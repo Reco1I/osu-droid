@@ -10,7 +10,7 @@ import org.anddev.andengine.opengl.texture.region.TextureRegion;
 
 import ru.nsu.ccfit.zuev.audio.BassSoundProvider;
 import ru.nsu.ccfit.zuev.osu.Config;
-import ru.nsu.ccfit.zuev.osu.GlobalManager;
+import ru.nsu.ccfit.zuev.osu.Osu;
 import ru.nsu.ccfit.zuev.osu.ResourceManager;
 import ru.nsu.ccfit.zuev.osu.ToastLogger;
 import ru.nsu.ccfit.zuev.osu.game.GameScene;
@@ -104,7 +104,7 @@ public class PauseMenu implements IOnMenuItemClickListener {
                 return true;
 
             case ITEM_BACK:
-                GlobalManager.ScoringScene.setReplayID(-1);
+                Osu.ScoringScene.setReplayID(-1);
                 playSnd = ResourceManager.getInstance().getSound("menuback");
                 if (playSnd != null) {
                     playSnd.play();

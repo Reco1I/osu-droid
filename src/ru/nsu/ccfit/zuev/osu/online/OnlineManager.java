@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 import ru.nsu.ccfit.zuev.osu.BeatmapInfo;
 import ru.nsu.ccfit.zuev.osu.Config;
-import ru.nsu.ccfit.zuev.osu.GlobalManager;
+import ru.nsu.ccfit.zuev.osu.Osu;
 import ru.nsu.ccfit.zuev.osu.ResourceManager;
 import ru.nsu.ccfit.zuev.osu.TrackInfo;
 import ru.nsu.ccfit.zuev.osu.helper.FileUtils;
@@ -166,7 +166,7 @@ public class OnlineManager {
 
         Bundle bParams = new Bundle();
         bParams.putString(FirebaseAnalytics.Param.METHOD, "ingame");
-        GlobalManager.Activity.getAnalytics().logEvent(FirebaseAnalytics.Event.LOGIN, bParams);
+        Osu.Activity.getAnalytics().logEvent(FirebaseAnalytics.Event.LOGIN, bParams);
 
         return true;
     }

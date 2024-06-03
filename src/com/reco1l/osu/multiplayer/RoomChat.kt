@@ -32,8 +32,8 @@ import com.reco1l.toolkt.android.drawableRight
 import com.reco1l.toolkt.android.fontColor
 import com.reco1l.toolkt.kotlin.async
 import org.anddev.andengine.input.touch.TouchEvent
-import ru.nsu.ccfit.zuev.osu.GlobalManager
-import ru.nsu.ccfit.zuev.osu.GlobalManager.Engine
+import ru.nsu.ccfit.zuev.osu.Osu
+import ru.nsu.ccfit.zuev.osu.Osu.Engine
 import ru.nsu.ccfit.zuev.osu.RGBColor
 import ru.nsu.ccfit.zuev.osu.ResourceManager
 import ru.nsu.ccfit.zuev.osuplus.R
@@ -120,7 +120,7 @@ class RoomChat : BaseFragment(), OnEditorActionListener, OnKeyListener
 
     private fun appendMessage(message: Message) {
 
-        if (Engine.scene != GlobalManager.GameScene.scene) {
+        if (Engine.scene != Osu.GameScene.scene) {
             ResourceManager.getInstance().getSound("heartbeat")?.play(0.75f)
         }
 
@@ -284,8 +284,8 @@ class RoomChat : BaseFragment(), OnEditorActionListener, OnKeyListener
             return
         }
 
-        if (Engine.scene == GlobalManager.GameScene.scene) {
-            GlobalManager.GameScene.pause()
+        if (Engine.scene == Osu.GameScene.scene) {
+            Osu.GameScene.pause()
             return
         }
 

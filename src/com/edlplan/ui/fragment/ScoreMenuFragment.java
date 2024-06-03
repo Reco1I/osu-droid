@@ -25,7 +25,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Locale;
 
-import ru.nsu.ccfit.zuev.osu.GlobalManager;
+import ru.nsu.ccfit.zuev.osu.Osu;
 import ru.nsu.ccfit.zuev.osuplus.BuildConfig;
 import ru.nsu.ccfit.zuev.osuplus.R;
 
@@ -66,11 +66,11 @@ public class ScoreMenuFragment extends BaseFragment {
                         public void onClick(View v) {
                             Intent intent = new Intent();
                             intent.setAction(Intent.ACTION_VIEW);
-                            intent.setDataAndType(FileProvider.getUriForFile(GlobalManager.Activity,
+                            intent.setDataAndType(FileProvider.getUriForFile(Osu.Activity,
                                     BuildConfig.APPLICATION_ID + ".fileProvider",
                                     file), "*/*");
                             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                            GlobalManager.Activity.startActivityForResult(intent, 0);
+                            Osu.Activity.startActivityForResult(intent, 0);
                         }
                     }).show();
                 } catch (Exception e) {

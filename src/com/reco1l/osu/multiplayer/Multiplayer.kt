@@ -12,8 +12,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import ru.nsu.ccfit.zuev.osu.Config
-import ru.nsu.ccfit.zuev.osu.GlobalManager
-import ru.nsu.ccfit.zuev.osu.GlobalManager.Engine
+import ru.nsu.ccfit.zuev.osu.Osu
+import ru.nsu.ccfit.zuev.osu.Osu.Engine
 import ru.nsu.ccfit.zuev.osu.MainActivity
 import ru.nsu.ccfit.zuev.osu.ToastLogger
 import ru.nsu.ccfit.zuev.osu.scoring.StatisticV2
@@ -103,10 +103,10 @@ object Multiplayer
 
     fun onLiveLeaderboard(array: JSONArray)
     {
-        if (Engine.scene != GlobalManager.GameScene.scene)
+        if (Engine.scene != Osu.GameScene.scene)
             return
 
-        GlobalManager.GameScene.scoreBoard?.nextItems = MutableList(array.length()) { i ->
+        Osu.GameScene.scoreBoard?.nextItems = MutableList(array.length()) { i ->
             val json = array.getJSONObject(i)
 
             jsonToScoreboardItem(json).apply { rank = i + 1 }
@@ -118,7 +118,7 @@ object Multiplayer
         finalData = null
 
         // Avoiding data parsing if user left from ScoringScene
-        if (Engine.scene == RoomScene || Engine.scene == GlobalManager.SongMenu.scene)
+        if (Engine.scene == RoomScene || Engine.scene == Osu.SongMenu.scene)
             return
 
         if (array.length() == 0)
@@ -139,7 +139,7 @@ object Multiplayer
             return
 
         // Replacing server statistic with local
-        val ownScore = GlobalManager.GameScene.stat
+        val ownScore = Osu.GameScene.stat
         val ownScoreIndex = list.indexOfFirst { it.playerName == getOnline().username }.takeUnless { it == -1 }
 
         if (ownScore != null)
@@ -156,7 +156,7 @@ object Multiplayer
         finalData = list.toTypedArray()
 
         // Reloading results screen
-        GlobalManager.ScoringScene.updateLeaderboard()
+        Osu.ScoringScene.updateLeaderboard()
     }
 
 

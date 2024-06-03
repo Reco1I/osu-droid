@@ -14,7 +14,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import ru.nsu.ccfit.zuev.osu.GlobalManager;
+import ru.nsu.ccfit.zuev.osu.Osu;
 import ru.nsu.ccfit.zuev.osu.helper.QualityFileBitmapSource;
 
 public class TextureHelper {
@@ -67,7 +67,7 @@ public class TextureHelper {
         TextureRegion region = TextureRegionFactory.createFromSource(tex, source, 0, 0,
                 false);
         
-        GlobalManager.Engine.getTextureManager().loadTexture(tex);
+        Osu.Engine.getTextureManager().loadTexture(tex);
         return region;
     }
 
@@ -98,7 +98,7 @@ public class TextureHelper {
 
         TextureRegion region = TextureRegionFactory.createFromSource(tex, source, 0, 0,
                 false);
-        GlobalManager.Engine.getTextureManager().loadTexture(tex);
+        Osu.Engine.getTextureManager().loadTexture(tex);
         return region;
     }
 

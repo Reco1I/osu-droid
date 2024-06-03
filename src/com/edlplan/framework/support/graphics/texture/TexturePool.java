@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
-import ru.nsu.ccfit.zuev.osu.GlobalManager;
+import ru.nsu.ccfit.zuev.osu.Osu;
 import ru.nsu.ccfit.zuev.osu.helper.QualityFileBitmapSource;
 
 public class TexturePool {
@@ -67,7 +67,7 @@ public class TexturePool {
     public void clear() {
         textures.clear();
         for (ITexture texture : createdTextures) {
-            GlobalManager.Engine.getTextureManager().unloadTexture(texture);
+            Osu.Engine.getTextureManager().unloadTexture(texture);
         }
         createdTextures.clear();
         currentPack = 0;
@@ -156,7 +156,7 @@ public class TexturePool {
                     TextureHelper.createFactoryFromBitmap(pack));
             final BitmapTextureAtlas tex = new BitmapTextureAtlas(glMaxWidth, glMaxWidth, TextureOptions.BILINEAR);
             tex.addTextureAtlasSource(source, 0, 0);
-            GlobalManager.Engine.getTextureManager().loadTexture(tex);
+            Osu.Engine.getTextureManager().loadTexture(tex);
             createdTextures.add(tex);
             for (TextureInfo info : toLoad) {
                 info.texture = new TextureRegion(tex, info.pos.x, info.pos.y, info.size.x, info.size.y);

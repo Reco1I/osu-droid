@@ -136,7 +136,7 @@ public class ResourceManager {
                 var iniFile = new File(folder, "skin.ini");
 
                 if (iniFile.exists()) {
-                    GlobalManager.setInfo("Reading skin.ini...");
+                    Osu.setInfo("Reading skin.ini...");
 
                     try (var ini = new IniReader(iniFile)) {
                         skinjson = SkinConverter.convertToJson(ini);

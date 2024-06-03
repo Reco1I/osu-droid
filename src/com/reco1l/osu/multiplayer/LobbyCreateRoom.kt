@@ -18,7 +18,7 @@ import com.reco1l.osu.async
 import com.reco1l.osu.mainThread
 import com.reco1l.toolkt.android.cornerRadius
 import com.reco1l.toolkt.android.dp
-import ru.nsu.ccfit.zuev.osu.GlobalManager
+import ru.nsu.ccfit.zuev.osu.Osu
 import ru.nsu.ccfit.zuev.osu.ToastLogger
 import ru.nsu.ccfit.zuev.osu.menu.LoadingScreen
 import ru.nsu.ccfit.zuev.osuplus.R
@@ -79,7 +79,7 @@ class LobbyCreateRoom : BaseFragment()
                 val password = passwordField!!.text.toString().takeUnless { it.isEmpty() }
 
                 // Track MD5 should never be null.
-                val beatmap = GlobalManager.getSelectedTrack()?.takeUnless { it.mD5 == null }?.let {
+                val beatmap = Osu.getSelectedTrack()?.takeUnless { it.mD5 == null }?.let {
 
                     RoomBeatmap(
                             md5 = it.mD5,

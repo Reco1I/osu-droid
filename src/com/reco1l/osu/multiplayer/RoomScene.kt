@@ -22,7 +22,6 @@ import com.reco1l.osu.ui.SettingsFragment
 import com.reco1l.osu.updateThread
 import com.reco1l.toolkt.kotlin.runSafe
 import com.rian.osu.ui.DifficultyAlgorithmSwitcher
-import org.anddev.andengine.engine.camera.SmoothCamera
 import org.anddev.andengine.entity.primitive.Rectangle
 import org.anddev.andengine.entity.scene.Scene
 import org.anddev.andengine.entity.scene.background.SpriteBackground
@@ -33,8 +32,8 @@ import org.anddev.andengine.util.MathUtils
 import org.json.JSONArray
 import ru.nsu.ccfit.zuev.osu.Config
 import ru.nsu.ccfit.zuev.osu.DifficultyAlgorithm
-import ru.nsu.ccfit.zuev.osu.GlobalManager
-import ru.nsu.ccfit.zuev.osu.GlobalManager.Engine
+import ru.nsu.ccfit.zuev.osu.Osu
+import ru.nsu.ccfit.zuev.osu.Osu.Engine
 import ru.nsu.ccfit.zuev.osu.ToastLogger
 import ru.nsu.ccfit.zuev.osu.game.mods.GameMod.MOD_SCOREV2
 import ru.nsu.ccfit.zuev.osu.helper.AnimSprite
@@ -391,7 +390,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
                 {
                     frame = 0
                     if (!moved)
-                        getModMenu().show(this@RoomScene, GlobalManager.getSelectedTrack())
+                        getModMenu().show(this@RoomScene, Osu.getSelectedTrack())
                     return true
                 }
                 if (event.isActionOutside || event.isActionMove && MathUtils.distance(dx, dy, localX, localY) > 50)
@@ -436,7 +435,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
     override fun onSceneTouchEvent(event: TouchEvent): Boolean {
         trackButton?.also {
             beatmapInfoRectangle?.isVisible =
-                GlobalManager.getSelectedTrack() != null &&
+                Osu.getSelectedTrack() != null &&
                 !event.isActionUp &&
                 event.x in it.x..it.x + it.width &&
                 event.y in it.y..it.y + it.height
@@ -550,7 +549,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
     private fun updateBeatmapInfo()
     {
-        beatmapInfoRectangle!!.isVisible = GlobalManager.getSelectedTrack()?.let { track ->
+        beatmapInfoRectangle!!.isVisible = Osu.getSelectedTrack()?.let { track ->
 
             beatmapInfoText.text = """
                 Length: ${
@@ -600,7 +599,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
         var newStatus = NOT_READY
 
-        if (room!!.beatmap != null && GlobalManager.getSelectedTrack() == null)
+        if (room!!.beatmap != null && Osu.getSelectedTrack() == null)
             newStatus = MISSING_BEATMAP
 
         if (player!!.status != newStatus)
@@ -646,7 +645,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
     fun show()
     {
-        GlobalManager.Camera.apply {
+        Osu.Camera.apply {
 
             setZoomFactorDirect(1f)
 
@@ -753,7 +752,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
             {
                 // Handling special case when the beatmap could have been changed and match was started while player was
                 // disconnected.
-                if (GlobalManager.getSelectedTrack() != null)
+                if (Osu.getSelectedTrack() != null)
                     onRoomMatchPlay()
                 else
                     invalidateStatus()
@@ -809,7 +808,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
         room!!.beatmap = beatmap
 
         // Searching the beatmap in the library
-        GlobalManager.setSelectedTrack(library.findTrackByMD5(beatmap?.md5))
+        Osu.setSelectedTrack(library.findTrackByMD5(beatmap?.md5))
 
         // Updating track button
         trackButton!!.updateBeatmap(beatmap)
@@ -829,20 +828,20 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
         invalidateStatus()
 
         // Updating background
-        updateBackground(GlobalManager.getSelectedTrack()?.background)
+        updateBackground(Osu.getSelectedTrack()?.background)
         updateBeatmapInfo()
 
         // Releasing await lock
         awaitBeatmapChange = false
 
-        if (GlobalManager.getSelectedTrack() == null)
+        if (Osu.getSelectedTrack() == null)
         {
-            GlobalManager.SongService.stop()
+            Osu.SongService.stop()
             return
         }
 
-        GlobalManager.SongService.preLoad(GlobalManager.getSelectedTrack()?.beatmap?.music)
-        GlobalManager.SongService.play()
+        Osu.SongService.preLoad(Osu.getSelectedTrack()?.beatmap?.music)
+        Osu.SongService.play()
     }
 
     override fun onRoomHostChange(uid: Long)
@@ -996,15 +995,15 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
     override fun onRoomMatchPlay()
     {
-        if (player!!.status != MISSING_BEATMAP && Engine.scene != GlobalManager.GameScene.scene)
+        if (player!!.status != MISSING_BEATMAP && Engine.scene != Osu.GameScene.scene)
         {
-            if (GlobalManager.getSelectedTrack() == null)
+            if (Osu.getSelectedTrack() == null)
             {
                 Multiplayer.log("WARNING: Attempt to start match with null track.")
                 return
             }
 
-            GlobalManager.SongMenu.stopMusic()
+            Osu.SongMenu.stopMusic()
 
             Replay.oldMod = getModMenu().mod
             Replay.oldChangeSpeed = getModMenu().changeSpeed
@@ -1015,7 +1014,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
             Replay.oldCustomCS = getModMenu().customCS
             Replay.oldCustomHP = getModMenu().customHP
 
-            GlobalManager.GameScene.startGame(GlobalManager.getSelectedTrack(), null)
+            Osu.GameScene.startGame(Osu.getSelectedTrack(), null)
 
             // Hiding any player menu if its shown
             mainThread { playerList!!.menu.dismiss() }
@@ -1028,7 +1027,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
     override fun onRoomMatchStart()
     {
         if (Engine.scene is LoadingScene) {
-            GlobalManager.GameScene.start()
+            Osu.GameScene.start()
         }
 
         // Updating player list
@@ -1037,10 +1036,10 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
     override fun onRoomMatchSkip()
     {
-        if (Engine.scene != GlobalManager.GameScene.scene)
+        if (Engine.scene != Osu.GameScene.scene)
             return
 
-        GlobalManager.GameScene.skip()
+        Osu.GameScene.skip()
     }
 
 
@@ -1087,7 +1086,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
         {
             Multiplayer.log("Kicked from room.")
 
-            if (Engine.scene == GlobalManager.GameScene.scene) {
+            if (Engine.scene == Osu.GameScene.scene) {
                 ToastLogger.showText("You were kicked by the room host, but you can continue playing.", true)
                 return
             }

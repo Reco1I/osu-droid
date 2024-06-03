@@ -17,7 +17,7 @@ import com.reco1l.osu.multiplayer.Multiplayer
 import com.reco1l.toolkt.android.dp
 import org.anddev.andengine.input.touch.TouchEvent
 import ru.nsu.ccfit.zuev.osu.Config
-import ru.nsu.ccfit.zuev.osu.GlobalManager
+import ru.nsu.ccfit.zuev.osu.Osu
 import ru.nsu.ccfit.zuev.osu.game.cursor.flashlight.FlashLightEntity
 import ru.nsu.ccfit.zuev.osu.game.mods.GameMod
 import ru.nsu.ccfit.zuev.osu.menu.ModMenu
@@ -396,7 +396,7 @@ class InGameSettingMenu : BaseFragment() {
     }
 
     private fun updateDifficultyAdjustValues() {
-        val track = GlobalManager.getSelectedTrack()
+        val track = Osu.getSelectedTrack()
         var visibility = View.VISIBLE
 
         if (Multiplayer.room != null) {

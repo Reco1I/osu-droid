@@ -194,7 +194,7 @@ public class MainScene implements IUpdateHandler {
                         .setMessage(context.getString(R.string.dialog_visit_osu_website_message))
                         .addButton("Yes", dialog -> {
                             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://osu.ppy.sh"));
-                            GlobalManager.Activity.startActivity(browserIntent);
+                            Osu.Activity.startActivity(browserIntent);
                             dialog.dismiss();
                             return null;
                         })
@@ -221,7 +221,7 @@ public class MainScene implements IUpdateHandler {
                         .setMessage(context.getString(R.string.dialog_visit_osudroid_website_message))
                         .addButton("Yes", dialog -> {
                             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://" + OnlineManager.hostname));
-                            GlobalManager.Activity.startActivity(browserIntent);
+                            Osu.Activity.startActivity(browserIntent);
                             dialog.dismiss();
                             return null;
                         })
@@ -528,13 +528,13 @@ public class MainScene implements IUpdateHandler {
     }
 
     public void musicControl(MusicOption option) {
-        if (GlobalManager.SongService == null || beatmapInfo == null) {
+        if (Osu.SongService == null || beatmapInfo == null) {
             return;
         }
         switch (option) {
             case PREV: {
-                if (GlobalManager.SongService.getStatus() == Status.PLAYING || GlobalManager.SongService.getStatus() == Status.PAUSED) {
-                    GlobalManager.SongService.stop();
+                if (Osu.SongService.getStatus() == Status.PLAYING || Osu.SongService.getStatus() == Status.PAUSED) {
+                    Osu.SongService.stop();
                 }
                 firstTimingPoint = null;
                 LibraryManager.INSTANCE.getPrevBeatmap();
@@ -545,10 +545,10 @@ public class MainScene implements IUpdateHandler {
             }
             break;
             case PLAY: {
-                if (GlobalManager.SongService.getStatus() == Status.PAUSED || GlobalManager.SongService.getStatus() == Status.STOPPED) {
-                    if (GlobalManager.SongService.getStatus() == Status.STOPPED) {
+                if (Osu.SongService.getStatus() == Status.PAUSED || Osu.SongService.getStatus() == Status.STOPPED) {
+                    if (Osu.SongService.getStatus() == Status.STOPPED) {
                         loadTimingPoints(false);
-                        GlobalManager.SongService.preLoad(beatmapInfo.getMusic());
+                        Osu.SongService.preLoad(beatmapInfo.getMusic());
                         if (firstTimingPoint != null) {
                             bpmLength = firstTimingPoint.getBeatLength() * 1000f;
                             if (lastTimingPoint != null) {
@@ -556,25 +556,25 @@ public class MainScene implements IUpdateHandler {
                             }
                         }
                     }
-                    if (GlobalManager.SongService.getStatus() == Status.PAUSED) {
+                    if (Osu.SongService.getStatus() == Status.PAUSED) {
                         if (lastBpmLength > 0) {
                             bpmLength = lastBpmLength;
                         }
                         if (lastTimingPoint != null) {
-                            int position = GlobalManager.SongService.getPosition();
+                            int position = Osu.SongService.getPosition();
                             offset = (position - lastTimingPoint.getTime() * 1000f) % bpmLength;
                         }
                     }
                     Debug.i("BPM: " + 60 / bpmLength * 1000 + " Offset: " + offset);
 //						ToastLogger.showText("BPM: " + 60 / bpmLength * 1000 + " Offset: " + offset, false);
-                    GlobalManager.SongService.play();
+                    Osu.SongService.play();
                     doStop = false;
                 }
             }
             break;
             case PAUSE: {
-                if (GlobalManager.SongService.getStatus() == Status.PLAYING) {
-                    GlobalManager.SongService.pause();
+                if (Osu.SongService.getStatus() == Status.PLAYING) {
+                    Osu.SongService.pause();
                     lastBpmLength = bpmLength;
                     bpmLength = 1000;
                 }
@@ -582,8 +582,8 @@ public class MainScene implements IUpdateHandler {
             break;
             case STOP: {
                 
-                if (GlobalManager.SongService.getStatus() == Status.PLAYING || GlobalManager.SongService.getStatus() == Status.PAUSED) {
-                    GlobalManager.SongService.stop();
+                if (Osu.SongService.getStatus() == Status.PLAYING || Osu.SongService.getStatus() == Status.PAUSED) {
+                    Osu.SongService.stop();
                     lastBpmLength = bpmLength;
                     bpmLength = 1000;
                 }
@@ -591,8 +591,8 @@ public class MainScene implements IUpdateHandler {
             break;
             case NEXT: {
                 
-                if (GlobalManager.SongService.getStatus() == Status.PLAYING || GlobalManager.SongService.getStatus() == Status.PAUSED) {
-                    GlobalManager.SongService.stop();
+                if (Osu.SongService.getStatus() == Status.PLAYING || Osu.SongService.getStatus() == Status.PAUSED) {
+                    Osu.SongService.stop();
                 }
                 LibraryManager.INSTANCE.getNextBeatmap();
                 firstTimingPoint = null;
@@ -603,9 +603,9 @@ public class MainScene implements IUpdateHandler {
             }
             break;
             case SYNC: {
-                if (GlobalManager.SongService.getStatus() == Status.PLAYING) {
+                if (Osu.SongService.getStatus() == Status.PLAYING) {
                     if (lastTimingPoint != null) {
-                        int position = GlobalManager.SongService.getPosition();
+                        int position = Osu.SongService.getPosition();
                         offset = (position - lastTimingPoint.getTime() * 1000f) % bpmLength;
                     }
                     Debug.i("BPM: " + 60 / bpmLength * 1000 + " Offset: " + offset);
@@ -625,7 +625,7 @@ public class MainScene implements IUpdateHandler {
             return;
         }
 
-        if (GlobalManager.SongService == null || !musicStarted || GlobalManager.SongService.getStatus() == Status.STOPPED) {
+        if (Osu.SongService == null || !musicStarted || Osu.SongService.getStatus() == Status.STOPPED) {
             bpmLength = 1000;
             offset = 0;
         }
@@ -693,7 +693,7 @@ public class MainScene implements IUpdateHandler {
             }
         }
 
-        if (GlobalManager.SongService != null) {
+        if (Osu.SongService != null) {
             if (!musicStarted) {
                 if (firstTimingPoint != null) {
                     bpmLength = firstTimingPoint.getBeatLength() * 1000f;
@@ -701,8 +701,8 @@ public class MainScene implements IUpdateHandler {
                     return;
                 }
                 progressBar.setStartTime(0);
-                GlobalManager.SongService.play();
-                GlobalManager.SongService.setVolume(Config.getBgmVolume());
+                Osu.SongService.play();
+                Osu.SongService.setVolume(Config.getBgmVolume());
                 if (lastTimingPoint != null) {
                     offset = lastTimingPoint.getTime() * 1000f % bpmLength;
                 }
@@ -711,10 +711,10 @@ public class MainScene implements IUpdateHandler {
                 musicStarted = true;
             }
 
-            if (GlobalManager.SongService.getStatus() == Status.PLAYING) {
+            if (Osu.SongService.getStatus() == Status.PLAYING) {
 //                syncPassedTime += pSecondsElapsed * 1000f;
-                int position = GlobalManager.SongService.getPosition();
-                progressBar.setTime(GlobalManager.SongService.getLength());
+                int position = Osu.SongService.getPosition();
+                progressBar.setTime(Osu.SongService.getLength());
                 progressBar.setPassedTime(position);
                 progressBar.update(pSecondsElapsed * 1000);
 
@@ -756,7 +756,7 @@ public class MainScene implements IUpdateHandler {
 
                 int windowSize = 240;
                 int spectrumWidth = 120;
-                float[] fft = GlobalManager.SongService.getSpectrum();
+                float[] fft = Osu.SongService.getSpectrum();
                 if (fft == null) return;
                 for (int i = 0, leftBound = 0; i < spectrumWidth; i++) {
                     float peak = 0;
@@ -792,8 +792,8 @@ public class MainScene implements IUpdateHandler {
                     specRectangle.setAlpha(0);
                 }
                 if (!doChange && !doStop) {
-                    if (GlobalManager.SongService != null) {
-                        if (GlobalManager.SongService.getPosition() >= GlobalManager.SongService.getLength()) {
+                    if (Osu.SongService != null) {
+                        if (Osu.SongService.getPosition() >= Osu.SongService.getLength()) {
                             musicControl(MusicOption.NEXT);
                         }
                     }
@@ -853,7 +853,7 @@ public class MainScene implements IUpdateHandler {
         if (trackInfos != null && trackInfos.size() > 0) {
             int trackIndex = random.nextInt(trackInfos.size());
             TrackInfo selectedTrack = trackInfos.get(trackIndex);
-            GlobalManager.setSelectedTrack(selectedTrack);
+            Osu.setSelectedTrack(selectedTrack);
 
             if (selectedTrack.getBackground() != null) {
                 try {
@@ -876,7 +876,7 @@ public class MainScene implements IUpdateHandler {
 
                             @Override
                             public void onModifierFinished(IModifier<IEntity> pModifier, final IEntity pItem) {
-                                GlobalManager.Activity.runOnUpdateThread(pItem::detachSelf);
+                                Osu.Activity.runOnUpdateThread(pItem::detachSelf);
                             }
                         }));
                         lastBackground = background;
@@ -890,8 +890,8 @@ public class MainScene implements IUpdateHandler {
             }
 
             if (reloadMusic) {
-                if (GlobalManager.SongService != null) {
-                    GlobalManager.SongService.preLoad(beatmapInfo.getMusic());
+                if (Osu.SongService != null) {
+                    Osu.SongService.preLoad(beatmapInfo.getMusic());
                     musicStarted = false;
                 } else {
                     Log.w("nullpoint", "GlobalManager.getInstance().getSongService() is null while reload music (MainScene.loadTimeingPoints)");
@@ -948,7 +948,7 @@ public class MainScene implements IUpdateHandler {
         }
         isOnExitAnim = true;
 
-        PowerManager.WakeLock wakeLock = GlobalManager.Activity.getWakeLock();
+        PowerManager.WakeLock wakeLock = Osu.Activity.getWakeLock();
         if (wakeLock != null && wakeLock.isHeld()) {
             wakeLock.release();
         }
@@ -982,15 +982,15 @@ public class MainScene implements IUpdateHandler {
                 ModifierFactory.newScaleModifier(3.0f, 1f, 0.8f)
         ));
 
-        if (GlobalManager.SongService != null) {
-            GlobalManager.SongService.stop();
+        if (Osu.SongService != null) {
+            Osu.SongService.stop();
         }
 
         ScheduledExecutorService taskPool = Executors.newScheduledThreadPool(1);
         taskPool.schedule(new TimerTask() {
             @Override
             public void run() {
-                GlobalManager.Activity.finish();
+                Osu.Activity.finish();
             }
         }, 3000, TimeUnit.MILLISECONDS);
     }
@@ -1020,22 +1020,22 @@ public class MainScene implements IUpdateHandler {
                 TrackInfo track = LibraryManager.INSTANCE.findTrackByFileNameAndMD5(replay.getMapFile(), replay.getMd5());
                 if (track != null) {
                     setBeatmap(track.getBeatmap());
-                    GlobalManager.SongMenu.select();
+                    Osu.SongMenu.select();
                     ResourceManager.getInstance().loadBackground(track.getBackground());
-                    GlobalManager.SongService.preLoad(track.getBeatmap().getMusic());
-                    GlobalManager.SongService.play();
-                    GlobalManager.ScoringScene.load(stat, null, GlobalManager.SongService, replayFile, null, track);
-                    GlobalManager.Engine.setScene(GlobalManager.ScoringScene.getScene());
+                    Osu.SongService.preLoad(track.getBeatmap().getMusic());
+                    Osu.SongService.play();
+                    Osu.ScoringScene.load(stat, null, Osu.SongService, replayFile, null, track);
+                    Osu.Engine.setScene(Osu.ScoringScene.getScene());
                 }
             }
         }
     }
 
     public void show() {
-        GlobalManager.SongService.setGaming(false);
-        GlobalManager.Engine.setScene(getScene());
-        if (GlobalManager.getSelectedTrack() != null) {
-            setBeatmap(GlobalManager.getSelectedTrack().getBeatmap());
+        Osu.SongService.setGaming(false);
+        Osu.Engine.setScene(getScene());
+        if (Osu.getSelectedTrack() != null) {
+            setBeatmap(Osu.getSelectedTrack().getBeatmap());
         }
     }
 

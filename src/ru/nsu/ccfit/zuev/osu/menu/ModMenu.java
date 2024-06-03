@@ -318,13 +318,13 @@ public class ModMenu implements IModSwitcher {
                                          final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
                 if (pSceneTouchEvent.isActionUp()) {
                     Execution.async(() -> {
-                        if (GlobalManager.SongMenu.getSelectedTrack() != null) {
+                        if (Osu.SongMenu.getSelectedTrack() != null) {
                             try (var parser = new BeatmapParser(
-                                    GlobalManager.SongMenu.getSelectedTrack().getFilename()
+                                    Osu.SongMenu.getSelectedTrack().getFilename()
                             )) {
                                 var beatmap = parser.parse(true);
                                 if (beatmap == null) {
-                                    GlobalManager.SongMenu.setStarsDisplay(0);
+                                    Osu.SongMenu.setStarsDisplay(0);
                                     return;
                                 }
 
@@ -344,7 +344,7 @@ public class ModMenu implements IModSwitcher {
                                             parameters
                                         );
 
-                                        GlobalManager.SongMenu.setStarsDisplay(
+                                        Osu.SongMenu.setStarsDisplay(
                                             GameHelper.Round(attributes.starRating, 2)
                                         );
                                     }
@@ -355,7 +355,7 @@ public class ModMenu implements IModSwitcher {
                                             parameters
                                         );
 
-                                        GlobalManager.SongMenu.setStarsDisplay(
+                                        Osu.SongMenu.setStarsDisplay(
                                             GameHelper.Round(attributes.starRating, 2)
                                         );
                                     }
@@ -399,7 +399,7 @@ public class ModMenu implements IModSwitcher {
     }
 
     private void changeMultiplierText() {
-        GlobalManager.SongMenu.changeDimensionInfo(selectedTrack);
+        Osu.SongMenu.changeDimensionInfo(selectedTrack);
         //calculateAble = true;
         float mult = 1;
         for (GameMod m : mod) {

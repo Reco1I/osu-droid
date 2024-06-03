@@ -12,7 +12,7 @@ import java.io.File;
 
 import androidx.core.app.NotificationManagerCompat;
 import ru.nsu.ccfit.zuev.audio.Status;
-import ru.nsu.ccfit.zuev.osu.GlobalManager;
+import ru.nsu.ccfit.zuev.osu.Osu;
 import ru.nsu.ccfit.zuev.osu.MainActivity;
 
 
@@ -224,7 +224,7 @@ public class SongService extends Service {
         }
 
         notify.show();
-        notify.updateSong(GlobalManager.MainScene.getBeatmapInfo());
+        notify.updateSong(Osu.MainScene.getBeatmapInfo());
         notify.updateState();
     }
 

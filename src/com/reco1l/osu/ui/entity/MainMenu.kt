@@ -8,8 +8,8 @@ import com.reco1l.osu.mainThread
 import com.reco1l.osu.multiplayer.RoomScene
 import com.reco1l.osu.ui.SettingsFragment
 import org.anddev.andengine.input.touch.TouchEvent
-import ru.nsu.ccfit.zuev.osu.GlobalManager
-import ru.nsu.ccfit.zuev.osu.GlobalManager.Engine
+import ru.nsu.ccfit.zuev.osu.Osu
+import ru.nsu.ccfit.zuev.osu.Osu.Engine
 import ru.nsu.ccfit.zuev.osu.LibraryManager
 import ru.nsu.ccfit.zuev.osu.MainScene
 import ru.nsu.ccfit.zuev.osu.MainScene.MusicOption
@@ -65,27 +65,27 @@ class MainMenu(val main: MainScene)
                 if (main.isOnExitAnim)
                     return true
 
-                GlobalManager.SongService.isGaming = true
+                Osu.SongService.isGaming = true
 
                 async {
                     LoadingScreen().show()
 
-                    GlobalManager.Activity.checkNewSkins()
-                    GlobalManager.Activity.checkNewBeatmaps()
+                    Osu.Activity.checkNewSkins()
+                    Osu.Activity.checkNewBeatmaps()
                     LibraryManager.INSTANCE.updateLibrary(true)
 
                     if (LibraryManager.INSTANCE.library.isEmpty())
                     {
-                        GlobalManager.SongService.isGaming = false
+                        Osu.SongService.isGaming = false
                         Engine.scene = main.scene
 
                         BeatmapListing().show()
                     } else {
                         main.musicControl(MusicOption.PLAY)
 
-                        GlobalManager.SongMenu.reload()
-                        GlobalManager.SongMenu.show()
-                        GlobalManager.SongMenu.select()
+                        Osu.SongMenu.reload()
+                        Osu.SongMenu.show()
+                        Osu.SongMenu.select()
                     }
                 }
                 return true
@@ -115,7 +115,7 @@ class MainMenu(val main: MainScene)
                 {
                     setColor(1f, 1f, 1f)
                     if (main.isOnExitAnim) return true
-                    GlobalManager.SongService.isGaming = true
+                    Osu.SongService.isGaming = true
                     mainThread { SettingsFragment().show() }
                     return true
                 }
@@ -140,17 +140,17 @@ class MainMenu(val main: MainScene)
 
                 if (main.isOnExitAnim) return true
 
-                GlobalManager.SongService.isGaming = true
+                Osu.SongService.isGaming = true
                 Multiplayer.isMultiplayer = true
 
                 async {
                     LoadingScreen().show()
 
-                    GlobalManager.Activity.checkNewSkins()
-                    GlobalManager.Activity.checkNewBeatmaps()
+                    Osu.Activity.checkNewSkins()
+                    Osu.Activity.checkNewBeatmaps()
                     LibraryManager.INSTANCE.updateLibrary(true)
 
-                    GlobalManager.SongMenu.reload()
+                    Osu.SongMenu.reload()
 
                     RoomScene.load()
                     LobbyScene.load()

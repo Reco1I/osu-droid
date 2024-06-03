@@ -38,8 +38,8 @@ import com.reco1l.toolkt.android.drawableLeft
 import com.reco1l.toolkt.android.layoutWidth
 import com.reco1l.toolkt.android.topMargin
 import ru.nsu.ccfit.zuev.osu.Config
-import ru.nsu.ccfit.zuev.osu.GlobalManager
-import ru.nsu.ccfit.zuev.osu.GlobalManager.Engine
+import ru.nsu.ccfit.zuev.osu.Osu
+import ru.nsu.ccfit.zuev.osu.Osu.Engine
 import ru.nsu.ccfit.zuev.osu.LibraryManager
 import ru.nsu.ccfit.zuev.osu.MainActivity
 import ru.nsu.ccfit.zuev.osu.PropertiesLibrary
@@ -371,12 +371,12 @@ class SettingsFragment : com.edlplan.ui.fragment.SettingsFragment() {
         Config.loadConfig(requireActivity())
 
         if (!Multiplayer.isMultiplayer) {
-            GlobalManager.MainScene.reloadOnlinePanel()
-            GlobalManager.MainScene.loadTimingPoints(false)
-            GlobalManager.SongService.isGaming = false
+            Osu.MainScene.reloadOnlinePanel()
+            Osu.MainScene.loadTimingPoints(false)
+            Osu.SongService.isGaming = false
         }
 
-        GlobalManager.SongService.volume = Config.getBgmVolume()
+        Osu.SongService.volume = Config.getBgmVolume()
         super.dismiss()
     }
 

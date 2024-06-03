@@ -13,9 +13,10 @@ import ru.nsu.ccfit.zuev.osu.scoring.ScoreLibrary;
 import ru.nsu.ccfit.zuev.osu.scoring.ScoringScene;
 
 /**
- * Created by Fuuko on 2015/4/24.
+ * Originally created by Fuuko on 2015/4/24.
+ * Modified by Reco1l on 2024/6/3.
  */
-public class GlobalManager {
+public class Osu {
 
 
     public static Engine Engine;

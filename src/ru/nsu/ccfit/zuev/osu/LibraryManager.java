@@ -26,7 +26,7 @@ public enum LibraryManager {
     private static boolean isCaching = true;
 
     public File getLibraryCacheFile() {
-        return new File(GlobalManager.Activity.getFilesDir(), String.format("library.%s.dat", VERSION));
+        return new File(Osu.Activity.getFilesDir(), String.format("library.%s.dat", VERSION));
     }
 
     @SuppressWarnings("unchecked")
@@ -518,7 +518,7 @@ public enum LibraryManager {
         private void submitToExecutorCheckCached(List<File> files) {
             executors.submit(() -> {
                 for (final File file : files) {
-                    GlobalManager.setLoadingProgress(50 + 50 * fileCached / fileCount);
+                    Osu.setLoadingProgress(50 + 50 * fileCached / fileCount);
                     ToastLogger.setPercentage(fileCached * 100f / fileCount);
 
                     synchronized (this) {
@@ -552,7 +552,7 @@ public enum LibraryManager {
                         }
                     }
 
-                    GlobalManager.setInfo("Loading " + file.getName() + " ...");
+                    Osu.setInfo("Loading " + file.getName() + " ...");
 
                     scanFolder(info);
                     if (info.getCount() < 1) {
@@ -571,7 +571,7 @@ public enum LibraryManager {
         private void submitToExecutor(List<File> files) {
             executors.submit(() -> {
                 for (File file : files) {
-                    GlobalManager.setLoadingProgress(50 + 50 * fileCached / fileCount);
+                    Osu.setLoadingProgress(50 + 50 * fileCached / fileCount);
                     ToastLogger.setPercentage(fileCached * 100f / fileCount);
 
                     synchronized (this) {
@@ -582,7 +582,7 @@ public enum LibraryManager {
                         continue;
                     }
 
-                    GlobalManager.setInfo("Loading " + file.getName() + "...");
+                    Osu.setInfo("Loading " + file.getName() + "...");
                     final BeatmapInfo info = new BeatmapInfo();
                     info.setPath(file.getPath());
                     scanFolder(info);

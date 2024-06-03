@@ -275,19 +275,19 @@ public class AppException extends Exception implements Thread.UncaughtExceptionH
             return false;
         }
 
-        if (GlobalManager.Activity == null) {
+        if (Osu.Activity == null) {
             return false;
         }
 
         if (Multiplayer.isMultiplayer)
             Multiplayer.log(ex);
 
-        final String crashReport = getCrashReport(GlobalManager.Activity, ex);
+        final String crashReport = getCrashReport(Osu.Activity, ex);
         // 显示异常信息&发送报告
         new Thread() {
             public void run() {
                 Looper.prepare();
-                Toast.makeText(GlobalManager.Activity, StringTable.get(R.string.crash), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Osu.Activity, StringTable.get(R.string.crash), Toast.LENGTH_SHORT).show();
                 Looper.loop();
             }
 

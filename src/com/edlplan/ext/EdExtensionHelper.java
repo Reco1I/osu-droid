@@ -10,7 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import ru.nsu.ccfit.zuev.osu.Config;
-import ru.nsu.ccfit.zuev.osu.GlobalManager;
+import ru.nsu.ccfit.zuev.osu.Osu;
 import ru.nsu.ccfit.zuev.osu.ToastLogger;
 import ru.nsu.ccfit.zuev.osu.TrackInfo;
 import ru.nsu.ccfit.zuev.osu.game.GameHelper;
@@ -25,7 +25,7 @@ public class EdExtensionHelper {
 
     public static boolean downloadExtension() {
         final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.edplan.cn/osu/droid/extension/latest_ext.php"));
-        GlobalManager.Activity.startActivity(intent);
+        Osu.Activity.startActivity(intent);
         return true;
     }
 
@@ -39,7 +39,7 @@ public class EdExtensionHelper {
         intent.putExtra("api", apiName);
         intent.putExtra("type", "anyBroadcast");
         intent.putExtra("data", data);
-        GlobalManager.Activity.sendBroadcast(intent);
+        Osu.Activity.sendBroadcast(intent);
     }
 
     public static void onSelectTrack(TrackInfo info) {
@@ -193,7 +193,7 @@ public class EdExtensionHelper {
                 game.put("file", filepath);
                 game.put("mods", new JSONArray(ModMenu.getInstance().getMod()));
                 intent.putExtra("data", game.toString());
-                GlobalManager.Activity.startActivity(intent);
+                Osu.Activity.startActivity(intent);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

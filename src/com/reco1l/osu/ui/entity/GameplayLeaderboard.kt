@@ -6,7 +6,7 @@ import org.anddev.andengine.entity.Entity
 import org.anddev.andengine.entity.sprite.Sprite
 import org.anddev.andengine.entity.text.ChangeableText
 import ru.nsu.ccfit.zuev.osu.Config
-import ru.nsu.ccfit.zuev.osu.GlobalManager
+import ru.nsu.ccfit.zuev.osu.Osu
 import ru.nsu.ccfit.zuev.osu.menu.ScoreBoardItem
 import ru.nsu.ccfit.zuev.osu.scoring.StatisticV2
 import ru.nsu.ccfit.zuev.osu.ResourceManager.getInstance as getResources
@@ -25,11 +25,11 @@ class GameplayLeaderboard(var playerName: String, private val stats: StatisticV2
     // This determines the max amount of sprites that can be shown according to the user screen height.
     private val maxAllowed = (Config.getRES_HEIGHT() - VERTICAL_PADDING * 2).toInt() / SPRITE_HEIGHT
 
-    private val replayId: Int get() = GlobalManager.ScoringScene.replayID
+    private val replayId: Int get() = Osu.ScoringScene.replayID
 
     private val isReplaying get() = replayId != -1
 
-    private val isGlobalLeaderboard get() = GlobalManager.SongMenu.isBoardOnline
+    private val isGlobalLeaderboard get() = Osu.SongMenu.isBoardOnline
 
 
     init
@@ -42,7 +42,7 @@ class GameplayLeaderboard(var playerName: String, private val stats: StatisticV2
     {
         if (!isMultiplayer)
         {
-            val items = GlobalManager.SongMenu.board
+            val items = Osu.SongMenu.board
 
             // We consider that if it's in replay mode the length should be the same, in case it's not then the
             // length should be +1 greater (because of the new score).

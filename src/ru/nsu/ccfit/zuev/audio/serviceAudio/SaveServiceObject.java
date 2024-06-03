@@ -6,15 +6,15 @@ import android.os.Bundle;
 
 import androidx.core.app.NotificationManagerCompat;
 import ru.nsu.ccfit.zuev.osu.AppException;
-import ru.nsu.ccfit.zuev.osu.GlobalManager;
+import ru.nsu.ccfit.zuev.osu.Osu;
 
 public class SaveServiceObject extends Application {
 
     static private SongService songService;
 
     public static void finishAllActivities() {
-        if (GlobalManager.Activity != null) {
-            GlobalManager.Activity.finish();
+        if (Osu.Activity != null) {
+            Osu.Activity.finish();
         }
     }
 

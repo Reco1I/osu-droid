@@ -29,7 +29,7 @@ import java.util.Locale;
 
 import ru.nsu.ccfit.zuev.audio.serviceAudio.SongService;
 import ru.nsu.ccfit.zuev.osu.Config;
-import ru.nsu.ccfit.zuev.osu.GlobalManager;
+import ru.nsu.ccfit.zuev.osu.Osu;
 import ru.nsu.ccfit.zuev.osu.ResourceManager;
 import ru.nsu.ccfit.zuev.osu.TrackInfo;
 import ru.nsu.ccfit.zuev.osu.Utils;
@@ -230,8 +230,8 @@ public class ScoringScene {
                     }
                     if (pSceneTouchEvent.isActionUp()) {
                         ResourceManager.getInstance().getSound("applause").stop();
-                        GlobalManager.Engine.setScene(GlobalManager.SongMenu.getScene());
-                        GlobalManager.GameScene.startGame(null, null);
+                        Osu.Engine.setScene(Osu.SongMenu.getScene());
+                        Osu.GameScene.startGame(null, null);
                         scene = null;
                         stopMusic();
                         return true;
@@ -260,7 +260,7 @@ public class ScoringScene {
                     if (pSceneTouchEvent.isActionUp()) {
                         ResourceManager.getInstance().getSound("applause").stop();
                         SongMenu.stopMusicStatic();
-                        GlobalManager.Engine.setScene(GlobalManager.SongMenu.getScene());
+                        Osu.Engine.setScene(Osu.SongMenu.getScene());
 
                         Replay.oldMod = ModMenu.getInstance().getMod();
                         Replay.oldChangeSpeed = ModMenu.getInstance().getChangeSpeed();
@@ -281,7 +281,7 @@ public class ScoringScene {
                         ModMenu.getInstance().setCustomCS(stat.getCustomCS());
                         ModMenu.getInstance().setCustomHP(stat.getCustomHP());
 
-                        GlobalManager.GameScene.startGame(trackToReplay, replay);
+                        Osu.GameScene.startGame(trackToReplay, replay);
 
                         scene = null;
                         stopMusic();
@@ -535,14 +535,14 @@ public class ScoringScene {
         //save and upload score
         if (track != null && track.getMD5() != null && track.getMD5().equals(mapMD5)) {
             ResourceManager.getInstance().getSound("applause").play();
-            if (!Multiplayer.isMultiplayer || !GlobalManager.GameScene.hasFailed) {
+            if (!Multiplayer.isMultiplayer || !Osu.GameScene.hasFailed) {
                 ScoreLibrary.getInstance().addScore(track.getFilename(), stat, replay);
             }
 
             if (stat.getTotalScoreWithMultiplier() > 0 && OnlineManager.getInstance().isStayOnline() &&
                     OnlineManager.getInstance().isReadyToSend()) {
 
-                if (GlobalManager.GameScene.hasFailed ||
+                if (Osu.GameScene.hasFailed ||
                         (Multiplayer.isMultiplayer && !Config.isSubmitScoreOnMultiplayer()))
                     return;
 
@@ -607,8 +607,8 @@ public class ScoringScene {
             return;
         }
         replayMusic();
-        GlobalManager.Engine.setScene(GlobalManager.SongMenu.getScene());
-        GlobalManager.SongMenu.updateScore();
+        Osu.Engine.setScene(Osu.SongMenu.getScene());
+        Osu.SongMenu.updateScore();
         setReplayID(-1);
     }
 

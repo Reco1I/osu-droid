@@ -42,7 +42,7 @@ import ru.nsu.ccfit.zuev.audio.BassSoundProvider;
 import ru.nsu.ccfit.zuev.audio.Status;
 import ru.nsu.ccfit.zuev.osu.BeatmapInfo;
 import ru.nsu.ccfit.zuev.osu.Config;
-import ru.nsu.ccfit.zuev.osu.GlobalManager;
+import ru.nsu.ccfit.zuev.osu.Osu;
 import ru.nsu.ccfit.zuev.osu.LibraryManager;
 import ru.nsu.ccfit.zuev.osu.RankedStatus;
 import ru.nsu.ccfit.zuev.osu.ResourceManager;
@@ -112,8 +112,8 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
 
     public static void stopMusicStatic() {
         synchronized (musicMutex) {
-            if (GlobalManager.SongService != null) {
-                GlobalManager.SongService.stop();
+            if (Osu.SongService != null) {
+                Osu.SongService.stop();
             }
         }
     }
@@ -143,7 +143,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
         scene.unregisterUpdateHandler(this);
         scene.setTouchAreaBindingEnabled(false);
         load();
-        GlobalManager.GameScene.setOldScene(scene);
+        Osu.GameScene.setOldScene(scene);
     }
 
     public synchronized void load() {
@@ -685,7 +685,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
 
     public void loadFilterFragment() {
         filterMenu = new FilterMenuFragment();
-        filterMenu.loadConfig(GlobalManager.Activity);
+        filterMenu.loadConfig(Osu.Activity);
     }
 
     public void unloadFilterFragment() {
@@ -712,7 +712,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
     public FilterMenuFragment getFilterMenu() { return filterMenu; }
 
     public void show() {
-        GlobalManager.Engine.setScene(scene);
+        Osu.Engine.setScene(scene);
     }
 
     public void setFilter(final String filter, final SortOrder order,
@@ -833,13 +833,13 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
     }
 
     public void increaseVolume() {
-        if (GlobalManager.SongService != null) {
+        if (Osu.SongService != null) {
             synchronized (musicMutex) {
-                if (GlobalManager.SongService != null) {
-                    if (GlobalManager.SongService.getStatus() == Status.PLAYING) {
-                        if (GlobalManager.SongService.getVolume() < Config.getBgmVolume()) {
-                            float vol = Math.min(1, GlobalManager.SongService.getVolume() + 0.01f);
-                            GlobalManager.SongService.setVolume(vol);
+                if (Osu.SongService != null) {
+                    if (Osu.SongService.getStatus() == Status.PLAYING) {
+                        if (Osu.SongService.getVolume() < Config.getBgmVolume()) {
+                            float vol = Math.min(1, Osu.SongService.getVolume() + 0.01f);
+                            Osu.SongService.setVolume(vol);
                         }
                     }
                 }
@@ -1127,7 +1127,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
     public void selectTrack(final TrackInfo track, boolean reloadBG) {
 
         // Playing corresponding audio for the selected track.
-        var selectedAudioTrack = this.selectedTrack != null ? this.selectedTrack : GlobalManager.getSelectedTrack();
+        var selectedAudioTrack = this.selectedTrack != null ? this.selectedTrack : Osu.getSelectedTrack();
 
         if (selectedAudioTrack == null || !Objects.equals(selectedAudioTrack.getAudioFilename(), track.getAudioFilename())) {
             playMusic(track.getAudioFilename(), track.getPreviewTime());
@@ -1159,14 +1159,14 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
 
             Replay.oldFLFollowDelay = ModMenu.getInstance().getFLfollowDelay();
 
-            GlobalManager.GameScene.startGame(track, null);
+            Osu.GameScene.startGame(track, null);
             unload();
             return;
         }
         isSelectComplete = false;
         selectedTrack = track;
         EdExtensionHelper.onSelectTrack(track);
-        GlobalManager.setSelectedTrack(track);
+        Osu.setSelectedTrack(track);
         updateInfo(track);
         updateScoringSwitcherStatus(false);
         board.init(track);
@@ -1239,7 +1239,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
 
     public void openScore(final int id, boolean showOnline, final String playerName) {
         if (showOnline) {
-            GlobalManager.Engine.setScene(new LoadingScreen().getScene());
+            Osu.Engine.setScene(new LoadingScreen().getScene());
             ToastLogger.showTextId(com.edlplan.osudroidresource.R.string.online_loadrecord, false);
 
             Execution.async(() -> {
@@ -1255,11 +1255,11 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
                     }
 
                     stat.setPlayerName(playerName);
-                    GlobalManager.ScoringScene.load(stat, null, null, OnlineManager.getReplayURL(id), null, selectedTrack);
-                    GlobalManager.Engine.setScene(GlobalManager.ScoringScene.getScene());
+                    Osu.ScoringScene.load(stat, null, null, OnlineManager.getReplayURL(id), null, selectedTrack);
+                    Osu.Engine.setScene(Osu.ScoringScene.getScene());
                 } catch (OnlineManagerException e) {
                     Debug.e("Cannot load play info: " + e.getMessage(), e);
-                    GlobalManager.Engine.setScene(scene);
+                    Osu.Engine.setScene(scene);
                 }
             });
             return;
@@ -1271,8 +1271,8 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
             stat.processLegacySC(selectedTrack);
         }
 
-        GlobalManager.ScoringScene.load(stat, null, null, stat.getReplayName(), null, selectedTrack);
-        GlobalManager.Engine.setScene(GlobalManager.ScoringScene.getScene());
+        Osu.ScoringScene.load(stat, null, null, stat.getReplayName(), null, selectedTrack);
+        Osu.Engine.setScene(Osu.ScoringScene.getScene());
     }
 
 
@@ -1300,7 +1300,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
             return;
         }
 
-        GlobalManager.MainScene.show();
+        Osu.MainScene.show();
     }
 
     private void resetMultiplayerRoomBeatmap() {
@@ -1372,8 +1372,8 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
 
     public void stopMusic() {
         synchronized (musicMutex) {
-            if (GlobalManager.SongService != null) {
-                GlobalManager.SongService.stop();
+            if (Osu.SongService != null) {
+                Osu.SongService.stop();
             }
         }
     }
@@ -1385,18 +1385,18 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
 
         Execution.async(() -> {
             synchronized (musicMutex) {
-                if (GlobalManager.SongService != null) {
-                    GlobalManager.SongService.stop();
+                if (Osu.SongService != null) {
+                    Osu.SongService.stop();
                 }
 
                 try {
-                    GlobalManager.SongService.preLoad(filename);
-                    GlobalManager.SongService.play();
-                    GlobalManager.SongService.setVolume(0);
+                    Osu.SongService.preLoad(filename);
+                    Osu.SongService.play();
+                    Osu.SongService.setVolume(0);
                     if (previewTime >= 0) {
-                        GlobalManager.SongService.seekTo(previewTime);
+                        Osu.SongService.seekTo(previewTime);
                     } else {
-                        GlobalManager.SongService.seekTo(GlobalManager.SongService.getLength() / 2);
+                        Osu.SongService.seekTo(Osu.SongService.getLength() / 2);
                     }
                 } catch (final Exception e) {
                     Debug.e("LoadingMusic: " + e.getMessage(), e);
@@ -1431,8 +1431,8 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
     }
 
     public void select() {
-        if (GlobalManager.getSelectedTrack() != null) {
-            BeatmapInfo beatmapInfo = GlobalManager.getSelectedTrack().getBeatmap();
+        if (Osu.getSelectedTrack() != null) {
+            BeatmapInfo beatmapInfo = Osu.getSelectedTrack().getBeatmap();
 
             var i = items.size() - 1;
             while (i >= 0) {

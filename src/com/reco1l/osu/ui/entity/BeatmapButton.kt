@@ -14,7 +14,7 @@ import org.anddev.andengine.input.touch.TouchEvent
 import org.anddev.andengine.util.MathUtils
 import ru.nsu.ccfit.zuev.osu.Config
 import ru.nsu.ccfit.zuev.osu.DifficultyAlgorithm
-import ru.nsu.ccfit.zuev.osu.GlobalManager
+import ru.nsu.ccfit.zuev.osu.Osu
 import ru.nsu.ccfit.zuev.osu.RGBColor
 import ru.nsu.ccfit.zuev.osu.ToastLogger
 import ru.nsu.ccfit.zuev.osu.menu.MenuItemTrack
@@ -85,14 +85,14 @@ class BeatmapButton : Sprite(0f, 0f, getResources().getTexture("menu-button-back
         {
             if (libraryManager.library.isEmpty())
             {
-                GlobalManager.SongService.pause()
+                Osu.SongService.pause()
                 BeatmapListing().show()
                 return true
             }
 
-            GlobalManager.SongMenu.reload()
-            GlobalManager.SongMenu.show()
-            GlobalManager.SongMenu.select()
+            Osu.SongMenu.reload()
+            Osu.SongMenu.show()
+            Osu.SongMenu.select()
 
             // We notify all clients that the host is changing beatmap
             RoomAPI.changeBeatmap()
@@ -101,7 +101,7 @@ class BeatmapButton : Sprite(0f, 0f, getResources().getTexture("menu-button-back
 
 
         // If the room beatmap has set a 'parentSetID' it means that the beatmap can be downloaded trough Chimu.moe
-        if (GlobalManager.getSelectedTrack() == null) Multiplayer.room!!.beatmap?.apply {
+        if (Osu.getSelectedTrack() == null) Multiplayer.room!!.beatmap?.apply {
 
             // If it's null the beatmap isn't available on Chimu servers.
             if (parentSetID == null)
@@ -136,7 +136,7 @@ class BeatmapButton : Sprite(0f, 0f, getResources().getTexture("menu-button-back
         trackTitle.text = "${beatmap.artist} - ${beatmap.title}"
         creatorInfo.text = "Mapped by ${beatmap.creator} // ${beatmap.version}"
 
-        if (GlobalManager.getSelectedTrack() == null)
+        if (Osu.getSelectedTrack() == null)
         {
             creatorInfo.text += "\n${
 
@@ -149,8 +149,8 @@ class BeatmapButton : Sprite(0f, 0f, getResources().getTexture("menu-button-back
         }
 
         val difficulty =
-            if (Config.getDifficultyAlgorithm() == DifficultyAlgorithm.standard) GlobalManager.getSelectedTrack()!!.standardDifficulty
-            else GlobalManager.getSelectedTrack()!!.droidDifficulty
+            if (Config.getDifficultyAlgorithm() == DifficultyAlgorithm.standard) Osu.getSelectedTrack()!!.standardDifficulty
+            else Osu.getSelectedTrack()!!.droidDifficulty
 
         stars.forEachIndexed { i, it ->
             it.isVisible = difficulty >= i

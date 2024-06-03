@@ -63,7 +63,7 @@ import ru.nsu.ccfit.zuev.audio.serviceAudio.PlayMode;
 import ru.nsu.ccfit.zuev.osu.BeatmapProperties;
 import ru.nsu.ccfit.zuev.osu.Config;
 import ru.nsu.ccfit.zuev.osu.Constants;
-import ru.nsu.ccfit.zuev.osu.GlobalManager;
+import ru.nsu.ccfit.zuev.osu.Osu;
 import ru.nsu.ccfit.zuev.osu.PropertiesLibrary;
 import ru.nsu.ccfit.zuev.osu.RGBAColor;
 import ru.nsu.ccfit.zuev.osu.RGBColor;
@@ -264,7 +264,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
                 videoStarted = false;
                 videoOffset = beatmap.events.videoStartTime / 1000f;
 
-                video = new VideoSprite(lastTrack.getBeatmap().getPath() + "/" + beatmap.events.videoFilename, GlobalManager.Engine);
+                video = new VideoSprite(lastTrack.getBeatmap().getPath() + "/" + beatmap.events.videoFilename, Osu.Engine);
                 video.setAlpha(0f);
 
                 bgSprite = video;
@@ -419,27 +419,27 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         GameHelper.setNightCore(false);
         GameHelper.setHalfTime(false);
 
-        GlobalManager.SongService.preLoad(filePath, PlayMode.MODE_NONE);
+        Osu.SongService.preLoad(filePath, PlayMode.MODE_NONE);
         GameHelper.setTimeMultiplier(1f);
         //Speed Change
         if (ModMenu.getInstance().getChangeSpeed() != 1.00f){
             timeMultiplier = ModMenu.getInstance().getSpeed();
-            GlobalManager.SongService.preLoad(filePath, timeMultiplier,
+            Osu.SongService.preLoad(filePath, timeMultiplier,
                 ModMenu.getInstance().isEnableNCWhenSpeedChange() ||
                         ModMenu.getInstance().getMod().contains(GameMod.MOD_NIGHTCORE));
             GameHelper.setTimeMultiplier(1 / timeMultiplier);
         } else if (ModMenu.getInstance().getMod().contains(GameMod.MOD_DOUBLETIME)) {
-            GlobalManager.SongService.preLoad(filePath, PlayMode.MODE_DT);
+            Osu.SongService.preLoad(filePath, PlayMode.MODE_DT);
             timeMultiplier = 1.5f;
             GameHelper.setDoubleTime(true);
             GameHelper.setTimeMultiplier(2 / 3f);
         } else if (ModMenu.getInstance().getMod().contains(GameMod.MOD_NIGHTCORE)) {
-            GlobalManager.SongService.preLoad(filePath, PlayMode.MODE_NC);
+            Osu.SongService.preLoad(filePath, PlayMode.MODE_NC);
             timeMultiplier = 1.5f;
             GameHelper.setNightCore(true);
             GameHelper.setTimeMultiplier(2 / 3f);
         } else if (ModMenu.getInstance().getMod().contains(GameMod.MOD_HALFTIME)) {
-            GlobalManager.SongService.preLoad(filePath, PlayMode.MODE_HT);
+            Osu.SongService.preLoad(filePath, PlayMode.MODE_HT);
             timeMultiplier = 0.75f;
             GameHelper.setHalfTime(true);
             GameHelper.setTimeMultiplier(4 / 3f);
@@ -714,7 +714,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         failcount = 0;
         mainCursorId = -1;
         final LoadingScreen screen = new LoadingScreen();
-        GlobalManager.Engine.setScene(screen.getScene());
+        Osu.Engine.setScene(screen.getScene());
 
         final String rfile = track != null ? replayFile : this.replayFile;
 
@@ -742,9 +742,9 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
     private void prepareScene() {
         scene.setOnSceneTouchListener(this);
 
-        GlobalManager.Camera.setZoomFactorDirect(Config.getPlayfieldSize());
+        Osu.Camera.setZoomFactorDirect(Config.getPlayfieldSize());
         if (Config.isShrinkPlayfieldDownwards()) {
-            GlobalManager.Camera.setCenterDirect((float) Config.getRES_WIDTH() / 2, (float) Config.getRES_HEIGHT() / 2 * Config.getPlayfieldSize());
+            Osu.Camera.setCenterDirect((float) Config.getRES_WIDTH() / 2, (float) Config.getRES_HEIGHT() / 2 * Config.getPlayfieldSize());
         }
 
         setBackground();
@@ -1035,7 +1035,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         fgScene.attachChild(replayText, 0);
         if (stat.getMod().contains(GameMod.MOD_AUTO) || replaying) {
             if (replaying) {
-                playname = GlobalManager.ScoringScene.getReplayStat().getPlayerName();
+                playname = Osu.ScoringScene.getReplayStat().getPlayerName();
             } else {
                 playname = "osu!";
             }
@@ -1081,9 +1081,9 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         // Handle input in its own thread
         var touchOptions = new TouchOptions();
         touchOptions.setRunOnUpdateThread(false);
-        GlobalManager.Engine.getTouchController().applyTouchOptions(touchOptions);
+        Osu.Engine.getTouchController().applyTouchOptions(touchOptions);
 
-        GlobalManager.Engine.setScene(scene);
+        Osu.Engine.setScene(scene);
         scene.registerUpdateHandler(this);
     }
 
@@ -1096,11 +1096,11 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         previousFrameTime = SystemClock.uptimeMillis();
         Utils.clearSoundMask();
         float dt = pSecondsElapsed * timeMultiplier;
-        if (GlobalManager.SongService.getStatus() == Status.PLAYING) {
+        if (Osu.SongService.getStatus() == Status.PLAYING) {
             //处理时间差过于庞大的情况
             final float offset = totalOffset / 1000f;
             final float realsecPassed = //Config.isSyncMusic() ?
-                    GlobalManager.SongService.getPosition() / 1000.0f;// : realTime;
+                    Osu.SongService.getPosition() / 1000.0f;// : realTime;
             final float criticalError = Config.isSyncMusic() ? 0.1f : 0.5f;
             final float normalError = Config.isSyncMusic() ? dt : 0.05f;
 
@@ -1438,9 +1438,9 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         }
 
         if (secPassed >= 0 && !musicStarted) {
-            GlobalManager.SongService.play();
-            GlobalManager.SongService.setVolume(Config.getBgmVolume());
-            totalLength = GlobalManager.SongService.getLength();
+            Osu.SongService.play();
+            Osu.SongService.setVolume(Config.getBgmVolume());
+            totalLength = Osu.SongService.getLength();
             musicStarted = true;
             secPassed = 0;
             return;
@@ -1652,7 +1652,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         }
 
         //Status playerStatus = music.getStatus();
-        Status playerStatus = GlobalManager.SongService.getStatus();
+        Status playerStatus = Osu.SongService.getStatus();
 
         if (playerStatus != Status.PLAYING) {
             secPassed += dt;
@@ -1677,9 +1677,9 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
                 replay.save(replayFile);
             }
 
-            GlobalManager.Camera.setZoomFactorDirect(1f);
+            Osu.Camera.setZoomFactorDirect(1f);
             if (Config.isShrinkPlayfieldDownwards()) {
-                GlobalManager.Camera.setCenterDirect((float) Config.getRES_WIDTH() / 2, (float) Config.getRES_HEIGHT() / 2);
+                Osu.Camera.setCenterDirect((float) Config.getRES_WIDTH() / 2, (float) Config.getRES_HEIGHT() / 2);
             }
 
             if (replaying) {
@@ -1694,7 +1694,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
             }
 
             if (replaying) {
-                GlobalManager.ScoringScene.load(GlobalManager.ScoringScene.getReplayStat(), null, GlobalManager.SongService, replayFile, null, lastTrack);
+                Osu.ScoringScene.load(Osu.ScoringScene.getReplayStat(), null, Osu.SongService, replayFile, null, lastTrack);
             }
             else {
                 if (stat.getMod().contains(GameMod.MOD_AUTO)) {
@@ -1712,15 +1712,15 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
 
                     ToastLogger.showText("Loading room statistics...", false);
                 }
-                GlobalManager.ScoringScene.load(stat, lastTrack, GlobalManager.SongService, replayFile, trackMD5, null);
+                Osu.ScoringScene.load(stat, lastTrack, Osu.SongService, replayFile, trackMD5, null);
             }
-            GlobalManager.SongService.setVolume(0.2f);
-            GlobalManager.Engine.setScene(GlobalManager.ScoringScene.getScene());
+            Osu.SongService.setVolume(0.2f);
+            Osu.Engine.setScene(Osu.ScoringScene.getScene());
 
             // Handle input back in update thread
             var touchOptions = new TouchOptions();
             touchOptions.setRunOnUpdateThread(true);
-            GlobalManager.Engine.getTouchController().applyTouchOptions(touchOptions);
+            Osu.Engine.getTouchController().applyTouchOptions(touchOptions);
 
             if (video != null) {
                 video.release();
@@ -1803,10 +1803,10 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         if (secPassed > skipTime - 1f)
             return;
 
-        if (GlobalManager.SongService.getStatus() != Status.PLAYING) {
-            GlobalManager.SongService.play();
-            GlobalManager.SongService.setVolume(Config.getBgmVolume());
-            totalLength = GlobalManager.SongService.getLength();
+        if (Osu.SongService.getStatus() != Status.PLAYING) {
+            Osu.SongService.play();
+            Osu.SongService.setVolume(Config.getBgmVolume());
+            totalLength = Osu.SongService.getLength();
             musicStarted = true;
         }
         ResourceManager.getInstance().getSound("menuhit").play();
@@ -1820,7 +1820,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
 
             updatePassiveObjects(difference);
 
-            GlobalManager.SongService.seekTo(seekTime);
+            Osu.SongService.seekTo(seekTime);
             if (video != null) {
                 video.getTexture().seekTo(videoSeekTime);
             }
@@ -1852,11 +1852,11 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         droidTimedDifficultyAttributes = null;
         standardTimedDifficultyAttributes = null;
 
-        if (GlobalManager.SongService != null) {
-            GlobalManager.SongService.stop();
-            GlobalManager.SongService.preLoad(filePath);
-            GlobalManager.SongService.play();
-            GlobalManager.SongService.setVolume(Config.getBgmVolume());
+        if (Osu.SongService != null) {
+            Osu.SongService.stop();
+            Osu.SongService.preLoad(filePath);
+            Osu.SongService.play();
+            Osu.SongService.setVolume(Config.getBgmVolume());
         }
 
         if (replaying) {
@@ -1877,7 +1877,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         // Handle input back in update thread
         var touchOptions = new TouchOptions();
         touchOptions.setRunOnUpdateThread(true);
-        GlobalManager.Engine.getTouchController().applyTouchOptions(touchOptions);
+        Osu.Engine.getTouchController().applyTouchOptions(touchOptions);
 
         if (!replaying) {
             EdExtensionHelper.onQuitGame(lastTrack);
@@ -1899,9 +1899,9 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
 
         onExit();
 
-        GlobalManager.Camera.setZoomFactorDirect(1f);
+        Osu.Camera.setZoomFactorDirect(1f);
         if (Config.isShrinkPlayfieldDownwards()) {
-            GlobalManager.Camera.setCenterDirect((float) Config.getRES_WIDTH() / 2, (float) Config.getRES_HEIGHT() / 2);
+            Osu.Camera.setCenterDirect((float) Config.getRES_WIDTH() / 2, (float) Config.getRES_HEIGHT() / 2);
         }
 
         scene = new Scene();
@@ -1912,7 +1912,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
             return;
         }
         ResourceManager.getInstance().getSound("failsound").stop();
-        GlobalManager.Engine.setScene(oldScene);
+        Osu.Engine.setScene(oldScene);
     }
 
 
@@ -2445,14 +2445,14 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
             }
         }
 
-        if (GlobalManager.SongService != null) {
-            if (GlobalManager.SongService.getStatus() == Status.PLAYING) {
-                GlobalManager.SongService.pause();
+        if (Osu.SongService != null) {
+            if (Osu.SongService.getStatus() == Status.PLAYING) {
+                Osu.SongService.pause();
             }
         }
         paused = true;
 
-        final PauseMenu menu = new PauseMenu(GlobalManager.Engine, this, false);
+        final PauseMenu menu = new PauseMenu(Osu.Engine, this, false);
         scene.setChildScene(menu.getScene(), false, true, true);
     }
 
@@ -2475,16 +2475,16 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
 
         if(scorebar != null) scorebar.flush();
         ResourceManager.getInstance().getSound("failsound").play();
-        final PauseMenu menu = new PauseMenu(GlobalManager.Engine, this, true);
+        final PauseMenu menu = new PauseMenu(Osu.Engine, this, true);
         gameStarted = false;
 
         if (video != null) {
             video.getTexture().pause();
         }
 
-        if (GlobalManager.SongService != null) {
-            if (GlobalManager.SongService.getStatus() == Status.PLAYING) {
-                GlobalManager.SongService.pause();
+        if (Osu.SongService != null) {
+            if (Osu.SongService.getStatus() == Status.PLAYING) {
+                Osu.SongService.pause();
             }
         }
         paused = true;
@@ -2513,11 +2513,11 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
             video.getTexture().play();
         }
 
-        if (GlobalManager.SongService != null) {
-            if (GlobalManager.SongService.getStatus() != Status.PLAYING && secPassed > 0) {
-                GlobalManager.SongService.play();
-                GlobalManager.SongService.setVolume(Config.getBgmVolume());
-                totalLength = GlobalManager.SongService.getLength();
+        if (Osu.SongService != null) {
+            if (Osu.SongService.getStatus() != Status.PLAYING && secPassed > 0) {
+                Osu.SongService.play();
+                Osu.SongService.setVolume(Config.getBgmVolume());
+                totalLength = Osu.SongService.getLength();
             }
         }
     }
@@ -2672,7 +2672,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         stat.addHitOffset(acc);
 
         if (replaying) {
-            GlobalManager.ScoringScene.getReplayStat().addHitOffset(acc);
+            Osu.ScoringScene.getReplayStat().addHitOffset(acc);
         }
     }
 
