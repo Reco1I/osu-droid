@@ -100,10 +100,6 @@ public class GlobalManager {
         this.skinNow = skinNow;
     }
 
-    public SongMenu getSongMenu() {
-        return songMenu;
-    }
-
     public void setSongMenu(SongMenu songMenu) {
         this.songMenu = songMenu;
     }

@@ -29,7 +29,7 @@ class GameplayLeaderboard(var playerName: String, private val stats: StatisticV2
 
     private val isReplaying get() = replayId != -1
 
-    private val isGlobalLeaderboard get() = GlobalManager.getInstance().songMenu.isBoardOnline
+    private val isGlobalLeaderboard get() = GlobalManager.SongMenu.isBoardOnline
 
 
     init
@@ -42,7 +42,7 @@ class GameplayLeaderboard(var playerName: String, private val stats: StatisticV2
     {
         if (!isMultiplayer)
         {
-            val items = GlobalManager.getInstance().songMenu.board
+            val items = GlobalManager.SongMenu.board
 
             // We consider that if it's in replay mode the length should be the same, in case it's not then the
             // length should be +1 greater (because of the new score).

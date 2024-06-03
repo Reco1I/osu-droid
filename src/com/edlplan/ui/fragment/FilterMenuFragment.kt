@@ -118,7 +118,7 @@ class FilterMenuFragment : BaseFragment(), IUpdateHandler, IFilterMenu {
 
     override fun dismiss() {
         playEndAnim { super.dismiss() }
-        GlobalManager.getInstance().songMenu.unloadFilterFragment()
+        GlobalManager.SongMenu.unloadFilterFragment()
         saveState(savedFolder, savedFavOnly, savedFilter)
     }
 

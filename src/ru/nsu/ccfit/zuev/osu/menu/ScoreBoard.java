@@ -456,7 +456,7 @@ public class ScoreBoard extends Entity implements ScrollDetector.IScrollDetector
         if (downTime > 0.5f) {
             moved = true;
             if (!Multiplayer.isMultiplayer && _scoreID != -1 && !showOnlineScores) {
-                GlobalManager.getInstance().getSongMenu().showDeleteScoreMenu(_scoreID);
+                GlobalManager.SongMenu.showDeleteScoreMenu(_scoreID);
             }
             downTime = -1;
         }

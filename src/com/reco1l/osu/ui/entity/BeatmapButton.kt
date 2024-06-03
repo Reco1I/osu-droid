@@ -90,9 +90,9 @@ class BeatmapButton : Sprite(0f, 0f, getResources().getTexture("menu-button-back
                 return true
             }
 
-            GlobalManager.getInstance().songMenu.reload()
-            GlobalManager.getInstance().songMenu.show()
-            GlobalManager.getInstance().songMenu.select()
+            GlobalManager.SongMenu.reload()
+            GlobalManager.SongMenu.show()
+            GlobalManager.SongMenu.select()
 
             // We notify all clients that the host is changing beatmap
             RoomAPI.changeBeatmap()

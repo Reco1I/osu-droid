@@ -607,8 +607,8 @@ public class ScoringScene {
             return;
         }
         replayMusic();
-        GlobalManager.Engine.setScene(GlobalManager.getInstance().getSongMenu().getScene());
-        GlobalManager.getInstance().getSongMenu().updateScore();
+        GlobalManager.Engine.setScene(GlobalManager.SongMenu.getScene());
+        GlobalManager.SongMenu.updateScore();
         setReplayID(-1);
     }
 

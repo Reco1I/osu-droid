@@ -1005,7 +1005,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
                 return
             }
 
-            GlobalManager.getInstance().songMenu.stopMusic()
+            GlobalManager.SongMenu.stopMusic()
 
             Replay.oldMod = getModMenu().mod
             Replay.oldChangeSpeed = getModMenu().changeSpeed

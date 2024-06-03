@@ -83,9 +83,9 @@ class MainMenu(val main: MainScene)
                     } else {
                         main.musicControl(MusicOption.PLAY)
 
-                        GlobalManager.getInstance().songMenu.reload()
-                        GlobalManager.getInstance().songMenu.show()
-                        GlobalManager.getInstance().songMenu.select()
+                        GlobalManager.SongMenu.reload()
+                        GlobalManager.SongMenu.show()
+                        GlobalManager.SongMenu.select()
                     }
                 }
                 return true
@@ -150,7 +150,7 @@ class MainMenu(val main: MainScene)
                     GlobalManager.Activity.checkNewBeatmaps()
                     LibraryManager.INSTANCE.updateLibrary(true)
 
-                    GlobalManager.getInstance().songMenu.reload()
+                    GlobalManager.SongMenu.reload()
 
                     RoomScene.load()
                     LobbyScene.load()

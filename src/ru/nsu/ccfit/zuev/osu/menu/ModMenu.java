@@ -318,13 +318,13 @@ public class ModMenu implements IModSwitcher {
                                          final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
                 if (pSceneTouchEvent.isActionUp()) {
                     Execution.async(() -> {
-                        if (GlobalManager.getInstance().getSongMenu().getSelectedTrack() != null) {
+                        if (GlobalManager.SongMenu.getSelectedTrack() != null) {
                             try (var parser = new BeatmapParser(
-                                    GlobalManager.getInstance().getSongMenu().getSelectedTrack().getFilename()
+                                    GlobalManager.SongMenu.getSelectedTrack().getFilename()
                             )) {
                                 var beatmap = parser.parse(true);
                                 if (beatmap == null) {
-                                    GlobalManager.getInstance().getSongMenu().setStarsDisplay(0);
+                                    GlobalManager.SongMenu.setStarsDisplay(0);
                                     return;
                                 }
 
@@ -344,7 +344,7 @@ public class ModMenu implements IModSwitcher {
                                             parameters
                                         );
 
-                                        GlobalManager.getInstance().getSongMenu().setStarsDisplay(
+                                        GlobalManager.SongMenu.setStarsDisplay(
                                             GameHelper.Round(attributes.starRating, 2)
                                         );
                                     }
@@ -355,7 +355,7 @@ public class ModMenu implements IModSwitcher {
                                             parameters
                                         );
 
-                                        GlobalManager.getInstance().getSongMenu().setStarsDisplay(
+                                        GlobalManager.SongMenu.setStarsDisplay(
                                             GameHelper.Round(attributes.starRating, 2)
                                         );
                                     }
@@ -399,7 +399,7 @@ public class ModMenu implements IModSwitcher {
     }
 
     private void changeMultiplierText() {
-        GlobalManager.getInstance().getSongMenu().changeDimensionInfo(selectedTrack);
+        GlobalManager.SongMenu.changeDimensionInfo(selectedTrack);
         //calculateAble = true;
         float mult = 1;
         for (GameMod m : mod) {

@@ -682,7 +682,7 @@ public class MainActivity extends BaseGameActivity implements
 
             if (Multiplayer.isConnected()
                     && (getEngine().getScene() == RoomScene.INSTANCE
-                    || getEngine().getScene() == GlobalManager.getInstance().getSongMenu().getScene())) {
+                    || getEngine().getScene() == GlobalManager.SongMenu.getScene())) {
                 Execution.async(() -> Execution.runSafe(RoomScene.INSTANCE::invalidateStatus));
             }
         }
@@ -751,43 +751,44 @@ public class MainActivity extends BaseGameActivity implements
         }
         if ((keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ENTER)) {
             GlobalManager.getInstance();
-            if (GlobalManager.Engine != null && GlobalManager.getInstance().getSongMenu() != null) {
-                GlobalManager.getInstance();
-                if (GlobalManager.Engine.getScene() == GlobalManager.getInstance().getSongMenu().getScene() && GlobalManager.getInstance().getSongMenu().getScene().hasChildScene()) {
-                    if (GlobalManager.getInstance().getSongMenu().getScene().getChildScene() == GlobalManager.getInstance().getSongMenu().getFilterMenu().getScene()) {
-                        if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                            InputManager.getInstance().toggleKeyboard();
+            if (GlobalManager.Engine != null) {
+                if (GlobalManager.SongMenu != null) {
+                    if (GlobalManager.Engine.getScene() == GlobalManager.SongMenu.getScene()) {
+                        if (GlobalManager.SongMenu.getScene().hasChildScene()) {
+                            if (GlobalManager.SongMenu.getScene().getChildScene() == GlobalManager.SongMenu.getFilterMenu().getScene()) {
+                                if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                                    InputManager.getInstance().toggleKeyboard();
+                                }
+                                GlobalManager.SongMenu.getFilterMenu().hideMenu();
+                            }
+
+                            if (GlobalManager.SongMenu.getScene().getChildScene() == ModMenu.getInstance().getScene()) {
+                                ModMenu.getInstance().hide();
+                            }
+
+                            return true;
                         }
-                        GlobalManager.getInstance().getSongMenu().getFilterMenu().hideMenu();
                     }
-
-                    if (GlobalManager.getInstance().getSongMenu().getScene().getChildScene() == ModMenu.getInstance().getScene()) {
-                        ModMenu.getInstance().hide();
-                    }
-
-                    return true;
                 }
             }
         }
-        if (GlobalManager.getInstance().getSongMenu() != null) {
-            GlobalManager.getInstance();
+        if (GlobalManager.SongMenu != null) {
             if (GlobalManager.Engine != null && keyCode == KeyEvent.KEYCODE_MENU) {
-                GlobalManager.getInstance();
-                if (GlobalManager.Engine.getScene() == GlobalManager.getInstance().getSongMenu().getScene() && !GlobalManager.getInstance().getSongMenu().getScene().hasChildScene()) {
-                    GlobalManager.getInstance().getSongMenu().stopScroll(0);
-                    GlobalManager.getInstance().getSongMenu().showPropertiesMenu(null);
-                    return true;
+                if (GlobalManager.Engine.getScene() == GlobalManager.SongMenu.getScene()) {
+                    if (!GlobalManager.SongMenu.getScene().hasChildScene()) {
+                        GlobalManager.SongMenu.stopScroll(0);
+                        GlobalManager.SongMenu.showPropertiesMenu(null);
+                        return true;
+                    }
                 }
             }
         }
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            GlobalManager.getInstance();
-            GlobalManager.getInstance();
-            if (GlobalManager.Engine != null && GlobalManager.getInstance().getSongMenu() != null &&
-                    GlobalManager.Engine.getScene() == GlobalManager.getInstance().getSongMenu().getScene()) {
+            if (GlobalManager.Engine != null && GlobalManager.SongMenu != null &&
+                    GlobalManager.Engine.getScene() == GlobalManager.SongMenu.getScene()) {
 
                 //SongMenu 界面按返回按钮（系统按钮）
-                GlobalManager.getInstance().getSongMenu().back();
+                GlobalManager.SongMenu.back();
             } else {
 
                 GlobalManager.getInstance();

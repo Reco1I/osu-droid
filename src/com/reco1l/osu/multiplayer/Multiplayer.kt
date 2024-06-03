@@ -118,7 +118,7 @@ object Multiplayer
         finalData = null
 
         // Avoiding data parsing if user left from ScoringScene
-        if (Engine.scene == RoomScene || Engine.scene == GlobalManager.getInstance().songMenu.scene)
+        if (Engine.scene == RoomScene || Engine.scene == GlobalManager.SongMenu.scene)
             return
 
         if (array.length() == 0)

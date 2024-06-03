@@ -1014,7 +1014,7 @@ public class MainScene implements IUpdateHandler {
                 TrackInfo track = LibraryManager.INSTANCE.findTrackByFileNameAndMD5(replay.getMapFile(), replay.getMd5());
                 if (track != null) {
                     setBeatmap(track.getBeatmap());
-                    GlobalManager.getInstance().getSongMenu().select();
+                    GlobalManager.SongMenu.select();
                     ResourceManager.getInstance().loadBackground(track.getBackground());
                     GlobalManager.getInstance().getSongService().preLoad(track.getBeatmap().getMusic());
                     GlobalManager.getInstance().getSongService().play();
