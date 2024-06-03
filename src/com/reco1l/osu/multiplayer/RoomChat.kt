@@ -120,7 +120,7 @@ class RoomChat : BaseFragment(), OnEditorActionListener, OnKeyListener
 
     private fun appendMessage(message: Message) {
 
-        if (Engine.scene != GlobalManager.getInstance().gameScene.scene) {
+        if (Engine.scene != GlobalManager.GameScene.scene) {
             ResourceManager.getInstance().getSound("heartbeat")?.play(0.75f)
         }
 
@@ -284,8 +284,8 @@ class RoomChat : BaseFragment(), OnEditorActionListener, OnKeyListener
             return
         }
 
-        if (Engine.scene == GlobalManager.getInstance().gameScene.scene) {
-            GlobalManager.getInstance().gameScene.pause()
+        if (Engine.scene == GlobalManager.GameScene.scene) {
+            GlobalManager.GameScene.pause()
             return
         }
 

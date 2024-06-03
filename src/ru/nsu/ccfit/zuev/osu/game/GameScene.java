@@ -105,7 +105,6 @@ import static com.rian.osu.utils.ModConverter.convertLegacyMods;
 public class GameScene implements IUpdateHandler, GameObjectListener,
         IOnSceneTouchListener {
     public static final int CursorCount = 10;
-    private final Engine engine;
     private final Cursor[] cursors = new Cursor[CursorCount];
     private final boolean[] cursorIIsDown = new boolean[CursorCount];
     private final StringBuilder strBuilder = new StringBuilder();
@@ -115,7 +114,6 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
     private Scene oldScene;
     private Beatmap beatmap;
     private TrackInfo lastTrack;
-    private ScoringScene scoringScene;
     private TimingPoint currentTimingPoint;
     private TimingPoint soundTimingPoint;
     private TimingPoint firstTimingPoint;
@@ -236,8 +234,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
 
 
 
-    public GameScene(final Engine engine) {
-        this.engine = engine;
+    public GameScene() {
         scene = new Scene();
         bgScene = new Scene();
         fgScene = new Scene();
@@ -245,10 +242,6 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         scene.attachChild(bgScene);
         scene.attachChild(mgScene);
         scene.attachChild(fgScene);
-    }
-
-    public void setScoringScene(final ScoringScene sc) {
-        scoringScene = sc;
     }
 
     public void setOldScene(final Scene oscene) {
@@ -273,7 +266,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
                 videoStarted = false;
                 videoOffset = beatmap.events.videoStartTime / 1000f;
 
-                video = new VideoSprite(lastTrack.getBeatmap().getPath() + "/" + beatmap.events.videoFilename, engine);
+                video = new VideoSprite(lastTrack.getBeatmap().getPath() + "/" + beatmap.events.videoFilename, GlobalManager.Engine);
                 video.setAlpha(0f);
 
                 bgSprite = video;
@@ -723,7 +716,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         failcount = 0;
         mainCursorId = -1;
         final LoadingScreen screen = new LoadingScreen();
-        engine.setScene(screen.getScene());
+        GlobalManager.Engine.setScene(screen.getScene());
 
         final String rfile = track != null ? replayFile : this.replayFile;
 
@@ -1086,9 +1079,9 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         // Handle input in its own thread
         var touchOptions = new TouchOptions();
         touchOptions.setRunOnUpdateThread(false);
-        engine.getTouchController().applyTouchOptions(touchOptions);
+        GlobalManager.Engine.getTouchController().applyTouchOptions(touchOptions);
 
-        engine.setScene(scene);
+        GlobalManager.Engine.setScene(scene);
         scene.registerUpdateHandler(this);
     }
 
@@ -1687,48 +1680,44 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
                 GlobalManager.Camera.setCenterDirect((float) Config.getRES_WIDTH() / 2, (float) Config.getRES_HEIGHT() / 2);
             }
 
-            if (scoringScene != null) {
-                if (replaying) {
-                    ModMenu.getInstance().setMod(Replay.oldMod);
-                    ModMenu.getInstance().setChangeSpeed(Replay.oldChangeSpeed);
-                    ModMenu.getInstance().setFLfollowDelay(Replay.oldFLFollowDelay);
+            if (replaying) {
+                ModMenu.getInstance().setMod(Replay.oldMod);
+                ModMenu.getInstance().setChangeSpeed(Replay.oldChangeSpeed);
+                ModMenu.getInstance().setFLfollowDelay(Replay.oldFLFollowDelay);
 
-                    ModMenu.getInstance().setCustomAR(Replay.oldCustomAR);
-                    ModMenu.getInstance().setCustomOD(Replay.oldCustomOD);
-                    ModMenu.getInstance().setCustomCS(Replay.oldCustomCS);
-                    ModMenu.getInstance().setCustomHP(Replay.oldCustomHP);
-                }
-
-                if (replaying)
-                    scoringScene.load(scoringScene.getReplayStat(), null, GlobalManager.getInstance().getSongService(), replayFile, null, lastTrack);
-                else {
-                    if (stat.getMod().contains(GameMod.MOD_AUTO)) {
-                        stat.setPlayerName("osu!");
-                    }
-
-                    EdExtensionHelper.onEndGame(lastTrack, stat);
-
-                    if (Multiplayer.isConnected())
-                    {
-                        Multiplayer.log("Match ended, moving to results scene.");
-                        RoomScene.INSTANCE.getChat().show();
-
-                        Execution.async(() -> Execution.runSafe(() -> RoomAPI.submitFinalScore(stat.toJson())));
-
-                        ToastLogger.showText("Loading room statistics...", false);
-                    }
-                    scoringScene.load(stat, lastTrack, GlobalManager.getInstance().getSongService(), replayFile, trackMD5, null);
-                }
-                GlobalManager.getInstance().getSongService().setVolume(0.2f);
-                engine.setScene(scoringScene.getScene());
-            } else {
-                engine.setScene(oldScene);
+                ModMenu.getInstance().setCustomAR(Replay.oldCustomAR);
+                ModMenu.getInstance().setCustomOD(Replay.oldCustomOD);
+                ModMenu.getInstance().setCustomCS(Replay.oldCustomCS);
+                ModMenu.getInstance().setCustomHP(Replay.oldCustomHP);
             }
+
+            if (replaying)
+                GlobalManager.ScoringScene.load(GlobalManager.ScoringScene.getReplayStat(), null, GlobalManager.getInstance().getSongService(), replayFile, null, lastTrack);
+            else {
+                if (stat.getMod().contains(GameMod.MOD_AUTO)) {
+                    stat.setPlayerName("osu!");
+                }
+
+                EdExtensionHelper.onEndGame(lastTrack, stat);
+
+                if (Multiplayer.isConnected())
+                {
+                    Multiplayer.log("Match ended, moving to results scene.");
+                    RoomScene.INSTANCE.getChat().show();
+
+                    Execution.async(() -> Execution.runSafe(() -> RoomAPI.submitFinalScore(stat.toJson())));
+
+                    ToastLogger.showText("Loading room statistics...", false);
+                }
+                GlobalManager.ScoringScene.load(stat, lastTrack, GlobalManager.getInstance().getSongService(), replayFile, trackMD5, null);
+            }
+            GlobalManager.getInstance().getSongService().setVolume(0.2f);
+            GlobalManager.Engine.setScene(GlobalManager.ScoringScene.getScene());
 
             // Handle input back in update thread
             var touchOptions = new TouchOptions();
             touchOptions.setRunOnUpdateThread(true);
-            engine.getTouchController().applyTouchOptions(touchOptions);
+            GlobalManager.Engine.getTouchController().applyTouchOptions(touchOptions);
 
             if (video != null) {
                 video.release();
@@ -1885,7 +1874,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         // Handle input back in update thread
         var touchOptions = new TouchOptions();
         touchOptions.setRunOnUpdateThread(true);
-        engine.getTouchController().applyTouchOptions(touchOptions);
+        GlobalManager.Engine.getTouchController().applyTouchOptions(touchOptions);
 
         if (!replaying) {
             EdExtensionHelper.onQuitGame(lastTrack);
@@ -1920,7 +1909,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
             return;
         }
         ResourceManager.getInstance().getSound("failsound").stop();
-        engine.setScene(oldScene);
+        GlobalManager.Engine.setScene(oldScene);
     }
 
 
@@ -2458,7 +2447,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         }
         paused = true;
 
-        final PauseMenu menu = new PauseMenu(engine, this, false);
+        final PauseMenu menu = new PauseMenu(GlobalManager.Engine, this, false);
         scene.setChildScene(menu.getScene(), false, true, true);
     }
 
@@ -2481,7 +2470,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
 
         if(scorebar != null) scorebar.flush();
         ResourceManager.getInstance().getSound("failsound").play();
-        final PauseMenu menu = new PauseMenu(engine, this, true);
+        final PauseMenu menu = new PauseMenu(GlobalManager.Engine, this, true);
         gameStarted = false;
 
         if (video != null) {
@@ -2674,7 +2663,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         stat.addHitOffset(acc);
 
         if (replaying) {
-            scoringScene.getReplayStat().addHitOffset(acc);
+            GlobalManager.ScoringScene.getReplayStat().addHitOffset(acc);
         }
     }
 

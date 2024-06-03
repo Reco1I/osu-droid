@@ -1,7 +1,6 @@
 package ru.nsu.ccfit.zuev.osu.menu;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 
 import com.edlplan.ext.EdExtensionHelper;
 import com.edlplan.favorite.FavoriteLibrary;
@@ -19,7 +18,7 @@ import com.rian.osu.difficulty.BeatmapDifficultyCalculator;
 import com.rian.osu.difficulty.calculator.DifficultyCalculationParameters;
 import com.rian.osu.ui.DifficultyAlgorithmSwitcher;
 import com.rian.osu.utils.LRUCache;
-import org.anddev.andengine.engine.Engine;
+
 import org.anddev.andengine.engine.handler.IUpdateHandler;
 import org.anddev.andengine.entity.Entity;
 import org.anddev.andengine.entity.primitive.Rectangle;
@@ -51,7 +50,6 @@ import ru.nsu.ccfit.zuev.osu.ToastLogger;
 import ru.nsu.ccfit.zuev.osu.TrackInfo;
 import ru.nsu.ccfit.zuev.osu.Utils;
 import ru.nsu.ccfit.zuev.osu.game.GameHelper;
-import ru.nsu.ccfit.zuev.osu.game.GameScene;
 import ru.nsu.ccfit.zuev.osu.game.mods.GameMod;
 import ru.nsu.ccfit.zuev.osu.helper.AnimSprite;
 import ru.nsu.ccfit.zuev.osu.helper.StringTable;
@@ -61,7 +59,6 @@ import ru.nsu.ccfit.zuev.osu.online.OnlinePanel;
 import ru.nsu.ccfit.zuev.osu.online.OnlineScoring;
 import ru.nsu.ccfit.zuev.osu.scoring.Replay;
 import ru.nsu.ccfit.zuev.osu.scoring.ScoreLibrary;
-import ru.nsu.ccfit.zuev.osu.scoring.ScoringScene;
 import ru.nsu.ccfit.zuev.osu.scoring.StatisticV2;
 import ru.nsu.ccfit.zuev.osuplus.R;
 import ru.nsu.ccfit.zuev.skins.OsuSkin;
@@ -77,12 +74,8 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
     public Scene scene;
     public Entity frontLayer = new Entity();
     SortOrder sortOrder = SortOrder.Title;
-    private Engine engine;
-    public GameScene game;
-    private ScoringScene scoreScene;
     private float camY = 0;
     private float velocityY;
-    private Activity context;
     private Entity backLayer = new Entity();
     private ArrayList<MenuItem> items = new ArrayList<>();
     private MenuItem selectedItem = null;
@@ -125,10 +118,6 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
         }
     }
 
-    public void setScoringScene(final ScoringScene ss) {
-        scoreScene = ss;
-    }
-
     @Nullable
     public ArrayList<ScoreBoardItem> getBoard() {
         return board.getScoreBoardItems();
@@ -142,12 +131,6 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
         return items;
     }
 
-    public void init(final Activity context, final Engine engine,
-                     final GameScene pGame) {
-        this.engine = engine;
-        game = pGame;
-        this.context = context;
-    }
 
     public void loadFilter(IFilterMenu filterMenu) {
         setFilter(filterMenu.getFilter(), filterMenu.getOrder(), filterMenu.isFavoritesOnly(),
@@ -160,7 +143,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
         scene.unregisterUpdateHandler(this);
         scene.setTouchAreaBindingEnabled(false);
         load();
-        GlobalManager.getInstance().getGameScene().setOldScene(scene);
+        GlobalManager.GameScene.setOldScene(scene);
     }
 
     public synchronized void load() {
@@ -702,7 +685,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
 
     public void loadFilterFragment() {
         filterMenu = new FilterMenuFragment();
-        filterMenu.loadConfig(context);
+        filterMenu.loadConfig(GlobalManager.Activity);
     }
 
     public void unloadFilterFragment() {
@@ -729,7 +712,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
     public FilterMenuFragment getFilterMenu() { return filterMenu; }
 
     public void show() {
-        engine.setScene(scene);
+        GlobalManager.Engine.setScene(scene);
     }
 
     public void setFilter(final String filter, final SortOrder order,
@@ -1172,7 +1155,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
 
             Replay.oldFLFollowDelay = ModMenu.getInstance().getFLfollowDelay();
 
-            game.startGame(track, null);
+            GlobalManager.GameScene.startGame(track, null);
             unload();
             return;
         }
@@ -1252,7 +1235,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
 
     public void openScore(final int id, boolean showOnline, final String playerName) {
         if (showOnline) {
-            engine.setScene(new LoadingScreen().getScene());
+            GlobalManager.Engine.setScene(new LoadingScreen().getScene());
             ToastLogger.showTextId(com.edlplan.osudroidresource.R.string.online_loadrecord, false);
 
             Execution.async(() -> {
@@ -1268,11 +1251,11 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
                     }
 
                     stat.setPlayerName(playerName);
-                    scoreScene.load(stat, null, null, OnlineManager.getReplayURL(id), null, selectedTrack);
-                    engine.setScene(scoreScene.getScene());
+                    GlobalManager.ScoringScene.load(stat, null, null, OnlineManager.getReplayURL(id), null, selectedTrack);
+                    GlobalManager.Engine.setScene(GlobalManager.ScoringScene.getScene());
                 } catch (OnlineManagerException e) {
                     Debug.e("Cannot load play info: " + e.getMessage(), e);
-                    engine.setScene(scene);
+                    GlobalManager.Engine.setScene(scene);
                 }
             });
             return;
@@ -1284,8 +1267,8 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
             stat.processLegacySC(selectedTrack);
         }
 
-        scoreScene.load(stat, null, null, stat.getReplayName(), null, selectedTrack);
-        engine.setScene(scoreScene.getScene());
+        GlobalManager.ScoringScene.load(stat, null, null, stat.getReplayName(), null, selectedTrack);
+        GlobalManager.Engine.setScene(GlobalManager.ScoringScene.getScene());
     }
 
 

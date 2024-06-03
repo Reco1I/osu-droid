@@ -16,6 +16,7 @@ import ru.nsu.ccfit.zuev.osu.GlobalManager
 import ru.nsu.ccfit.zuev.osu.GlobalManager.Engine
 import ru.nsu.ccfit.zuev.osu.MainActivity
 import ru.nsu.ccfit.zuev.osu.ToastLogger
+import ru.nsu.ccfit.zuev.osu.game.GameScene
 import ru.nsu.ccfit.zuev.osu.scoring.StatisticV2
 import java.io.File
 import ru.nsu.ccfit.zuev.osu.online.OnlineManager.getInstance as getOnline
@@ -103,10 +104,10 @@ object Multiplayer
 
     fun onLiveLeaderboard(array: JSONArray)
     {
-        if (Engine.scene != GlobalManager.getInstance().gameScene.scene)
+        if (Engine.scene != GlobalManager.GameScene.scene)
             return
 
-        GlobalManager.getInstance().gameScene.scoreBoard?.nextItems = MutableList(array.length()) { i ->
+        GlobalManager.GameScene.scoreBoard?.nextItems = MutableList(array.length()) { i ->
             val json = array.getJSONObject(i)
 
             jsonToScoreboardItem(json).apply { rank = i + 1 }
@@ -139,7 +140,7 @@ object Multiplayer
             return
 
         // Replacing server statistic with local
-        val ownScore = GlobalManager.getInstance().gameScene.stat
+        val ownScore = GlobalManager.GameScene.stat
         val ownScoreIndex = list.indexOfFirst { it.playerName == getOnline().username }.takeUnless { it == -1 }
 
         if (ownScore != null)

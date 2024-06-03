@@ -594,12 +594,11 @@ public class MainActivity extends BaseGameActivity implements
             return;
         }
         activityVisible = true;
-        GlobalManager.getInstance();
-        if (GlobalManager.Engine != null && GlobalManager.getInstance().getGameScene() != null) {
-            GlobalManager.getInstance();
-            if (GlobalManager.Engine.getScene() == GlobalManager.getInstance().getGameScene().getScene()) {
-                GlobalManager.getInstance();
-                GlobalManager.Engine.getTextureManager().reloadTextures();
+        if (GlobalManager.Engine != null) {
+            if (GlobalManager.GameScene != null) {
+                if (GlobalManager.Engine.getScene() == GlobalManager.GameScene.getScene()) {
+                    GlobalManager.Engine.getTextureManager().reloadTextures();
+                }
             }
         }
         if (GlobalManager.getInstance().getMainScene() != null) {
@@ -623,17 +622,19 @@ public class MainActivity extends BaseGameActivity implements
         if (this.mEngine == null) {
             return;
         }
-        GlobalManager.getInstance();
-        if (GlobalManager.Engine != null && GlobalManager.getInstance().getGameScene() != null) {
-            GlobalManager.getInstance();
-            if (GlobalManager.Engine.getScene() == GlobalManager.getInstance().getGameScene().getScene()) {
-                SpritePool.getInstance().purge();
+        if (GlobalManager.Engine != null) {
+            if (GlobalManager.GameScene != null) {
+                if (GlobalManager.Engine.getScene() == GlobalManager.GameScene.getScene()) {
+                    SpritePool.getInstance().purge();
 
-                if (Multiplayer.isMultiplayer) {
-                    ToastLogger.showText("You've left the match.", true);
-                    GlobalManager.getInstance().getGameScene().quit();
-                    Multiplayer.log("Player left the match.");
-                } else GlobalManager.getInstance().getGameScene().pause();
+                    if (Multiplayer.isMultiplayer) {
+                        ToastLogger.showText("You've left the match.", true);
+                        GlobalManager.GameScene.quit();
+                        Multiplayer.log("Player left the match.");
+                    } else {
+                        GlobalManager.GameScene.pause();
+                    }
+                }
             }
         }
         if (GlobalManager.getInstance().getMainScene() != null) {
@@ -669,12 +670,12 @@ public class MainActivity extends BaseGameActivity implements
 
         if (getEngine() != null && !hasFocus) {
 
-            if (GlobalManager.getInstance().getGameScene() != null
-                    && getEngine().getScene() == GlobalManager.getInstance().getGameScene().getScene()
-                    && GlobalManager.getInstance().getGameScene() != null) {
-
-                if (!GlobalManager.getInstance().getGameScene().isPaused() && !Multiplayer.isMultiplayer)
-                    GlobalManager.getInstance().getGameScene().pause();
+            if (GlobalManager.GameScene != null) {
+                if (getEngine().getScene() == GlobalManager.GameScene.getScene()) {
+                    if (!GlobalManager.GameScene.isPaused() && !Multiplayer.isMultiplayer) {
+                        GlobalManager.GameScene.pause();
+                    }
+                }
             }
 
             if (Multiplayer.isConnected()
@@ -730,13 +731,12 @@ public class MainActivity extends BaseGameActivity implements
             return true;
         }
 
-        if (GlobalManager.getInstance().getGameScene() != null && (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_MENU)) {
-            GlobalManager.getInstance();
-            if (GlobalManager.Engine.getScene() == GlobalManager.getInstance().getGameScene().getScene()) {
-                if (GlobalManager.getInstance().getGameScene().isPaused()) {
-                    GlobalManager.getInstance().getGameScene().resume();
+        if (GlobalManager.GameScene != null && (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_MENU)) {
+            if (GlobalManager.Engine.getScene() == GlobalManager.GameScene.getScene()) {
+                if (GlobalManager.GameScene.isPaused()) {
+                    GlobalManager.GameScene.resume();
                 } else {
-                    GlobalManager.getInstance().getGameScene().pause();
+                    GlobalManager.GameScene.pause();
                 }
                 return true;
             }
@@ -832,11 +832,9 @@ public class MainActivity extends BaseGameActivity implements
     }
 
     public void forcedExit() {
-        GlobalManager.getInstance();
-        if (GlobalManager.Engine.getScene() == GlobalManager.getInstance().getGameScene().getScene()) {
-            GlobalManager.getInstance().getGameScene().quit();
+        if (GlobalManager.Engine.getScene() == GlobalManager.GameScene.getScene()) {
+            GlobalManager.GameScene.quit();
         }
-        GlobalManager.getInstance();
         GlobalManager.Engine.setScene(GlobalManager.getInstance().getMainScene().getScene());
         GlobalManager.getInstance().getMainScene().exit();
     }

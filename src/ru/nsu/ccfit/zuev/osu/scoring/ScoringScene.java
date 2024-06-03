@@ -11,7 +11,7 @@ import com.rian.osu.beatmap.parser.BeatmapParser;
 import com.rian.osu.difficulty.BeatmapDifficultyCalculator;
 import com.rian.osu.difficulty.attributes.DroidPerformanceAttributes;
 import com.rian.osu.ui.SendingPanel;
-import org.anddev.andengine.engine.Engine;
+
 import org.anddev.andengine.entity.modifier.FadeInModifier;
 import org.anddev.andengine.entity.modifier.ParallelEntityModifier;
 import org.anddev.andengine.entity.modifier.ScaleModifier;
@@ -33,7 +33,6 @@ import ru.nsu.ccfit.zuev.osu.GlobalManager;
 import ru.nsu.ccfit.zuev.osu.ResourceManager;
 import ru.nsu.ccfit.zuev.osu.TrackInfo;
 import ru.nsu.ccfit.zuev.osu.Utils;
-import ru.nsu.ccfit.zuev.osu.game.GameScene;
 import ru.nsu.ccfit.zuev.osu.game.cursor.flashlight.FlashLightEntity;
 import ru.nsu.ccfit.zuev.osu.game.mods.GameMod;
 import ru.nsu.ccfit.zuev.osu.menu.ModMenu;
@@ -42,9 +41,6 @@ import ru.nsu.ccfit.zuev.osu.online.OnlineManager;
 import ru.nsu.ccfit.zuev.osuplus.BuildConfig;
 
 public class ScoringScene {
-    private final Engine engine;
-    private final GameScene game;
-    private final SongMenu menu;
     private Scene scene;
     private SongService songService;
     private StatisticV2 replayStat;
@@ -56,13 +52,6 @@ public class ScoringScene {
 
     private StatisticSelector selector;
 
-
-    public ScoringScene(final Engine pEngine, final GameScene pGame,
-                        final SongMenu pMenu) {
-        engine = pEngine;
-        game = pGame;
-        menu = pMenu;
-    }
 
     public void load(final StatisticV2 stat, final TrackInfo track,
                      final SongService player, final String replay, final String mapMD5,
@@ -241,8 +230,8 @@ public class ScoringScene {
                     }
                     if (pSceneTouchEvent.isActionUp()) {
                         ResourceManager.getInstance().getSound("applause").stop();
-                        engine.setScene(menu.getScene());
-                        game.startGame(null, null);
+                        GlobalManager.Engine.setScene(GlobalManager.SongMenu.getScene());
+                        GlobalManager.GameScene.startGame(null, null);
                         scene = null;
                         stopMusic();
                         return true;
@@ -271,7 +260,7 @@ public class ScoringScene {
                     if (pSceneTouchEvent.isActionUp()) {
                         ResourceManager.getInstance().getSound("applause").stop();
                         SongMenu.stopMusicStatic();
-                        engine.setScene(menu.getScene());
+                        GlobalManager.Engine.setScene(GlobalManager.SongMenu.getScene());
 
                         Replay.oldMod = ModMenu.getInstance().getMod();
                         Replay.oldChangeSpeed = ModMenu.getInstance().getChangeSpeed();
@@ -292,7 +281,7 @@ public class ScoringScene {
                         ModMenu.getInstance().setCustomCS(stat.getCustomCS());
                         ModMenu.getInstance().setCustomHP(stat.getCustomHP());
 
-                        game.startGame(trackToReplay, replay);
+                        GlobalManager.GameScene.startGame(trackToReplay, replay);
 
                         scene = null;
                         stopMusic();
@@ -546,14 +535,14 @@ public class ScoringScene {
         //save and upload score
         if (track != null && track.getMD5() != null && track.getMD5().equals(mapMD5)) {
             ResourceManager.getInstance().getSound("applause").play();
-            if (!Multiplayer.isMultiplayer || !GlobalManager.getInstance().getGameScene().hasFailed) {
+            if (!Multiplayer.isMultiplayer || !GlobalManager.GameScene.hasFailed) {
                 ScoreLibrary.getInstance().addScore(track.getFilename(), stat, replay);
             }
 
             if (stat.getTotalScoreWithMultiplier() > 0 && OnlineManager.getInstance().isStayOnline() &&
                     OnlineManager.getInstance().isReadyToSend()) {
 
-                if (GlobalManager.getInstance().getGameScene().hasFailed ||
+                if (GlobalManager.GameScene.hasFailed ||
                         (Multiplayer.isMultiplayer && !Config.isSubmitScoreOnMultiplayer()))
                     return;
 

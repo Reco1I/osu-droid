@@ -36,6 +36,7 @@ import ru.nsu.ccfit.zuev.osu.DifficultyAlgorithm
 import ru.nsu.ccfit.zuev.osu.GlobalManager
 import ru.nsu.ccfit.zuev.osu.GlobalManager.Engine
 import ru.nsu.ccfit.zuev.osu.ToastLogger
+import ru.nsu.ccfit.zuev.osu.game.GameScene
 import ru.nsu.ccfit.zuev.osu.game.mods.GameMod.MOD_SCOREV2
 import ru.nsu.ccfit.zuev.osu.helper.AnimSprite
 import ru.nsu.ccfit.zuev.osu.helper.TextButton
@@ -996,7 +997,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
     override fun onRoomMatchPlay()
     {
-        if (player!!.status != MISSING_BEATMAP && Engine.scene != GlobalManager.getInstance().gameScene.scene)
+        if (player!!.status != MISSING_BEATMAP && Engine.scene != GlobalManager.GameScene.scene)
         {
             if (GlobalManager.getInstance().selectedTrack == null)
             {
@@ -1015,7 +1016,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
             Replay.oldCustomCS = getModMenu().customCS
             Replay.oldCustomHP = getModMenu().customHP
 
-            GlobalManager.getInstance().gameScene.startGame(GlobalManager.getInstance().selectedTrack, null)
+            GlobalManager.GameScene.startGame(GlobalManager.getInstance().selectedTrack, null)
 
             // Hiding any player menu if its shown
             mainThread { playerList!!.menu.dismiss() }
@@ -1027,8 +1028,9 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
     override fun onRoomMatchStart()
     {
-        if (Engine.scene is LoadingScene)
-            GlobalManager.getInstance().gameScene.start()
+        if (Engine.scene is LoadingScene) {
+            GlobalManager.GameScene.start()
+        }
 
         // Updating player list
         playerList!!.invalidate()
@@ -1036,10 +1038,10 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
     override fun onRoomMatchSkip()
     {
-        if (Engine.scene != GlobalManager.getInstance().gameScene.scene)
+        if (Engine.scene != GlobalManager.GameScene.scene)
             return
 
-        GlobalManager.getInstance().gameScene.skip()
+        GlobalManager.GameScene.skip()
     }
 
 
@@ -1086,7 +1088,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
         {
             Multiplayer.log("Kicked from room.")
 
-            if (Engine.scene == GlobalManager.getInstance().gameScene.scene) {
+            if (Engine.scene == GlobalManager.GameScene.scene) {
                 ToastLogger.showText("You were kicked by the room host, but you can continue playing.", true)
                 return
             }

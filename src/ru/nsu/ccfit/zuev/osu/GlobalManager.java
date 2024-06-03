@@ -67,24 +67,25 @@ public class GlobalManager {
         saveServiceObject = (SaveServiceObject) mainActivity.getApplication();
         songService = saveServiceObject.getSongService();
         setLoadingProgress(10);
-        setMainScene(new MainScene());
-        getMainScene().load(mainActivity);
+
+        MainScene = new MainScene();
+        MainScene.load(Activity);
         setInfo("Loading skin...");
         skinNow = Config.getSkinPath();
         ResourceManager.getInstance().loadSkin(skinNow);
         ScoreLibrary.getInstance().load(mainActivity);
         setLoadingProgress(20);
+
         PropertiesLibrary.getInstance().load(mainActivity);
         setLoadingProgress(30);
-        setGameScene(new GameScene(Engine));
-        setSongMenu(new SongMenu());
+
+        GameScene = new GameScene();
+        SongMenu = new SongMenu();
+        SongMenu.load();
         setLoadingProgress(40);
-        getSongMenu().init(mainActivity, Engine, getGameScene());
-        getSongMenu().load();
-        setScoring(new ScoringScene(Engine, getGameScene(), getSongMenu()));
-        getSongMenu().setScoringScene(getScoring());
-        getGameScene().setScoringScene(getScoring());
-        getGameScene().setOldScene(getSongMenu().getScene());
+
+        ScoringScene = new ScoringScene();
+        GameScene.setOldScene(SongMenu.scene);
         if (songService != null) {
             songService.stop();
             songService.hideNotification();
@@ -97,14 +98,6 @@ public class GlobalManager {
 
     public void setSkinNow(String skinNow) {
         this.skinNow = skinNow;
-    }
-
-    public GameScene getGameScene() {
-        return gameScene;
-    }
-
-    public void setGameScene(GameScene gameScene) {
-        this.gameScene = gameScene;
     }
 
     public MainScene getMainScene() {
