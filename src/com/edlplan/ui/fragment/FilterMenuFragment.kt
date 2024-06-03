@@ -20,12 +20,12 @@ import com.reco1l.toolkt.android.cornerRadius
 import com.reco1l.toolkt.android.dp
 import org.anddev.andengine.engine.handler.IUpdateHandler
 import org.anddev.andengine.entity.scene.Scene
+import ru.nsu.ccfit.zuev.osu.GlobalManager
 import ru.nsu.ccfit.zuev.osu.helper.InputManager
 import ru.nsu.ccfit.zuev.osu.helper.StringTable
 import ru.nsu.ccfit.zuev.osu.menu.IFilterMenu
 import ru.nsu.ccfit.zuev.osu.menu.SongMenu
 import ru.nsu.ccfit.zuev.osuplus.R
-import ru.nsu.ccfit.zuev.osu.GlobalManager.getInstance as getGlobal
 
 class FilterMenuFragment : BaseFragment(), IUpdateHandler, IFilterMenu {
     private var configContext: Context? = null
@@ -118,7 +118,7 @@ class FilterMenuFragment : BaseFragment(), IUpdateHandler, IFilterMenu {
 
     override fun dismiss() {
         playEndAnim { super.dismiss() }
-        getGlobal().songMenu.unloadFilterFragment()
+        GlobalManager.getInstance().songMenu.unloadFilterFragment()
         saveState(savedFolder, savedFavOnly, savedFilter)
     }
 

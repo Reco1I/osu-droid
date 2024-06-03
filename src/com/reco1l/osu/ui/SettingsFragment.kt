@@ -5,15 +5,12 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
 import android.text.InputType.TYPE_CLASS_TEXT
 import android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
 import android.view.ContextThemeWrapper
-import android.view.MotionEvent
 import android.view.View
-import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.XmlRes
@@ -42,6 +39,7 @@ import com.reco1l.toolkt.android.layoutWidth
 import com.reco1l.toolkt.android.topMargin
 import ru.nsu.ccfit.zuev.osu.Config
 import ru.nsu.ccfit.zuev.osu.GlobalManager
+import ru.nsu.ccfit.zuev.osu.GlobalManager.Engine
 import ru.nsu.ccfit.zuev.osu.LibraryManager
 import ru.nsu.ccfit.zuev.osu.MainActivity
 import ru.nsu.ccfit.zuev.osu.PropertiesLibrary
@@ -207,7 +205,7 @@ class SettingsFragment : com.edlplan.ui.fragment.SettingsFragment() {
                         GlobalManager.getInstance().skinNow = Config.getSkinPath()
                         SkinManager.getInstance().clearSkin()
                         ResourceManager.getInstance().loadSkin(newValue.toString())
-                        GlobalManager.getInstance().engine.textureManager.reloadTextures()
+                        Engine.textureManager.reloadTextures()
 
                         mainThread {
                             loading.dismiss()

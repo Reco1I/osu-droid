@@ -8,6 +8,8 @@ import com.reco1l.osu.mainThread
 import com.reco1l.osu.multiplayer.RoomScene
 import com.reco1l.osu.ui.SettingsFragment
 import org.anddev.andengine.input.touch.TouchEvent
+import ru.nsu.ccfit.zuev.osu.GlobalManager
+import ru.nsu.ccfit.zuev.osu.GlobalManager.Engine
 import ru.nsu.ccfit.zuev.osu.LibraryManager
 import ru.nsu.ccfit.zuev.osu.MainScene
 import ru.nsu.ccfit.zuev.osu.MainScene.MusicOption
@@ -16,7 +18,6 @@ import ru.nsu.ccfit.zuev.osu.helper.AnimSprite
 import ru.nsu.ccfit.zuev.osu.helper.StringTable
 import ru.nsu.ccfit.zuev.osu.menu.LoadingScreen
 import ru.nsu.ccfit.zuev.osuplus.R
-import ru.nsu.ccfit.zuev.osu.GlobalManager.getInstance as getGlobal
 import ru.nsu.ccfit.zuev.osu.ResourceManager.getInstance as getResources
 import ru.nsu.ccfit.zuev.osu.online.OnlineManager.getInstance as getOnline
 
@@ -64,27 +65,27 @@ class MainMenu(val main: MainScene)
                 if (main.isOnExitAnim)
                     return true
 
-                getGlobal().songService.isGaming = true
+                GlobalManager.getInstance().songService.isGaming = true
 
                 async {
                     LoadingScreen().show()
 
-                    getGlobal().mainActivity.checkNewSkins()
-                    getGlobal().mainActivity.checkNewBeatmaps()
+                    GlobalManager.Activity.checkNewSkins()
+                    GlobalManager.Activity.checkNewBeatmaps()
                     LibraryManager.INSTANCE.updateLibrary(true)
 
                     if (LibraryManager.INSTANCE.library.isEmpty())
                     {
-                        getGlobal().songService.isGaming = false
-                        getGlobal().engine.scene = main.scene
+                        GlobalManager.getInstance().songService.isGaming = false
+                        Engine.scene = main.scene
 
                         BeatmapListing().show()
                     } else {
                         main.musicControl(MusicOption.PLAY)
 
-                        getGlobal().songMenu.reload()
-                        getGlobal().songMenu.show()
-                        getGlobal().songMenu.select()
+                        GlobalManager.getInstance().songMenu.reload()
+                        GlobalManager.getInstance().songMenu.show()
+                        GlobalManager.getInstance().songMenu.select()
                     }
                 }
                 return true
@@ -114,7 +115,7 @@ class MainMenu(val main: MainScene)
                 {
                     setColor(1f, 1f, 1f)
                     if (main.isOnExitAnim) return true
-                    getGlobal().songService.isGaming = true
+                    GlobalManager.getInstance().songService.isGaming = true
                     mainThread { SettingsFragment().show() }
                     return true
                 }
@@ -139,17 +140,17 @@ class MainMenu(val main: MainScene)
 
                 if (main.isOnExitAnim) return true
 
-                getGlobal().songService.isGaming = true
+                GlobalManager.getInstance().songService.isGaming = true
                 Multiplayer.isMultiplayer = true
 
                 async {
                     LoadingScreen().show()
 
-                    getGlobal().mainActivity.checkNewSkins()
-                    getGlobal().mainActivity.checkNewBeatmaps()
+                    GlobalManager.Activity.checkNewSkins()
+                    GlobalManager.Activity.checkNewBeatmaps()
                     LibraryManager.INSTANCE.updateLibrary(true)
 
-                    getGlobal().songMenu.reload()
+                    GlobalManager.getInstance().songMenu.reload()
 
                     RoomScene.load()
                     LobbyScene.load()

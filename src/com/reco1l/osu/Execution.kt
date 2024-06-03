@@ -3,7 +3,8 @@
 package com.reco1l.osu
 
 import kotlinx.coroutines.Runnable
-import ru.nsu.ccfit.zuev.osu.GlobalManager.getInstance as getGlobal
+import ru.nsu.ccfit.zuev.osu.GlobalManager.Activity
+import ru.nsu.ccfit.zuev.osu.GlobalManager.Engine
 
 
 /**
@@ -22,7 +23,7 @@ fun runSafe(block: Runnable) = com.reco1l.toolkt.kotlin.runSafe { block.run() }
 fun delayed(time: Long, block: Runnable) = com.reco1l.toolkt.kotlin.delayed(time) { block.run() }
 
 
-fun mainThread(block: Runnable) = getGlobal().mainActivity.runOnUiThread(block)
+fun mainThread(block: Runnable) = Activity.runOnUiThread(block)
 
-fun updateThread(block: Runnable) = getGlobal().engine.runOnUpdateThread(block)
+fun updateThread(block: Runnable) = Engine.runOnUpdateThread(block)
 

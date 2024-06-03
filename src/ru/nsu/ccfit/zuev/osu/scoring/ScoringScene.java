@@ -618,7 +618,7 @@ public class ScoringScene {
             return;
         }
         replayMusic();
-        GlobalManager.getInstance().getEngine().setScene(GlobalManager.getInstance().getSongMenu().getScene());
+        GlobalManager.Engine.setScene(GlobalManager.getInstance().getSongMenu().getScene());
         GlobalManager.getInstance().getSongMenu().updateScore();
         setReplayID(-1);
     }

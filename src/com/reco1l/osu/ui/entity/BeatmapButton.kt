@@ -14,11 +14,11 @@ import org.anddev.andengine.input.touch.TouchEvent
 import org.anddev.andengine.util.MathUtils
 import ru.nsu.ccfit.zuev.osu.Config
 import ru.nsu.ccfit.zuev.osu.DifficultyAlgorithm
+import ru.nsu.ccfit.zuev.osu.GlobalManager
 import ru.nsu.ccfit.zuev.osu.RGBColor
 import ru.nsu.ccfit.zuev.osu.ToastLogger
 import ru.nsu.ccfit.zuev.osu.menu.MenuItemTrack
 import ru.nsu.ccfit.zuev.skins.OsuSkin
-import ru.nsu.ccfit.zuev.osu.GlobalManager.getInstance as getGlobal
 import ru.nsu.ccfit.zuev.osu.LibraryManager.INSTANCE as libraryManager
 import ru.nsu.ccfit.zuev.osu.ResourceManager.getInstance as getResources
 
@@ -85,14 +85,14 @@ class BeatmapButton : Sprite(0f, 0f, getResources().getTexture("menu-button-back
         {
             if (libraryManager.library.isEmpty())
             {
-                getGlobal().songService.pause()
+                GlobalManager.getInstance().songService.pause()
                 BeatmapListing().show()
                 return true
             }
 
-            getGlobal().songMenu.reload()
-            getGlobal().songMenu.show()
-            getGlobal().songMenu.select()
+            GlobalManager.getInstance().songMenu.reload()
+            GlobalManager.getInstance().songMenu.show()
+            GlobalManager.getInstance().songMenu.select()
 
             // We notify all clients that the host is changing beatmap
             RoomAPI.changeBeatmap()
@@ -101,7 +101,7 @@ class BeatmapButton : Sprite(0f, 0f, getResources().getTexture("menu-button-back
 
 
         // If the room beatmap has set a 'parentSetID' it means that the beatmap can be downloaded trough Chimu.moe
-        if (getGlobal().selectedTrack == null) Multiplayer.room!!.beatmap?.apply {
+        if (GlobalManager.getInstance().selectedTrack == null) Multiplayer.room!!.beatmap?.apply {
 
             // If it's null the beatmap isn't available on Chimu servers.
             if (parentSetID == null)
@@ -136,7 +136,7 @@ class BeatmapButton : Sprite(0f, 0f, getResources().getTexture("menu-button-back
         trackTitle.text = "${beatmap.artist} - ${beatmap.title}"
         creatorInfo.text = "Mapped by ${beatmap.creator} // ${beatmap.version}"
 
-        if (getGlobal().selectedTrack == null)
+        if (GlobalManager.getInstance().selectedTrack == null)
         {
             creatorInfo.text += "\n${
 
@@ -149,8 +149,8 @@ class BeatmapButton : Sprite(0f, 0f, getResources().getTexture("menu-button-back
         }
 
         val difficulty =
-            if (Config.getDifficultyAlgorithm() == DifficultyAlgorithm.standard) getGlobal().selectedTrack.standardDifficulty
-            else getGlobal().selectedTrack.droidDifficulty
+            if (Config.getDifficultyAlgorithm() == DifficultyAlgorithm.standard) GlobalManager.getInstance().selectedTrack.standardDifficulty
+            else GlobalManager.getInstance().selectedTrack.droidDifficulty
 
         stars.forEachIndexed { i, it ->
             it.isVisible = difficulty >= i

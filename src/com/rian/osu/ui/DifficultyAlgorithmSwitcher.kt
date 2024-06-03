@@ -6,8 +6,8 @@ import org.anddev.andengine.input.touch.TouchEvent
 import org.anddev.andengine.util.MathUtils
 import ru.nsu.ccfit.zuev.osu.Config
 import ru.nsu.ccfit.zuev.osu.DifficultyAlgorithm
+import ru.nsu.ccfit.zuev.osu.GlobalManager
 import ru.nsu.ccfit.zuev.osu.helper.AnimSprite
-import ru.nsu.ccfit.zuev.osu.GlobalManager.getInstance as getGlobal
 
 class DifficultyAlgorithmSwitcher : AnimSprite(
     0f, 0f, 0f,
@@ -52,7 +52,7 @@ class DifficultyAlgorithmSwitcher : AnimSprite(
         if (Multiplayer.isConnected) {
             RoomScene.switchDifficultyAlgorithm()
         } else {
-            getGlobal().songMenu.switchDifficultyAlgorithm()
+            GlobalManager.getInstance().songMenu.switchDifficultyAlgorithm()
         }
 
         onDeselect()

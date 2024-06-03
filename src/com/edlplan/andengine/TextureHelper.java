@@ -66,7 +66,8 @@ public class TextureHelper {
 
         TextureRegion region = TextureRegionFactory.createFromSource(tex, source, 0, 0,
                 false);
-        GlobalManager.getInstance().getEngine().getTextureManager().loadTexture(tex);
+        GlobalManager.getInstance();
+        GlobalManager.Engine.getTextureManager().loadTexture(tex);
         return region;
     }
 
@@ -97,7 +98,7 @@ public class TextureHelper {
 
         TextureRegion region = TextureRegionFactory.createFromSource(tex, source, 0, 0,
                 false);
-        GlobalManager.getInstance().getEngine().getTextureManager().loadTexture(tex);
+        GlobalManager.Engine.getTextureManager().loadTexture(tex);
         return region;
     }
 

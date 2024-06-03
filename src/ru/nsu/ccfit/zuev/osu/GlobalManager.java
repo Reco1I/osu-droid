@@ -4,6 +4,7 @@ import android.util.DisplayMetrics;
 
 import org.anddev.andengine.engine.Engine;
 import org.anddev.andengine.engine.camera.Camera;
+import org.anddev.andengine.engine.camera.SmoothCamera;
 
 import ru.nsu.ccfit.zuev.audio.serviceAudio.SaveServiceObject;
 import ru.nsu.ccfit.zuev.audio.serviceAudio.SongService;
@@ -16,9 +17,26 @@ import ru.nsu.ccfit.zuev.osu.scoring.ScoringScene;
  * Created by Fuuko on 2015/4/24.
  */
 public class GlobalManager {
+
+
+    public static Engine Engine;
+
+    public static SmoothCamera Camera;
+
+    public static MainActivity Activity;
+
+
+    public static SongMenu SongMenu;
+
+    public static GameScene GameScene;
+
+    public static MainScene MainScene;
+
+    public static ScoringScene ScoringScene;
+
+
+
     private static GlobalManager instance;
-    private Engine engine;
-    private Camera camera;
     private GameScene gameScene;
     private MainScene mainScene;
     private ScoringScene scoring;
@@ -59,12 +77,12 @@ public class GlobalManager {
         setLoadingProgress(20);
         PropertiesLibrary.getInstance().load(mainActivity);
         setLoadingProgress(30);
-        setGameScene(new GameScene(getEngine()));
+        setGameScene(new GameScene(Engine));
         setSongMenu(new SongMenu());
         setLoadingProgress(40);
-        getSongMenu().init(mainActivity, getEngine(), getGameScene());
+        getSongMenu().init(mainActivity, Engine, getGameScene());
         getSongMenu().load();
-        setScoring(new ScoringScene(getEngine(), getGameScene(), getSongMenu()));
+        setScoring(new ScoringScene(Engine, getGameScene(), getSongMenu()));
         getSongMenu().setScoringScene(getScoring());
         getGameScene().setScoringScene(getScoring());
         getGameScene().setOldScene(getSongMenu().getScene());
@@ -72,14 +90,6 @@ public class GlobalManager {
             songService.stop();
             songService.hideNotification();
         }
-    }
-
-    public Engine getEngine() {
-        return engine;
-    }
-
-    public void setEngine(Engine engine) {
-        this.engine = engine;
     }
 
     public String getSkinNow() {
@@ -91,11 +101,7 @@ public class GlobalManager {
     }
 
     public Camera getCamera() {
-        return camera;
-    }
-
-    public void setCamera(Camera camera) {
-        this.camera = camera;
+        return Camera;
     }
 
     public GameScene getGameScene() {

@@ -8,11 +8,12 @@ import org.anddev.andengine.entity.sprite.Sprite
 import org.anddev.andengine.entity.text.ChangeableText
 import org.anddev.andengine.input.touch.TouchEvent
 import org.anddev.andengine.util.MathUtils
+import ru.nsu.ccfit.zuev.osu.GlobalManager
+import ru.nsu.ccfit.zuev.osu.GlobalManager.Engine
 import ru.nsu.ccfit.zuev.osu.scoring.StatisticV2
 import java.text.NumberFormat.getNumberInstance
 import java.util.Locale.ENGLISH
 import java.util.Locale.US
-import ru.nsu.ccfit.zuev.osu.GlobalManager.getInstance as getGlobal
 import ru.nsu.ccfit.zuev.osu.ResourceManager.getInstance as getResources
 
 /**
@@ -21,15 +22,15 @@ import ru.nsu.ccfit.zuev.osu.ResourceManager.getInstance as getResources
 class StatisticSelector(stats: Array<StatisticV2>?) : ScrollableList(), ITouchArea
 {
 
-    private var selected: StatisticV2? = getGlobal().scoring.currentStatistic
+    private var selected: StatisticV2? = GlobalManager.getInstance().scoring.currentStatistic
         set(value)
         {
             if (value != field && value != null)
             {
                 field = value
 
-                getGlobal().scoring.load(value, getGlobal().scoring.track, getGlobal().songService, null, null, null)
-                getGlobal().engine.scene = getGlobal().scoring.scene
+                GlobalManager.getInstance().scoring.load(value, GlobalManager.getInstance().scoring.track, GlobalManager.getInstance().songService, null, null, null)
+                Engine.scene = GlobalManager.getInstance().scoring.scene
             }
         }
 

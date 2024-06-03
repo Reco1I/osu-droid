@@ -22,7 +22,6 @@ import ru.nsu.ccfit.zuev.osu.helper.TextButton
 import ru.nsu.ccfit.zuev.osu.menu.LoadingScreen
 import ru.nsu.ccfit.zuev.osu.online.OnlinePanel
 import ru.nsu.ccfit.zuev.skins.OsuSkin
-import ru.nsu.ccfit.zuev.osu.GlobalManager.getInstance as getGlobal
 import ru.nsu.ccfit.zuev.osu.ResourceManager.getInstance as getResources
 import ru.nsu.ccfit.zuev.osu.online.OnlineManager.getInstance as getOnline
 
@@ -214,7 +213,7 @@ object LobbyScene : Scene()
         if (Multiplayer.isConnected)
             return
 
-        getGlobal().songService.isGaming = true
+        GlobalManager.getInstance().songService.isGaming = true
         Multiplayer.isMultiplayer = true
 
         async {
@@ -222,8 +221,8 @@ object LobbyScene : Scene()
             try {
                 LoadingScreen().show()
 
-                getGlobal().mainActivity.checkNewSkins()
-                getGlobal().mainActivity.checkNewBeatmaps()
+                GlobalManager.getInstance().mainActivity.checkNewSkins()
+                GlobalManager.getInstance().mainActivity.checkNewBeatmaps()
                 LibraryManager.INSTANCE.updateLibrary(true)
 
                 RoomScene.load()
@@ -340,15 +339,14 @@ object LobbyScene : Scene()
         search.dismiss()
 
         Multiplayer.isMultiplayer = false
-        getGlobal().songService.isGaming = false
-
-        getGlobal().mainScene.show()
+        GlobalManager.getInstance().songService.isGaming = false
+        GlobalManager.getInstance().mainScene.show()
     }
 
     fun show()
     {
         updateBackground()
-        getGlobal().engine.scene = this
+        GlobalManager.Engine.scene = this
         updateList()
 
         search.show()

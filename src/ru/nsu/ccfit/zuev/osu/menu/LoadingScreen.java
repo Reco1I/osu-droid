@@ -77,7 +77,7 @@ public class LoadingScreen implements IUpdateHandler {
     }
 
     public void show() {
-        GlobalManager.getInstance().getEngine().setScene(scene);
+        GlobalManager.Engine.setScene(scene);
     }
 
     @SuppressLint("DefaultLocale")

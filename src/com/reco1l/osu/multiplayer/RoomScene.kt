@@ -1,6 +1,5 @@
 package com.reco1l.osu.multiplayer
 
-import android.app.AlertDialog
 import com.reco1l.ibancho.IPlayerEventListener
 import com.reco1l.ibancho.IRoomEventListener
 import com.reco1l.ibancho.RoomAPI
@@ -34,6 +33,8 @@ import org.anddev.andengine.util.MathUtils
 import org.json.JSONArray
 import ru.nsu.ccfit.zuev.osu.Config
 import ru.nsu.ccfit.zuev.osu.DifficultyAlgorithm
+import ru.nsu.ccfit.zuev.osu.GlobalManager
+import ru.nsu.ccfit.zuev.osu.GlobalManager.Engine
 import ru.nsu.ccfit.zuev.osu.ToastLogger
 import ru.nsu.ccfit.zuev.osu.game.mods.GameMod.MOD_SCOREV2
 import ru.nsu.ccfit.zuev.osu.helper.AnimSprite
@@ -44,7 +45,6 @@ import ru.nsu.ccfit.zuev.osu.scoring.Replay
 import ru.nsu.ccfit.zuev.skins.OsuSkin
 import java.text.SimpleDateFormat
 import java.util.*
-import ru.nsu.ccfit.zuev.osu.GlobalManager.getInstance as getGlobal
 import ru.nsu.ccfit.zuev.osu.LibraryManager.INSTANCE as library
 import ru.nsu.ccfit.zuev.osu.ResourceManager.getInstance as getResources
 import ru.nsu.ccfit.zuev.osu.menu.ModMenu.getInstance as getModMenu
@@ -391,7 +391,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
                 {
                     frame = 0
                     if (!moved)
-                        getModMenu().show(this@RoomScene, getGlobal().selectedTrack)
+                        getModMenu().show(this@RoomScene, GlobalManager.getInstance().selectedTrack)
                     return true
                 }
                 if (event.isActionOutside || event.isActionMove && MathUtils.distance(dx, dy, localX, localY) > 50)
@@ -436,7 +436,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
     override fun onSceneTouchEvent(event: TouchEvent): Boolean {
         trackButton?.also {
             beatmapInfoRectangle?.isVisible =
-                getGlobal().selectedTrack != null &&
+                GlobalManager.getInstance().selectedTrack != null &&
                 !event.isActionUp &&
                 event.x in it.x..it.x + it.width &&
                 event.y in it.y..it.y + it.height
@@ -550,7 +550,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
     private fun updateBeatmapInfo()
     {
-        beatmapInfoRectangle!!.isVisible = getGlobal().selectedTrack?.let { track ->
+        beatmapInfoRectangle!!.isVisible = GlobalManager.getInstance().selectedTrack?.let { track ->
 
             beatmapInfoText.text = """
                 Length: ${
@@ -600,7 +600,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
         var newStatus = NOT_READY
 
-        if (room!!.beatmap != null && getGlobal().selectedTrack == null)
+        if (room!!.beatmap != null && GlobalManager.getInstance().selectedTrack == null)
             newStatus = MISSING_BEATMAP
 
         if (player!!.status != newStatus)
@@ -646,7 +646,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
     fun show()
     {
-        (getGlobal().camera as SmoothCamera).apply {
+        (GlobalManager.Engine.camera as SmoothCamera).apply {
 
             setZoomFactorDirect(1f)
 
@@ -660,7 +660,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
             return
         }
 
-        getGlobal().engine.scene = this
+        Engine.scene = this
 
         // Updating beatmap just in case only if there's no await lock.
         if (!awaitBeatmapChange)
@@ -753,7 +753,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
             {
                 // Handling special case when the beatmap could have been changed and match was started while player was
                 // disconnected.
-                if (getGlobal().selectedTrack != null)
+                if (GlobalManager.getInstance().selectedTrack != null)
                     onRoomMatchPlay()
                 else
                     invalidateStatus()
@@ -809,13 +809,13 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
         room!!.beatmap = beatmap
 
         // Searching the beatmap in the library
-        getGlobal().selectedTrack = library.findTrackByMD5(beatmap?.md5)
+        GlobalManager.getInstance().selectedTrack = library.findTrackByMD5(beatmap?.md5)
 
         // Updating track button
         trackButton!!.updateBeatmap(beatmap)
 
         // Preventing from change song when host is in room while other players are in gameplay
-        if (getGlobal().engine.scene != this)
+        if (Engine.scene != this)
         {
             awaitBeatmapChange = false
             return
@@ -829,20 +829,20 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
         invalidateStatus()
 
         // Updating background
-        updateBackground(getGlobal().selectedTrack?.background)
+        updateBackground(GlobalManager.getInstance().selectedTrack?.background)
         updateBeatmapInfo()
 
         // Releasing await lock
         awaitBeatmapChange = false
 
-        if (getGlobal().selectedTrack == null)
+        if (GlobalManager.getInstance().selectedTrack == null)
         {
-            getGlobal().songService.stop()
+            GlobalManager.getInstance().songService.stop()
             return
         }
 
-        getGlobal().songService.preLoad(getGlobal().selectedTrack.beatmap.music)
-        getGlobal().songService.play()
+        GlobalManager.getInstance().songService.preLoad(GlobalManager.getInstance().selectedTrack.beatmap.music)
+        GlobalManager.getInstance().songService.play()
     }
 
     override fun onRoomHostChange(uid: Long)
@@ -996,15 +996,15 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
     override fun onRoomMatchPlay()
     {
-        if (player!!.status != MISSING_BEATMAP && getGlobal().engine.scene != getGlobal().gameScene.scene)
+        if (player!!.status != MISSING_BEATMAP && Engine.scene != GlobalManager.getInstance().gameScene.scene)
         {
-            if (getGlobal().selectedTrack == null)
+            if (GlobalManager.getInstance().selectedTrack == null)
             {
                 Multiplayer.log("WARNING: Attempt to start match with null track.")
                 return
             }
 
-            getGlobal().songMenu.stopMusic()
+            GlobalManager.getInstance().songMenu.stopMusic()
 
             Replay.oldMod = getModMenu().mod
             Replay.oldChangeSpeed = getModMenu().changeSpeed
@@ -1015,7 +1015,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
             Replay.oldCustomCS = getModMenu().customCS
             Replay.oldCustomHP = getModMenu().customHP
 
-            getGlobal().gameScene.startGame(getGlobal().selectedTrack, null)
+            GlobalManager.getInstance().gameScene.startGame(GlobalManager.getInstance().selectedTrack, null)
 
             // Hiding any player menu if its shown
             mainThread { playerList!!.menu.dismiss() }
@@ -1027,8 +1027,8 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
     override fun onRoomMatchStart()
     {
-        if (getGlobal().engine.scene is LoadingScene)
-            getGlobal().gameScene.start()
+        if (Engine.scene is LoadingScene)
+            GlobalManager.getInstance().gameScene.start()
 
         // Updating player list
         playerList!!.invalidate()
@@ -1036,10 +1036,10 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
     override fun onRoomMatchSkip()
     {
-        if (getGlobal().engine.scene != getGlobal().gameScene.scene)
+        if (Engine.scene != GlobalManager.getInstance().gameScene.scene)
             return
 
-        getGlobal().gameScene.skip()
+        GlobalManager.getInstance().gameScene.skip()
     }
 
 
@@ -1086,7 +1086,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
         {
             Multiplayer.log("Kicked from room.")
 
-            if (getGlobal().engine.scene == getGlobal().gameScene.scene) {
+            if (Engine.scene == GlobalManager.getInstance().gameScene.scene) {
                 ToastLogger.showText("You were kicked by the room host, but you can continue playing.", true)
                 return
             }

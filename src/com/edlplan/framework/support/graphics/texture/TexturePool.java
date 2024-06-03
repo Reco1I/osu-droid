@@ -24,7 +24,6 @@ import org.anddev.andengine.opengl.util.GLHelper;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -68,7 +67,7 @@ public class TexturePool {
     public void clear() {
         textures.clear();
         for (ITexture texture : createdTextures) {
-            GlobalManager.getInstance().getEngine().getTextureManager().unloadTexture(texture);
+            GlobalManager.Engine.getTextureManager().unloadTexture(texture);
         }
         createdTextures.clear();
         currentPack = 0;
@@ -157,7 +156,7 @@ public class TexturePool {
                     TextureHelper.createFactoryFromBitmap(pack));
             final BitmapTextureAtlas tex = new BitmapTextureAtlas(glMaxWidth, glMaxWidth, TextureOptions.BILINEAR);
             tex.addTextureAtlasSource(source, 0, 0);
-            GlobalManager.getInstance().getEngine().getTextureManager().loadTexture(tex);
+            GlobalManager.Engine.getTextureManager().loadTexture(tex);
             createdTextures.add(tex);
             for (TextureInfo info : toLoad) {
                 info.texture = new TextureRegion(tex, info.pos.x, info.pos.y, info.size.x, info.size.y);

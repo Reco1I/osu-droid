@@ -32,11 +32,12 @@ import com.reco1l.toolkt.android.drawableRight
 import com.reco1l.toolkt.android.fontColor
 import com.reco1l.toolkt.kotlin.async
 import org.anddev.andengine.input.touch.TouchEvent
+import ru.nsu.ccfit.zuev.osu.GlobalManager
+import ru.nsu.ccfit.zuev.osu.GlobalManager.Engine
 import ru.nsu.ccfit.zuev.osu.RGBColor
 import ru.nsu.ccfit.zuev.osu.ResourceManager
 import ru.nsu.ccfit.zuev.osuplus.R
 import kotlin.math.abs
-import ru.nsu.ccfit.zuev.osu.GlobalManager.getInstance as getGlobal
 
 
 /**
@@ -119,7 +120,7 @@ class RoomChat : BaseFragment(), OnEditorActionListener, OnKeyListener
 
     private fun appendMessage(message: Message) {
 
-        if (getGlobal().engine.scene != getGlobal().gameScene.scene) {
+        if (Engine.scene != GlobalManager.getInstance().gameScene.scene) {
             ResourceManager.getInstance().getSound("heartbeat")?.play(0.75f)
         }
 
@@ -283,8 +284,8 @@ class RoomChat : BaseFragment(), OnEditorActionListener, OnKeyListener
             return
         }
 
-        if (getGlobal().engine.scene == getGlobal().gameScene.scene) {
-            getGlobal().gameScene.pause()
+        if (Engine.scene == GlobalManager.getInstance().gameScene.scene) {
+            GlobalManager.getInstance().gameScene.pause()
             return
         }
 
