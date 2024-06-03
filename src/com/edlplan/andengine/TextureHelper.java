@@ -66,7 +66,7 @@ public class TextureHelper {
 
         TextureRegion region = TextureRegionFactory.createFromSource(tex, source, 0, 0,
                 false);
-        GlobalManager.getInstance();
+        
         GlobalManager.Engine.getTextureManager().loadTexture(tex);
         return region;
     }

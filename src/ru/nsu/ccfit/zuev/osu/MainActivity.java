@@ -293,7 +293,7 @@ public class MainActivity extends BaseGameActivity implements
                 GlobalManager.getInstance().setLoadingProgress(100);
                 ResourceManager.getInstance().loadFont("font", null, 28, Color.WHITE);
                 GlobalManager.Engine.setScene(GlobalManager.MainScene.getScene());
-                GlobalManager.getInstance();
+                
                 GlobalManager.MainScene.loadBeatmap();
                 initPreferences();
                 availableInternalMemory();
@@ -637,9 +637,9 @@ public class MainActivity extends BaseGameActivity implements
                 }
             }
         }
-        GlobalManager.getInstance();
+        
         if (GlobalManager.MainScene != null) {
-            GlobalManager.getInstance();
+            
             BeatmapInfo beatmapInfo = GlobalManager.MainScene.beatmapInfo;
             if (songService != null && beatmapInfo != null && !songService.isGaming()) {
                 songService.showNotification();
@@ -724,7 +724,7 @@ public class MainActivity extends BaseGameActivity implements
         if (event.getAction() != KeyEvent.ACTION_DOWN) {
             return super.onKeyDown(keyCode, event);
         }
-        GlobalManager.getInstance();
+        
         if (GlobalManager.Engine == null) {
             return super.onKeyDown(keyCode, event);
         }
@@ -750,7 +750,7 @@ public class MainActivity extends BaseGameActivity implements
             }
         }
         if ((keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ENTER)) {
-            GlobalManager.getInstance();
+            
             if (GlobalManager.Engine != null) {
                 if (GlobalManager.SongMenu != null) {
                     if (GlobalManager.Engine.getScene() == GlobalManager.SongMenu.getScene()) {
@@ -791,19 +791,19 @@ public class MainActivity extends BaseGameActivity implements
                 GlobalManager.SongMenu.back();
             } else {
 
-                GlobalManager.getInstance();
+                
                 if (GlobalManager.Engine.getScene() instanceof LoadingScreen.LoadingScene) {
                     return true;
                 }
 
                 if (Multiplayer.isMultiplayer) {
-                    GlobalManager.getInstance();
+                    
                     if (GlobalManager.Engine.getScene() == LobbyScene.INSTANCE) {
                         LobbyScene.INSTANCE.back();
                         return true;
                     }
 
-                    GlobalManager.getInstance();
+                    
                     if (GlobalManager.Engine.getScene() == RoomScene.INSTANCE) {
 
                         if (RoomScene.INSTANCE.hasChildScene() && RoomScene.INSTANCE.getChildScene() == ModMenu.getInstance().getScene()) {
@@ -815,7 +815,7 @@ public class MainActivity extends BaseGameActivity implements
                     }
                 }
 
-                GlobalManager.getInstance();
+                
                 GlobalManager.MainScene.showExitDialog();
             }
             return true;
@@ -838,9 +838,9 @@ public class MainActivity extends BaseGameActivity implements
         if (GlobalManager.Engine.getScene() == GlobalManager.GameScene.getScene()) {
             GlobalManager.GameScene.quit();
         }
-        GlobalManager.getInstance();
+        
         GlobalManager.Engine.setScene(GlobalManager.MainScene.getScene());
-        GlobalManager.getInstance();
+        
         GlobalManager.MainScene.exit();
     }
 

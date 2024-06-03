@@ -202,7 +202,6 @@ class SettingsFragment : com.edlplan.ui.fragment.SettingsFragment() {
                     loading.show()
 
                     async {
-                        GlobalManager.getInstance().skinNow = Config.getSkinPath()
                         SkinManager.getInstance().clearSkin()
                         ResourceManager.getInstance().loadSkin(newValue.toString())
                         Engine.textureManager.reloadTextures()

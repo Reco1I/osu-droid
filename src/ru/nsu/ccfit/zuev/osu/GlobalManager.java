@@ -38,7 +38,6 @@ public class GlobalManager {
     private int loadingProgress;
     private String info;
     private TrackInfo selectedTrack;
-    private String skinNow;
 
     public static GlobalManager getInstance() {
         if (instance == null) {
@@ -63,8 +62,7 @@ public class GlobalManager {
         MainScene = new MainScene();
         MainScene.load(Activity);
         setInfo("Loading skin...");
-        skinNow = Config.getSkinPath();
-        ResourceManager.getInstance().loadSkin(skinNow);
+        ResourceManager.getInstance().loadSkin(Config.getSkinPath());
         ScoreLibrary.getInstance().load(Activity);
         setLoadingProgress(20);
 
@@ -82,14 +80,6 @@ public class GlobalManager {
             SongService.stop();
             SongService.hideNotification();
         }
-    }
-
-    public String getSkinNow() {
-        return skinNow;
-    }
-
-    public void setSkinNow(String skinNow) {
-        this.skinNow = skinNow;
     }
 
     public int getLoadingProgress() {

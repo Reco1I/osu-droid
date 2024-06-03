@@ -581,7 +581,7 @@ public class MainScene implements IUpdateHandler {
             }
             break;
             case STOP: {
-                GlobalManager.getInstance();
+                
                 if (GlobalManager.SongService.getStatus() == Status.PLAYING || GlobalManager.SongService.getStatus() == Status.PAUSED) {
                     GlobalManager.SongService.stop();
                     lastBpmLength = bpmLength;
@@ -590,7 +590,7 @@ public class MainScene implements IUpdateHandler {
             }
             break;
             case NEXT: {
-                GlobalManager.getInstance();
+                
                 if (GlobalManager.SongService.getStatus() == Status.PLAYING || GlobalManager.SongService.getStatus() == Status.PAUSED) {
                     GlobalManager.SongService.stop();
                 }
