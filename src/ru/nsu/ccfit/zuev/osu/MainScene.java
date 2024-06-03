@@ -1011,7 +1011,6 @@ public class MainScene implements IUpdateHandler {
         if (replay.loadInfo(replayFile)) {
             if (replay.replayVersion >= 3) {
                 //replay
-                ScoringScene scorescene = GlobalManager.getInstance().getScoring();
                 StatisticV2 stat = replay.getStat();
                 TrackInfo track = LibraryManager.INSTANCE.findTrackByFileNameAndMD5(replay.getMapFile(), replay.getMd5());
                 if (track != null) {
@@ -1020,9 +1019,9 @@ public class MainScene implements IUpdateHandler {
                     ResourceManager.getInstance().loadBackground(track.getBackground());
                     GlobalManager.getInstance().getSongService().preLoad(track.getBeatmap().getMusic());
                     GlobalManager.getInstance().getSongService().play();
-                    scorescene.load(stat, null, ru.nsu.ccfit.zuev.osu.GlobalManager.getInstance().getSongService(), replayFile, null, track);
+                    GlobalManager.ScoringScene.load(stat, null, ru.nsu.ccfit.zuev.osu.GlobalManager.getInstance().getSongService(), replayFile, null, track);
                     GlobalManager.getInstance();
-                    GlobalManager.Engine.setScene(scorescene.getScene());
+                    GlobalManager.Engine.setScene(GlobalManager.ScoringScene.getScene());
                 }
             }
         }

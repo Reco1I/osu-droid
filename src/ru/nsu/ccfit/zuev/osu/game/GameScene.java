@@ -30,8 +30,7 @@ import com.rian.osu.difficulty.attributes.StandardDifficultyAttributes;
 import com.rian.osu.difficulty.attributes.TimedDifficultyAttributes;
 import com.rian.osu.difficulty.calculator.DifficultyCalculationParameters;
 import com.rian.osu.beatmap.hitobject.HitObjectUtils;
-import org.anddev.andengine.engine.Engine;
-import org.anddev.andengine.engine.camera.SmoothCamera;
+
 import org.anddev.andengine.engine.handler.IUpdateHandler;
 import org.anddev.andengine.engine.options.TouchOptions;
 import org.anddev.andengine.entity.modifier.FadeOutModifier;
@@ -92,7 +91,6 @@ import ru.nsu.ccfit.zuev.osu.online.OnlineScoring;
 import ru.nsu.ccfit.zuev.osu.scoring.Replay;
 import ru.nsu.ccfit.zuev.osu.scoring.ResultType;
 import ru.nsu.ccfit.zuev.osu.scoring.ScoreLibrary;
-import ru.nsu.ccfit.zuev.osu.scoring.ScoringScene;
 import ru.nsu.ccfit.zuev.osu.scoring.StatisticV2;
 import ru.nsu.ccfit.zuev.osu.scoring.TouchType;
 import ru.nsu.ccfit.zuev.osuplus.BuildConfig;
@@ -1036,7 +1034,11 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         replayText.setAlpha(0.7f);
         fgScene.attachChild(replayText, 0);
         if (stat.getMod().contains(GameMod.MOD_AUTO) || replaying) {
-            playname = replaying ? GlobalManager.getInstance().getScoring().getReplayStat().getPlayerName() : "osu!";
+            if (replaying) {
+                playname = GlobalManager.ScoringScene.getReplayStat().getPlayerName();
+            } else {
+                playname = "osu!";
+            }
             replayText.setText("Watching " + playname + " play " + artist + " - " + title + " [" + version + "]");
             replayText.registerEntityModifier(new LoopEntityModifier(new MoveXModifier(40,
                     Config.getRES_WIDTH() + 5, -replayText.getWidth() - 5)));

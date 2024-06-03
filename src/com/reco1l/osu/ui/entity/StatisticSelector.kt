@@ -22,15 +22,15 @@ import ru.nsu.ccfit.zuev.osu.ResourceManager.getInstance as getResources
 class StatisticSelector(stats: Array<StatisticV2>?) : ScrollableList(), ITouchArea
 {
 
-    private var selected: StatisticV2? = GlobalManager.getInstance().scoring.currentStatistic
+    private var selected: StatisticV2? = GlobalManager.ScoringScene.currentStatistic
         set(value)
         {
             if (value != field && value != null)
             {
                 field = value
 
-                GlobalManager.getInstance().scoring.load(value, GlobalManager.getInstance().scoring.track, GlobalManager.getInstance().songService, null, null, null)
-                Engine.scene = GlobalManager.getInstance().scoring.scene
+                GlobalManager.ScoringScene.load(value, GlobalManager.ScoringScene.track, GlobalManager.getInstance().songService, null, null, null)
+                Engine.scene = GlobalManager.ScoringScene.scene
             }
         }
 

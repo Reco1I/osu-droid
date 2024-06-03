@@ -712,7 +712,7 @@ public class ScoreBoard extends Entity implements ScrollDetector.IScrollDetector
                     return true;
 
                 listener.openScore(scoreID, showOnline, username);
-                GlobalManager.getInstance().getScoring().setReplayID(scoreID);
+                GlobalManager.ScoringScene.setReplayID(scoreID);
                 return true;
             } else if (event.isActionOutside() || event.isActionMove() && MathUtils.distance(dx, dy, localX, localY) > 10) {
                 downTime = -1;

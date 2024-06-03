@@ -25,7 +25,7 @@ class GameplayLeaderboard(var playerName: String, private val stats: StatisticV2
     // This determines the max amount of sprites that can be shown according to the user screen height.
     private val maxAllowed = (Config.getRES_HEIGHT() - VERTICAL_PADDING * 2).toInt() / SPRITE_HEIGHT
 
-    private val replayId get() = GlobalManager.getInstance().scoring.replayID
+    private val replayId: Int get() = GlobalManager.ScoringScene.replayID
 
     private val isReplaying get() = replayId != -1
 

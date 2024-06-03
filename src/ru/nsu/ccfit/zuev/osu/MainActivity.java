@@ -741,10 +741,9 @@ public class MainActivity extends BaseGameActivity implements
                 return true;
             }
         }
-        if (GlobalManager.getInstance().getScoring() != null && keyCode == KeyEvent.KEYCODE_BACK) {
-            GlobalManager.getInstance();
-            if (GlobalManager.Engine.getScene() == GlobalManager.getInstance().getScoring().getScene()) {
-                GlobalManager.getInstance().getScoring().back();
+        if (GlobalManager.ScoringScene != null && keyCode == KeyEvent.KEYCODE_BACK) {
+            if (GlobalManager.Engine.getScene() == GlobalManager.ScoringScene.getScene()) {
+                GlobalManager.ScoringScene.back();
                 return true;
             }
         }

@@ -16,7 +16,6 @@ import ru.nsu.ccfit.zuev.osu.GlobalManager
 import ru.nsu.ccfit.zuev.osu.GlobalManager.Engine
 import ru.nsu.ccfit.zuev.osu.MainActivity
 import ru.nsu.ccfit.zuev.osu.ToastLogger
-import ru.nsu.ccfit.zuev.osu.game.GameScene
 import ru.nsu.ccfit.zuev.osu.scoring.StatisticV2
 import java.io.File
 import ru.nsu.ccfit.zuev.osu.online.OnlineManager.getInstance as getOnline
@@ -157,7 +156,7 @@ object Multiplayer
         finalData = list.toTypedArray()
 
         // Reloading results screen
-        GlobalManager.getInstance().scoring.updateLeaderboard()
+        GlobalManager.ScoringScene.updateLeaderboard()
     }
 
 

@@ -108,14 +108,6 @@ public class GlobalManager {
         this.mainScene = mainScene;
     }
 
-    public ScoringScene getScoring() {
-        return scoring;
-    }
-
-    public void setScoring(ScoringScene scoring) {
-        this.scoring = scoring;
-    }
-
     public SongMenu getSongMenu() {
         return songMenu;
     }
