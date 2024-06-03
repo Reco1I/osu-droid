@@ -853,7 +853,7 @@ public class MainScene implements IUpdateHandler {
         if (trackInfos != null && trackInfos.size() > 0) {
             int trackIndex = random.nextInt(trackInfos.size());
             TrackInfo selectedTrack = trackInfos.get(trackIndex);
-            GlobalManager.getInstance().setSelectedTrack(selectedTrack);
+            GlobalManager.setSelectedTrack(selectedTrack);
 
             if (selectedTrack.getBackground() != null) {
                 try {
@@ -1034,8 +1034,8 @@ public class MainScene implements IUpdateHandler {
     public void show() {
         GlobalManager.SongService.setGaming(false);
         GlobalManager.Engine.setScene(getScene());
-        if (GlobalManager.getInstance().getSelectedTrack() != null) {
-            setBeatmap(GlobalManager.getInstance().getSelectedTrack().getBeatmap());
+        if (GlobalManager.getSelectedTrack() != null) {
+            setBeatmap(GlobalManager.getSelectedTrack().getBeatmap());
         }
     }
 

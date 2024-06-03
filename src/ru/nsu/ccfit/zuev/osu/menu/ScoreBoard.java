@@ -78,7 +78,7 @@ public class ScoreBoard extends Entity implements ScrollDetector.IScrollDetector
     public static String convertModString(StringBuilder sb, String s) {
         // Account for SC being removed.
         // Too dirty of a solution, but no other clean way :/
-        var track = GlobalManager.getInstance().getSelectedTrack();
+        var track = GlobalManager.getSelectedTrack();
         var cs = track.getCircleSize();
         var hasLegacySC = false;
 

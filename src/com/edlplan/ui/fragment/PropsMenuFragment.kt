@@ -105,8 +105,7 @@ class PropsMenuFragment : BaseFragment(), IPropsMenu {
 
         findViewById<View>(R.id.manageFavButton)!!.setOnClickListener { v: View? ->
             val dialog = FavoriteManagerFragment()
-            //TODO : 铺面引用还是全局耦合的，需要分离
-            dialog.showToAddToFolder(ScoreLibrary.getTrackDir(GlobalManager.getInstance().selectedTrack.filename))
+            dialog.showToAddToFolder(ScoreLibrary.getTrackDir(GlobalManager.getSelectedTrack()!!.filename))
         }
 
         findViewById<View>(R.id.deleteBeatmap)!!.setOnClickListener { v: View? ->

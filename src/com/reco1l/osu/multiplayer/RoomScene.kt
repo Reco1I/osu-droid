@@ -391,7 +391,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
                 {
                     frame = 0
                     if (!moved)
-                        getModMenu().show(this@RoomScene, GlobalManager.getInstance().selectedTrack)
+                        getModMenu().show(this@RoomScene, GlobalManager.getSelectedTrack())
                     return true
                 }
                 if (event.isActionOutside || event.isActionMove && MathUtils.distance(dx, dy, localX, localY) > 50)
@@ -436,7 +436,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
     override fun onSceneTouchEvent(event: TouchEvent): Boolean {
         trackButton?.also {
             beatmapInfoRectangle?.isVisible =
-                GlobalManager.getInstance().selectedTrack != null &&
+                GlobalManager.getSelectedTrack() != null &&
                 !event.isActionUp &&
                 event.x in it.x..it.x + it.width &&
                 event.y in it.y..it.y + it.height
@@ -550,7 +550,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
     private fun updateBeatmapInfo()
     {
-        beatmapInfoRectangle!!.isVisible = GlobalManager.getInstance().selectedTrack?.let { track ->
+        beatmapInfoRectangle!!.isVisible = GlobalManager.getSelectedTrack()?.let { track ->
 
             beatmapInfoText.text = """
                 Length: ${
@@ -600,7 +600,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
         var newStatus = NOT_READY
 
-        if (room!!.beatmap != null && GlobalManager.getInstance().selectedTrack == null)
+        if (room!!.beatmap != null && GlobalManager.getSelectedTrack() == null)
             newStatus = MISSING_BEATMAP
 
         if (player!!.status != newStatus)
@@ -646,7 +646,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
     fun show()
     {
-        (GlobalManager.Engine.camera as SmoothCamera).apply {
+        GlobalManager.Camera.apply {
 
             setZoomFactorDirect(1f)
 
@@ -753,7 +753,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
             {
                 // Handling special case when the beatmap could have been changed and match was started while player was
                 // disconnected.
-                if (GlobalManager.getInstance().selectedTrack != null)
+                if (GlobalManager.getSelectedTrack() != null)
                     onRoomMatchPlay()
                 else
                     invalidateStatus()
@@ -809,7 +809,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
         room!!.beatmap = beatmap
 
         // Searching the beatmap in the library
-        GlobalManager.getInstance().selectedTrack = library.findTrackByMD5(beatmap?.md5)
+        GlobalManager.setSelectedTrack(library.findTrackByMD5(beatmap?.md5))
 
         // Updating track button
         trackButton!!.updateBeatmap(beatmap)
@@ -829,19 +829,19 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
         invalidateStatus()
 
         // Updating background
-        updateBackground(GlobalManager.getInstance().selectedTrack?.background)
+        updateBackground(GlobalManager.getSelectedTrack()?.background)
         updateBeatmapInfo()
 
         // Releasing await lock
         awaitBeatmapChange = false
 
-        if (GlobalManager.getInstance().selectedTrack == null)
+        if (GlobalManager.getSelectedTrack() == null)
         {
             GlobalManager.SongService.stop()
             return
         }
 
-        GlobalManager.SongService.preLoad(GlobalManager.getInstance().selectedTrack.beatmap.music)
+        GlobalManager.SongService.preLoad(GlobalManager.getSelectedTrack()?.beatmap?.music)
         GlobalManager.SongService.play()
     }
 
@@ -998,7 +998,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
     {
         if (player!!.status != MISSING_BEATMAP && Engine.scene != GlobalManager.GameScene.scene)
         {
-            if (GlobalManager.getInstance().selectedTrack == null)
+            if (GlobalManager.getSelectedTrack() == null)
             {
                 Multiplayer.log("WARNING: Attempt to start match with null track.")
                 return
@@ -1015,7 +1015,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
             Replay.oldCustomCS = getModMenu().customCS
             Replay.oldCustomHP = getModMenu().customHP
 
-            GlobalManager.GameScene.startGame(GlobalManager.getInstance().selectedTrack, null)
+            GlobalManager.GameScene.startGame(GlobalManager.getSelectedTrack(), null)
 
             // Hiding any player menu if its shown
             mainThread { playerList!!.menu.dismiss() }

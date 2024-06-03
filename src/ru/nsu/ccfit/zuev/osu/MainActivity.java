@@ -273,9 +273,9 @@ public class MainActivity extends BaseGameActivity implements
 
         Execution.async(() -> {
             BassAudioPlayer.initDevice();
-            GlobalManager.getInstance().init();
+            GlobalManager.init();
             analytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, null);
-            GlobalManager.getInstance().setLoadingProgress(50);
+            GlobalManager.setLoadingProgress(50);
             checkNewSkins();
             Config.loadSkins();
             checkNewBeatmaps();
@@ -289,8 +289,8 @@ public class MainActivity extends BaseGameActivity implements
             Execution.delayed(2500, () -> {
 
                 UpdateManager.INSTANCE.onActivityStart();
-                GlobalManager.getInstance().setInfo("");
-                GlobalManager.getInstance().setLoadingProgress(100);
+                GlobalManager.setInfo("");
+                GlobalManager.setLoadingProgress(100);
                 ResourceManager.getInstance().loadFont("font", null, 28, Color.WHITE);
                 GlobalManager.Engine.setScene(GlobalManager.MainScene.getScene());
                 
@@ -372,7 +372,7 @@ public class MainActivity extends BaseGameActivity implements
     }
 
     public void checkNewBeatmaps() {
-        GlobalManager.getInstance().setInfo("Checking for new maps...");
+        GlobalManager.setInfo("Checking for new maps...");
         final File mainDir = new File(Config.getCorePath());
         if (beatmapToAdd != null) {
             File file = new File(beatmapToAdd);
@@ -446,7 +446,7 @@ public class MainActivity extends BaseGameActivity implements
     }
 
     public void checkNewSkins() {
-        GlobalManager.getInstance().setInfo("Checking new skins...");
+        GlobalManager.setInfo("Checking new skins...");
 
         final ArrayList<String> skins = new ArrayList<>();
 
@@ -750,7 +750,7 @@ public class MainActivity extends BaseGameActivity implements
             }
         }
         if ((keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ENTER)) {
-            
+
             if (GlobalManager.Engine != null) {
                 if (GlobalManager.SongMenu != null) {
                     if (GlobalManager.Engine.getScene() == GlobalManager.SongMenu.getScene()) {

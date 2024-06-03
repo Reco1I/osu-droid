@@ -101,7 +101,7 @@ class BeatmapButton : Sprite(0f, 0f, getResources().getTexture("menu-button-back
 
 
         // If the room beatmap has set a 'parentSetID' it means that the beatmap can be downloaded trough Chimu.moe
-        if (GlobalManager.getInstance().selectedTrack == null) Multiplayer.room!!.beatmap?.apply {
+        if (GlobalManager.getSelectedTrack() == null) Multiplayer.room!!.beatmap?.apply {
 
             // If it's null the beatmap isn't available on Chimu servers.
             if (parentSetID == null)
@@ -136,7 +136,7 @@ class BeatmapButton : Sprite(0f, 0f, getResources().getTexture("menu-button-back
         trackTitle.text = "${beatmap.artist} - ${beatmap.title}"
         creatorInfo.text = "Mapped by ${beatmap.creator} // ${beatmap.version}"
 
-        if (GlobalManager.getInstance().selectedTrack == null)
+        if (GlobalManager.getSelectedTrack() == null)
         {
             creatorInfo.text += "\n${
 
@@ -149,8 +149,8 @@ class BeatmapButton : Sprite(0f, 0f, getResources().getTexture("menu-button-back
         }
 
         val difficulty =
-            if (Config.getDifficultyAlgorithm() == DifficultyAlgorithm.standard) GlobalManager.getInstance().selectedTrack.standardDifficulty
-            else GlobalManager.getInstance().selectedTrack.droidDifficulty
+            if (Config.getDifficultyAlgorithm() == DifficultyAlgorithm.standard) GlobalManager.getSelectedTrack()!!.standardDifficulty
+            else GlobalManager.getSelectedTrack()!!.droidDifficulty
 
         stars.forEachIndexed { i, it ->
             it.isVisible = difficulty >= i

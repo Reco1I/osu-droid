@@ -1,5 +1,7 @@
 package ru.nsu.ccfit.zuev.osu;
 
+import androidx.annotation.Nullable;
+
 import org.anddev.andengine.engine.Engine;
 import org.anddev.andengine.engine.camera.SmoothCamera;
 
@@ -34,27 +36,16 @@ public class GlobalManager {
 
     public static SaveServiceObject SaveServiceObject;
 
-    private static GlobalManager instance;
-    private int loadingProgress;
-    private String info;
-    private TrackInfo selectedTrack;
 
-    public static GlobalManager getInstance() {
-        if (instance == null) {
-            instance = new GlobalManager();
-        }
-        return instance;
-    }
+    private static TrackInfo selectedTrack;
 
-    public TrackInfo getSelectedTrack() {
-        return selectedTrack;
-    }
+    private static String loadingInfo;
 
-    public void setSelectedTrack(TrackInfo selectedTrack) {
-        this.selectedTrack = selectedTrack;
-    }
+    private static int loadingProgress;
 
-    public void init() {
+
+    public static void init() {
+
         SaveServiceObject = (SaveServiceObject) Activity.getApplication();
         SongService = SaveServiceObject.getSongService();
         setLoadingProgress(10);
@@ -82,20 +73,30 @@ public class GlobalManager {
         }
     }
 
-    public int getLoadingProgress() {
+
+    @Nullable
+    public static TrackInfo getSelectedTrack() {
+        return selectedTrack;
+    }
+
+    public static void setSelectedTrack(@Nullable TrackInfo track) {
+        selectedTrack = track;
+    }
+
+    public static int getLoadingProgress() {
         return loadingProgress;
     }
 
-    public void setLoadingProgress(int loadingProgress) {
-        this.loadingProgress = loadingProgress;
+    public static void setLoadingProgress(int value) {
+        loadingProgress = value;
     }
 
-    public String getInfo() {
-        return info;
+    public static String getLoadingInfo() {
+        return loadingInfo;
     }
 
-    public void setInfo(String info) {
-        this.info = info;
+    public static void setInfo(String info) {
+        loadingInfo = info;
     }
 
 }

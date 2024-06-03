@@ -136,7 +136,7 @@ public class ResourceManager {
                 var iniFile = new File(folder, "skin.ini");
 
                 if (iniFile.exists()) {
-                    GlobalManager.getInstance().setInfo("Reading skin.ini...");
+                    GlobalManager.setInfo("Reading skin.ini...");
 
                     try (var ini = new IniReader(iniFile)) {
                         skinjson = SkinConverter.convertToJson(ini);

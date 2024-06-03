@@ -108,7 +108,7 @@ public class SplashScene implements IUpdateHandler {
 
     @Override
     public void onUpdate(float pSecondsElapsed) {
-        float progress = GlobalManager.getInstance().getLoadingProgress();
+        float progress = GlobalManager.getLoadingProgress();
         if (mStarting)
         {
             mLoading.setAlpha(mLoading.getAlpha() + 0.1f);
@@ -117,8 +117,8 @@ public class SplashScene implements IUpdateHandler {
         progressText.setText(String.format("%.0f %%", progress));
         progressText.setPosition((Config.getRES_WIDTH() - progressText.getWidth()) / 2f, (Config.getRES_HEIGHT() + mLoading.getHeight()) / 2f - mLoading.getHeight() / 4f);
 
-        if (GlobalManager.getInstance().getInfo() != null) {
-            infoText.setText(GlobalManager.getInstance().getInfo());
+        if (GlobalManager.getLoadingInfo() != null) {
+            infoText.setText(GlobalManager.getLoadingInfo());
             infoText.setPosition((Config.getRES_WIDTH() - infoText.getWidth()) / 2, Config.getRES_HEIGHT() - infoText.getHeight() - 20);
         }
     }

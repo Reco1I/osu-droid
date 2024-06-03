@@ -396,7 +396,7 @@ class InGameSettingMenu : BaseFragment() {
     }
 
     private fun updateDifficultyAdjustValues() {
-        val track = GlobalManager.getInstance().selectedTrack
+        val track = GlobalManager.getSelectedTrack()
         var visibility = View.VISIBLE
 
         if (Multiplayer.room != null) {
