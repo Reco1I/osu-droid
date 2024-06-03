@@ -700,10 +700,12 @@ public class MainActivity extends BaseGameActivity implements
         if (this.mEngine == null) {
             return;
         }
-        if (GlobalManager.getInstance().getCamera().getRotation() == 0 && arg0.getY() < -5) {
-            GlobalManager.getInstance().getCamera().setRotation(180);
-        } else if (GlobalManager.getInstance().getCamera().getRotation() == 180 && arg0.getY() > 5) {
-            GlobalManager.getInstance().getCamera().setRotation(0);
+        if (GlobalManager.Camera.getRotation() == 0 && arg0.getY() < -5) {
+            GlobalManager.Camera.setRotation(180);
+        } else {
+            if (GlobalManager.Camera.getRotation() == 180 && arg0.getY() > 5) {
+                GlobalManager.Camera.setRotation(0);
+            }
         }
     }
 

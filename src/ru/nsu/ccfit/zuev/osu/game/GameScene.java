@@ -750,13 +750,12 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
 
     private void prepareScene() {
         scene.setOnSceneTouchListener(this);
-        if (GlobalManager.getInstance().getCamera() instanceof SmoothCamera) {
-            SmoothCamera camera = (SmoothCamera) (GlobalManager.getInstance().getCamera());
-            camera.setZoomFactorDirect(Config.getPlayfieldSize());
-            if (Config.isShrinkPlayfieldDownwards()) {
-                camera.setCenterDirect((float) Config.getRES_WIDTH() / 2, (float) Config.getRES_HEIGHT() / 2 * Config.getPlayfieldSize());
-            }
+
+        GlobalManager.Camera.setZoomFactorDirect(Config.getPlayfieldSize());
+        if (Config.isShrinkPlayfieldDownwards()) {
+            GlobalManager.Camera.setCenterDirect((float) Config.getRES_WIDTH() / 2, (float) Config.getRES_HEIGHT() / 2 * Config.getPlayfieldSize());
         }
+
         setBackground();
 
         // Set up counter texts
@@ -1682,13 +1681,12 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
                 replay.setStat(stat);
                 replay.save(replayFile);
             }
-            if (GlobalManager.getInstance().getCamera() instanceof SmoothCamera) {
-                SmoothCamera camera = (SmoothCamera) (GlobalManager.getInstance().getCamera());
-                camera.setZoomFactorDirect(1f);
-                if (Config.isShrinkPlayfieldDownwards()) {
-                    camera.setCenterDirect((float) Config.getRES_WIDTH() / 2, (float) Config.getRES_HEIGHT() / 2);
-                }
+
+            GlobalManager.Camera.setZoomFactorDirect(1f);
+            if (Config.isShrinkPlayfieldDownwards()) {
+                GlobalManager.Camera.setCenterDirect((float) Config.getRES_WIDTH() / 2, (float) Config.getRES_HEIGHT() / 2);
             }
+
             if (scoringScene != null) {
                 if (replaying) {
                     ModMenu.getInstance().setMod(Replay.oldMod);
@@ -1908,13 +1906,12 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         }
 
         onExit();
-        if (GlobalManager.getInstance().getCamera() instanceof SmoothCamera) {
-            SmoothCamera camera = (SmoothCamera) (GlobalManager.getInstance().getCamera());
-            camera.setZoomFactorDirect(1f);
-            if (Config.isShrinkPlayfieldDownwards()) {
-                camera.setCenterDirect((float) Config.getRES_WIDTH() / 2, (float) Config.getRES_HEIGHT() / 2);
-            }
+
+        GlobalManager.Camera.setZoomFactorDirect(1f);
+        if (Config.isShrinkPlayfieldDownwards()) {
+            GlobalManager.Camera.setCenterDirect((float) Config.getRES_WIDTH() / 2, (float) Config.getRES_HEIGHT() / 2);
         }
+
         scene = new Scene();
 
         if (Multiplayer.isMultiplayer)

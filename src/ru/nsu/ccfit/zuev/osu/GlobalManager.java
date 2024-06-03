@@ -3,7 +3,6 @@ package ru.nsu.ccfit.zuev.osu;
 import android.util.DisplayMetrics;
 
 import org.anddev.andengine.engine.Engine;
-import org.anddev.andengine.engine.camera.Camera;
 import org.anddev.andengine.engine.camera.SmoothCamera;
 
 import ru.nsu.ccfit.zuev.audio.serviceAudio.SaveServiceObject;
@@ -98,10 +97,6 @@ public class GlobalManager {
 
     public void setSkinNow(String skinNow) {
         this.skinNow = skinNow;
-    }
-
-    public Camera getCamera() {
-        return Camera;
     }
 
     public GameScene getGameScene() {
