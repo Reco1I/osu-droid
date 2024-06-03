@@ -1296,7 +1296,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
             return;
         }
 
-        GlobalManager.getInstance().getMainScene().show();
+        GlobalManager.MainScene.show();
     }
 
     private void resetMultiplayerRoomBeatmap() {

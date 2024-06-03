@@ -100,14 +100,6 @@ public class GlobalManager {
         this.skinNow = skinNow;
     }
 
-    public MainScene getMainScene() {
-        return mainScene;
-    }
-
-    public void setMainScene(MainScene mainScene) {
-        this.mainScene = mainScene;
-    }
-
     public SongMenu getSongMenu() {
         return songMenu;
     }

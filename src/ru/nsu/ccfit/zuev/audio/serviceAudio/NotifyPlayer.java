@@ -105,7 +105,7 @@ public class NotifyPlayer {
                         break;
                     case actionClose:
                         service.stop();
-                        GlobalManager.getInstance().getMainScene().exit();
+                        GlobalManager.MainScene.exit();
                         break;
                 }
             }

@@ -372,8 +372,8 @@ class SettingsFragment : com.edlplan.ui.fragment.SettingsFragment() {
         Config.loadConfig(requireActivity())
 
         if (!Multiplayer.isMultiplayer) {
-            GlobalManager.getInstance().mainScene.reloadOnlinePanel()
-            GlobalManager.getInstance().mainScene.loadTimingPoints(false)
+            GlobalManager.MainScene.reloadOnlinePanel()
+            GlobalManager.MainScene.loadTimingPoints(false)
             GlobalManager.getInstance().songService.isGaming = false
         }
 

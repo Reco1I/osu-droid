@@ -340,7 +340,7 @@ object LobbyScene : Scene()
 
         Multiplayer.isMultiplayer = false
         GlobalManager.getInstance().songService.isGaming = false
-        GlobalManager.getInstance().mainScene.show()
+        GlobalManager.MainScene.show()
     }
 
     fun show()

@@ -67,7 +67,6 @@ import ru.nsu.ccfit.zuev.osu.online.OnlineManager;
 import ru.nsu.ccfit.zuev.osu.online.OnlinePanel;
 import ru.nsu.ccfit.zuev.osu.online.OnlineScoring;
 import ru.nsu.ccfit.zuev.osu.scoring.Replay;
-import ru.nsu.ccfit.zuev.osu.scoring.ScoringScene;
 import ru.nsu.ccfit.zuev.osu.scoring.StatisticV2;
 import ru.nsu.ccfit.zuev.osuplus.BuildConfig;
 import ru.nsu.ccfit.zuev.osuplus.R;
@@ -1014,7 +1013,7 @@ public class MainScene implements IUpdateHandler {
                 StatisticV2 stat = replay.getStat();
                 TrackInfo track = LibraryManager.INSTANCE.findTrackByFileNameAndMD5(replay.getMapFile(), replay.getMd5());
                 if (track != null) {
-                    GlobalManager.getInstance().getMainScene().setBeatmap(track.getBeatmap());
+                    setBeatmap(track.getBeatmap());
                     GlobalManager.getInstance().getSongMenu().select();
                     ResourceManager.getInstance().loadBackground(track.getBackground());
                     GlobalManager.getInstance().getSongService().preLoad(track.getBeatmap().getMusic());

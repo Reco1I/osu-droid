@@ -553,11 +553,11 @@ class BeatmapSetViewHolder(itemView: View, private val mediaScope: CoroutineScop
                     stopPreview(true)
 
                     if (BeatmapListing.isPlayingMusic) {
-                        GlobalManager.getInstance().mainScene.musicControl(MusicOption.PLAY)
+                        GlobalManager.MainScene.musicControl(MusicOption.PLAY)
                     }
                 }
 
-                GlobalManager.getInstance().mainScene.musicControl(MusicOption.PAUSE)
+                GlobalManager.MainScene.musicControl(MusicOption.PAUSE)
 
                 previewStream!!.setVolume(Config.getBgmVolume())
                 previewStream!!.play()
@@ -594,7 +594,7 @@ class BeatmapSetViewHolder(itemView: View, private val mediaScope: CoroutineScop
         }
 
         if (shouldResumeMusic && BeatmapListing.isPlayingMusic) {
-            GlobalManager.getInstance().mainScene.musicControl(MusicOption.PLAY)
+            GlobalManager.MainScene.musicControl(MusicOption.PLAY)
         }
     }
 

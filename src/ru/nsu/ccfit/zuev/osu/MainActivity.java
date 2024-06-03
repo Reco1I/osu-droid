@@ -292,9 +292,9 @@ public class MainActivity extends BaseGameActivity implements
                 GlobalManager.getInstance().setInfo("");
                 GlobalManager.getInstance().setLoadingProgress(100);
                 ResourceManager.getInstance().loadFont("font", null, 28, Color.WHITE);
+                GlobalManager.Engine.setScene(GlobalManager.MainScene.getScene());
                 GlobalManager.getInstance();
-                GlobalManager.Engine.setScene(GlobalManager.getInstance().getMainScene().getScene());
-                GlobalManager.getInstance().getMainScene().loadBeatmap();
+                GlobalManager.MainScene.loadBeatmap();
                 initPreferences();
                 availableInternalMemory();
 
@@ -309,7 +309,7 @@ public class MainActivity extends BaseGameActivity implements
                 }
 
                 if (willReplay) {
-                    GlobalManager.getInstance().getMainScene().watchReplay(beatmapToAdd);
+                    GlobalManager.MainScene.watchReplay(beatmapToAdd);
                     willReplay = false;
                 }
             });
@@ -601,15 +601,15 @@ public class MainActivity extends BaseGameActivity implements
                 }
             }
         }
-        if (GlobalManager.getInstance().getMainScene() != null) {
+        if (GlobalManager.MainScene != null) {
             if (songService != null && Build.VERSION.SDK_INT > 10) {
                 if (songService.hideNotification()) {
                     if (wakeLock != null && wakeLock.isHeld()) wakeLock.release();
-                    GlobalManager.getInstance().getMainScene().loadBeatmapInfo();
-                    GlobalManager.getInstance().getMainScene().loadTimingPoints(false);
-                    GlobalManager.getInstance().getMainScene().progressBar.setTime(songService.getLength());
-                    GlobalManager.getInstance().getMainScene().progressBar.setPassedTime(songService.getPosition());
-                    GlobalManager.getInstance().getMainScene().musicControl(MainScene.MusicOption.SYNC);
+                    GlobalManager.MainScene.loadBeatmapInfo();
+                    GlobalManager.MainScene.loadTimingPoints(false);
+                    GlobalManager.MainScene.progressBar.setTime(songService.getLength());
+                    GlobalManager.MainScene.progressBar.setPassedTime(songService.getPosition());
+                    GlobalManager.MainScene.musicControl(MainScene.MusicOption.SYNC);
                 }
             }
         }
@@ -637,8 +637,10 @@ public class MainActivity extends BaseGameActivity implements
                 }
             }
         }
-        if (GlobalManager.getInstance().getMainScene() != null) {
-            BeatmapInfo beatmapInfo = GlobalManager.getInstance().getMainScene().beatmapInfo;
+        GlobalManager.getInstance();
+        if (GlobalManager.MainScene != null) {
+            GlobalManager.getInstance();
+            BeatmapInfo beatmapInfo = GlobalManager.MainScene.beatmapInfo;
             if (songService != null && beatmapInfo != null && !songService.isGaming()) {
                 songService.showNotification();
 
@@ -812,7 +814,8 @@ public class MainActivity extends BaseGameActivity implements
                     }
                 }
 
-                GlobalManager.getInstance().getMainScene().showExitDialog();
+                GlobalManager.getInstance();
+                GlobalManager.MainScene.showExitDialog();
             }
             return true;
         }
@@ -834,8 +837,10 @@ public class MainActivity extends BaseGameActivity implements
         if (GlobalManager.Engine.getScene() == GlobalManager.GameScene.getScene()) {
             GlobalManager.GameScene.quit();
         }
-        GlobalManager.Engine.setScene(GlobalManager.getInstance().getMainScene().getScene());
-        GlobalManager.getInstance().getMainScene().exit();
+        GlobalManager.getInstance();
+        GlobalManager.Engine.setScene(GlobalManager.MainScene.getScene());
+        GlobalManager.getInstance();
+        GlobalManager.MainScene.exit();
     }
 
     public long getVersionCode() {
