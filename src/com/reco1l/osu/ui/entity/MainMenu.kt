@@ -65,7 +65,7 @@ class MainMenu(val main: MainScene)
                 if (main.isOnExitAnim)
                     return true
 
-                GlobalManager.getInstance().songService.isGaming = true
+                GlobalManager.SongService.isGaming = true
 
                 async {
                     LoadingScreen().show()
@@ -76,7 +76,7 @@ class MainMenu(val main: MainScene)
 
                     if (LibraryManager.INSTANCE.library.isEmpty())
                     {
-                        GlobalManager.getInstance().songService.isGaming = false
+                        GlobalManager.SongService.isGaming = false
                         Engine.scene = main.scene
 
                         BeatmapListing().show()
@@ -115,7 +115,7 @@ class MainMenu(val main: MainScene)
                 {
                     setColor(1f, 1f, 1f)
                     if (main.isOnExitAnim) return true
-                    GlobalManager.getInstance().songService.isGaming = true
+                    GlobalManager.SongService.isGaming = true
                     mainThread { SettingsFragment().show() }
                     return true
                 }
@@ -140,7 +140,7 @@ class MainMenu(val main: MainScene)
 
                 if (main.isOnExitAnim) return true
 
-                GlobalManager.getInstance().songService.isGaming = true
+                GlobalManager.SongService.isGaming = true
                 Multiplayer.isMultiplayer = true
 
                 async {

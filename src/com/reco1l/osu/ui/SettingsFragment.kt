@@ -374,10 +374,10 @@ class SettingsFragment : com.edlplan.ui.fragment.SettingsFragment() {
         if (!Multiplayer.isMultiplayer) {
             GlobalManager.MainScene.reloadOnlinePanel()
             GlobalManager.MainScene.loadTimingPoints(false)
-            GlobalManager.getInstance().songService.isGaming = false
+            GlobalManager.SongService.isGaming = false
         }
 
-        GlobalManager.getInstance().songService.volume = Config.getBgmVolume()
+        GlobalManager.SongService.volume = Config.getBgmVolume()
         super.dismiss()
     }
 

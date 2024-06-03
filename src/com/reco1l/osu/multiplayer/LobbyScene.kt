@@ -213,7 +213,7 @@ object LobbyScene : Scene()
         if (Multiplayer.isConnected)
             return
 
-        GlobalManager.getInstance().songService.isGaming = true
+        GlobalManager.SongService.isGaming = true
         Multiplayer.isMultiplayer = true
 
         async {
@@ -339,7 +339,7 @@ object LobbyScene : Scene()
         search.dismiss()
 
         Multiplayer.isMultiplayer = false
-        GlobalManager.getInstance().songService.isGaming = false
+        GlobalManager.SongService.isGaming = false
         GlobalManager.MainScene.show()
     }
 

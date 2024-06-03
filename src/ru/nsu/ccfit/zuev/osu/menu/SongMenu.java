@@ -112,8 +112,8 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
 
     public static void stopMusicStatic() {
         synchronized (musicMutex) {
-            if (GlobalManager.getInstance().getSongService() != null) {
-                GlobalManager.getInstance().getSongService().stop();
+            if (GlobalManager.SongService != null) {
+                GlobalManager.SongService.stop();
             }
         }
     }
@@ -833,11 +833,15 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
     }
 
     public void increaseVolume() {
-        if (GlobalManager.getInstance().getSongService() != null) {
+        if (GlobalManager.SongService != null) {
             synchronized (musicMutex) {
-                if (GlobalManager.getInstance().getSongService() != null && GlobalManager.getInstance().getSongService().getStatus() == Status.PLAYING && GlobalManager.getInstance().getSongService().getVolume() < Config.getBgmVolume()) {
-                    float vol = Math.min(1, GlobalManager.getInstance().getSongService().getVolume() + 0.01f);
-                    GlobalManager.getInstance().getSongService().setVolume(vol);
+                if (GlobalManager.SongService != null) {
+                    if (GlobalManager.SongService.getStatus() == Status.PLAYING) {
+                        if (GlobalManager.SongService.getVolume() < Config.getBgmVolume()) {
+                            float vol = Math.min(1, GlobalManager.SongService.getVolume() + 0.01f);
+                            GlobalManager.SongService.setVolume(vol);
+                        }
+                    }
                 }
             }
         }
@@ -1368,8 +1372,8 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
 
     public void stopMusic() {
         synchronized (musicMutex) {
-            if (GlobalManager.getInstance().getSongService() != null) {
-                GlobalManager.getInstance().getSongService().stop();
+            if (GlobalManager.SongService != null) {
+                GlobalManager.SongService.stop();
             }
         }
     }
@@ -1381,18 +1385,18 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
 
         Execution.async(() -> {
             synchronized (musicMutex) {
-                if (GlobalManager.getInstance().getSongService() != null) {
-                    GlobalManager.getInstance().getSongService().stop();
+                if (GlobalManager.SongService != null) {
+                    GlobalManager.SongService.stop();
                 }
 
                 try {
-                    GlobalManager.getInstance().getSongService().preLoad(filename);
-                    GlobalManager.getInstance().getSongService().play();
-                    GlobalManager.getInstance().getSongService().setVolume(0);
+                    GlobalManager.SongService.preLoad(filename);
+                    GlobalManager.SongService.play();
+                    GlobalManager.SongService.setVolume(0);
                     if (previewTime >= 0) {
-                        GlobalManager.getInstance().getSongService().seekTo(previewTime);
+                        GlobalManager.SongService.seekTo(previewTime);
                     } else {
-                        GlobalManager.getInstance().getSongService().seekTo(GlobalManager.getInstance().getSongService().getLength() / 2);
+                        GlobalManager.SongService.seekTo(GlobalManager.SongService.getLength() / 2);
                     }
                 } catch (final Exception e) {
                     Debug.e("LoadingMusic: " + e.getMessage(), e);

@@ -528,13 +528,13 @@ public class MainScene implements IUpdateHandler {
     }
 
     public void musicControl(MusicOption option) {
-        if (GlobalManager.getInstance().getSongService() == null || beatmapInfo == null) {
+        if (GlobalManager.SongService == null || beatmapInfo == null) {
             return;
         }
         switch (option) {
             case PREV: {
-                if (GlobalManager.getInstance().getSongService().getStatus() == Status.PLAYING || GlobalManager.getInstance().getSongService().getStatus() == Status.PAUSED) {
-                    GlobalManager.getInstance().getSongService().stop();
+                if (GlobalManager.SongService.getStatus() == Status.PLAYING || GlobalManager.SongService.getStatus() == Status.PAUSED) {
+                    GlobalManager.SongService.stop();
                 }
                 firstTimingPoint = null;
                 LibraryManager.INSTANCE.getPrevBeatmap();
@@ -545,10 +545,10 @@ public class MainScene implements IUpdateHandler {
             }
             break;
             case PLAY: {
-                if (GlobalManager.getInstance().getSongService().getStatus() == Status.PAUSED || GlobalManager.getInstance().getSongService().getStatus() == Status.STOPPED) {
-                    if (GlobalManager.getInstance().getSongService().getStatus() == Status.STOPPED) {
+                if (GlobalManager.SongService.getStatus() == Status.PAUSED || GlobalManager.SongService.getStatus() == Status.STOPPED) {
+                    if (GlobalManager.SongService.getStatus() == Status.STOPPED) {
                         loadTimingPoints(false);
-                        GlobalManager.getInstance().getSongService().preLoad(beatmapInfo.getMusic());
+                        GlobalManager.SongService.preLoad(beatmapInfo.getMusic());
                         if (firstTimingPoint != null) {
                             bpmLength = firstTimingPoint.getBeatLength() * 1000f;
                             if (lastTimingPoint != null) {
@@ -556,41 +556,43 @@ public class MainScene implements IUpdateHandler {
                             }
                         }
                     }
-                    if (GlobalManager.getInstance().getSongService().getStatus() == Status.PAUSED) {
+                    if (GlobalManager.SongService.getStatus() == Status.PAUSED) {
                         if (lastBpmLength > 0) {
                             bpmLength = lastBpmLength;
                         }
                         if (lastTimingPoint != null) {
-                            int position = GlobalManager.getInstance().getSongService().getPosition();
+                            int position = GlobalManager.SongService.getPosition();
                             offset = (position - lastTimingPoint.getTime() * 1000f) % bpmLength;
                         }
                     }
                     Debug.i("BPM: " + 60 / bpmLength * 1000 + " Offset: " + offset);
 //						ToastLogger.showText("BPM: " + 60 / bpmLength * 1000 + " Offset: " + offset, false);
-                    GlobalManager.getInstance().getSongService().play();
+                    GlobalManager.SongService.play();
                     doStop = false;
                 }
             }
             break;
             case PAUSE: {
-                if (GlobalManager.getInstance().getSongService().getStatus() == Status.PLAYING) {
-                    GlobalManager.getInstance().getSongService().pause();
+                if (GlobalManager.SongService.getStatus() == Status.PLAYING) {
+                    GlobalManager.SongService.pause();
                     lastBpmLength = bpmLength;
                     bpmLength = 1000;
                 }
             }
             break;
             case STOP: {
-                if (GlobalManager.getInstance().getSongService().getStatus() == Status.PLAYING || GlobalManager.getInstance().getSongService().getStatus() == Status.PAUSED) {
-                    GlobalManager.getInstance().getSongService().stop();
+                GlobalManager.getInstance();
+                if (GlobalManager.SongService.getStatus() == Status.PLAYING || GlobalManager.SongService.getStatus() == Status.PAUSED) {
+                    GlobalManager.SongService.stop();
                     lastBpmLength = bpmLength;
                     bpmLength = 1000;
                 }
             }
             break;
             case NEXT: {
-                if (GlobalManager.getInstance().getSongService().getStatus() == Status.PLAYING || GlobalManager.getInstance().getSongService().getStatus() == Status.PAUSED) {
-                    GlobalManager.getInstance().getSongService().stop();
+                GlobalManager.getInstance();
+                if (GlobalManager.SongService.getStatus() == Status.PLAYING || GlobalManager.SongService.getStatus() == Status.PAUSED) {
+                    GlobalManager.SongService.stop();
                 }
                 LibraryManager.INSTANCE.getNextBeatmap();
                 firstTimingPoint = null;
@@ -601,9 +603,9 @@ public class MainScene implements IUpdateHandler {
             }
             break;
             case SYNC: {
-                if (GlobalManager.getInstance().getSongService().getStatus() == Status.PLAYING) {
+                if (GlobalManager.SongService.getStatus() == Status.PLAYING) {
                     if (lastTimingPoint != null) {
-                        int position = GlobalManager.getInstance().getSongService().getPosition();
+                        int position = GlobalManager.SongService.getPosition();
                         offset = (position - lastTimingPoint.getTime() * 1000f) % bpmLength;
                     }
                     Debug.i("BPM: " + 60 / bpmLength * 1000 + " Offset: " + offset);
@@ -623,7 +625,7 @@ public class MainScene implements IUpdateHandler {
             return;
         }
 
-        if (GlobalManager.getInstance().getSongService() == null || !musicStarted || GlobalManager.getInstance().getSongService().getStatus() == Status.STOPPED) {
+        if (GlobalManager.SongService == null || !musicStarted || GlobalManager.SongService.getStatus() == Status.STOPPED) {
             bpmLength = 1000;
             offset = 0;
         }
@@ -691,7 +693,7 @@ public class MainScene implements IUpdateHandler {
             }
         }
 
-        if (GlobalManager.getInstance().getSongService() != null) {
+        if (GlobalManager.SongService != null) {
             if (!musicStarted) {
                 if (firstTimingPoint != null) {
                     bpmLength = firstTimingPoint.getBeatLength() * 1000f;
@@ -699,8 +701,8 @@ public class MainScene implements IUpdateHandler {
                     return;
                 }
                 progressBar.setStartTime(0);
-                GlobalManager.getInstance().getSongService().play();
-                GlobalManager.getInstance().getSongService().setVolume(Config.getBgmVolume());
+                GlobalManager.SongService.play();
+                GlobalManager.SongService.setVolume(Config.getBgmVolume());
                 if (lastTimingPoint != null) {
                     offset = lastTimingPoint.getTime() * 1000f % bpmLength;
                 }
@@ -709,10 +711,10 @@ public class MainScene implements IUpdateHandler {
                 musicStarted = true;
             }
 
-            if (GlobalManager.getInstance().getSongService().getStatus() == Status.PLAYING) {
+            if (GlobalManager.SongService.getStatus() == Status.PLAYING) {
 //                syncPassedTime += pSecondsElapsed * 1000f;
-                int position = GlobalManager.getInstance().getSongService().getPosition();
-                progressBar.setTime(GlobalManager.getInstance().getSongService().getLength());
+                int position = GlobalManager.SongService.getPosition();
+                progressBar.setTime(GlobalManager.SongService.getLength());
                 progressBar.setPassedTime(position);
                 progressBar.update(pSecondsElapsed * 1000);
 
@@ -754,7 +756,7 @@ public class MainScene implements IUpdateHandler {
 
                 int windowSize = 240;
                 int spectrumWidth = 120;
-                float[] fft = GlobalManager.getInstance().getSongService().getSpectrum();
+                float[] fft = GlobalManager.SongService.getSpectrum();
                 if (fft == null) return;
                 for (int i = 0, leftBound = 0; i < spectrumWidth; i++) {
                     float peak = 0;
@@ -789,8 +791,12 @@ public class MainScene implements IUpdateHandler {
                     specRectangle.setWidth(0);
                     specRectangle.setAlpha(0);
                 }
-                if (!doChange && !doStop && GlobalManager.getInstance().getSongService() != null && GlobalManager.getInstance().getSongService().getPosition() >= GlobalManager.getInstance().getSongService().getLength()) {
-                    musicControl(MusicOption.NEXT);
+                if (!doChange && !doStop) {
+                    if (GlobalManager.SongService != null) {
+                        if (GlobalManager.SongService.getPosition() >= GlobalManager.SongService.getLength()) {
+                            musicControl(MusicOption.NEXT);
+                        }
+                    }
                 }
             }
         }
@@ -884,8 +890,8 @@ public class MainScene implements IUpdateHandler {
             }
 
             if (reloadMusic) {
-                if (GlobalManager.getInstance().getSongService() != null) {
-                    GlobalManager.getInstance().getSongService().preLoad(beatmapInfo.getMusic());
+                if (GlobalManager.SongService != null) {
+                    GlobalManager.SongService.preLoad(beatmapInfo.getMusic());
                     musicStarted = false;
                 } else {
                     Log.w("nullpoint", "GlobalManager.getInstance().getSongService() is null while reload music (MainScene.loadTimeingPoints)");
@@ -976,8 +982,8 @@ public class MainScene implements IUpdateHandler {
                 ModifierFactory.newScaleModifier(3.0f, 1f, 0.8f)
         ));
 
-        if (GlobalManager.getInstance().getSongService() != null) {
-            GlobalManager.getInstance().getSongService().stop();
+        if (GlobalManager.SongService != null) {
+            GlobalManager.SongService.stop();
         }
 
         ScheduledExecutorService taskPool = Executors.newScheduledThreadPool(1);
@@ -1016,10 +1022,9 @@ public class MainScene implements IUpdateHandler {
                     setBeatmap(track.getBeatmap());
                     GlobalManager.SongMenu.select();
                     ResourceManager.getInstance().loadBackground(track.getBackground());
-                    GlobalManager.getInstance().getSongService().preLoad(track.getBeatmap().getMusic());
-                    GlobalManager.getInstance().getSongService().play();
-                    GlobalManager.ScoringScene.load(stat, null, ru.nsu.ccfit.zuev.osu.GlobalManager.getInstance().getSongService(), replayFile, null, track);
-                    GlobalManager.getInstance();
+                    GlobalManager.SongService.preLoad(track.getBeatmap().getMusic());
+                    GlobalManager.SongService.play();
+                    GlobalManager.ScoringScene.load(stat, null, GlobalManager.SongService, replayFile, null, track);
                     GlobalManager.Engine.setScene(GlobalManager.ScoringScene.getScene());
                 }
             }
@@ -1027,8 +1032,7 @@ public class MainScene implements IUpdateHandler {
     }
 
     public void show() {
-        GlobalManager.getInstance().getSongService().setGaming(false);
-        GlobalManager.getInstance();
+        GlobalManager.SongService.setGaming(false);
         GlobalManager.Engine.setScene(getScene());
         if (GlobalManager.getInstance().getSelectedTrack() != null) {
             setBeatmap(GlobalManager.getInstance().getSelectedTrack().getBeatmap());

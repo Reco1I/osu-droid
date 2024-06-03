@@ -419,27 +419,27 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         GameHelper.setNightCore(false);
         GameHelper.setHalfTime(false);
 
-        GlobalManager.getInstance().getSongService().preLoad(filePath, PlayMode.MODE_NONE);
+        GlobalManager.SongService.preLoad(filePath, PlayMode.MODE_NONE);
         GameHelper.setTimeMultiplier(1f);
         //Speed Change
         if (ModMenu.getInstance().getChangeSpeed() != 1.00f){
             timeMultiplier = ModMenu.getInstance().getSpeed();
-            GlobalManager.getInstance().getSongService().preLoad(filePath, timeMultiplier,
+            GlobalManager.SongService.preLoad(filePath, timeMultiplier,
                 ModMenu.getInstance().isEnableNCWhenSpeedChange() ||
                         ModMenu.getInstance().getMod().contains(GameMod.MOD_NIGHTCORE));
             GameHelper.setTimeMultiplier(1 / timeMultiplier);
         } else if (ModMenu.getInstance().getMod().contains(GameMod.MOD_DOUBLETIME)) {
-            GlobalManager.getInstance().getSongService().preLoad(filePath, PlayMode.MODE_DT);
+            GlobalManager.SongService.preLoad(filePath, PlayMode.MODE_DT);
             timeMultiplier = 1.5f;
             GameHelper.setDoubleTime(true);
             GameHelper.setTimeMultiplier(2 / 3f);
         } else if (ModMenu.getInstance().getMod().contains(GameMod.MOD_NIGHTCORE)) {
-            GlobalManager.getInstance().getSongService().preLoad(filePath, PlayMode.MODE_NC);
+            GlobalManager.SongService.preLoad(filePath, PlayMode.MODE_NC);
             timeMultiplier = 1.5f;
             GameHelper.setNightCore(true);
             GameHelper.setTimeMultiplier(2 / 3f);
         } else if (ModMenu.getInstance().getMod().contains(GameMod.MOD_HALFTIME)) {
-            GlobalManager.getInstance().getSongService().preLoad(filePath, PlayMode.MODE_HT);
+            GlobalManager.SongService.preLoad(filePath, PlayMode.MODE_HT);
             timeMultiplier = 0.75f;
             GameHelper.setHalfTime(true);
             GameHelper.setTimeMultiplier(4 / 3f);
@@ -1096,11 +1096,11 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         previousFrameTime = SystemClock.uptimeMillis();
         Utils.clearSoundMask();
         float dt = pSecondsElapsed * timeMultiplier;
-        if (GlobalManager.getInstance().getSongService().getStatus() == Status.PLAYING) {
+        if (GlobalManager.SongService.getStatus() == Status.PLAYING) {
             //处理时间差过于庞大的情况
             final float offset = totalOffset / 1000f;
             final float realsecPassed = //Config.isSyncMusic() ?
-                    GlobalManager.getInstance().getSongService().getPosition() / 1000.0f;// : realTime;
+                    GlobalManager.SongService.getPosition() / 1000.0f;// : realTime;
             final float criticalError = Config.isSyncMusic() ? 0.1f : 0.5f;
             final float normalError = Config.isSyncMusic() ? dt : 0.05f;
 
@@ -1438,9 +1438,9 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         }
 
         if (secPassed >= 0 && !musicStarted) {
-            GlobalManager.getInstance().getSongService().play();
-            GlobalManager.getInstance().getSongService().setVolume(Config.getBgmVolume());
-            totalLength = GlobalManager.getInstance().getSongService().getLength();
+            GlobalManager.SongService.play();
+            GlobalManager.SongService.setVolume(Config.getBgmVolume());
+            totalLength = GlobalManager.SongService.getLength();
             musicStarted = true;
             secPassed = 0;
             return;
@@ -1652,7 +1652,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         }
 
         //Status playerStatus = music.getStatus();
-        Status playerStatus = GlobalManager.getInstance().getSongService().getStatus();
+        Status playerStatus = GlobalManager.SongService.getStatus();
 
         if (playerStatus != Status.PLAYING) {
             secPassed += dt;
@@ -1693,8 +1693,9 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
                 ModMenu.getInstance().setCustomHP(Replay.oldCustomHP);
             }
 
-            if (replaying)
-                GlobalManager.ScoringScene.load(GlobalManager.ScoringScene.getReplayStat(), null, GlobalManager.getInstance().getSongService(), replayFile, null, lastTrack);
+            if (replaying) {
+                GlobalManager.ScoringScene.load(GlobalManager.ScoringScene.getReplayStat(), null, GlobalManager.SongService, replayFile, null, lastTrack);
+            }
             else {
                 if (stat.getMod().contains(GameMod.MOD_AUTO)) {
                     stat.setPlayerName("osu!");
@@ -1711,9 +1712,9 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
 
                     ToastLogger.showText("Loading room statistics...", false);
                 }
-                GlobalManager.ScoringScene.load(stat, lastTrack, GlobalManager.getInstance().getSongService(), replayFile, trackMD5, null);
+                GlobalManager.ScoringScene.load(stat, lastTrack, GlobalManager.SongService, replayFile, trackMD5, null);
             }
-            GlobalManager.getInstance().getSongService().setVolume(0.2f);
+            GlobalManager.SongService.setVolume(0.2f);
             GlobalManager.Engine.setScene(GlobalManager.ScoringScene.getScene());
 
             // Handle input back in update thread
@@ -1802,10 +1803,10 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         if (secPassed > skipTime - 1f)
             return;
 
-        if (GlobalManager.getInstance().getSongService().getStatus() != Status.PLAYING) {
-            GlobalManager.getInstance().getSongService().play();
-            GlobalManager.getInstance().getSongService().setVolume(Config.getBgmVolume());
-            totalLength = GlobalManager.getInstance().getSongService().getLength();
+        if (GlobalManager.SongService.getStatus() != Status.PLAYING) {
+            GlobalManager.SongService.play();
+            GlobalManager.SongService.setVolume(Config.getBgmVolume());
+            totalLength = GlobalManager.SongService.getLength();
             musicStarted = true;
         }
         ResourceManager.getInstance().getSound("menuhit").play();
@@ -1819,7 +1820,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
 
             updatePassiveObjects(difference);
 
-            GlobalManager.getInstance().getSongService().seekTo(seekTime);
+            GlobalManager.SongService.seekTo(seekTime);
             if (video != null) {
                 video.getTexture().seekTo(videoSeekTime);
             }
@@ -1851,11 +1852,11 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         droidTimedDifficultyAttributes = null;
         standardTimedDifficultyAttributes = null;
 
-        if (GlobalManager.getInstance().getSongService() != null) {
-            GlobalManager.getInstance().getSongService().stop();
-            GlobalManager.getInstance().getSongService().preLoad(filePath);
-            GlobalManager.getInstance().getSongService().play();
-            GlobalManager.getInstance().getSongService().setVolume(Config.getBgmVolume());
+        if (GlobalManager.SongService != null) {
+            GlobalManager.SongService.stop();
+            GlobalManager.SongService.preLoad(filePath);
+            GlobalManager.SongService.play();
+            GlobalManager.SongService.setVolume(Config.getBgmVolume());
         }
 
         if (replaying) {
@@ -2444,8 +2445,10 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
             }
         }
 
-        if (GlobalManager.getInstance().getSongService() != null && GlobalManager.getInstance().getSongService().getStatus() == Status.PLAYING) {
-            GlobalManager.getInstance().getSongService().pause();
+        if (GlobalManager.SongService != null) {
+            if (GlobalManager.SongService.getStatus() == Status.PLAYING) {
+                GlobalManager.SongService.pause();
+            }
         }
         paused = true;
 
@@ -2479,8 +2482,10 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
             video.getTexture().pause();
         }
 
-        if (GlobalManager.getInstance().getSongService() != null && GlobalManager.getInstance().getSongService().getStatus() == Status.PLAYING) {
-            GlobalManager.getInstance().getSongService().pause();
+        if (GlobalManager.SongService != null) {
+            if (GlobalManager.SongService.getStatus() == Status.PLAYING) {
+                GlobalManager.SongService.pause();
+            }
         }
         paused = true;
         scene.setChildScene(menu.getScene(), false, true, true);
@@ -2508,10 +2513,12 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
             video.getTexture().play();
         }
 
-        if (GlobalManager.getInstance().getSongService() != null && GlobalManager.getInstance().getSongService().getStatus() != Status.PLAYING && secPassed > 0) {
-            GlobalManager.getInstance().getSongService().play();
-            GlobalManager.getInstance().getSongService().setVolume(Config.getBgmVolume());
-            totalLength = GlobalManager.getInstance().getSongService().getLength();
+        if (GlobalManager.SongService != null) {
+            if (GlobalManager.SongService.getStatus() != Status.PLAYING && secPassed > 0) {
+                GlobalManager.SongService.play();
+                GlobalManager.SongService.setVolume(Config.getBgmVolume());
+                totalLength = GlobalManager.SongService.getLength();
+            }
         }
     }
 

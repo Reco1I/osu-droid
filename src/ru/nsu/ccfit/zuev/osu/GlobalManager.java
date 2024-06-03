@@ -1,7 +1,5 @@
 package ru.nsu.ccfit.zuev.osu;
 
-import android.util.DisplayMetrics;
-
 import org.anddev.andengine.engine.Engine;
 import org.anddev.andengine.engine.camera.SmoothCamera;
 
@@ -24,7 +22,6 @@ public class GlobalManager {
 
     public static MainActivity Activity;
 
-
     public static SongMenu SongMenu;
 
     public static GameScene GameScene;
@@ -33,19 +30,14 @@ public class GlobalManager {
 
     public static ScoringScene ScoringScene;
 
+    public static SongService SongService;
 
+    public static SaveServiceObject SaveServiceObject;
 
     private static GlobalManager instance;
-    private GameScene gameScene;
-    private MainScene mainScene;
-    private ScoringScene scoring;
-    private SongMenu songMenu;
-    private MainActivity mainActivity;
     private int loadingProgress;
     private String info;
-    private SongService songService;
     private TrackInfo selectedTrack;
-    private SaveServiceObject saveServiceObject;
     private String skinNow;
 
     public static GlobalManager getInstance() {
@@ -64,8 +56,8 @@ public class GlobalManager {
     }
 
     public void init() {
-        saveServiceObject = (SaveServiceObject) mainActivity.getApplication();
-        songService = saveServiceObject.getSongService();
+        SaveServiceObject = (SaveServiceObject) Activity.getApplication();
+        SongService = SaveServiceObject.getSongService();
         setLoadingProgress(10);
 
         MainScene = new MainScene();
@@ -73,10 +65,10 @@ public class GlobalManager {
         setInfo("Loading skin...");
         skinNow = Config.getSkinPath();
         ResourceManager.getInstance().loadSkin(skinNow);
-        ScoreLibrary.getInstance().load(mainActivity);
+        ScoreLibrary.getInstance().load(Activity);
         setLoadingProgress(20);
 
-        PropertiesLibrary.getInstance().load(mainActivity);
+        PropertiesLibrary.getInstance().load(Activity);
         setLoadingProgress(30);
 
         GameScene = new GameScene();
@@ -86,9 +78,9 @@ public class GlobalManager {
 
         ScoringScene = new ScoringScene();
         GameScene.setOldScene(SongMenu.scene);
-        if (songService != null) {
-            songService.stop();
-            songService.hideNotification();
+        if (SongService != null) {
+            SongService.stop();
+            SongService.hideNotification();
         }
     }
 
@@ -116,25 +108,4 @@ public class GlobalManager {
         this.info = info;
     }
 
-    public SongService getSongService() {
-        return songService;
-    }
-
-    public void setSongService(SongService songService) {
-        this.songService = songService;
-    }
-
-    public SaveServiceObject getSaveServiceObject() {
-        return saveServiceObject;
-    }
-
-    public void setSaveServiceObject(SaveServiceObject saveServiceObject) {
-        this.saveServiceObject = saveServiceObject;
-    }
-
-    public DisplayMetrics getDisplayMetrics() {
-        final DisplayMetrics dm = new DisplayMetrics();
-        mainActivity.getWindowManager().getDefaultDisplay().getMetrics(dm);
-        return dm;
-    }
 }

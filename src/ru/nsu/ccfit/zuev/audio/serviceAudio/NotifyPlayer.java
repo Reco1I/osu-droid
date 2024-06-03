@@ -116,7 +116,7 @@ public class NotifyPlayer {
     public void updateState() {
         if (!isShowing)
             return;
-        boolean isPlaying = GlobalManager.getInstance().getSongService().getStatus() == Status.PLAYING;
+        boolean isPlaying = GlobalManager.SongService.getStatus() == Status.PLAYING;
         int drawable = isPlaying ? R.drawable.v_pause : R.drawable.v_play;
 
         builder.mActions.set(1, new NotificationCompat.Action(drawable, actionPlay, play));

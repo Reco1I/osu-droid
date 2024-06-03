@@ -36,7 +36,6 @@ import ru.nsu.ccfit.zuev.osu.DifficultyAlgorithm
 import ru.nsu.ccfit.zuev.osu.GlobalManager
 import ru.nsu.ccfit.zuev.osu.GlobalManager.Engine
 import ru.nsu.ccfit.zuev.osu.ToastLogger
-import ru.nsu.ccfit.zuev.osu.game.GameScene
 import ru.nsu.ccfit.zuev.osu.game.mods.GameMod.MOD_SCOREV2
 import ru.nsu.ccfit.zuev.osu.helper.AnimSprite
 import ru.nsu.ccfit.zuev.osu.helper.TextButton
@@ -838,12 +837,12 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
         if (GlobalManager.getInstance().selectedTrack == null)
         {
-            GlobalManager.getInstance().songService.stop()
+            GlobalManager.SongService.stop()
             return
         }
 
-        GlobalManager.getInstance().songService.preLoad(GlobalManager.getInstance().selectedTrack.beatmap.music)
-        GlobalManager.getInstance().songService.play()
+        GlobalManager.SongService.preLoad(GlobalManager.getInstance().selectedTrack.beatmap.music)
+        GlobalManager.SongService.play()
     }
 
     override fun onRoomHostChange(uid: Long)

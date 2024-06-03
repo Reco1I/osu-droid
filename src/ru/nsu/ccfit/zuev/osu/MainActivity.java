@@ -553,7 +553,7 @@ public class MainActivity extends BaseGameActivity implements
                     songService = ((SongService.ReturnBindObject) service).getObject();
                     saveServiceObject = (SaveServiceObject) getApplication();
                     saveServiceObject.setSongService(songService);
-                    GlobalManager.getInstance().setSongService(songService);
+                    GlobalManager.SongService = songService;
                 }
 
                 @Override
@@ -565,8 +565,8 @@ public class MainActivity extends BaseGameActivity implements
 
             bindService(new Intent(MainActivity.this, SongService.class), connection, BIND_AUTO_CREATE);
         }
-        GlobalManager.getInstance().setSongService(songService);
-        GlobalManager.getInstance().setSaveServiceObject(saveServiceObject);
+        GlobalManager.SongService = songService;
+        GlobalManager.SaveServiceObject = saveServiceObject;
     }
 
     @Override

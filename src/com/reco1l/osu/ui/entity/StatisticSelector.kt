@@ -29,7 +29,7 @@ class StatisticSelector(stats: Array<StatisticV2>?) : ScrollableList(), ITouchAr
             {
                 field = value
 
-                GlobalManager.ScoringScene.load(value, GlobalManager.ScoringScene.track, GlobalManager.getInstance().songService, null, null, null)
+                GlobalManager.ScoringScene.load(value, GlobalManager.ScoringScene.track, GlobalManager.SongService, null, null, null)
                 Engine.scene = GlobalManager.ScoringScene.scene
             }
         }
