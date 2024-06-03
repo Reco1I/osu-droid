@@ -194,7 +194,7 @@ public class MainScene implements IUpdateHandler {
                         .setMessage(context.getString(R.string.dialog_visit_osu_website_message))
                         .addButton("Yes", dialog -> {
                             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://osu.ppy.sh"));
-                            GlobalManager.getInstance().getMainActivity().startActivity(browserIntent);
+                            GlobalManager.Activity.startActivity(browserIntent);
                             dialog.dismiss();
                             return null;
                         })
@@ -221,7 +221,7 @@ public class MainScene implements IUpdateHandler {
                         .setMessage(context.getString(R.string.dialog_visit_osudroid_website_message))
                         .addButton("Yes", dialog -> {
                             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://" + OnlineManager.hostname));
-                            GlobalManager.getInstance().getMainActivity().startActivity(browserIntent);
+                            GlobalManager.Activity.startActivity(browserIntent);
                             dialog.dismiss();
                             return null;
                         })
@@ -870,7 +870,7 @@ public class MainScene implements IUpdateHandler {
 
                             @Override
                             public void onModifierFinished(IModifier<IEntity> pModifier, final IEntity pItem) {
-                                GlobalManager.getInstance().getMainActivity().runOnUpdateThread(pItem::detachSelf);
+                                GlobalManager.Activity.runOnUpdateThread(pItem::detachSelf);
                             }
                         }));
                         lastBackground = background;
@@ -942,7 +942,7 @@ public class MainScene implements IUpdateHandler {
         }
         isOnExitAnim = true;
 
-        PowerManager.WakeLock wakeLock = GlobalManager.getInstance().getMainActivity().getWakeLock();
+        PowerManager.WakeLock wakeLock = GlobalManager.Activity.getWakeLock();
         if (wakeLock != null && wakeLock.isHeld()) {
             wakeLock.release();
         }
@@ -984,7 +984,7 @@ public class MainScene implements IUpdateHandler {
         taskPool.schedule(new TimerTask() {
             @Override
             public void run() {
-                GlobalManager.getInstance().getMainActivity().finish();
+                GlobalManager.Activity.finish();
             }
         }, 3000, TimeUnit.MILLISECONDS);
     }

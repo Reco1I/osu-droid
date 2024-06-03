@@ -100,18 +100,6 @@ public class GlobalManager {
         this.skinNow = skinNow;
     }
 
-    public void setSongMenu(SongMenu songMenu) {
-        this.songMenu = songMenu;
-    }
-
-    public MainActivity getMainActivity() {
-        return mainActivity;
-    }
-
-    public void setMainActivity(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
-    }
-
     public int getLoadingProgress() {
         return loadingProgress;
     }

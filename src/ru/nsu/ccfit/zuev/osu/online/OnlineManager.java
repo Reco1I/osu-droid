@@ -166,7 +166,7 @@ public class OnlineManager {
 
         Bundle bParams = new Bundle();
         bParams.putString(FirebaseAnalytics.Param.METHOD, "ingame");
-        GlobalManager.getInstance().getMainActivity().getAnalytics().logEvent(FirebaseAnalytics.Event.LOGIN, bParams);
+        GlobalManager.Activity.getAnalytics().logEvent(FirebaseAnalytics.Event.LOGIN, bParams);
 
         return true;
     }

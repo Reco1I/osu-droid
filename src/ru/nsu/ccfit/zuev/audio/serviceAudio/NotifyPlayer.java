@@ -37,7 +37,6 @@ public class NotifyPlayer {
 
     public static int NOTIFICATION_ID = 1;
 
-    private final MainActivity mActivity = GlobalManager.getInstance().getMainActivity();
     private Context context;
 
     private final String
@@ -70,7 +69,7 @@ public class NotifyPlayer {
         filter.addAction(actionNext);
         filter.addAction(actionClose);
 
-        defaultIcon = BitmapFactory.decodeResource(mActivity.getResources(), R.drawable.osut);
+        defaultIcon = BitmapFactory.decodeResource(GlobalManager.Activity.getResources(), R.drawable.osut);
 
         prev = PendingIntent.getBroadcast(context, 0, new Intent(actionPrev), 0);
         next = PendingIntent.getBroadcast(context, 0, new Intent(actionNext), 0);

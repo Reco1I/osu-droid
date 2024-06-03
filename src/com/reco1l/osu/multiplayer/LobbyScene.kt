@@ -221,8 +221,8 @@ object LobbyScene : Scene()
             try {
                 LoadingScreen().show()
 
-                GlobalManager.getInstance().mainActivity.checkNewSkins()
-                GlobalManager.getInstance().mainActivity.checkNewBeatmaps()
+                GlobalManager.Activity.checkNewSkins()
+                GlobalManager.Activity.checkNewBeatmaps()
                 LibraryManager.INSTANCE.updateLibrary(true)
 
                 RoomScene.load()

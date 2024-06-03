@@ -66,12 +66,11 @@ public class ScoreMenuFragment extends BaseFragment {
                         public void onClick(View v) {
                             Intent intent = new Intent();
                             intent.setAction(Intent.ACTION_VIEW);
-                            intent.setDataAndType(FileProvider.getUriForFile(
-                                    GlobalManager.getInstance().getMainActivity(),
+                            intent.setDataAndType(FileProvider.getUriForFile(GlobalManager.Activity,
                                     BuildConfig.APPLICATION_ID + ".fileProvider",
                                     file), "*/*");
                             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                            GlobalManager.getInstance().getMainActivity().startActivityForResult(intent, 0);
+                            GlobalManager.Activity.startActivityForResult(intent, 0);
                         }
                     }).show();
                 } catch (Exception e) {

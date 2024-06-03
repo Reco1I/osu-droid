@@ -25,7 +25,7 @@ public class EdExtensionHelper {
 
     public static boolean downloadExtension() {
         final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.edplan.cn/osu/droid/extension/latest_ext.php"));
-        GlobalManager.getInstance().getMainActivity().startActivity(intent);
+        GlobalManager.Activity.startActivity(intent);
         return true;
     }
 
@@ -39,7 +39,7 @@ public class EdExtensionHelper {
         intent.putExtra("api", apiName);
         intent.putExtra("type", "anyBroadcast");
         intent.putExtra("data", data);
-        GlobalManager.getInstance().getMainActivity().sendBroadcast(intent);
+        GlobalManager.Activity.sendBroadcast(intent);
     }
 
     public static void onSelectTrack(TrackInfo info) {
@@ -193,7 +193,7 @@ public class EdExtensionHelper {
                 game.put("file", filepath);
                 game.put("mods", new JSONArray(ModMenu.getInstance().getMod()));
                 intent.putExtra("data", game.toString());
-                GlobalManager.getInstance().getMainActivity().startActivity(intent);
+                GlobalManager.Activity.startActivity(intent);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

@@ -32,34 +32,31 @@ import ru.nsu.ccfit.zuev.osuplus.R.string.update_info_latest
 import java.io.File
 
 
-object UpdateManager: IDownloaderObserver
-{
-
-    private val mainActivity = GlobalManager.getInstance().mainActivity
+object UpdateManager: IDownloaderObserver {
 
     private val preferences
-        get() = PreferenceManager.getDefaultSharedPreferences(mainActivity)
+        get() = PreferenceManager.getDefaultSharedPreferences(GlobalManager.Activity)
 
-    private val cacheDirectory = File(mainActivity.cacheDir, "updates").apply { mkdirs() }
+    private val cacheDirectory = File(GlobalManager.Activity.cacheDir, "updates").apply { mkdirs() }
 
-    private val snackBar = Snackbar.make(mainActivity.window.decorView, "", LENGTH_INDEFINITE)
+    private val snackBar = Snackbar.make(GlobalManager.Activity.window.decorView, "", LENGTH_INDEFINITE)
 
-    
+
     private var downloadURL: String? = null
-    
-    private var newVersionCode: Long = mainActivity.versionCode
-    
+
+    private var newVersionCode: Long = GlobalManager.Activity.versionCode
+
 
     fun onActivityStart() = mainThread {
         // Finding if there's a "pending changelog". This means the game was previously updated, we're
         // showing the changelog after update with a prompt asking user to show.
         preferences.apply {
 
-            val latestUpdate = getLong("latestVersionCode", mainActivity.versionCode)
+            val latestUpdate = getLong("latestVersionCode", GlobalManager.Activity.versionCode)
             val pendingChangelog = getString("pendingChangelog", null)
 
             if (!pendingChangelog.isNullOrEmpty()) {
-                if (latestUpdate > mainActivity.versionCode) {
+                if (latestUpdate > GlobalManager.Activity.versionCode) {
                     snackBar.apply {
 
                         // Will only dismiss if user wants.
@@ -89,11 +86,10 @@ object UpdateManager: IDownloaderObserver
 
     /**
      * Check for new game updates.
-     * 
+     *
      * @param silently If `true` no prompt will be shown unless there's new updates.
      */
-    fun checkNewUpdates(silently: Boolean)
-    {
+    fun checkNewUpdates(silently: Boolean) {
         if (!silently) {
             snackBar.apply {
 
@@ -110,14 +106,14 @@ object UpdateManager: IDownloaderObserver
             // then installing it.
             cacheDirectory.listFiles()?.also { list ->
 
-                var newestVersionDownloaded: Long = mainActivity.versionCode
+                var newestVersionDownloaded: Long = GlobalManager.Activity.versionCode
 
                 list.forEach {
 
                     val version = it.nameWithoutExtension.toLongOrNull() ?: return@forEach
 
                     // Deleting the file corresponding to this version if still present.
-                    if (version == mainActivity.versionCode)
+                    if (version == GlobalManager.Activity.versionCode)
                         it.delete()
 
                     // Finding the newest package.
@@ -126,24 +122,24 @@ object UpdateManager: IDownloaderObserver
                 }
 
                 // Directly navigate to installation if there's already a newer package.
-                if (newestVersionDownloaded > mainActivity.versionCode) {
+                if (newestVersionDownloaded > GlobalManager.Activity.versionCode) {
                     newVersionCode = newestVersionDownloaded
                     onFoundNewUpdate(silently)
                     return@async
                 }
             }
-                
+
             // Requesting to server asking for new updates.
             try {
-                
+
                 // Avoid new request if one was already done.
                 if (downloadURL != null) {
                     onFoundNewUpdate(silently)
                     return@async
                 }
-                
+
                 val request = Request.Builder()
-                    .url(updateEndpoint + mainActivity.resources.configuration.locale.language)
+                    .url(updateEndpoint + GlobalManager.Activity.resources.configuration.locale.language)
                     .build()
 
                 OnlineManager.client.newCall(request).execute().use {
@@ -156,7 +152,7 @@ object UpdateManager: IDownloaderObserver
 
                     // Previous implementation has this check, server returning an older version 
                     // shouldn't happen.
-                    if (newVersionCode <= mainActivity.versionCode) {
+                    if (newVersionCode <= GlobalManager.Activity.versionCode) {
                         onAlreadyLatestVersion(silently)
                         return@async
                     }
@@ -176,26 +172,26 @@ object UpdateManager: IDownloaderObserver
             }
         }
     }
-    
-    
+
+
     private fun onInstallNewUpdate(file: File) {
 
         val intent = Intent(ACTION_VIEW).apply {
 
-            val uri = FileProvider.getUriForFile(mainActivity, "$APPLICATION_ID.fileProvider", file)
+            val uri = FileProvider.getUriForFile(GlobalManager.Activity, "$APPLICATION_ID.fileProvider", file)
 
             setDataAndType(uri, "application/vnd.android.package-archive")
             addFlags(FLAG_GRANT_READ_URI_PERMISSION)
         }
-        mainActivity.startActivity(intent)
+        GlobalManager.Activity.startActivity(intent)
     }
-    
+
     private fun onDownloadNewUpdate(file: File) {
 
         // Empty string: At this point download URL shouldn't be null but if it is the case (which is weird) we set an
         // empty string so the downloader invokes onDownloadFail() and a prompt is shown to user rather than nothing.
         val url = downloadURL ?: ""
-        
+
         val downloader = FileRequest(file, url)
         downloader.observer = this
 
@@ -215,11 +211,11 @@ object UpdateManager: IDownloaderObserver
         }
 
     }
-    
-    
+
+
     private fun onFoundNewUpdate(silently: Boolean) = mainThread {
 
-        if (newVersionCode <= mainActivity.versionCode) {
+        if (newVersionCode <= GlobalManager.Activity.versionCode) {
             onAlreadyLatestVersion(silently)
             return@mainThread
         }
@@ -236,12 +232,12 @@ object UpdateManager: IDownloaderObserver
             setAction(update_dialog_button_update) {
 
                 val file = File(cacheDirectory, "$newVersionCode.apk")
-                
+
                 // Files is already downloaded, navigating to installation.
                 if (file.exists()) {
                     onInstallNewUpdate(file)
                     return@setAction
-                }                 
+                }
 
                 file.createNewFile()
                 onDownloadNewUpdate(file)

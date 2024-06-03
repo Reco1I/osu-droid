@@ -26,7 +26,7 @@ public enum LibraryManager {
     private static boolean isCaching = true;
 
     public File getLibraryCacheFile() {
-        return new File(GlobalManager.getInstance().getMainActivity().getFilesDir(), String.format("library.%s.dat", VERSION));
+        return new File(GlobalManager.Activity.getFilesDir(), String.format("library.%s.dat", VERSION));
     }
 
     @SuppressWarnings("unchecked")
