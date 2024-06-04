@@ -16,7 +16,7 @@ import com.reco1l.toolkt.android.cornerRadius
 import com.reco1l.toolkt.android.dp
 import ru.nsu.ccfit.zuev.osu.BeatmapProperties
 import ru.nsu.ccfit.zuev.osu.Osu
-import ru.nsu.ccfit.zuev.osu.PropertiesLibrary
+import ru.nsu.ccfit.zuev.osu.PropertyManager
 import ru.nsu.ccfit.zuev.osu.menu.IPropsMenu
 import ru.nsu.ccfit.zuev.osu.menu.MenuItem
 import ru.nsu.ccfit.zuev.osu.menu.SongMenu
@@ -174,7 +174,7 @@ class PropsMenuFragment : BaseFragment(), IPropsMenu {
     override fun show(menu: SongMenu, item: MenuItem) {
         this.menu = menu
         this.item = item
-        props = PropertiesLibrary.getInstance().getProperties(item.beatmap.path)
+        props = PropertyManager.getProperties(item.beatmap.path)
         if (props == null) {
             props = BeatmapProperties()
         }
@@ -182,10 +182,8 @@ class PropsMenuFragment : BaseFragment(), IPropsMenu {
     }
 
     fun saveProp() {
-        PropertiesLibrary.getInstance().setProperties(
-            item!!.beatmap.path, props
-        )
+        PropertyManager.setProperties(item!!.beatmap.path, props)
         item!!.isFavorite = props!!.favorite
-        PropertiesLibrary.getInstance().save()
+        PropertyManager.save()
     }
 }

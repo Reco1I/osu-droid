@@ -62,13 +62,13 @@ public class Osu {
         setLoadingProgress(10);
 
         MainScene = new MainScene();
-        MainScene.load(Activity);
+        MainScene.init();
         setLoadingInfo("Loading skin...");
         ResourceManager.loadSkin(Config.getSkinPath());
         ScoreLibrary.init();
         setLoadingProgress(20);
 
-        PropertiesLibrary.getInstance().load(Activity);
+        PropertyManager.init();
         setLoadingProgress(30);
 
         GameScene = new GameScene();

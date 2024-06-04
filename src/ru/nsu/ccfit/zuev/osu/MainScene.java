@@ -1,6 +1,5 @@
 package ru.nsu.ccfit.zuev.osu;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.PointF;
 import android.net.Uri;
@@ -77,7 +76,6 @@ import ru.nsu.ccfit.zuev.osuplus.R;
 public class MainScene implements IUpdateHandler {
     public SongProgressBar progressBar;
     public BeatmapInfo beatmapInfo;
-    private Context context;
     private Sprite logo, logoOverlay, background, lastBackground;
     private Sprite music_nowplay;
     private Scene scene;
@@ -119,8 +117,7 @@ public class MainScene implements IUpdateHandler {
     private MainMenu menu;
 
 
-    public void load(Context context) {
-        this.context = context;
+    public void init() {
         Debug.i("Load: mainMenuLoaded()");
         scene = new Scene();
 
@@ -190,7 +187,7 @@ public class MainScene implements IUpdateHandler {
                 if (pSceneTouchEvent.isActionDown()) {
 
                     new MessageDialog()
-                        .setMessage(context.getString(R.string.dialog_visit_osu_website_message))
+                        .setMessage(Osu.Activity.getString(R.string.dialog_visit_osu_website_message))
                         .addButton("Yes", dialog -> {
                             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://osu.ppy.sh"));
                             Osu.Activity.startActivity(browserIntent);
@@ -503,8 +500,8 @@ public class MainScene implements IUpdateHandler {
     }
 
     private void createOnlinePanel(Scene scene) {
-        Config.loadOnlineConfig(context);
-        OnlineManager.getInstance().Init(context);
+        Config.loadOnlineConfig(Osu.Activity);
+        OnlineManager.getInstance().Init(Osu.Activity);
 
         if (OnlineManager.getInstance().isStayOnline()) {
             Debug.i("Stay online, creating panel");

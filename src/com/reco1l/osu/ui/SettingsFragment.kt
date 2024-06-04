@@ -42,7 +42,7 @@ import ru.nsu.ccfit.zuev.osu.Osu
 import ru.nsu.ccfit.zuev.osu.Osu.Engine
 import ru.nsu.ccfit.zuev.osu.LibraryManager
 import ru.nsu.ccfit.zuev.osu.MainActivity
-import ru.nsu.ccfit.zuev.osu.PropertiesLibrary
+import ru.nsu.ccfit.zuev.osu.PropertyManager
 import ru.nsu.ccfit.zuev.osu.ResourceManager
 import ru.nsu.ccfit.zuev.osu.ToastLogger
 import ru.nsu.ccfit.zuev.osu.helper.StringTable
@@ -225,7 +225,7 @@ class SettingsFragment : com.edlplan.ui.fragment.SettingsFragment() {
             }
 
             findPreference<Preference>("clear_properties")!!.setOnPreferenceClickListener {
-                PropertiesLibrary.getInstance().clear(requireActivity())
+                PropertyManager.clear()
                 true
             }
         }

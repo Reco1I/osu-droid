@@ -64,7 +64,7 @@ import ru.nsu.ccfit.zuev.osu.BeatmapProperties;
 import ru.nsu.ccfit.zuev.osu.Config;
 import ru.nsu.ccfit.zuev.osu.Constants;
 import ru.nsu.ccfit.zuev.osu.Osu;
-import ru.nsu.ccfit.zuev.osu.PropertiesLibrary;
+import ru.nsu.ccfit.zuev.osu.PropertyManager;
 import ru.nsu.ccfit.zuev.osu.RGBAColor;
 import ru.nsu.ccfit.zuev.osu.RGBColor;
 import ru.nsu.ccfit.zuev.osu.ResourceManager;
@@ -358,8 +358,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         totalOffset = Config.getOffset();
         String beatmapName = track.getFilename();
         beatmapName = beatmapName.substring(0, beatmapName.lastIndexOf('/'));
-        final BeatmapProperties props = PropertiesLibrary.getInstance()
-                .getProperties(beatmapName);
+        final BeatmapProperties props = PropertyManager.getProperties(beatmapName);
         if (props != null) {
             totalOffset += props.getOffset();
         }

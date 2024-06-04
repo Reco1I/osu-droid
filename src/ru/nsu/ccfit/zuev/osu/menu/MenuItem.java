@@ -14,7 +14,7 @@ import ru.nsu.ccfit.zuev.osu.BeatmapInfo;
 import ru.nsu.ccfit.zuev.osu.BeatmapProperties;
 import ru.nsu.ccfit.zuev.osu.Config;
 import ru.nsu.ccfit.zuev.osu.LibraryManager;
-import ru.nsu.ccfit.zuev.osu.PropertiesLibrary;
+import ru.nsu.ccfit.zuev.osu.PropertyManager;
 import ru.nsu.ccfit.zuev.osu.ResourceManager;
 import ru.nsu.ccfit.zuev.osu.TrackInfo;
 import ru.nsu.ccfit.zuev.osu.Utils;
@@ -54,8 +54,7 @@ public class MenuItem {
                 beatmap.getCreator());
         trackSprites = new MenuItemTrack[info.getCount()];
 
-        final BeatmapProperties props = PropertiesLibrary.getInstance()
-                .getProperties(info.getPath());
+        final BeatmapProperties props = PropertyManager.getProperties(info.getPath());
         favorite = props != null && props.isFavorite();
 
     }
@@ -71,7 +70,7 @@ public class MenuItem {
         creatorStr = StringTable.format(R.string.menu_creator, beatmap.getCreator());
         trackSprites = new MenuItemTrack[1];
         trackId = id;
-        final BeatmapProperties props = PropertiesLibrary.getInstance().getProperties(info.getPath());
+        final BeatmapProperties props = PropertyManager.getProperties(info.getPath());
         favorite = props != null && props.isFavorite();
 
     }
