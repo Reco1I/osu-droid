@@ -66,7 +66,7 @@ public class SpritePool {
         }
 
         spritesCreated++;
-        return new Sprite(0, 0, ResourceManager.getInstance().getTexture(name));
+        return new Sprite(0, 0, ResourceManager.getTexture(name));
     }
 
     synchronized public Sprite getCenteredSprite(final String name,
@@ -86,8 +86,7 @@ public class SpritePool {
         }
 
         spritesCreated++;
-        return new CentredSprite(pos.x, pos.y, ResourceManager.getInstance()
-                .getTexture(name));
+        return new CentredSprite(pos.x, pos.y, ResourceManager.getTexture(name));
     }
 
     synchronized public AnimSprite getAnimSprite(final String name, int count) {

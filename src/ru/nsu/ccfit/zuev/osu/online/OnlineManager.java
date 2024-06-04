@@ -350,8 +350,8 @@ public class OnlineManager {
 
         if (imageWidth * imageHeight > 0) {
             // Avatar has been cached locally
-            ResourceManager.getInstance().loadHighQualityFile(filename, picfile);
-            if (ResourceManager.getInstance().getAvatarTextureIfLoaded(avatarURL) != null) {
+            ResourceManager.loadTexture(filename, picfile);
+            if (ResourceManager.getTexture(MD5Calculator.getStringMD5(avatarURL)) != null) {
                 return true;
             }
         } else {
@@ -368,8 +368,7 @@ public class OnlineManager {
 
             if (imageWidth * imageHeight > 0) {
                 //Avatar has been cached locally
-                ResourceManager.getInstance().loadHighQualityFile(defaultAvatarFilename, avatarFile);
-                if (ResourceManager.getInstance().getAvatarTextureIfLoaded(defaultAvatarURL) != null) {
+                if (ResourceManager.loadTexture(defaultAvatarFilename, avatarFile) != null) {
                     return true;
                 }
             }

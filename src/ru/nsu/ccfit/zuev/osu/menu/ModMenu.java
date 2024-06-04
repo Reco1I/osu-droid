@@ -228,7 +228,7 @@ public class ModMenu implements IModSwitcher {
         scene.attachChild(bg);
 
         multiplierText = new ChangeableText(0, Utils.toRes(50),
-                ResourceManager.getInstance().getFont("CaptionFont"),
+                ResourceManager.getFont("CaptionFont"),
                 StringTable.format(R.string.menu_mod_multiplier, 1f));
         multiplierText.setScale(1.2f);
         scene.attachChild(multiplierText);
@@ -239,7 +239,7 @@ public class ModMenu implements IModSwitcher {
 
         final int offset = 100;
         final int offsetGrowth = 130;
-        final TextureRegion button = ResourceManager.getInstance().getTexture("selection-mod-easy");
+        final TextureRegion button = ResourceManager.getTexture("selection-mod-easy");
 
         //line 1
         addButton(offset, Config.getRES_HEIGHT() / 2 - button.getHeight() * 3, "selection-mod-easy", GameMod.MOD_EASY);
@@ -284,9 +284,7 @@ public class ModMenu implements IModSwitcher {
 
         addButton(offset + offsetGrowth * factor, Config.getRES_HEIGHT() / 2 + button.getHeight() * 2, "selection-mod-precise", GameMod.MOD_PRECISE);
 
-        final TextButton resetText = new TextButton(ResourceManager
-                .getInstance().getFont("CaptionFont"),
-                StringTable.get(R.string.menu_mod_reset)) {
+        final TextButton resetText = new TextButton(ResourceManager.getFont("CaptionFont"), StringTable.get(R.string.menu_mod_reset)) {
 
             @Override
             public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
@@ -309,9 +307,7 @@ public class ModMenu implements IModSwitcher {
         }
         resetText.setScale(1.2f);
 
-        final TextButton back = new TextButton(ResourceManager
-                .getInstance().getFont("CaptionFont"),
-                StringTable.get(R.string.menu_mod_back)) {
+        final TextButton back = new TextButton(ResourceManager.getFont("CaptionFont"), StringTable.get(R.string.menu_mod_back)) {
 
             @Override
             public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,

@@ -24,7 +24,7 @@ public class GameScoreText {
         AnimSprite scoreComma = null;
         AnimSprite scorePercent = null;
         AnimSprite scoreX = null;
-        digitWidth = ResourceManager.getInstance().getTextureWithPrefix(prefix, "0").getWidth();
+        digitWidth = ResourceManager.getTextureWithPrefix(prefix, "0").getWidth();
         letters = new AnimSprite[mask.length()];
         float width = 0;
         for (int i = 0; i < mask.length(); i++) {

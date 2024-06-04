@@ -13,18 +13,18 @@ import ru.nsu.ccfit.zuev.osu.Osu.Engine
 import ru.nsu.ccfit.zuev.osu.LibraryManager
 import ru.nsu.ccfit.zuev.osu.MainScene
 import ru.nsu.ccfit.zuev.osu.MainScene.MusicOption
+import ru.nsu.ccfit.zuev.osu.ResourceManager
 import ru.nsu.ccfit.zuev.osu.ToastLogger
 import ru.nsu.ccfit.zuev.osu.helper.AnimSprite
 import ru.nsu.ccfit.zuev.osu.helper.StringTable
 import ru.nsu.ccfit.zuev.osu.menu.LoadingScreen
 import ru.nsu.ccfit.zuev.osuplus.R
-import ru.nsu.ccfit.zuev.osu.ResourceManager.getInstance as getResources
 import ru.nsu.ccfit.zuev.osu.online.OnlineManager.getInstance as getOnline
 
 class MainMenu(val main: MainScene)
 {
 
-    private val sound = getResources().loadSound("menuhit", "sfx/menuhit.ogg", false)
+    private val sound = ResourceManager.loadSound("menuhit", "sfx/menuhit.ogg")
 
     /**
      * This button will switch between `Play` and `Solo`.

@@ -203,7 +203,7 @@ class SettingsFragment : com.edlplan.ui.fragment.SettingsFragment() {
 
                     async {
                         SkinManager.getInstance().clearSkin()
-                        ResourceManager.getInstance().loadSkin(newValue.toString())
+                        ResourceManager.loadSkin(newValue.toString())
                         Engine.textureManager.reloadTextures()
 
                         mainThread {

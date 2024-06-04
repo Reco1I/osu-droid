@@ -121,7 +121,7 @@ class RoomChat : BaseFragment(), OnEditorActionListener, OnKeyListener
     private fun appendMessage(message: Message) {
 
         if (Engine.scene != Osu.GameScene.scene) {
-            ResourceManager.getInstance().getSound("heartbeat")?.play(0.75f)
+            ResourceManager.getSound("heartbeat")?.play(0.75f)
         }
 
         val index = adapter.data.size

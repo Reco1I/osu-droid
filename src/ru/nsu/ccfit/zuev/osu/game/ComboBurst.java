@@ -42,26 +42,26 @@ public class ComboBurst {
         this.bottomY = bottomY;
         breakCombo();
 
-        TextureRegion globalTex = ResourceManager.getInstance().getTexture("comboburst");
+        TextureRegion globalTex = ResourceManager.getTexture("comboburst");
         if (globalTex != null) {
             Sprite sprite = new Sprite(0, 0, globalTex);
             sprite.setAlpha(0f);
             sprite.setIgnoreUpdate(true);
             comboBursts.add(sprite);
         }
-        BassSoundProvider sound = ResourceManager.getInstance().getSound("comboburst");
+        BassSoundProvider sound = ResourceManager.getSound("comboburst");
         if (sound != null) {
             comboBurstVocals.add(sound);
         }
         for (int i = 0; i < 10; i++) {
-            TextureRegion tex = ResourceManager.getInstance().getTexture("comboburst-" + i);
+            TextureRegion tex = ResourceManager.getTexture("comboburst-" + i);
             if (tex != null) {
                 Sprite sprite = new Sprite(0, 0, tex);
                 sprite.setAlpha(0f);
                 sprite.setIgnoreUpdate(true);
                 comboBursts.add(sprite);
             }
-            sound = ResourceManager.getInstance().getSound("comboburst-" + i);
+            sound = ResourceManager.getSound("comboburst-" + i);
             if (sound != null) {
                 comboBurstVocals.add(sound);
             }

@@ -16,25 +16,25 @@ import ru.nsu.ccfit.zuev.osu.Config
 import ru.nsu.ccfit.zuev.osu.DifficultyAlgorithm
 import ru.nsu.ccfit.zuev.osu.Osu
 import ru.nsu.ccfit.zuev.osu.RGBColor
+import ru.nsu.ccfit.zuev.osu.ResourceManager
 import ru.nsu.ccfit.zuev.osu.ToastLogger
 import ru.nsu.ccfit.zuev.osu.menu.MenuItemTrack
 import ru.nsu.ccfit.zuev.skins.OsuSkin
 import ru.nsu.ccfit.zuev.osu.LibraryManager.INSTANCE as libraryManager
-import ru.nsu.ccfit.zuev.osu.ResourceManager.getInstance as getResources
 
 /**
  * Simplified version of [MenuItemTrack]
  */
-class BeatmapButton : Sprite(0f, 0f, getResources().getTexture("menu-button-background"))
+class BeatmapButton : Sprite(0f, 0f, ResourceManager.getTexture("menu-button-background"))
 {
 
-    private val trackTitle = ChangeableText(32f, 20f, getResources().getFont("smallFont"), "", 100)
+    private val trackTitle = ChangeableText(32f, 20f, ResourceManager.getFont("smallFont"), "", 100)
 
-    private val creatorInfo = ChangeableText(32f, trackTitle.height + 20, getResources().getFont("smallFont"), "", 200)
+    private val creatorInfo = ChangeableText(32f, trackTitle.height + 20, ResourceManager.getFont("smallFont"), "", 200)
 
     private val stars = Array(10) { i ->
 
-        Sprite(0f, 0f, getResources().getTexture("star")).also {
+        Sprite(0f, 0f, ResourceManager.getTexture("star")).also {
 
             it.setScale(0.5f)
             it.setPosition(20f + it.widthScaled * i, creatorInfo.y + 20f)
@@ -76,7 +76,7 @@ class BeatmapButton : Sprite(0f, 0f, getResources().getTexture("menu-button-back
         if (moved || !event.isActionUp || Multiplayer.player!!.status == READY || RoomScene.awaitBeatmapChange || RoomScene.awaitStatusChange)
             return true
 
-        getResources().getSound("menuclick")?.play()
+        ResourceManager.getSound("menuclick")?.play()
 
         initialX = null
         initialY = null

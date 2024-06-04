@@ -13,7 +13,7 @@ import org.anddev.andengine.input.touch.TouchEvent
 import org.anddev.andengine.input.touch.detector.ScrollDetector.IScrollDetectorListener
 import org.anddev.andengine.util.MathUtils
 import ru.nsu.ccfit.zuev.osu.Config
-import ru.nsu.ccfit.zuev.osu.ResourceManager.getInstance as getResources
+import ru.nsu.ccfit.zuev.osu.ResourceManager
 
 class RoomPlayerList(val room: Room) : ScrollableList(), IScrollDetectorListener
 {
@@ -85,7 +85,7 @@ class RoomPlayerList(val room: Room) : ScrollableList(), IScrollDetectorListener
 
         private val state = Rectangle(0f, 0f, 5f, height)
 
-        private val text = ChangeableText(20f, 16f, getResources().getFont("smallFont"), "", 64)
+        private val text = ChangeableText(20f, 16f, ResourceManager.getFont("smallFont"), "", 64)
 
         private var hostIcon: Sprite? = null
 
@@ -137,7 +137,7 @@ class RoomPlayerList(val room: Room) : ScrollableList(), IScrollDetectorListener
 
             if (isHost)
             {
-                val icon = getResources().getTexture("crown")
+                val icon = ResourceManager.getTexture("crown")
 
                 hostIcon = Sprite(width - icon.width - 15f, (height - icon.height) / 2f, icon)
                 attachChild(hostIcon)
@@ -147,7 +147,7 @@ class RoomPlayerList(val room: Room) : ScrollableList(), IScrollDetectorListener
             {
                 MISSING_BEATMAP ->
                 {
-                    val icon = getResources().getTexture("missing")
+                    val icon = ResourceManager.getTexture("missing")
 
                     missingIcon = Sprite(width - icon.width - 15f - (hostIcon?.let { it.width + 10f } ?: 0f), (height - icon.height) / 2f, icon)
                     attachChild(missingIcon)
@@ -183,7 +183,7 @@ class RoomPlayerList(val room: Room) : ScrollableList(), IScrollDetectorListener
                 if (moved || isScroll)
                     return true
 
-                getResources().getSound("menuclick")?.play()
+                ResourceManager.getSound("menuclick")?.play()
 
                 if (player != null && Multiplayer.player != player)
                 {

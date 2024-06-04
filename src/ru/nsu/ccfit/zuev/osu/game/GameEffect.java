@@ -33,10 +33,10 @@ public class GameEffect extends GameObject implements IEntityModifierListener {
     public GameEffect(final String texname) {
         this.texname = texname;
 
-        if (isAnimationEffect(texname) && ResourceManager.getInstance().isTextureLoaded(texname + "-0")) {
+        if (isAnimationEffect(texname) && ResourceManager.isTextureLoaded(texname + "-0")) {
             List<String> loadedScoreBarTextures = new ArrayList<>();
             for (int i = 0; i < 60; i++) {
-                if (ResourceManager.getInstance().isTextureLoaded(texname + "-" + i))
+                if (ResourceManager.isTextureLoaded(texname + "-" + i))
                     loadedScoreBarTextures.add(texname + "-" + i);
                 else break;
             }
@@ -44,7 +44,7 @@ public class GameEffect extends GameObject implements IEntityModifierListener {
             hit.setLoopType(AnimSprite.LoopType.STOP);
             this.hit = hit;
         } else {
-            hit = new Sprite(0, 0, ResourceManager.getInstance().getTexture(texname));
+            hit = new Sprite(0, 0, ResourceManager.getTexture(texname));
         }
     }
 

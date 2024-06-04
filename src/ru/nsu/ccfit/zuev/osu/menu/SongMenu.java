@@ -166,7 +166,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
         scene.attachChild(backLayer);
         scene.attachChild(frontLayer);
 
-        final TextureRegion tex = ResourceManager.getInstance().getTexture("menu-background");
+        final TextureRegion tex = ResourceManager.getTexture("menu-background");
         float height = tex.getHeight();
         height *= Config.getRES_WIDTH() / (float) tex.getWidth();
         final Sprite bg = new Sprite(0, (Config.getRES_HEIGHT() - height) / 2,
@@ -190,9 +190,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
         sort();
 
         if (items.size() == 0) {
-            final Text text = new Text(0, 0, ResourceManager.getInstance()
-                    .getFont("CaptionFont"), "There are no songs in library, try using chimu.moe",
-                    HorizontalAlign.CENTER);
+            final Text text = new Text(0, 0, ResourceManager.getFont("CaptionFont"), "There are no songs in library, try using chimu.moe", HorizontalAlign.CENTER);
             text.setPosition(Config.getRES_WIDTH() / 2f - text.getWidth() / 2,
                     Config.getRES_HEIGHT() / 2f - text.getHeight() / 2);
             text.setScale(1.5f);
@@ -263,7 +261,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
 
         scrollbar = new ScrollBar(scene);
 
-        final TextureRegion songSelectTopTexture = ResourceManager.getInstance().getTexture("songselect-top");
+        final TextureRegion songSelectTopTexture = ResourceManager.getTexture("songselect-top");
         final Sprite songSelectTop = new Sprite(0, 0, songSelectTopTexture);
         songSelectTop.setSize(songSelectTopTexture.getWidth() * songSelectTopTexture.getHeight() / 184f, 184);
         songSelectTop.setPosition(-1640, songSelectTop.getY());
@@ -271,23 +269,23 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
         frontLayer.attachChild(songSelectTop);
 
         trackInfo = new ChangeableText(Utils.toRes(70), Utils.toRes(2),
-                ResourceManager.getInstance().getFont("font"), "title", 1024);
+                ResourceManager.getFont("font"), "title", 1024);
         frontLayer.attachChild(trackInfo);
 
         mapper = new ChangeableText(Utils.toRes(70), trackInfo.getY() + trackInfo.getHeight() + Utils.toRes(2),
-                ResourceManager.getInstance().getFont("middleFont"), "mapper", 1024);
+                ResourceManager.getFont("middleFont"), "mapper", 1024);
         frontLayer.attachChild(mapper);
 
         beatmapInfo = new ChangeableText(Utils.toRes(4), mapper.getY() + mapper.getHeight() + Utils.toRes(2),
-                ResourceManager.getInstance().getFont("middleFont"), "beatmapInfo", 1024);
+                ResourceManager.getFont("middleFont"), "beatmapInfo", 1024);
         frontLayer.attachChild(beatmapInfo);
 
         beatmapInfo2 = new ChangeableText(Utils.toRes(4), beatmapInfo.getY() + beatmapInfo.getHeight() + Utils.toRes(2),
-                ResourceManager.getInstance().getFont("middleFont"), "beatmapInfo2", 1024);
+                ResourceManager.getFont("middleFont"), "beatmapInfo2", 1024);
         frontLayer.attachChild(beatmapInfo2);
 
         dimensionInfo = new ChangeableText(Utils.toRes(4), beatmapInfo2.getY() + beatmapInfo2.getHeight() + Utils.toRes(2),
-                ResourceManager.getInstance().getFont("smallFont"), "dimensionInfo", 1024);
+                ResourceManager.getFont("smallFont"), "dimensionInfo", 1024);
         frontLayer.attachChild(dimensionInfo);
 
 
@@ -300,10 +298,10 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
         SkinLayout layoutOptions = OsuSkin.get().getLayout("OptionsButton");
         SkinLayout layoutRandom = OsuSkin.get().getLayout("RandomButton");
 
-        if (ResourceManager.getInstance().isTextureLoaded("menu-back-0")) {
+        if (ResourceManager.isTextureLoaded("menu-back-0")) {
             List<String> loadedBackTextures = new ArrayList<>();
             for (int i = 0; i < 60; i++) {
-                if (ResourceManager.getInstance().isTextureLoaded("menu-back-" + i))
+                if (ResourceManager.isTextureLoaded("menu-back-" + i))
                     loadedBackTextures.add("menu-back-" + i);
             }
             backButton = new AnimSprite(0, 0, loadedBackTextures.size(), loadedBackTextures.toArray(new String[0])) {
@@ -325,7 +323,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
                         moved = false;
                         dx = pTouchAreaLocalX;
                         dy = pTouchAreaLocalY;
-                        BassSoundProvider playSnd = ResourceManager.getInstance().getSound("menuback");
+                        BassSoundProvider playSnd = ResourceManager.getSound("menuback");
                         if (playSnd != null) {
                             playSnd.play();
                         }
@@ -353,7 +351,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
                 }
             };
         } else {
-            backButton = new Sprite(0, 0, ResourceManager.getInstance().getTexture("menu-back")) {
+            backButton = new Sprite(0, 0, ResourceManager.getTexture("menu-back")) {
                 boolean moved = false;
                 float dx = 0, dy = 0;
                 boolean scaleWhenHold = true;
@@ -372,7 +370,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
                         moved = false;
                         dx = pTouchAreaLocalX;
                         dy = pTouchAreaLocalY;
-                        BassSoundProvider playSnd = ResourceManager.getInstance().getSound("menuback");
+                        BassSoundProvider playSnd = ResourceManager.getSound("menuback");
                         if (playSnd != null) {
                             playSnd.play();
                         }
@@ -516,7 +514,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
 
                             previousSelectionPerformed = true;
 
-                            ResourceManager.getInstance().getSound("menuclick")
+                            ResourceManager.getSound("menuclick")
                                     .play();
                             previousItem.select(true, true);
                         }
@@ -564,7 +562,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
                         if (selectedItem == items.get(index)) {
                             return true;
                         }
-                        ResourceManager.getInstance().getSound("menuclick")
+                        ResourceManager.getSound("menuclick")
                                 .play();
                         items.get(index).select(true, true);
                     }
@@ -1140,7 +1138,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
                 }
             }
 
-            ResourceManager.getInstance().getSound("menuhit").play();
+            ResourceManager.getSound("menuhit").play();
             if (Multiplayer.isMultiplayer)
             {
                 setMultiplayerRoomBeatmap(selectedTrack);
@@ -1186,8 +1184,8 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
         Execution.async(() -> {
             synchronized (backgroundMutex) {
                 final TextureRegion tex = Config.isSafeBeatmapBg() || track.getBackground() == null?
-                        ResourceManager.getInstance().getTexture("menu-background") :
-                        ResourceManager.getInstance().loadBackground(bgName);
+                        ResourceManager.getTexture("menu-background") :
+                        ResourceManager.loadBackground(bgName);
                 if (tex != null) {
                     float height = tex.getHeight();
                     height *= Config.getRES_WIDTH()
@@ -1201,8 +1199,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
                 Execution.updateThread(() -> {
                     synchronized (backgroundMutex) {
                         if (bg == null) {
-                            final TextureRegion tex1 = ResourceManager
-                                    .getInstance().getTexture("menu-background");
+                            final TextureRegion tex1 = ResourceManager.getTexture("menu-background");
                             float height = tex1.getHeight();
                             height *= Config.getRES_WIDTH()
                                     / (float) tex1.getWidth();

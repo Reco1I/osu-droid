@@ -66,7 +66,7 @@ public class SkinManager {
         stdframeCount.put("sliderfollowcircle", 1);
 
         for (final String s : stdframeCount.keySet()) {
-            final int fcount = ResourceManager.getInstance().getFrameCount(s);
+            final int fcount = ResourceManager.getFrameCount(s);
             if (fcount >= 0) {
                 stdframeCount.put(s, fcount);
             }
@@ -94,11 +94,11 @@ public class SkinManager {
                     || f.getName().toLowerCase().matches(".*[.]mp3")
                     || f.getName().toLowerCase().matches(".*[.]ogg"))
                 && f.length() >= 1024) {
-                ResourceManager.getInstance().loadCustomSound(f);
+                ResourceManager.loadCustomSound(f);
             } else if (Config.isUseCustomSkins()
                     && (f.getName().toLowerCase().matches(".*[.]png")
                     || f.getName().toLowerCase().matches(".*[.]jpg"))) {
-                ResourceManager.getInstance().loadCustomTexture(f);
+                ResourceManager.loadCustomTexture(f);
             }
 
         }
@@ -106,7 +106,7 @@ public class SkinManager {
         if (!Config.isUseCustomSkins()) return;
 
         for (final String s : frameCount.keySet()) {
-            final int fcount = ResourceManager.getInstance().getFrameCount(s);
+            final int fcount = ResourceManager.getFrameCount(s);
             if (fcount >= 0) {
                 frameCount.put(s, fcount);
             }
@@ -124,6 +124,6 @@ public class SkinManager {
         frameCount.put("play-skip", stdframeCount.get("play-skip"));
         frameCount.put("sliderfollowcircle",
                 stdframeCount.get("sliderfollowcircle"));
-        ResourceManager.getInstance().clearCustomResources();
+        ResourceManager.clearCustomResources();
     }
 }

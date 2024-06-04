@@ -40,8 +40,7 @@ public class BreakAnimator extends GameObject {
         listener.addPassiveObject(this);
 
         for (int i = 0; i < 4; i++) {
-            arrows[i] = new Sprite(0, 0, ResourceManager.getInstance()
-                    .getTexture("play-warningarrow").deepCopy());
+            arrows[i] = new Sprite(0, 0, ResourceManager.getTexture("play-warningarrow").deepCopy());
             arrows[i]
                     .registerEntityModifier(new LoopEntityModifier(
                             new SequenceEntityModifier(
@@ -95,11 +94,8 @@ public class BreakAnimator extends GameObject {
             scene.attachChild(arrows[i], 0);
         }
         if (showMark) {
-            final TextureRegion zeroRect = ResourceManager.getInstance()
-                    .getTextureWithPrefix(OsuSkin.get().getScorePrefix(), "0");
-            mark = new Sprite(Config.getRES_WIDTH() - zeroRect.getWidth() * 11,
-                    Utils.toRes(5), ResourceManager.getInstance().getTexture(
-                    "ranking-" + stat.getMark() + "-small"));
+            final TextureRegion zeroRect = ResourceManager.getTextureWithPrefix(OsuSkin.get().getScorePrefix(), "0");
+            mark = new Sprite(Config.getRES_WIDTH() - zeroRect.getWidth() * 11, Utils.toRes(5), ResourceManager.getTexture("ranking-" + stat.getMark() + "-small"));
             mark.setScale(1.2f);
             scene.attachChild(mark, 0);
         }
@@ -133,7 +129,7 @@ public class BreakAnimator extends GameObject {
                     new DelayModifier(0.025f), new FadeInModifier(0.025f),
                     new DelayModifier(0.6725f), new FadeOutModifier(0.3f)));
 
-            var sound = ResourceManager.getInstance().getCustomSound("section" + ending, 1);
+            var sound = ResourceManager.getCustomSound("section" + ending, 1);
             if (sound != null)
                 sound.play();
         }

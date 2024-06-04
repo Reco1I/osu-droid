@@ -22,6 +22,7 @@ import org.anddev.andengine.util.modifier.IModifier;
 
 import ru.nsu.ccfit.zuev.osu.Config;
 import ru.nsu.ccfit.zuev.osu.Constants;
+import ru.nsu.ccfit.zuev.osu.Osu;
 import ru.nsu.ccfit.zuev.osu.ResourceManager;
 import ru.nsu.ccfit.zuev.osu.Utils;
 import ru.nsu.ccfit.zuev.osu.helper.CentredSprite;
@@ -58,7 +59,8 @@ public class Spinner extends GameObject {
 
 
     public Spinner() {
-        ResourceManager.getInstance().checkSpinnerTextures();
+        checkSpinnerTextures();
+        
         this.pos = new PointF((float) Constants.MAP_WIDTH / 2, (float) Constants.MAP_HEIGHT / 2);
         center = Utils.trackToRealCoords(pos);
         background = SpritePool.getInstance().getCenteredSprite(
@@ -68,7 +70,7 @@ public class Spinner extends GameObject {
 
         circle = SpritePool.getInstance().getCenteredSprite("spinner-circle",
                 center);
-        mregion = ResourceManager.getInstance().getTexture("spinner-metre")
+        mregion = ResourceManager.getTexture("spinner-metre")
                 .deepCopy();
         metre = new Sprite(center.x - (float) Config.getRES_WIDTH() / 2,
                 Config.getRES_HEIGHT(), mregion);
@@ -76,9 +78,24 @@ public class Spinner extends GameObject {
         metre.setHeight(background.getHeightScaled());
         approachCircle = SpritePool.getInstance().getCenteredSprite(
                 "spinner-approachcircle", center);
-        spinText = new CentredSprite(center.x, center.y * 1.5f, ResourceManager
-                .getInstance().getTexture("spinner-spin"));
+        spinText = new CentredSprite(center.x, center.y * 1.5f, ResourceManager.getTexture("spinner-spin"));
     }
+
+    
+    private void checkSpinnerTextures() {
+        
+        String[] names = {"spinner-background", "spinner-circle", "spinner-metre", "spinner-approachcircle", "spinner-spin"};
+        
+        for (var name : names) {
+            var region = ResourceManager.getTexture(name, false);
+            
+            if (region != null && region.getTexture() != null && !region.getTexture().isLoadedToHardware()) {
+                Osu.Engine.getTextureManager().reloadTextures();
+                break;
+            }
+        }
+    }
+    
 
     public void init(final GameObjectListener listener, final Scene scene,
                      final float pretime, final float time, final float rps,
@@ -100,7 +117,7 @@ public class Spinner extends GameObject {
         if(totalTime <= 0f) clear = true;
         bonusScore = null;
         score = 1;
-        ResourceManager.getInstance().checkSpinnerTextures();
+        checkSpinnerTextures();
 
         if (!Utils.isEmpty(tempSound)) {
             final String[] group = tempSound.split(":");
@@ -307,7 +324,7 @@ public class Spinner extends GameObject {
                 listener.onSpinnerHit(id, 1000, false, 0);
                 score++;
                 scene.attachChild(bonusScore);
-                ResourceManager.getInstance().getSound("spinnerbonus").play();
+                ResourceManager.getSound("spinnerbonus").play();
                 float rate = 0.375f;
                 if (GameHelper.getDrain() > 0) {
                     rate = 1 + (GameHelper.getDrain() / 4f);

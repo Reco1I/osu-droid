@@ -16,9 +16,9 @@ import org.anddev.andengine.entity.text.Text
 import org.anddev.andengine.input.touch.TouchEvent
 import org.anddev.andengine.util.MathUtils
 import ru.nsu.ccfit.zuev.osu.Config
+import ru.nsu.ccfit.zuev.osu.ResourceManager
 import ru.nsu.ccfit.zuev.osu.ToastLogger
 import ru.nsu.ccfit.zuev.osu.menu.LoadingScreen
-import ru.nsu.ccfit.zuev.osu.ResourceManager.getInstance as getResources
 import ru.nsu.ccfit.zuev.osu.online.OnlineManager.getInstance as getOnline
 
 class LobbyRoomList : ScrollableList()
@@ -82,7 +82,7 @@ class LobbyRoomList : ScrollableList()
 
     private fun addItem(room: Room)
     {
-        val texture = getResources().getTexture("menu-button-background")
+        val texture = ResourceManager.getTexture("menu-button-background")
 
         camY = -146f
 
@@ -114,7 +114,7 @@ class LobbyRoomList : ScrollableList()
                     if (moved || isScroll)
                         return false
 
-                    getResources().getSound("menuclick")?.play()
+                    ResourceManager.getSound("menuclick")?.play()
 
                     if (room.isLocked)
                         showPasswordPrompt(room)
@@ -142,7 +142,7 @@ class LobbyRoomList : ScrollableList()
             TEAM_VS_TEAM -> "team_vs"
         }
 
-        val icon = Sprite(10f, 0f, getResources().getTexture(texName)).also {
+        val icon = Sprite(10f, 0f, ResourceManager.getTexture(texName)).also {
 
             it.setScale(0.5f)
             it.setPosition(10f, (sprite.height - it.height) / 2f)
@@ -150,7 +150,7 @@ class LobbyRoomList : ScrollableList()
         }
 
         // Title
-        val name = Text(0f, 0f, getResources().getFont("smallFont"), room.name).also {
+        val name = Text(0f, 0f, ResourceManager.getFont("smallFont"), room.name).also {
 
             it.setPosition(icon.x + icon.width, 24f)
             sprite.attachChild(it)
@@ -178,7 +178,7 @@ class LobbyRoomList : ScrollableList()
             $status - $winCondition - ${room.modsToReadableString()}
         """.trimIndent()
 
-        Text(0f, 0f, getResources().getFont("smallFont"), infoText).also {
+        Text(0f, 0f, ResourceManager.getFont("smallFont"), infoText).also {
 
             it.setPosition(icon.x + icon.width, name.y + name.height)
             it.setColor(0.8f, 0.8f, 0.8f)
@@ -188,7 +188,7 @@ class LobbyRoomList : ScrollableList()
         // Lock indicator
         if (room.isLocked)
         {
-            Sprite(0f, 0f, getResources().getTexture("lock")).also {
+            Sprite(0f, 0f, ResourceManager.getTexture("lock")).also {
 
                 it.setPosition(sprite.width - it.width - 5f, sprite.height - it.height - 5f)
                 sprite.attachChild(it)

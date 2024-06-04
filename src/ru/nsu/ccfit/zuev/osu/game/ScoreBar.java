@@ -23,29 +23,29 @@ public class ScoreBar extends GameObject {
     public ScoreBar(final GameObjectListener listener, final Scene scene,
                     final StatisticV2 stat) {
         this.stat = stat;
-        bg = new Sprite(0, 0, ResourceManager.getInstance().getTexture(
+        bg = new Sprite(0, 0, ResourceManager.getTexture(
                 "scorebar-bg"));
         bg.setScaleCenter(0, 0);
 		/*final int colourFrames = SkinManager.getFrames("scorebar-colour");
 		colour = new AnimSprite(Utils.toRes(5), Utils.toRes(16),
 				"scorebar-colour-", colourFrames, colourFrames);*/
-        if (ResourceManager.getInstance().isTextureLoaded("scorebar-colour-0")) {
+        if (ResourceManager.isTextureLoaded("scorebar-colour-0")) {
             List<String> loadedScoreBarTextures = new ArrayList<>();
             for (int i = 0; i < 60; i++) {
-                if (ResourceManager.getInstance().isTextureLoaded("scorebar-colour-" + i))
+                if (ResourceManager.isTextureLoaded("scorebar-colour-" + i))
                     loadedScoreBarTextures.add("scorebar-colour-" + i);
             }
             colour = new AnimSprite(Utils.toRes(5), Utils.toRes(16), loadedScoreBarTextures.size(),
                     loadedScoreBarTextures.toArray(new String[0]));
         } else {
             colour = new Sprite(Utils.toRes(5), Utils.toRes(16),
-                    ResourceManager.getInstance().getTexture("scorebar-colour"));
+                    ResourceManager.getTexture("scorebar-colour"));
         }
         width = colour.getWidth();
 		/*for (int i = 0; i < colour.getTextureRegionCount(); i++) {
 			colour.setTextureRegion(i, colour.getTextureRegionAt(i).deepCopy());
 		}*/
-        ki = ResourceManager.getInstance().isTextureLoaded("scorebar-kidanger")
+        ki = ResourceManager.isTextureLoaded("scorebar-kidanger")
                 ? new AnimSprite(0, 0, 0, "scorebar-ki", "scorebar-kidanger", "scorebar-kidanger2")
                 : new AnimSprite(0, 0, 0, "scorebar-ki");
         ki.setPosition(Utils.toRes(5) + colour.getWidth() - ki.getWidth() / 2,

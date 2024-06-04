@@ -22,14 +22,13 @@ public class MenuItemBackground extends Sprite {
     private MenuItem item;
 
     public MenuItemBackground() {
-        super(0, 0, ResourceManager.getInstance().getTexture(
+        super(0, 0, ResourceManager.getTexture(
                 "menu-button-background"));
 
         setAlpha(0.8f);
         title = new ChangeableText(Utils.toRes(32), Utils.toRes(25),
-                ResourceManager.getInstance().getFont("font"), "", 255);
-        author = new ChangeableText(0, 0, ResourceManager.getInstance()
-                .getFont("font"), "", 100);
+                ResourceManager.getFont("font"), "", 255);
+        author = new ChangeableText(0, 0, ResourceManager.getFont("font"), "", 100);
         author.setPosition(Utils.toRes(150), Utils.toRes(60));
 
         defColor.apply(this);
@@ -72,7 +71,7 @@ public class MenuItemBackground extends Sprite {
             dy = pTouchAreaLocalY;
             return true;
         } else if (pSceneTouchEvent.isActionUp() && !moved) {
-            ResourceManager.getInstance().getSound("menuclick").play();
+            ResourceManager.getSound("menuclick").play();
             defColor.apply(this);
             if (item != null) {
                 item.select(true, true);

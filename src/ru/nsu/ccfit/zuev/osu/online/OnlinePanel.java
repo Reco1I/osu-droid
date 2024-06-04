@@ -15,6 +15,7 @@ import org.anddev.andengine.util.HorizontalAlign;
 import org.anddev.andengine.util.MathUtils;
 
 import ru.nsu.ccfit.zuev.osu.ResourceManager;
+import ru.nsu.ccfit.zuev.osu.helper.MD5Calculator;
 import ru.nsu.ccfit.zuev.osu.helper.StringTable;
 import ru.nsu.ccfit.zuev.osuplus.R;
 
@@ -86,7 +87,7 @@ public class OnlinePanel extends Entity {
 		attachChild(rightFooter);*/
 
         rankText = new ChangeableText(0, 0,
-                ResourceManager.getInstance().getFont("CaptionFont"), "#1",
+                ResourceManager.getFont("CaptionFont"), "#1",
                 HorizontalAlign.RIGHT, 12);
         rankText.setColor(0.6f, 0.6f, 0.6f, 0.9f);
         rankText.setScaleCenterX(0);
@@ -95,26 +96,26 @@ public class OnlinePanel extends Entity {
         onlineLayer.attachChild(rankText);
 
         nameText = new ChangeableText(120, 5,
-                ResourceManager.getInstance().getFont("CaptionFont"), "Guest", 16);
+                ResourceManager.getFont("CaptionFont"), "Guest", 16);
         onlineLayer.attachChild(nameText);
         ppText = new ChangeableText(120, 50,
-                ResourceManager.getInstance().getFont("smallFont"), "Performance: 0pp",
+                ResourceManager.getFont("smallFont"), "Performance: 0pp",
                 HorizontalAlign.LEFT, 25);
         ppText.setColor(0.85f, 0.85f, 0.9f);
         onlineLayer.attachChild(ppText);
 
         accText = new ChangeableText(120, 75,
-                ResourceManager.getInstance().getFont("smallFont"), "Accuracy: 0.00%",
+                ResourceManager.getFont("smallFont"), "Accuracy: 0.00%",
                 HorizontalAlign.LEFT, 17);
         accText.setColor(0.85f, 0.85f, 0.9f);
         onlineLayer.attachChild(accText);
 
         messageText = new ChangeableText(110, 5,
-                ResourceManager.getInstance().getFont("CaptionFont"), "Logging in...", 16);
+                ResourceManager.getFont("CaptionFont"), "Logging in...", 16);
         messageLayer.attachChild(messageText);
 
         submessageText = new ChangeableText(110, 60,
-                ResourceManager.getInstance().getFont("smallFont"), "Connecting to server...", 40);
+                ResourceManager.getFont("smallFont"), "Connecting to server...", 40);
         messageLayer.attachChild(submessageText);
 
         attachChild(messageLayer);
@@ -161,7 +162,7 @@ public class OnlinePanel extends Entity {
             avatar.detachSelf();
         avatar = null;
         if (texname == null) return;
-        TextureRegion tex = ResourceManager.getInstance().getAvatarTextureIfLoaded(texname);
+        TextureRegion tex = ResourceManager.getTexture(MD5Calculator.getStringMD5(texname));
         if (tex == null) return;
 
         Debug.i("Avatar is set!");

@@ -12,10 +12,12 @@ import org.anddev.andengine.entity.modifier.IEntityModifier;
 import org.anddev.andengine.entity.modifier.SequenceEntityModifier;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.sprite.Sprite;
+import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import org.anddev.andengine.util.MathUtils;
 import org.anddev.andengine.util.modifier.IModifier;
 
 import ru.nsu.ccfit.zuev.osu.Constants;
+import ru.nsu.ccfit.zuev.osu.Osu;
 import ru.nsu.ccfit.zuev.osu.ResourceManager;
 import ru.nsu.ccfit.zuev.osu.Utils;
 import ru.nsu.ccfit.zuev.osu.scoring.ScoreNumber;
@@ -52,7 +54,7 @@ public class ModernSpinner extends Spinner {
 
 
     public ModernSpinner() {
-        ResourceManager.getInstance().checkEvoSpinnerTextures();
+        checkEvoSpinnerTextures();
         center = Utils.trackToRealCoords(new PointF((float) Constants.MAP_WIDTH / 2,
                 (float) Constants.MAP_HEIGHT / 2));
         middle = SpritePool.getInstance().getCenteredSprite(
@@ -66,6 +68,22 @@ public class ModernSpinner extends Spinner {
         glow = SpritePool.getInstance().getCenteredSprite(
                 "spinner-glow", center);
     }
+
+
+    public static void checkEvoSpinnerTextures() {
+        
+        String[] names = {"spinner-bottom", "spinner-top", "spinner-glow", "spinner-middle", "spinner-middle2", "spinner-spin", "spinner-clear"};
+        
+        for (var name : names) {
+            var region = ResourceManager.getTexture(name, false);
+            
+            if (region != null && region.getTexture() != null && !region.getTexture().isLoadedToHardware()) {
+                Osu.Engine.getTextureManager().reloadTextures();
+                break;
+            }
+        }
+    }
+    
 
     public void init(GameObjectListener listener, Scene scene,
                      float aheadTime, float time, float rps,
@@ -203,7 +221,7 @@ public class ModernSpinner extends Spinner {
                 listener.onSpinnerHit(id, 1000, false, 0);
                 score++;
                 scene.attachChild(bonusScore);
-                ResourceManager.getInstance().getSound("spinnerbonus").play();
+                ResourceManager.getSound("spinnerbonus").play();
                 glow.registerEntityModifier(new SequenceEntityModifier(
                         new ColorModifier(0.1f, 0f, 1f, 0.8f, 1f, 1f, 1f),
                         new ColorModifier(0.1f, 1f, 0f, 1f, 0.8f, 1f, 1f)

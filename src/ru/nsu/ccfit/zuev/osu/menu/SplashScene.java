@@ -34,7 +34,7 @@ public class SplashScene implements IUpdateHandler {
     }
 
     private void initializeLoading() {
-        var loadTex = ResourceManager.getInstance().getTexture("loading_start");
+        var loadTex = ResourceManager.getTexture("loading_start");
 
         mLoading = new Sprite(0, 0, loadTex);
         mLoading.setPosition((Config.getRES_WIDTH() - mLoading.getWidth()) / 2f, (Config.getRES_HEIGHT() - mLoading.getHeight()) / 2f);
@@ -47,7 +47,7 @@ public class SplashScene implements IUpdateHandler {
     }
 
     private void initializeInfo() {
-        infoText = new ChangeableText(0, 0, ResourceManager.getInstance().getFont("font"), "", HorizontalAlign.CENTER, 1024);
+        infoText = new ChangeableText(0, 0, ResourceManager.getFont("font"), "", HorizontalAlign.CENTER, 1024);
         infoText.setPosition((Config.getRES_WIDTH() - infoText.getWidth()) / 2, Config.getRES_HEIGHT() - infoText.getHeight() - 20);
         infoText.setAlpha(0);
         infoText.setScale(0.6f);
@@ -76,11 +76,11 @@ public class SplashScene implements IUpdateHandler {
         {
         }
 
-        var welcomeTex = ResourceManager.getInstance().getTexture("welcome");
-        var welcomeSprite = new Sprite(0, 0, ResourceManager.getInstance().getTexture("welcome"));
+        var welcomeTex = ResourceManager.getTexture("welcome");
+        var welcomeSprite = new Sprite(0, 0, ResourceManager.getTexture("welcome"));
 
-        var welcomeSound = ResourceManager.getInstance().getSound("welcome");
-        var welcomePiano = ResourceManager.getInstance().getSound("welcome_piano");
+        var welcomeSound = ResourceManager.getSound("welcome");
+        var welcomePiano = ResourceManager.getSound("welcome_piano");
 
         welcomeSprite.setPosition((Config.getRES_WIDTH() - welcomeTex.getWidth()) / 2f, (Config.getRES_HEIGHT() - welcomeTex.getHeight()) / 2f);
         welcomeSprite.setAlpha(0);
@@ -99,7 +99,7 @@ public class SplashScene implements IUpdateHandler {
     }
 
     private void initializeProgress() {
-        progressText = new ChangeableText(0, 0, ResourceManager.getInstance().getFont("font"), "0 %", HorizontalAlign.CENTER, 10);
+        progressText = new ChangeableText(0, 0, ResourceManager.getFont("font"), "0 %", HorizontalAlign.CENTER, 10);
         progressText.setPosition((Config.getRES_WIDTH() - progressText.getWidth()) / 2f, (Config.getRES_HEIGHT() + mLoading.getHeight()) / 2f - mLoading.getHeight() / 4f);
         progressText.setAlpha(0);
         progressText.setScale(0.5f);

@@ -45,7 +45,7 @@ import ru.nsu.ccfit.zuev.skins.OsuSkin
 import java.text.SimpleDateFormat
 import java.util.*
 import ru.nsu.ccfit.zuev.osu.LibraryManager.INSTANCE as library
-import ru.nsu.ccfit.zuev.osu.ResourceManager.getInstance as getResources
+import ru.nsu.ccfit.zuev.osu.ResourceManager
 import ru.nsu.ccfit.zuev.osu.menu.ModMenu.getInstance as getModMenu
 import ru.nsu.ccfit.zuev.osu.online.OnlineManager.getInstance as getOnline
 
@@ -75,7 +75,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
     val chat: RoomChat
 
-    val chatPreview = ComposedText(0f, 0f, getResources().getFont("smallFont"), 100)
+    val chatPreview = ComposedText(0f, 0f, ResourceManager.getFont("smallFont"), 100)
 
     val leaveDialog = MessageDialog().apply {
 
@@ -112,14 +112,14 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
     private val onlinePanel = OnlinePanel()
 
-    private val titleText = ChangeableText(20f, 20f, getResources().getFont("bigFont"), "", 100)
+    private val titleText = ChangeableText(20f, 20f, ResourceManager.getFont("bigFont"), "", 100)
 
-    private val stateText = ChangeableText(0f, 0f, getResources().getFont("smallFont"), "", 250)
+    private val stateText = ChangeableText(0f, 0f, ResourceManager.getFont("smallFont"), "", 250)
 
-    private val infoText = ChangeableText(0f, 0f, getResources().getFont("smallFont"), "", 200)
+    private val infoText = ChangeableText(0f, 0f, ResourceManager.getFont("smallFont"), "", 200)
 
 
-    private val beatmapInfoText = ChangeableText(10f, 10f, getResources().getFont("smallFont"), "", 150)
+    private val beatmapInfoText = ChangeableText(10f, 10f, ResourceManager.getFont("smallFont"), "", 150)
 
     private var beatmapInfoRectangle: Rectangle? = null
 
@@ -187,14 +187,14 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
         OsuSkin.get().getColor("MenuItemDefaultTextColor", BeatmapButton.DEFAULT_TEXT_COLOR).apply(beatmapInfoText)
 
         // Ready button, this button will switch player status
-        readyButton = object : TextButton(getResources().getFont("CaptionFont"), "Ready")
+        readyButton = object : TextButton(ResourceManager.getFont("CaptionFont"), "Ready")
         {
             override fun onAreaTouched(event: TouchEvent, localX: Float, localY: Float): Boolean
             {
                 if (!event.isActionUp || awaitStatusChange)
                     return false
 
-                getResources().getSound("menuclick")?.play()
+                ResourceManager.getSound("menuclick")?.play()
                 awaitStatusChange = true
 
                 // Switching status
@@ -241,7 +241,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
         // It'll only be shown if the player is the room host, if host status is set to READY, this button will start
         // the game otherwise it'll the options button.
-        secondaryButton = object : TextButton(getResources().getFont("CaptionFont"), "Options")
+        secondaryButton = object : TextButton(ResourceManager.getFont("CaptionFont"), "Options")
         {
             override fun onAreaTouched(event: TouchEvent, localX: Float, localY: Float): Boolean
             {
@@ -283,7 +283,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
                         return true
                     }
 
-                    getResources().getSound("menuhit")?.play()
+                    ResourceManager.getSound("menuhit")?.play()
                     RoomAPI.notifyMatchPlay()
                     return true
                 }
@@ -309,10 +309,10 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
         val loadedBackTextures = mutableListOf<String>()
 
-        if (getResources().isTextureLoaded("menu-back-0"))
+        if (ResourceManager.isTextureLoaded("menu-back-0"))
         {
             for (i in 0..59)
-                if (getResources().isTextureLoaded("menu-back-$i")) loadedBackTextures.add("menu-back-$i")
+                if (ResourceManager.isTextureLoaded("menu-back-$i")) loadedBackTextures.add("menu-back-$i")
         }
         else loadedBackTextures.add("menu-back")
 
@@ -334,7 +334,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
                     dx = localX
                     dy = localY
 
-                    getResources().getSound("menuback")?.play()
+                    ResourceManager.getSound("menuback")?.play()
                     return true
                 }
                 if (event.isActionUp)
@@ -456,7 +456,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
     private fun updateBackground(path: String?)
     {
         val texture = if (path != null && !Config.isSafeBeatmapBg())
-            getResources().loadBackground(path) else getResources().getTexture("menu-background")
+            ResourceManager.loadBackground(path) else ResourceManager.getTexture("menu-background")
 
         val height = texture.height * Config.getRES_WIDTH() / texture.width.toFloat()
         val width = Config.getRES_WIDTH().toFloat()

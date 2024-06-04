@@ -31,7 +31,7 @@ public class ScoreNumber extends Entity {
                 textureName = "x";
             }
 
-            letter = new Sprite(totalWidth * scale, 0, ResourceManager.getInstance().getTextureWithPrefix(OsuSkin.get().getScorePrefix(), textureName));
+            letter = new Sprite(totalWidth * scale, 0, ResourceManager.getTextureWithPrefix(OsuSkin.get().getScorePrefix(), textureName));
             letter.setSize(letter.getWidth() * scale, letter.getHeight() * scale);
 
             totalWidth += letter.getWidth() * scale;

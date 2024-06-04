@@ -552,7 +552,7 @@ public enum LibraryManager {
                         }
                     }
 
-                    Osu.setInfo("Loading " + file.getName() + " ...");
+                    Osu.setLoadingInfo("Loading " + file.getName() + " ...");
 
                     scanFolder(info);
                     if (info.getCount() < 1) {
@@ -582,7 +582,7 @@ public enum LibraryManager {
                         continue;
                     }
 
-                    Osu.setInfo("Loading " + file.getName() + "...");
+                    Osu.setLoadingInfo("Loading " + file.getName() + "...");
                     final BeatmapInfo info = new BeatmapInfo();
                     info.setPath(file.getPath());
                     scanFolder(info);

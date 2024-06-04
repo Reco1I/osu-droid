@@ -19,6 +19,7 @@ import org.anddev.andengine.util.MathUtils;
 import org.jetbrains.annotations.Nullable;
 import ru.nsu.ccfit.zuev.osu.*;
 import ru.nsu.ccfit.zuev.osu.game.GameHelper;
+import ru.nsu.ccfit.zuev.osu.helper.MD5Calculator;
 import ru.nsu.ccfit.zuev.osu.helper.StringTable;
 import ru.nsu.ccfit.zuev.osu.online.OnlineManager;
 import ru.nsu.ccfit.zuev.osu.scoring.ScoreLibrary;
@@ -68,7 +69,7 @@ public class ScoreBoard extends Entity implements ScrollDetector.IScrollDetector
         this.mainScene = scene;
         layer.attachChild(this);
 
-        this.loadingText = new ChangeableText(5, 230, ResourceManager.getInstance().getFont("strokeFont"), "", 50);
+        this.loadingText = new ChangeableText(5, 230, ResourceManager.getFont("strokeFont"), "", 50);
         this.attachChild(this.loadingText);
 
         this.listener = listener;
@@ -575,7 +576,7 @@ public class ScoreBoard extends Entity implements ScrollDetector.IScrollDetector
                 String avaURL,
                 String username,
                 boolean isPersonalBest) {
-            super(-150, 40,  ResourceManager.getInstance().getTexture("menu-button-background").deepCopy());
+            super(-150, 40, ResourceManager.getTexture("menu-button-background").deepCopy());
 
             this.avatarExecutor = avatarExecutor;
             this.showOnline = showOnline;
@@ -595,7 +596,7 @@ public class ScoreBoard extends Entity implements ScrollDetector.IScrollDetector
                 var topText = new Text(
                         getWidth() / 2f,
                         0f,
-                        ResourceManager.getInstance().getFont("strokeFont"),
+                        ResourceManager.getFont("strokeFont"),
                         "Personal Best");
 
                 attachChild(topText);
@@ -622,10 +623,11 @@ public class ScoreBoard extends Entity implements ScrollDetector.IScrollDetector
 
                 @Override
                 public void run() {
-                    var texture = ResourceManager.getInstance().getTexture("emptyavatar");
+                    var texture = ResourceManager.getTexture("emptyavatar");
 
                     if (!avatarExecutor.isShutdown() && OnlineManager.getInstance().loadAvatarToTextureManager(avaURL)) {
-                        avatarTexture = ResourceManager.getInstance().getAvatarTextureIfLoaded(avaURL);
+
+                        avatarTexture = ResourceManager.getTexture(MD5Calculator.getStringMD5(avaURL), false);
 
                         if (avatarTexture != null)
                             texture = avatarTexture;
@@ -643,9 +645,9 @@ public class ScoreBoard extends Entity implements ScrollDetector.IScrollDetector
             } : null;
 
 
-            var text = new Text(baseX + 160, baseY + 20, ResourceManager.getInstance().getFont("font"), title);
-            var accText = new Text(670, baseY + 12, ResourceManager.getInstance().getFont("smallFont"), acc);
-            var mark = new Sprite(baseX + 80, baseY + 35, ResourceManager.getInstance().getTexture("ranking-" + markStr + "-small"));
+            var text = new Text(baseX + 160, baseY + 20, ResourceManager.getFont("font"), title);
+            var accText = new Text(670, baseY + 12, ResourceManager.getFont("smallFont"), acc);
+            var mark = new Sprite(baseX + 80, baseY + 35, ResourceManager.getTexture("ranking-" + markStr + "-small"));
 
             text.setScale(1.2f);
             mark.setScale(1.5f);
@@ -664,7 +666,7 @@ public class ScoreBoard extends Entity implements ScrollDetector.IScrollDetector
             if (avatarTexture != null)
                 // Ensure texture unloading happens in the next tick of the
                 // update thread to prevent concurrency problems.
-                Execution.updateThread(() -> ResourceManager.getInstance().unloadTexture(avatarTexture));
+                Execution.updateThread(() -> ResourceManager.unloadTexture(avatarTexture));
 
             mainScene.unregisterTouchArea(this);
         }

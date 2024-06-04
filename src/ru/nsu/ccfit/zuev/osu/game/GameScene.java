@@ -282,9 +282,9 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         if (storyboardSprite == null || !storyboardSprite.isStoryboardAvailable()) {
             if (bgSprite == null && beatmap.events.backgroundFilename != null) {
                 var tex = Config.isSafeBeatmapBg() ?
-                        ResourceManager.getInstance().getTexture("menu-background")
+                        ResourceManager.getTexture("menu-background")
                         :
-                        ResourceManager.getInstance().getTextureIfLoaded("::background");
+                        ResourceManager.getTexture("::background", false);
 
                 if (tex != null)
                     bgSprite = new Sprite(0, 0, tex);
@@ -736,7 +736,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
             }
         });
 
-        ResourceManager.getInstance().getSound("failsound").stop();
+        ResourceManager.getSound("failsound").stop();
     }
 
     private void prepareScene() {
@@ -755,7 +755,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         }
 
         counterTexts.clear();
-        var counterTextFont = ResourceManager.getInstance().getFont("smallFont");
+        var counterTextFont = ResourceManager.getFont("smallFont");
 
         if (Config.isShowFPS()) {
             fpsText = new ChangeableText(790, 520, counterTextFont, "00.00 FPS");
@@ -931,18 +931,18 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         skipBtn = null;
         if (skipTime > 1) {
             final TextureRegion tex;
-            if (ResourceManager.getInstance().isTextureLoaded("play-skip-0")) {
+            if (ResourceManager.isTextureLoaded("play-skip-0")) {
                 List<String> loadedSkipTextures = new ArrayList<>();
                 for (int i = 0; i < 60; i++) {
-                    if (ResourceManager.getInstance().isTextureLoaded("play-skip-" + i))
+                    if (ResourceManager.isTextureLoaded("play-skip-" + i))
                         loadedSkipTextures.add("play-skip-" + i);
                 }
-                tex = ResourceManager.getInstance().getTexture("play-skip-0");
+                tex = ResourceManager.getTexture("play-skip-0");
                 skipBtn = new AnimSprite(Config.getRES_WIDTH() - tex.getWidth(),
                         Config.getRES_HEIGHT() - tex.getHeight(), loadedSkipTextures.size(),
                         loadedSkipTextures.toArray(new String[0]));
             } else {
-                tex = ResourceManager.getInstance().getTexture("play-skip");
+                tex = ResourceManager.getTexture("play-skip");
                 skipBtn = new Sprite(Config.getRES_WIDTH() - tex.getWidth(),
                         Config.getRES_HEIGHT() - tex.getHeight(), tex);
             }
@@ -955,8 +955,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         if(!Config.isHideInGameUI()){
             scorebar = new ScoreBar(this, fgScene, stat);
             addPassiveObject(scorebar);
-            final TextureRegion scoreDigitTex = ResourceManager.getInstance()
-                    .getTexture("score-0");
+            final TextureRegion scoreDigitTex = ResourceManager.getTexture("score-0");
             accText = new GameScoreText(OsuSkin.get().getScorePrefix(), Config.getRES_WIDTH()
                     - scoreDigitTex.getWidth() * 4.75f, 50,
                     "000.00%", 0.6f);
@@ -1009,7 +1008,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         kiaiRect.setColor(1, 1, 1);
         bgScene.attachChild(kiaiRect, 0);
 
-        Sprite unranked = new Sprite(0, 0, ResourceManager.getInstance().getTexture("play-unranked"));
+        Sprite unranked = new Sprite(0, 0, ResourceManager.getTexture("play-unranked"));
         unranked.setPosition((float) Config.getRES_WIDTH() / 2 - unranked.getWidth() / 2, 80);
         unranked.setVisible(false);
         fgScene.attachChild(unranked);
@@ -1028,7 +1027,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
 
         String playname = Config.getOnlineUsername();
 
-        ChangeableText replayText = new ChangeableText(0, 0, ResourceManager.getInstance().getFont("font"), "", 1000);
+        ChangeableText replayText = new ChangeableText(0, 0, ResourceManager.getFont("font"), "", 1000);
         replayText.setVisible(false);
         replayText.setPosition(0, 140);
         replayText.setAlpha(0.7f);
@@ -1749,7 +1748,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
                         if (!isSkipRequested)
                         {
                             isSkipRequested = true;
-                            ResourceManager.getInstance().getSound("menuhit").play();
+                            ResourceManager.getSound("menuhit").play();
                             skipBtn.setVisible(false);
 
                             Execution.async(RoomAPI.INSTANCE::requestSkip);
@@ -1809,7 +1808,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
             totalLength = Osu.SongService.getLength();
             musicStarted = true;
         }
-        ResourceManager.getInstance().getSound("menuhit").play();
+        ResourceManager.getSound("menuhit").play();
         float difference = skipTime - 0.5f - secPassed;
 
         secPassed = skipTime - 0.5f;
@@ -1911,7 +1910,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
             RoomScene.INSTANCE.show();
             return;
         }
-        ResourceManager.getInstance().getSound("failsound").stop();
+        ResourceManager.getSound("failsound").stop();
         Osu.Engine.setScene(oldScene);
     }
 
@@ -1924,7 +1923,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         boolean writeReplay = objectId != -1 && replay != null && !replaying;
         if (score == 0) {
             if (stat.getCombo() > 30) {
-                ResourceManager.getInstance().getCustomSound("combobreak", 1)
+                ResourceManager.getCustomSound("combobreak", 1)
                         .play();
             }
             comboWasMissed = true;
@@ -2075,7 +2074,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
 
         if (score == -1) {
             if (stat.getCombo() > 30) {
-                ResourceManager.getInstance().getCustomSound("combobreak", 1)
+                ResourceManager.getCustomSound("combobreak", 1)
                         .play();
             }
             if (GameHelper.isSuddenDeath()) {
@@ -2175,7 +2174,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         };
 
         if (Config.isHitLighting() &&
-                ResourceManager.getInstance().getTexture("lighting") != null) {
+                ResourceManager.getTexture("lighting") != null) {
             final GameEffect light = GameObjectPool.getInstance().getEffect(
                     "lighting");
             light.init(
@@ -2220,9 +2219,9 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         final String fullName = prefix + "-" + name;
         BassSoundProvider snd;
         if (soundTimingPoint.getCustomSound() == 0) {
-            snd = ResourceManager.getInstance().getSound(fullName);
+            snd = ResourceManager.getSound(fullName);
         } else {
-            snd = ResourceManager.getInstance().getCustomSound(fullName,
+            snd = ResourceManager.getCustomSound(fullName,
                     soundTimingPoint.getCustomSound());
         }
         if(snd == null) {
@@ -2388,7 +2387,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
 
     public void stopSound(final String name) {
         final String prefix = soundTimingPoint.getHitSound() + "-";
-        final BassSoundProvider snd = ResourceManager.getInstance().getSound(prefix + name);
+        final BassSoundProvider snd = ResourceManager.getSound(prefix + name);
         if (snd != null) {
             snd.stop();
         }
@@ -2474,7 +2473,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         }
 
         if(scorebar != null) scorebar.flush();
-        ResourceManager.getInstance().getSound("failsound").play();
+        ResourceManager.getSound("failsound").play();
         final PauseMenu menu = new PauseMenu(Osu.Engine, this, true);
         gameStarted = false;
 
@@ -2564,7 +2563,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         if (Config.isHitLighting()
                 && !name.equals("sliderpoint10")
                 && !name.equals("sliderpoint30")
-                && ResourceManager.getInstance().getTexture("lighting") != null) {
+                && ResourceManager.getTexture("lighting") != null) {
             final GameEffect light = GameObjectPool.getInstance().getEffect("lighting");
             light.setColor(color);
             light.init(

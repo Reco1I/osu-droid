@@ -124,7 +124,7 @@ public class MainScene implements IUpdateHandler {
         Debug.i("Load: mainMenuLoaded()");
         scene = new Scene();
 
-        final TextureRegion tex = ResourceManager.getInstance().getTexture("menu-background");
+        final TextureRegion tex = ResourceManager.getTexture("menu-background");
 
         if (tex != null) {
             float height = tex.getHeight();
@@ -140,8 +140,8 @@ public class MainScene implements IUpdateHandler {
             scene.setBackground(new ColorBackground(70 / 255f, 129 / 255f,
                     252 / 255f));
         }
-        lastBackground = new Sprite(0, 0, Config.getRES_WIDTH(), Config.getRES_HEIGHT(), ResourceManager.getInstance().getTexture("emptyavatar"));
-        final TextureRegion logotex = ResourceManager.getInstance().getTexture("logo");
+        lastBackground = new Sprite(0, 0, Config.getRES_WIDTH(), Config.getRES_HEIGHT(), ResourceManager.getTexture("emptyavatar"));
+        final TextureRegion logotex = ResourceManager.getTexture("logo");
         logo = new Sprite((float) Config.getRES_WIDTH() / 2 - (float) logotex.getWidth() / 2, (float) Config.getRES_HEIGHT() / 2 - (float) logotex.getHeight() / 2, logotex) {
             @Override
             public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
@@ -177,8 +177,7 @@ public class MainScene implements IUpdateHandler {
 
         menu = new MainMenu(this);
 
-        final Text author = new Text(10, 530, ResourceManager
-                .getInstance().getFont("font"),
+        final Text author = new Text(10, 530, ResourceManager.getFont("font"),
                 String.format(
                         Locale.getDefault(),
                         "osu!droid %s\nby osu!droid Team\nosu! is © peppy 2007-2023",
@@ -211,7 +210,7 @@ public class MainScene implements IUpdateHandler {
         };
         author.setPosition(10, Config.getRES_HEIGHT() - author.getHeight() - 10);
 
-        final Text yasonline = new Text(720, 530, ResourceManager.getInstance().getFont("font"), "            Global Ranking\n   Provided by iBancho") {
+        final Text yasonline = new Text(720, 530, ResourceManager.getFont("font"), "            Global Ranking\n   Provided by iBancho") {
 
             @Override
             public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
@@ -239,7 +238,7 @@ public class MainScene implements IUpdateHandler {
         yasonline.setPosition(Config.getRES_WIDTH() - yasonline.getWidth() - 40, Config.getRES_HEIGHT() - yasonline.getHeight() - 10);
 
         final Sprite music_prev = new Sprite(Config.getRES_WIDTH() - 50 * 6 + 35,
-                47, 40, 40, ResourceManager.getInstance().getTexture(
+                47, 40, 40, ResourceManager.getTexture(
                 "music_prev")) {
 
             @Override
@@ -269,7 +268,7 @@ public class MainScene implements IUpdateHandler {
         };
 
         final Sprite music_play = new Sprite(Config.getRES_WIDTH() - 50 * 5 + 35,
-                47, 40, 40, ResourceManager.getInstance().getTexture(
+                47, 40, 40, ResourceManager.getTexture(
                 "music_play")) {
 
             @Override
@@ -290,7 +289,7 @@ public class MainScene implements IUpdateHandler {
         };
 
         final Sprite music_pause = new Sprite(Config.getRES_WIDTH() - 50 * 4 + 35,
-                47, 40, 40, ResourceManager.getInstance().getTexture(
+                47, 40, 40, ResourceManager.getTexture(
                 "music_pause")) {
 
             @Override
@@ -311,7 +310,7 @@ public class MainScene implements IUpdateHandler {
         };
 
         final Sprite music_stop = new Sprite(Config.getRES_WIDTH() - 50 * 3 + 35,
-                47, 40, 40, ResourceManager.getInstance().getTexture(
+                47, 40, 40, ResourceManager.getTexture(
                 "music_stop")) {
 
             @Override
@@ -333,7 +332,7 @@ public class MainScene implements IUpdateHandler {
         };
 
         final Sprite music_next = new Sprite(Config.getRES_WIDTH() - 50 * 2 + 35,
-                47, 40, 40, ResourceManager.getInstance().getTexture(
+                47, 40, 40, ResourceManager.getTexture(
                 "music_next")) {
 
             @Override
@@ -362,9 +361,9 @@ public class MainScene implements IUpdateHandler {
             }
         };
 
-        musicInfoText = new ChangeableText(0, 0, ResourceManager.getInstance().getFont("font"), "", HorizontalAlign.RIGHT, 35);
+        musicInfoText = new ChangeableText(0, 0, ResourceManager.getFont("font"), "", HorizontalAlign.RIGHT, 35);
 
-        final TextureRegion nptex = ResourceManager.getInstance().getTexture("music_np");
+        final TextureRegion nptex = ResourceManager.getTexture("music_np");
         music_nowplay = new Sprite(Utils.toRes(Config.getRES_WIDTH() - 500), 0, (float) (40 * nptex.getWidth()) / nptex.getHeight(), 40, nptex);
 
         final Rectangle bgTopRect = new Rectangle(0, 0, Config.getRES_WIDTH(), Utils.toRes(120));
@@ -390,7 +389,7 @@ public class MainScene implements IUpdateHandler {
 
         LibraryManager.INSTANCE.loadLibraryCache(false);
 
-        TextureRegion starRegion = ResourceManager.getInstance().getTexture("star");
+        TextureRegion starRegion = ResourceManager.getTexture("star");
 
         {
             particleSystem[0] = new ParticleSystem(new PointParticleEmitter(-40, (float) (Config.getRES_HEIGHT() * 3) / 4), 32, 48, 128, starRegion);
@@ -426,7 +425,7 @@ public class MainScene implements IUpdateHandler {
             scene.attachChild(particleSystem[1]);
         }
 
-        TextureRegion beatmapDownloaderTex = ResourceManager.getInstance().getTexture("beatmap_downloader");
+        TextureRegion beatmapDownloaderTex = ResourceManager.getTexture("beatmap_downloader");
         Sprite beatmapDownloader = new Sprite(Config.getRES_WIDTH() - beatmapDownloaderTex.getWidth(), (Config.getRES_HEIGHT() - beatmapDownloaderTex.getHeight()) / 2f, beatmapDownloaderTex) {
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                 if (pSceneTouchEvent.isActionDown()) {
@@ -500,7 +499,7 @@ public class MainScene implements IUpdateHandler {
         createOnlinePanel(scene);
         scene.registerUpdateHandler(this);
 
-        hitsound = ResourceManager.getInstance().loadSound("menuhit", "sfx/menuhit.ogg", false);
+        hitsound = ResourceManager.loadSound("menuhit", "sfx/menuhit.ogg");
     }
 
     private void createOnlinePanel(Scene scene) {
@@ -820,7 +819,7 @@ public class MainScene implements IUpdateHandler {
 
             if (musicInfoText == null) {
                 musicInfoText = new ChangeableText(Utils.toRes(Config.getRES_WIDTH() - 500), Utils.toRes(3),
-                        ResourceManager.getInstance().getFont("font"), "None...", HorizontalAlign.RIGHT, 35);
+                        ResourceManager.getFont("font"), "None...", HorizontalAlign.RIGHT, 35);
             }
             if (beatmapInfo.getArtistUnicode() != null && beatmapInfo.getTitleUnicode() != null && !Config.isForceRomanized()) {
                 musicInfoText.setText(beatmapInfo.getArtistUnicode() + " - " + beatmapInfo.getTitleUnicode(), true);
@@ -858,8 +857,8 @@ public class MainScene implements IUpdateHandler {
             if (selectedTrack.getBackground() != null) {
                 try {
                     final TextureRegion tex = Config.isSafeBeatmapBg() ?
-                            ResourceManager.getInstance().getTexture("menu-background") :
-                            ResourceManager.getInstance().loadBackground(selectedTrack.getBackground());
+                            ResourceManager.getTexture("menu-background") :
+                            ResourceManager.loadBackground(selectedTrack.getBackground());
 
                     if (tex != null) {
                         float height = tex.getHeight();
@@ -961,9 +960,9 @@ public class MainScene implements IUpdateHandler {
         menu.getSecond().setAlpha(0);
         menu.getThird().setAlpha(0);
 
-        //ResourceManager.getInstance().loadSound("seeya", "sfx/seeya.wav", false).play();
+        //ResourceManager.loadSound("seeya", "sfx/seeya.wav", false).play();
         //Allow customize Seeya Sounds from Skins
-        BassSoundProvider exitsound = ResourceManager.getInstance().getSound("seeya");
+        BassSoundProvider exitsound = ResourceManager.getSound("seeya");
         if (exitsound != null) {
             exitsound.play();
         }
@@ -1021,7 +1020,7 @@ public class MainScene implements IUpdateHandler {
                 if (track != null) {
                     setBeatmap(track.getBeatmap());
                     Osu.SongMenu.select();
-                    ResourceManager.getInstance().loadBackground(track.getBackground());
+                    ResourceManager.loadBackground(track.getBackground());
                     Osu.SongService.preLoad(track.getBeatmap().getMusic());
                     Osu.SongService.play();
                     Osu.ScoringScene.load(stat, null, Osu.SongService, replayFile, null, track);

@@ -22,7 +22,7 @@ import ru.nsu.ccfit.zuev.osu.helper.TextButton
 import ru.nsu.ccfit.zuev.osu.menu.LoadingScreen
 import ru.nsu.ccfit.zuev.osu.online.OnlinePanel
 import ru.nsu.ccfit.zuev.skins.OsuSkin
-import ru.nsu.ccfit.zuev.osu.ResourceManager.getInstance as getResources
+import ru.nsu.ccfit.zuev.osu.ResourceManager
 import ru.nsu.ccfit.zuev.osu.online.OnlineManager.getInstance as getOnline
 
 object LobbyScene : Scene()
@@ -53,11 +53,11 @@ object LobbyScene : Scene()
 
     private val onlinePanel = OnlinePanel()
 
-    private val titleText = ChangeableText(20f, 20f, getResources().getFont("bigFont"), "", 100)
+    private val titleText = ChangeableText(20f, 20f, ResourceManager.getFont("bigFont"), "", 100)
 
-    private val infoText = ChangeableText(20f, 0f, getResources().getFont("smallFont"), "", 100)
+    private val infoText = ChangeableText(20f, 0f, ResourceManager.getFont("smallFont"), "", 100)
 
-    private val loading = Sprite(0f, 0f, getResources().getTexture("loading_start"))
+    private val loading = Sprite(0f, 0f, ResourceManager.getTexture("loading_start"))
 
 
     /**Await lock for the list refresh*/
@@ -104,10 +104,10 @@ object LobbyScene : Scene()
         val layoutBackButton = OsuSkin.get().getLayout("BackButton")
         val loadedBackTextures = mutableListOf<String>()
 
-        if (getResources().isTextureLoaded("menu-back-0"))
+        if (ResourceManager.isTextureLoaded("menu-back-0"))
         {
             for (i in 0..59)
-                if (getResources().isTextureLoaded("menu-back-$i")) loadedBackTextures.add("menu-back-$i")
+                if (ResourceManager.isTextureLoaded("menu-back-$i")) loadedBackTextures.add("menu-back-$i")
         }
         else loadedBackTextures.add("menu-back")
 
@@ -129,7 +129,7 @@ object LobbyScene : Scene()
                     dx = localX
                     dy = localY
 
-                    ResourceManager.getInstance().getSound("menuback")?.play()
+                    ResourceManager.getSound("menuback")?.play()
                     return true
                 }
                 if (event.isActionUp)
@@ -164,14 +164,14 @@ object LobbyScene : Scene()
         onlinePanel.setPosition(Config.getRES_WIDTH() - 410f - 6f, 6f)
         attachChild(onlinePanel)
 
-        createButton = object : TextButton(getResources().getFont("CaptionFont"), "Create New Room")
+        createButton = object : TextButton(ResourceManager.getFont("CaptionFont"), "Create New Room")
         {
             override fun onAreaTouched(event: TouchEvent, localX: Float, localY: Float): Boolean
             {
                 if (!event.isActionUp || awaitList)
                     return false
 
-                getResources().getSound("menuclick")?.play()
+                ResourceManager.getSound("menuclick")?.play()
                 LobbyCreateRoom().show()
                 return true
             }
@@ -184,14 +184,14 @@ object LobbyScene : Scene()
             registerTouchArea(it)
         }
 
-        refreshButton = object : TextButton(getResources().getFont("CaptionFont"), "Refresh")
+        refreshButton = object : TextButton(ResourceManager.getFont("CaptionFont"), "Refresh")
         {
             override fun onAreaTouched(event: TouchEvent, localX: Float, localY: Float): Boolean
             {
                 if (!event.isActionUp || awaitList)
                     return false
 
-                getResources().getSound("menuclick")?.play()
+                ResourceManager.getSound("menuclick")?.play()
                 updateList()
                 return true
             }
@@ -314,10 +314,10 @@ object LobbyScene : Scene()
 
     private fun updateBackground()
     {
-        var texture = getResources().getTexture("menu-background")
+        var texture = ResourceManager.getTexture("menu-background")
 
         if (!Config.isSafeBeatmapBg())
-                texture = getResources().getTexture("::background") ?: texture
+                texture = ResourceManager.getTexture("::background") ?: texture
 
         texture?.also {
 

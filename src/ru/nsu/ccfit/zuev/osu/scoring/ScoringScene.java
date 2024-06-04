@@ -62,10 +62,9 @@ public class ScoringScene {
         if (replay != null && track == null) {
             replayStat = stat;
         }
-        TextureRegion tex = ResourceManager.getInstance()
-                .getTextureIfLoaded("::background");
+        TextureRegion tex = ResourceManager.getTexture("::background", false);
         if (tex == null) {
-            tex = ResourceManager.getInstance().getTexture("menu-background");
+            tex = ResourceManager.getTexture("menu-background");
         }
         float height = tex.getHeight();
         height *= Config.getRES_WIDTH() / (float) tex.getWidth();
@@ -83,50 +82,50 @@ public class ScoringScene {
         }
         this.track = trackInfo;
         final int x = 0, y = 100;
-        final TextureRegion panelr = ResourceManager.getInstance().getTexture(
+        final TextureRegion panelr = ResourceManager.getTexture(
                 "ranking-panel");
         final Sprite panel = new Sprite(x, y, Utils.toRes(panelr.getWidth() * 0.9f),
                 Utils.toRes(panelr.getHeight() * 0.9f), panelr);
         scene.attachChild(panel);
 
-        final TextureRegion hit300sr = ResourceManager.getInstance().getTexture("hit300");
+        final TextureRegion hit300sr = ResourceManager.getTexture("hit300");
         final Sprite hit300s = new Sprite(Utils.toRes(10), Utils.toRes(130),
                 Utils.toRes(hit300sr.getWidth()), Utils.toRes(hit300sr.getHeight()), hit300sr);
         hit300s.setPosition(Utils.toRes(70 - hit300s.getWidth() / 2 + x), Utils.toRes(130 - hit300s.getHeight() / 2 + y));
         scene.attachChild(hit300s);
 
-        final TextureRegion hit100sr = ResourceManager.getInstance().getTexture("hit100");
+        final TextureRegion hit100sr = ResourceManager.getTexture("hit100");
         final Sprite hit100s = new Sprite(Utils.toRes(10), Utils.toRes(130 + 92),
                 Utils.toRes(hit100sr.getWidth()), Utils.toRes(hit100sr.getHeight()), hit100sr);
         hit100s.setPosition(Utils.toRes(70 - hit100s.getWidth() / 2 + x), Utils.toRes(130 + 92 - hit100s.getHeight() / 2 + y));
         scene.attachChild(hit100s);
 
-        final TextureRegion hit50sr = ResourceManager.getInstance().getTexture("hit50");
+        final TextureRegion hit50sr = ResourceManager.getTexture("hit50");
         final Sprite hit50s = new Sprite(0, Utils.toRes(120 + 92 * 2),
                 Utils.toRes(hit50sr.getWidth()), Utils.toRes(hit50sr.getHeight()), hit50sr);
         hit50s.setPosition(Utils.toRes(70 - hit50s.getWidth() / 2 + x), Utils.toRes(130 + 92 * 2 - hit50s.getHeight() / 2 + y));
         scene.attachChild(hit50s);
 
-        final TextureRegion hit300ksr = ResourceManager.getInstance().getTexture("hit300g");
+        final TextureRegion hit300ksr = ResourceManager.getTexture("hit300g");
         final Sprite hit300ks = new Sprite(Utils.toRes(300), Utils.toRes(100),
                 Utils.toRes(hit300ksr.getWidth()), Utils.toRes(hit300ksr.getHeight()), hit300ksr);
         hit300ks.setPosition(Utils.toRes(340 - hit300ks.getWidth() / 2 + x), Utils.toRes(130 - hit300ks.getHeight() / 2 + y));
         scene.attachChild(hit300ks);
 
-        final TextureRegion hit100ksr = ResourceManager.getInstance().getTexture("hit100k");
+        final TextureRegion hit100ksr = ResourceManager.getTexture("hit100k");
         final Sprite hit100ks = new Sprite(Utils.toRes(300), Utils.toRes(120 + 92),
                 Utils.toRes(hit100ksr.getWidth()), Utils.toRes(hit100ksr.getHeight()), hit100ksr);
         hit100ks.setPosition(Utils.toRes(340 - hit100ks.getWidth() / 2 + x), Utils.toRes(130 + 92 - hit100ks.getHeight() / 2 + y));
         scene.attachChild(hit100ks);
 
-        final TextureRegion hit0sr = ResourceManager.getInstance().getTexture("hit0");
+        final TextureRegion hit0sr = ResourceManager.getTexture("hit0");
         final Sprite hit0s = new Sprite(Utils.toRes(300), Utils.toRes(120 + 92 * 2),
                 Utils.toRes(hit0sr.getWidth()), Utils.toRes(hit0sr.getHeight()), hit0sr);
         hit0s.setPosition(Utils.toRes(340 - hit0s.getWidth() / 2 + x), Utils.toRes(130 + 92 * 2 - hit0s.getHeight() / 2 + y));
         scene.attachChild(hit0s);
 
         final Sprite rankingText = new Sprite(Utils.toRes(580), 0,
-                ResourceManager.getInstance().getTexture("ranking-title"));
+                ResourceManager.getTexture("ranking-title"));
         rankingText.setPosition((float) (Config.getRES_WIDTH() * 5) / 6 - rankingText.getWidth() / 2, 0);
         scene.attachChild(rankingText);
 
@@ -165,11 +164,11 @@ public class ScoringScene {
         hit0num.attachToScene(scene);
 
         final Sprite maxComboText = new Sprite(Utils.toRes(20 + x),
-                Utils.toRes(332 + y), ResourceManager.getInstance().getTexture(
+                Utils.toRes(332 + y), ResourceManager.getTexture(
                 "ranking-maxcombo"));
         scene.attachChild(maxComboText);
         final Sprite accText = new Sprite(Utils.toRes(260 + x), Utils.toRes(332 + y),
-                ResourceManager.getInstance().getTexture("ranking-accuracy"));
+                ResourceManager.getTexture("ranking-accuracy"));
         scene.attachChild(accText);
         final ScoreNumber maxCombo = new ScoreNumber(Utils.toRes(20 + x),
                 Utils.toRes(maxComboText.getY() + 38), stat.getMaxCombo() + "x", 1,
@@ -181,8 +180,7 @@ public class ScoringScene {
                 Utils.toRes(accText.getY() + 38), accStr, 1, false);
         accuracy.attachToScene(scene);
 
-        final Sprite mark = new Sprite(Utils.toRes(610), 0, ResourceManager
-                .getInstance().getTexture("ranking-" + stat.getMark()));
+        final Sprite mark = new Sprite(Utils.toRes(610), 0, ResourceManager.getTexture("ranking-" + stat.getMark()));
         if (track != null) {
             mark.setAlpha(0);
             mark.setScale(1.5f);
@@ -192,7 +190,7 @@ public class ScoringScene {
         mark.setPosition((float) (Config.getRES_WIDTH() * 5) / 6 - mark.getWidth() / 2, 80);
 
         final Sprite backBtn = new Sprite(Utils.toRes(580), Utils.toRes(490),
-                ResourceManager.getInstance().getTexture("ranking-back")) {
+                ResourceManager.getTexture("ranking-back")) {
 
 
             @Override
@@ -200,7 +198,7 @@ public class ScoringScene {
                                          final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
                 if (pSceneTouchEvent.isActionDown()) {
                     setColor(0.7f, 0.7f, 0.7f);
-                    ResourceManager.getInstance().getSound("menuback").play();
+                    ResourceManager.getSound("menuback").play();
                     return true;
                 }
                 if (pSceneTouchEvent.isActionUp()) {
@@ -218,18 +216,18 @@ public class ScoringScene {
 
         if (!Multiplayer.isMultiplayer)
         {
-            retryBtn = new Sprite(Utils.toRes(580), Utils.toRes(400), ResourceManager.getInstance().getTexture("ranking-retry")) {
+            retryBtn = new Sprite(Utils.toRes(580), Utils.toRes(400), ResourceManager.getTexture("ranking-retry")) {
 
                 @Override
                 public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
                                              final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
                     if (pSceneTouchEvent.isActionDown()) {
                         setColor(0.7f, 0.7f, 0.7f);
-                        ResourceManager.getInstance().getSound("menuback").play();
+                        ResourceManager.getSound("menuback").play();
                         return true;
                     }
                     if (pSceneTouchEvent.isActionUp()) {
-                        ResourceManager.getInstance().getSound("applause").stop();
+                        ResourceManager.getSound("applause").stop();
                         Osu.Engine.setScene(Osu.SongMenu.getScene());
                         Osu.GameScene.startGame(null, null);
                         scene = null;
@@ -247,18 +245,18 @@ public class ScoringScene {
         if (!Multiplayer.isMultiplayer)
         {
             replayBtn = new Sprite(Utils.toRes(580), Utils.toRes(400),
-                                                ResourceManager.getInstance().getTexture("ranking-replay")) {
+                                                ResourceManager.getTexture("ranking-replay")) {
 
                 @Override
                 public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
                                              final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
                     if (pSceneTouchEvent.isActionDown()) {
                         setColor(0.7f, 0.7f, 0.7f);
-                        ResourceManager.getInstance().getSound("menuback").play();
+                        ResourceManager.getSound("menuback").play();
                         return true;
                     }
                     if (pSceneTouchEvent.isActionUp()) {
-                        ResourceManager.getInstance().getSound("applause").stop();
+                        ResourceManager.getSound("applause").stop();
                         SongMenu.stopMusicStatic();
                         Osu.Engine.setScene(Osu.SongMenu.getScene());
 
@@ -294,8 +292,7 @@ public class ScoringScene {
         }
 
         if (stat.accuracy == 1 || stat.getMaxCombo() == this.track.getMaxCombo() || stat.isPerfect()) {
-            final Sprite perfect = new Sprite(0, 0, ResourceManager
-                    .getInstance().getTexture("ranking-perfect"));
+            final Sprite perfect = new Sprite(0, 0, ResourceManager.getTexture("ranking-perfect"));
             perfect.setPosition(0, accuracy.getY() + accuracy.getHeight() + 10);
             scene.attachChild(perfect);
         }
@@ -319,95 +316,79 @@ public class ScoringScene {
         float modX = mark.getX() - 30;
         final float modY = mark.getY() + mark.getHeight() * 2 / 3;
         if (stat.getMod().contains(GameMod.MOD_SCOREV2)) {
-            final Sprite modSprite = new Sprite(modX, modY, ResourceManager
-                    .getInstance().getTexture("selection-mod-scorev2"));
+            final Sprite modSprite = new Sprite(modX, modY, ResourceManager.getTexture("selection-mod-scorev2"));
             modX -= Utils.toRes(30);
             scene.attachChild(modSprite);
         }
         if (stat.getMod().contains(GameMod.MOD_HARDROCK)) {
-            final Sprite modSprite = new Sprite(modX, modY, ResourceManager
-                    .getInstance().getTexture("selection-mod-hardrock"));
+            final Sprite modSprite = new Sprite(modX, modY, ResourceManager.getTexture("selection-mod-hardrock"));
             modX -= Utils.toRes(30);
             scene.attachChild(modSprite);
         } else if (stat.getMod().contains(GameMod.MOD_EASY)) {
-            final Sprite modSprite = new Sprite(modX, modY, ResourceManager
-                    .getInstance().getTexture("selection-mod-easy"));
+            final Sprite modSprite = new Sprite(modX, modY, ResourceManager.getTexture("selection-mod-easy"));
             modX -= Utils.toRes(30);
             scene.attachChild(modSprite);
         }
 
         if (stat.getMod().contains(GameMod.MOD_HIDDEN)) {
-            final Sprite modSprite = new Sprite(modX, modY, ResourceManager
-                    .getInstance().getTexture("selection-mod-hidden"));
+            final Sprite modSprite = new Sprite(modX, modY, ResourceManager.getTexture("selection-mod-hidden"));
             modX -= Utils.toRes(30);
             scene.attachChild(modSprite);
         }
 
         if (stat.getMod().contains(GameMod.MOD_FLASHLIGHT)) {
-            final Sprite modSprite = new Sprite(modX, modY, ResourceManager
-                    .getInstance().getTexture("selection-mod-flashlight"));
+            final Sprite modSprite = new Sprite(modX, modY, ResourceManager.getTexture("selection-mod-flashlight"));
             modX -= Utils.toRes(30);
             scene.attachChild(modSprite);
         }
         if (stat.getMod().contains(GameMod.MOD_NOFAIL)) {
-            final Sprite modSprite = new Sprite(modX, modY, ResourceManager
-                    .getInstance().getTexture("selection-mod-nofail"));
+            final Sprite modSprite = new Sprite(modX, modY, ResourceManager.getTexture("selection-mod-nofail"));
             modX -= Utils.toRes(30);
             scene.attachChild(modSprite);
         } else if (stat.getMod().contains(GameMod.MOD_SUDDENDEATH)) {
-            final Sprite modSprite = new Sprite(modX, modY, ResourceManager
-                    .getInstance().getTexture("selection-mod-suddendeath"));
+            final Sprite modSprite = new Sprite(modX, modY, ResourceManager.getTexture("selection-mod-suddendeath"));
             modX -= Utils.toRes(30);
             scene.attachChild(modSprite);
         } else if (stat.getMod().contains(GameMod.MOD_PERFECT)) {
-            final Sprite modSprite = new Sprite(modX, modY, ResourceManager
-                    .getInstance().getTexture("selection-mod-perfect"));
+            final Sprite modSprite = new Sprite(modX, modY, ResourceManager.getTexture("selection-mod-perfect"));
             modX -= Utils.toRes(30);
             scene.attachChild(modSprite);
         }
         if (stat.getMod().contains(GameMod.MOD_AUTO)) {
-            final Sprite modSprite = new Sprite(modX, modY, ResourceManager
-                    .getInstance().getTexture("selection-mod-autoplay"));
+            final Sprite modSprite = new Sprite(modX, modY, ResourceManager.getTexture("selection-mod-autoplay"));
             modX -= Utils.toRes(30);
             scene.attachChild(modSprite);
         } else if (stat.getMod().contains(GameMod.MOD_AUTOPILOT)) {
-            final Sprite modSprite = new Sprite(modX, modY, ResourceManager
-                    .getInstance().getTexture("selection-mod-relax2"));
+            final Sprite modSprite = new Sprite(modX, modY, ResourceManager.getTexture("selection-mod-relax2"));
             modX -= Utils.toRes(30);
             scene.attachChild(modSprite);
         } else if (stat.getMod().contains(GameMod.MOD_RELAX)) {
-            final Sprite modSprite = new Sprite(modX, modY, ResourceManager
-                    .getInstance().getTexture("selection-mod-relax"));
+            final Sprite modSprite = new Sprite(modX, modY, ResourceManager.getTexture("selection-mod-relax"));
             modX -= Utils.toRes(30);
             scene.attachChild(modSprite);
         }
         if (stat.getMod().contains(GameMod.MOD_DOUBLETIME)) {
-            final Sprite modSprite = new Sprite(modX, modY, ResourceManager
-                    .getInstance().getTexture("selection-mod-doubletime"));
+            final Sprite modSprite = new Sprite(modX, modY, ResourceManager.getTexture("selection-mod-doubletime"));
             modX -= Utils.toRes(30);
             scene.attachChild(modSprite);
         } else if (stat.getMod().contains(GameMod.MOD_NIGHTCORE)) {
-            final Sprite modSprite = new Sprite(modX, modY, ResourceManager
-                    .getInstance().getTexture("selection-mod-nightcore"));
+            final Sprite modSprite = new Sprite(modX, modY, ResourceManager.getTexture("selection-mod-nightcore"));
             modX -= Utils.toRes(30);
             scene.attachChild(modSprite);
         } else if (stat.getMod().contains(GameMod.MOD_HALFTIME)) {
-            final Sprite modSprite = new Sprite(modX, modY, ResourceManager
-                    .getInstance().getTexture("selection-mod-halftime"));
+            final Sprite modSprite = new Sprite(modX, modY, ResourceManager.getTexture("selection-mod-halftime"));
             modX -= Utils.toRes(30);
             scene.attachChild(modSprite);
         }
 
         if (stat.getMod().contains(GameMod.MOD_PRECISE)) {
-            final Sprite modSprite = new Sprite(modX, modY, ResourceManager
-                    .getInstance().getTexture("selection-mod-precise"));
+            final Sprite modSprite = new Sprite(modX, modY, ResourceManager.getTexture("selection-mod-precise"));
             modX -= Utils.toRes(30);
             scene.attachChild(modSprite);
         }
         //new mods in 1.6.8
         if (stat.getMod().contains(GameMod.MOD_REALLYEASY)) {
-            final Sprite modSprite = new Sprite(modX, modY, ResourceManager
-                    .getInstance().getTexture("selection-mod-reallyeasy"));
+            final Sprite modSprite = new Sprite(modX, modY, ResourceManager.getTexture("selection-mod-reallyeasy"));
             modX -= Utils.toRes(30);
             scene.attachChild(modSprite);
         }
@@ -452,11 +433,11 @@ public class ScoringScene {
         }
         Debug.i("playedtime " + stat.getTime());
         final Text beatmapInfo = new Text(Utils.toRes(4), Utils.toRes(2),
-                ResourceManager.getInstance().getFont("font"), infoStr);
+                ResourceManager.getFont("font"), infoStr);
         final Text mapperInfo = new Text(Utils.toRes(4), beatmapInfo.getY() + beatmapInfo.getHeight() + Utils.toRes(2),
-                ResourceManager.getInstance().getFont("smallFont"), mapperStr);
+                ResourceManager.getFont("smallFont"), mapperStr);
         final Text playerInfo = new Text(Utils.toRes(4), mapperInfo.getY() + mapperInfo.getHeight() + Utils.toRes(2),
-                ResourceManager.getInstance().getFont("smallFont"), playerStr);
+                ResourceManager.getFont("smallFont"), playerStr);
         //calculatePP
         if (Config.isDisplayScoreStatistics()){
             StringBuilder ppinfo = new StringBuilder();
@@ -516,7 +497,7 @@ public class ScoringScene {
             }
 
             final Text ppInfo = new Text(Utils.toRes(4), Config.getRES_HEIGHT() - playerInfo.getHeight() - Utils.toRes(2),
-                    ResourceManager.getInstance().getFont("smallFont"), ppinfo.toString());
+                    ResourceManager.getFont("smallFont"), ppinfo.toString());
             ppInfo.setPosition(Utils.toRes(244), Config.getRES_HEIGHT() - ppInfo.getHeight() - Utils.toRes(2));
             final Rectangle statisticRectangle = new Rectangle(Utils.toRes(240), Config.getRES_HEIGHT() - ppInfo.getHeight() - Utils.toRes(4), ppInfo.getWidth() + Utils.toRes(12), ppInfo.getHeight() + Utils.toRes(4));
             statisticRectangle.setColor(0, 0, 0, 0.5f);
@@ -534,7 +515,7 @@ public class ScoringScene {
 
         //save and upload score
         if (track != null && track.getMD5() != null && track.getMD5().equals(mapMD5)) {
-            ResourceManager.getInstance().getSound("applause").play();
+            ResourceManager.getSound("applause").play();
             if (!Multiplayer.isMultiplayer || !Osu.GameScene.hasFailed) {
                 ScoreLibrary.getInstance().addScore(track.getFilename(), stat, replay);
             }
@@ -593,7 +574,7 @@ public class ScoringScene {
     }
 
     public void back() {
-        ResourceManager.getInstance().getSound("applause").stop();
+        ResourceManager.getSound("applause").stop();
         Multiplayer.finalData = null;
         currentStatistic = null;
 

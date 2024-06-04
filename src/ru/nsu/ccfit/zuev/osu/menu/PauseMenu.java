@@ -34,28 +34,28 @@ public class PauseMenu implements IOnMenuItemClickListener {
         scene = new MenuScene(engine.getCamera());
 
         final SpriteMenuItem saveFailedReplay = new SpriteMenuItem(ITEM_SAVE_REPLAY,
-                ResourceManager.getInstance().getTexture("pause-save-replay"));
+                ResourceManager.getTexture("pause-save-replay"));
         scene.addMenuItem(saveFailedReplay);
         final SpriteMenuItem itemContinue = new SpriteMenuItem(ITEM_CONTINUE,
-                ResourceManager.getInstance().getTexture("pause-continue"));
+                ResourceManager.getTexture("pause-continue"));
         scene.addMenuItem(itemContinue);
         final SpriteMenuItem itemRetry = new SpriteMenuItem(ITEM_RETRY,
-                ResourceManager.getInstance().getTexture("pause-retry"));
+                ResourceManager.getTexture("pause-retry"));
         scene.addMenuItem(itemRetry);
         final SpriteMenuItem itemBack = new SpriteMenuItem(ITEM_BACK,
-                ResourceManager.getInstance().getTexture("pause-back"));
+                ResourceManager.getTexture("pause-back"));
         scene.addMenuItem(itemBack);
         scene.setBackgroundEnabled(false);
         TextureRegion tex;
         if (fail) {
             itemContinue.setVisible(false);
-            tex = ResourceManager.getInstance().getTexture("fail-background");
+            tex = ResourceManager.getTexture("fail-background");
             if (game.getReplaying()){
                 saveFailedReplay.setVisible(false);
             }
         } else {
             saveFailedReplay.setVisible(false);
-            tex = ResourceManager.getInstance().getTexture("pause-overlay");
+            tex = ResourceManager.getTexture("pause-overlay");
         }
 
         if (tex != null) {
@@ -96,7 +96,7 @@ public class PauseMenu implements IOnMenuItemClickListener {
                 if (fail) {
                     return false;
                 }
-                playSnd = ResourceManager.getInstance().getSound("menuback");
+                playSnd = ResourceManager.getSound("menuback");
                 if (playSnd != null) {
                     playSnd.play();
                 }
@@ -105,7 +105,7 @@ public class PauseMenu implements IOnMenuItemClickListener {
 
             case ITEM_BACK:
                 Osu.ScoringScene.setReplayID(-1);
-                playSnd = ResourceManager.getInstance().getSound("menuback");
+                playSnd = ResourceManager.getSound("menuback");
                 if (playSnd != null) {
                     playSnd.play();
                 }
@@ -113,8 +113,8 @@ public class PauseMenu implements IOnMenuItemClickListener {
                 return true;
 
             case ITEM_RETRY:
-                ResourceManager.getInstance().getSound("failsound").stop();
-                playSnd = ResourceManager.getInstance().getSound("menuhit");
+                ResourceManager.getSound("failsound").stop();
+                playSnd = ResourceManager.getSound("menuhit");
                 if (playSnd != null) {
                     playSnd.play();
                 }

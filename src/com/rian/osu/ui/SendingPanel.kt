@@ -12,7 +12,7 @@ import ru.nsu.ccfit.zuev.osu.Config
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.round
-import ru.nsu.ccfit.zuev.osu.ResourceManager.getInstance as getResources
+import ru.nsu.ccfit.zuev.osu.ResourceManager
 
 class SendingPanel(
     private val overallRank: Long,
@@ -23,7 +23,7 @@ class SendingPanel(
     val dismissTouchArea: ITouchArea
         get() = dismissButton
 
-    private val overallCaptionText = Text(0f, 0f, getResources().getFont("CaptionFont"), "Overall Ranking").also {
+    private val overallCaptionText = Text(0f, 0f, ResourceManager.getFont("CaptionFont"), "Overall Ranking").also {
         it.setPosition((width - it.width) / 2, height / 5)
         attachChild(it)
     }
@@ -202,10 +202,10 @@ class SendingPanel(
         // Reverse back to maintain original order
         .reversed()
 
-    private open class DismissButton : Sprite(0f, 0f, getResources().getTexture("ranking_button")) {
+    private open class DismissButton : Sprite(0f, 0f, ResourceManager.getTexture("ranking_button")) {
         var canBeDismissed = false
 
-        private val text = ChangeableText(0f, 0f, getResources().getFont("font"), "", 10).also {
+        private val text = ChangeableText(0f, 0f, ResourceManager.getFont("font"), "", 10).also {
             attachChild(it)
         }
 
@@ -229,7 +229,7 @@ class SendingPanel(
         private val minWidth = width
         private val minHeight = height
 
-        private val captionText = Text(0f, 0f, getResources().getFont("font"), caption).also {
+        private val captionText = Text(0f, 0f, ResourceManager.getFont("font"), caption).also {
             attachChild(it)
         }
 
@@ -238,7 +238,7 @@ class SendingPanel(
             attachChild(it)
         }
 
-        private val valueText = ChangeableText(0f, 0f, getResources().getFont("font"), "", HorizontalAlign.CENTER, 100).also {
+        private val valueText = ChangeableText(0f, 0f, ResourceManager.getFont("font"), "", HorizontalAlign.CENTER, 100).also {
             valueRect.attachChild(it)
         }
 

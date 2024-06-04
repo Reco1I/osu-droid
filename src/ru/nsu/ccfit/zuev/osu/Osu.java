@@ -63,8 +63,8 @@ public class Osu {
 
         MainScene = new MainScene();
         MainScene.load(Activity);
-        setInfo("Loading skin...");
-        ResourceManager.getInstance().loadSkin(Config.getSkinPath());
+        setLoadingInfo("Loading skin...");
+        ResourceManager.loadSkin(Config.getSkinPath());
         ScoreLibrary.getInstance().load(Activity);
         setLoadingProgress(20);
 
@@ -124,7 +124,7 @@ public class Osu {
     /**
      * Sets the current loading information.
      */
-    public static void setInfo(String value) {
+    public static void setLoadingInfo(String value) {
         loadingInfo = value;
     }
 

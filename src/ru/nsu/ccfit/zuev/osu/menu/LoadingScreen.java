@@ -33,7 +33,7 @@ public class LoadingScreen implements IUpdateHandler {
         scene = new LoadingScene();
         scene.registerEntityModifier(new FadeOutModifier(0.4f));
 
-        final TextureRegion tex = ResourceManager.getInstance().getTexture("menu-background");
+        final TextureRegion tex = ResourceManager.getTexture("menu-background");
         if (tex != null) {
             float height = tex.getHeight();
             height *= Config.getRES_WIDTH()
@@ -49,20 +49,17 @@ public class LoadingScreen implements IUpdateHandler {
                     252 / 255f));
         }
 
-        final TextureRegion loadingTexture = ResourceManager.getInstance()
-                .getTexture("loading-title");
+        final TextureRegion loadingTexture = ResourceManager.getTexture("loading-title");
         final Sprite loadingTitle = new Sprite(0, 0,
                 Config.getRES_WIDTH(), loadingTexture.getHeight(), loadingTexture);
         scene.attachChild(loadingTitle);
 
-        logText = new ChangeableText(0, 0, ResourceManager.getInstance()
-                .getFont("logFont"), "", 5);
+        logText = new ChangeableText(0, 0, ResourceManager.getFont("logFont"), "", 5);
         scene.attachChild(logText);
         ToastLogger.setPercentage(-1);
         percentage = -1;
 
-        final TextureRegion ltexture = ResourceManager.getInstance()
-                .getTexture("loading");
+        final TextureRegion ltexture = ResourceManager.getTexture("loading");
         final Sprite circle = new CentredSprite(Config.getRES_WIDTH() / 2f,
                 Config.getRES_HEIGHT() / 2f, ltexture);
         circle.registerEntityModifier(new LoopEntityModifier(

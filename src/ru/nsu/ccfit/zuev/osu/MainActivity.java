@@ -212,50 +212,49 @@ public class MainActivity extends BaseGameActivity implements
 
     @Override
     public void onLoadResources() {
-        ResourceManager.getInstance().Init(mEngine, this);
-        ResourceManager.getInstance().loadHighQualityAsset("welcome", "gfx/welcome.png");
-        ResourceManager.getInstance().loadHighQualityAsset("loading_start", "gfx/loading.png");
+        ResourceManager.init();
+        ResourceManager.loadTexture("welcome", "gfx/welcome.png");
+        ResourceManager.loadTexture("loading_start", "gfx/loading.png");
 
-        ResourceManager.getInstance().loadSound("welcome", "sfx/welcome.ogg", false);
-        ResourceManager.getInstance().loadSound("welcome_piano", "sfx/welcome_piano.ogg", false);
+        ResourceManager.loadSound("welcome", "sfx/welcome.ogg");
+        ResourceManager.loadSound("welcome_piano", "sfx/welcome_piano.ogg");
 
         // Setting the scene as fast as we can
         getEngine().setScene(SplashScene.INSTANCE.getScene());
 
-        ResourceManager.getInstance().loadHighQualityAsset("logo", "logo.png");
-        ResourceManager.getInstance().loadHighQualityAsset("play", "play.png");
-        ResourceManager.getInstance().loadHighQualityAsset("solo", "solo.png");
-        ResourceManager.getInstance().loadHighQualityAsset("multi", "multi.png");
-        ResourceManager.getInstance().loadHighQualityAsset("back", "back.png");
-        ResourceManager.getInstance().loadHighQualityAsset("exit", "exit.png");
-        ResourceManager.getInstance().loadHighQualityAsset("beatmap_downloader", "beatmap_downloader.png");
-        ResourceManager.getInstance().loadHighQualityAsset("options", "options.png");
-        ResourceManager.getInstance().loadHighQualityAsset("offline-avatar", "offline-avatar.png");
-        ResourceManager.getInstance().loadHighQualityAsset("star", "gfx/star.png");
-        ResourceManager.getInstance().loadHighQualityAsset("chat", "chat.png");
-        ResourceManager.getInstance().loadHighQualityAsset("team_vs", "team_vs.png");
-        ResourceManager.getInstance().loadHighQualityAsset("head_head", "head_head.png");
-        ResourceManager.getInstance().loadHighQualityAsset("crown", "crown.png");
-        ResourceManager.getInstance().loadHighQualityAsset("missing", "missing.png");
-        ResourceManager.getInstance().loadHighQualityAsset("lock", "lock.png");
-        ResourceManager.getInstance().loadHighQualityAsset("music_play", "music_play.png");
-        ResourceManager.getInstance().loadHighQualityAsset("music_pause", "music_pause.png");
-        ResourceManager.getInstance().loadHighQualityAsset("music_stop", "music_stop.png");
-        ResourceManager.getInstance().loadHighQualityAsset("music_next", "music_next.png");
-        ResourceManager.getInstance().loadHighQualityAsset("music_prev", "music_prev.png");
-        ResourceManager.getInstance().loadHighQualityAsset("music_np", "music_np.png");
-        ResourceManager.getInstance().loadHighQualityAsset("songselect-top", "songselect-top.png");
-        File bg;
-        if ((bg = new File(Config.getSkinPath() + "menu-background.png")).exists()
-                || (bg = new File(Config.getSkinPath() + "menu-background.jpg")).exists()) {
-            ResourceManager.getInstance().loadHighQualityFile("menu-background", bg);
-        }
-        // ResourceManager.getInstance().loadHighQualityAsset("exit", "exit.png");
-        ResourceManager.getInstance().loadFont("font", null, 28, Color.WHITE);
-        ResourceManager.getInstance().loadFont("smallFont", null, 21, Color.WHITE);
-        ResourceManager.getInstance().loadStrokeFont("strokeFont", null, 36, Color.BLACK, Color.WHITE);
+        ResourceManager.loadTexture("logo", "logo.png");
+        ResourceManager.loadTexture("play", "play.png");
+        ResourceManager.loadTexture("solo", "solo.png");
+        ResourceManager.loadTexture("multi", "multi.png");
+        ResourceManager.loadTexture("back", "back.png");
+        ResourceManager.loadTexture("exit", "exit.png");
+        ResourceManager.loadTexture("beatmap_downloader", "beatmap_downloader.png");
+        ResourceManager.loadTexture("options", "options.png");
+        ResourceManager.loadTexture("offline-avatar", "offline-avatar.png");
+        ResourceManager.loadTexture("star", "gfx/star.png");
+        ResourceManager.loadTexture("chat", "chat.png");
+        ResourceManager.loadTexture("team_vs", "team_vs.png");
+        ResourceManager.loadTexture("head_head", "head_head.png");
+        ResourceManager.loadTexture("crown", "crown.png");
+        ResourceManager.loadTexture("missing", "missing.png");
+        ResourceManager.loadTexture("lock", "lock.png");
+        ResourceManager.loadTexture("music_play", "music_play.png");
+        ResourceManager.loadTexture("music_pause", "music_pause.png");
+        ResourceManager.loadTexture("music_stop", "music_stop.png");
+        ResourceManager.loadTexture("music_next", "music_next.png");
+        ResourceManager.loadTexture("music_prev", "music_prev.png");
+        ResourceManager.loadTexture("music_np", "music_np.png");
+        ResourceManager.loadTexture("songselect-top", "songselect-top.png");
 
-        ResourceManager.getInstance().loadSound("heartbeat", "sfx/heartbeat.ogg", false);
+        File bg;
+        if ((bg = new File(Config.getSkinPath() + "menu-background.png")).exists() || (bg = new File(Config.getSkinPath() + "menu-background.jpg")).exists()) {
+            ResourceManager.loadTexture("menu-background", bg);
+        }
+        ResourceManager.loadFont("font", null, 28, Color.WHITE);
+        ResourceManager.loadFont("smallFont", null, 21, Color.WHITE);
+        ResourceManager.loadStrokeFont("strokeFont", null, 36, Color.BLACK, Color.WHITE);
+
+        ResourceManager.loadSound("heartbeat", "sfx/heartbeat.ogg");
     }
 
     @Override
@@ -289,9 +288,9 @@ public class MainActivity extends BaseGameActivity implements
             Execution.delayed(2500, () -> {
 
                 UpdateManager.INSTANCE.onActivityStart();
-                Osu.setInfo("");
+                Osu.setLoadingInfo("");
                 Osu.setLoadingProgress(100);
-                ResourceManager.getInstance().loadFont("font", null, 28, Color.WHITE);
+                ResourceManager.loadFont("font", null, 28, Color.WHITE);
                 Osu.Engine.setScene(Osu.MainScene.getScene());
                 
                 Osu.MainScene.loadBeatmap();
@@ -372,7 +371,7 @@ public class MainActivity extends BaseGameActivity implements
     }
 
     public void checkNewBeatmaps() {
-        Osu.setInfo("Checking for new maps...");
+        Osu.setLoadingInfo("Checking for new maps...");
         final File mainDir = new File(Config.getCorePath());
         if (beatmapToAdd != null) {
             File file = new File(beatmapToAdd);
@@ -446,7 +445,7 @@ public class MainActivity extends BaseGameActivity implements
     }
 
     public void checkNewSkins() {
-        Osu.setInfo("Checking new skins...");
+        Osu.setLoadingInfo("Checking new skins...");
 
         final ArrayList<String> skins = new ArrayList<>();
 

@@ -10,11 +10,11 @@ import org.anddev.andengine.input.touch.TouchEvent
 import org.anddev.andengine.util.MathUtils
 import ru.nsu.ccfit.zuev.osu.Osu
 import ru.nsu.ccfit.zuev.osu.Osu.Engine
+import ru.nsu.ccfit.zuev.osu.ResourceManager
 import ru.nsu.ccfit.zuev.osu.scoring.StatisticV2
 import java.text.NumberFormat.getNumberInstance
 import java.util.Locale.ENGLISH
 import java.util.Locale.US
-import ru.nsu.ccfit.zuev.osu.ResourceManager.getInstance as getResources
 
 /**
  * Scoreboard list used for multiplayer scores in results screen.
@@ -75,7 +75,7 @@ class StatisticSelector(stats: Array<StatisticV2>?) : ScrollableList(), ITouchAr
 
 
     inner class BoardItem(val index: Int, private val stats: StatisticV2) :
-            Sprite(570f, 0f, getResources().getTexture("menu-button-background"))
+            Sprite(570f, 0f, ResourceManager.getTexture("menu-button-background"))
     {
 
         private var moved = false
@@ -83,9 +83,9 @@ class StatisticSelector(stats: Array<StatisticV2>?) : ScrollableList(), ITouchAr
         private var dy = 0f
 
 
-        val text = ChangeableText(10f, 15f, getResources().getFont("font"), "", 100)
+        val text = ChangeableText(10f, 15f, ResourceManager.getFont("font"), "", 100)
 
-        val rank = ChangeableText(10f, 15f, getResources().getFont("CaptionFont"), "", 5)
+        val rank = ChangeableText(10f, 15f, ResourceManager.getFont("CaptionFont"), "", 5)
 
 
         init

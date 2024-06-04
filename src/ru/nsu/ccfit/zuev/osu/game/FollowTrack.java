@@ -36,10 +36,10 @@ public class FollowTrack extends GameObject {
 
         final float dist = Utils.distance(start, end);
         final float angle = (float) Math.atan2(end.y - start.y, end.x - start.x);
-        TextureRegion region = ResourceManager.getInstance().getTexture(
+        TextureRegion region = ResourceManager.getTexture(
                 frameCount > 1 ? "followpoint-0" : "followpoint");
         if (region == null) {
-            region = ResourceManager.getInstance().getTexture("followpoint");
+            region = ResourceManager.getTexture("followpoint");
         }
         final float pointSize = region.getWidth() * scale;
         int count = (int) ((dist - 64 * scale) / pointSize);
