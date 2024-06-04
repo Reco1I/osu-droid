@@ -294,7 +294,7 @@ public class ScoreBoard extends Entity implements ScrollDetector.IScrollDetector
             @Override
             public void run() {
                 String[] columns = { "id", "playername", "score", "combo", "mark", "accuracy", "mode" };
-                try (Cursor scoreSet = ScoreLibrary.getInstance().getMapScores(columns, track.getFilename())) {
+                try (Cursor scoreSet = ScoreLibrary.getMapScores(columns, track.getFilename())) {
                     if (scoreSet == null || scoreSet.getCount() == 0 || !isActive()) {
 
                         // This allows the in-game leaderboard to show even if the local database is empty, it'll append

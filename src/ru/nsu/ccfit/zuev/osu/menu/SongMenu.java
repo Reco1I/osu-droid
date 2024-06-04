@@ -1263,7 +1263,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
         }
 
 
-        StatisticV2 stat = ScoreLibrary.getInstance().getScore(id);
+        StatisticV2 stat = ScoreLibrary.getScore(id);
         if (stat.isLegacySC()) {
             stat.processLegacySC(selectedTrack);
         }

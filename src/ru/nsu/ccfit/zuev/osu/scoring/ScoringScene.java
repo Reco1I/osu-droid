@@ -517,7 +517,7 @@ public class ScoringScene {
         if (track != null && track.getMD5() != null && track.getMD5().equals(mapMD5)) {
             ResourceManager.getSound("applause").play();
             if (!Multiplayer.isMultiplayer || !Osu.GameScene.hasFailed) {
-                ScoreLibrary.getInstance().addScore(track.getFilename(), stat, replay);
+                ScoreLibrary.addScore(track.getFilename(), stat, replay);
             }
 
             if (stat.getTotalScoreWithMultiplier() > 0 && OnlineManager.getInstance().isStayOnline() &&
@@ -544,7 +544,7 @@ public class ScoringScene {
                         OnlineManager.getInstance().getPP());
                 scene.registerTouchArea(sendingPanel.getDismissTouchArea());
                 scene.attachChild(sendingPanel);
-                ScoreLibrary.getInstance().sendScoreOnline(stat, replay, sendingPanel);
+                ScoreLibrary.pushScore(stat, replay, sendingPanel);
             }
         }
     }

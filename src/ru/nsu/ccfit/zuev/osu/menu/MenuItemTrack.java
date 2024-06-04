@@ -101,8 +101,7 @@ public class MenuItemTrack extends Sprite {
         if (track == null) {
             return;
         }
-        final String newmark = ScoreLibrary.getInstance().getBestMark(
-                track.getFilename());
+        final String newmark = ScoreLibrary.getBestMark(track.getFilename());
         if (currentMark != null && currentMark.equals(newmark)) {
             return;
         }

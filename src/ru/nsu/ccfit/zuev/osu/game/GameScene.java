@@ -2809,7 +2809,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
                     + ctime.substring(0, Math.min(3, ctime.length())) + ".odr";
             replay.setStat(stat);
             replay.save(replayFile);
-            ScoreLibrary.getInstance().addScore(lastTrack.getFilename(), stat, replayFile);
+            ScoreLibrary.addScore(lastTrack.getFilename(), stat, replayFile);
             ToastLogger.showText(StringTable.get(R.string.message_save_replay_successful), true);
             replayFile = null;
             return true;
