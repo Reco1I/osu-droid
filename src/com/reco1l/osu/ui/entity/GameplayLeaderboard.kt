@@ -5,7 +5,7 @@ import com.reco1l.osu.multiplayer.Multiplayer.isMultiplayer
 import org.anddev.andengine.entity.Entity
 import org.anddev.andengine.entity.sprite.Sprite
 import org.anddev.andengine.entity.text.ChangeableText
-import ru.nsu.ccfit.zuev.osu.Config
+import ru.nsu.ccfit.zuev.osu.Config.screenHeight
 import ru.nsu.ccfit.zuev.osu.Osu
 import ru.nsu.ccfit.zuev.osu.ResourceManager
 import ru.nsu.ccfit.zuev.osu.menu.ScoreBoardItem
@@ -23,7 +23,7 @@ class GameplayLeaderboard(var playerName: String, private val stats: StatisticV2
 
 
     // This determines the max amount of sprites that can be shown according to the user screen height.
-    private val maxAllowed = (Config.getRES_HEIGHT() - VERTICAL_PADDING * 2).toInt() / SPRITE_HEIGHT
+    private val maxAllowed = (screenHeight - VERTICAL_PADDING * 2).toInt() / SPRITE_HEIGHT
 
     private val replayId: Int get() = Osu.ScoringScene.replayID
 

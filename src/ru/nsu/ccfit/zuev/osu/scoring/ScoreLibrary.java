@@ -21,7 +21,7 @@ import ru.nsu.ccfit.zuev.osu.Config;
 import ru.nsu.ccfit.zuev.osu.Osu;
 import ru.nsu.ccfit.zuev.osu.ToastLogger;
 import ru.nsu.ccfit.zuev.osu.game.mods.GameMod;
-import ru.nsu.ccfit.zuev.osu.helper.StringManager;
+import ru.nsu.ccfit.zuev.osu.helper.StringTable;
 import ru.nsu.ccfit.zuev.osu.helper.sql.DBOpenHelper;
 import ru.nsu.ccfit.zuev.osu.online.OnlineScoring;
 import ru.nsu.ccfit.zuev.osuplus.R;
@@ -49,11 +49,11 @@ public class ScoreLibrary {
         try {
             database = helper.getWritableDatabase();
         } catch (SQLiteCantOpenDatabaseException e) {
-            ToastLogger.showText(StringManager.get(R.string.require_storage_permission), true);
+            ToastLogger.showText(StringTable.get(R.string.require_storage_permission), true);
             throw new RuntimeException(e);
         }
 
-        var folder = new File(Config.getCorePath() + "/Scores");
+        var folder = new File(Config.mainDirectory + "/Scores");
         if (!folder.exists()) {
             return;
         }

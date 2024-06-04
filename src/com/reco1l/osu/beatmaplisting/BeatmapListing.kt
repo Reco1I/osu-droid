@@ -40,7 +40,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.SupervisorJob
 import ru.nsu.ccfit.zuev.audio.Status
-import ru.nsu.ccfit.zuev.osu.Config
+import ru.nsu.ccfit.zuev.osu.Config.forceMetadataRomanization
+import ru.nsu.ccfit.zuev.osu.Config.musicVolume
 import ru.nsu.ccfit.zuev.osu.Osu
 import ru.nsu.ccfit.zuev.osu.MainScene.MusicOption
 import ru.nsu.ccfit.zuev.osu.ToastLogger
@@ -471,10 +472,10 @@ class BeatmapSetViewHolder(itemView: View, private val mediaScope: CoroutineScop
 
         metadata.setText(buildSpannedString {
 
-            append(if (Config.isForceRomanized()) beatmapSet.title else beatmapSet.titleUnicode)
+            append(if (forceMetadataRomanization) beatmapSet.title else beatmapSet.titleUnicode)
             appendLine()
             color(0xFFB2B2CC.toInt()) {
-                append(if (Config.isForceRomanized()) beatmapSet.artist else beatmapSet.artistUnicode)
+                append(if (forceMetadataRomanization) beatmapSet.artist else beatmapSet.artistUnicode)
             }
 
         }, TextView.BufferType.SPANNABLE)
@@ -559,7 +560,7 @@ class BeatmapSetViewHolder(itemView: View, private val mediaScope: CoroutineScop
 
                 Osu.MainScene.musicControl(MusicOption.PAUSE)
 
-                previewStream!!.setVolume(Config.getBgmVolume())
+                previewStream!!.setVolume(musicVolume)
                 previewStream!!.play()
 
                 mainThread {

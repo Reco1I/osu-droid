@@ -79,7 +79,7 @@ import ru.nsu.ccfit.zuev.audio.serviceAudio.SongService;
 import ru.nsu.ccfit.zuev.osu.game.SpritePool;
 import ru.nsu.ccfit.zuev.osu.helper.FileUtils;
 import ru.nsu.ccfit.zuev.osu.helper.InputManager;
-import ru.nsu.ccfit.zuev.osu.helper.StringManager;
+import ru.nsu.ccfit.zuev.osu.helper.StringTable;
 import ru.nsu.ccfit.zuev.osu.menu.LoadingScreen;
 import ru.nsu.ccfit.zuev.osu.menu.ModMenu;
 import ru.nsu.ccfit.zuev.osu.menu.SplashScene;
@@ -113,23 +113,22 @@ public class MainActivity extends BaseGameActivity implements
         }
         analytics = FirebaseAnalytics.getInstance(this);
         crashlytics = FirebaseCrashlytics.getInstance();
-        Config.loadConfig(this);
+        Config.init();
         initialGameDirectory();
         ToastLogger.init(this);
         InputManager.setContext(this);
         OnlineManager.getInstance().Init(getApplicationContext());
-        crashlytics.setUserId(Config.getOnlineDeviceID());
+        crashlytics.setUserId(Config.deviceUUID);
 
         var dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        Config.setScaleMultiplier((float) ((11 - 5.2450170716245195) / 5));
 
         final PowerManager manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = manager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "osudroid:osu");
 
-        Osu.Camera = new SmoothCamera(0, 0, Config.getRES_WIDTH(), Config.getRES_HEIGHT(), 0, 1800, 1);
+        Osu.Camera = new SmoothCamera(0, 0, Config.screenWidth, Config.screenHeight, 0, 1800, 1);
 
-        var options = new EngineOptions(true, null, new RatioResolutionPolicy(Config.getRES_WIDTH(), Config.getRES_HEIGHT()), Osu.Camera);
+        var options = new EngineOptions(true, null, new RatioResolutionPolicy(Config.screenWidth, Config.screenHeight), Osu.Camera);
         options.setNeedsMusic(false);
         options.setNeedsSound(false);
         options.getRenderOptions().disableExtensionVertexBufferObjects();
@@ -140,23 +139,21 @@ public class MainActivity extends BaseGameActivity implements
         try {
             Osu.Engine.setTouchController(new MultiTouchController());
         } catch (final MultiTouchException e) {
-            ToastLogger.showText(StringManager.get(R.string.message_error_multitouch), false);
+            ToastLogger.showText(StringTable.get(R.string.message_error_multitouch), false);
         }
-
-        Osu.Activity = this;
 
         return Osu.Engine;
     }
 
     private void initialGameDirectory() {
-        File dir = new File(Config.getBeatmapPath());
+        File dir = new File(Config.beatmapsDirectory);
         // Creating Osu directory if it doesn't exist
         if (!dir.exists()) {
             if (!dir.mkdirs()) {
-                Config.setBeatmapPath(Config.getCorePath() + "Songs/");
-                dir = new File(Config.getBeatmapPath());
+                Config.beatmapsDirectory = Config.mainDirectory + "Songs/";
+                dir = new File(Config.beatmapsDirectory);
                 if (!(dir.exists() || dir.mkdirs())) {
-                    ToastLogger.showText(StringManager.format(
+                    ToastLogger.showText(StringTable.format(
                                     R.string.message_error_createdir, dir.getPath()),
                             true);
                 } else {
@@ -176,7 +173,7 @@ public class MainActivity extends BaseGameActivity implements
             }
         }
 
-        final File skinDir = new File(Config.getCorePath() + "/Skin");
+        final File skinDir = new File(Config.mainDirectory + "/Skin");
         // Creating Osu/Skin directory if it doesn't exist
         if (!skinDir.exists()) {
             skinDir.mkdirs();
@@ -246,7 +243,7 @@ public class MainActivity extends BaseGameActivity implements
         ResourceManager.loadTexture("songselect-top", "songselect-top.png");
 
         File bg;
-        if ((bg = new File(Config.getSkinPath() + "menu-background.png")).exists() || (bg = new File(Config.getSkinPath() + "menu-background.jpg")).exists()) {
+        if ((bg = new File(Config.skinsDirectory + "menu-background.png")).exists() || (bg = new File(Config.skinsDirectory + "menu-background.jpg")).exists()) {
             ResourceManager.loadTexture("menu-background", bg);
         }
         ResourceManager.loadFont("font", null, 28, Color.WHITE);
@@ -327,7 +324,7 @@ public class MainActivity extends BaseGameActivity implements
         File internal = Environment.getDataDirectory();
         StatFs stat = new StatFs(internal.getPath());
         availableMemory = (double) stat.getAvailableBytes();
-        String toastMessage = String.format(StringManager.get(R.string.message_low_storage_space), df.format(availableMemory / minMem));
+        String toastMessage = String.format(StringTable.get(R.string.message_low_storage_space), df.format(availableMemory / minMem));
         if (availableMemory < 0.5 * minMem) { //I set 512MiB as a minimum
             Execution.mainThread(() -> Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show());
         }
@@ -371,15 +368,15 @@ public class MainActivity extends BaseGameActivity implements
 
     public void checkNewBeatmaps() {
         Osu.setLoadingInfo("Checking for new maps...");
-        final File mainDir = new File(Config.getCorePath());
+        final File mainDir = new File(Config.mainDirectory);
         if (beatmapToAdd != null) {
             File file = new File(beatmapToAdd);
             if (file.getName().toLowerCase().endsWith(".osz")) {
                 ToastLogger.showText(
-                        StringManager.get(R.string.message_lib_importing),
+                        StringTable.get(R.string.message_lib_importing),
                         false);
 
-                FileUtils.extractZip(beatmapToAdd, Config.getBeatmapPath());
+                FileUtils.extractZip(beatmapToAdd, Config.beatmapsDirectory);
                 // LibraryManager.INSTANCE.sort();
                 LibraryManager.INSTANCE.saveToCache();
             } else if (file.getName().endsWith(".odr")) {
@@ -397,7 +394,7 @@ public class MainActivity extends BaseGameActivity implements
                 }
             }
 
-            File beatmapDir = new File(Config.getBeatmapPath());
+            File beatmapDir = new File(Config.beatmapsDirectory);
             if (beatmapDir.exists()
                     && beatmapDir.isDirectory()) {
                 filelist = FileUtils.listFiles(beatmapDir, ".osz");
@@ -412,7 +409,7 @@ public class MainActivity extends BaseGameActivity implements
             }
 
             File downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-            if (Config.isSCAN_DOWNLOAD()
+            if (Config.scanDownloadDirectory
                     && downloadDir.exists()
                     && downloadDir.isDirectory()) {
                 filelist = FileUtils.listFiles(downloadDir, ".osz");
@@ -429,11 +426,11 @@ public class MainActivity extends BaseGameActivity implements
             if (beatmaps.size() > 0) {
                 // final boolean deleteOsz = Config.isDELETE_OSZ();
                 // Config.setDELETE_OSZ(true);
-                ToastLogger.showText(StringManager.format(
+                ToastLogger.showText(StringTable.format(
                         R.string.message_lib_importing_several,
                         beatmaps.size()), false);
                 for (final String beatmap : beatmaps) {
-                    FileUtils.extractZip(beatmap, Config.getBeatmapPath());
+                    FileUtils.extractZip(beatmap, Config.beatmapsDirectory);
                 }
                 // Config.setDELETE_OSZ(deleteOsz);
 
@@ -449,7 +446,7 @@ public class MainActivity extends BaseGameActivity implements
         final ArrayList<String> skins = new ArrayList<>();
 
         // Scanning skin directory
-        final File skinDir = new File(Config.getSkinTopPath());
+        final File skinDir = new File(Config.skinPath);
 
         if (skinDir.exists() && skinDir.isDirectory()) {
             final File[] files = FileUtils.listFiles(skinDir, ".osk");
@@ -467,7 +464,7 @@ public class MainActivity extends BaseGameActivity implements
         // Scanning download directory
         final File downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
-        if (Config.isSCAN_DOWNLOAD()
+        if (Config.scanDownloadDirectory
                 && downloadDir.exists()
                 && downloadDir.isDirectory()) {
             final File[] files = FileUtils.listFiles(downloadDir, ".osk");
@@ -483,18 +480,19 @@ public class MainActivity extends BaseGameActivity implements
         }
 
         if (skins.size() > 0) {
-            ToastLogger.showText(StringManager.format(
+            ToastLogger.showText(StringTable.format(
                     R.string.message_skin_importing_several,
                     skins.size()), false);
 
             for (final String skin : skins) {
-                if (FileUtils.extractZip(skin, Config.getSkinTopPath())) {
+                if (FileUtils.extractZip(skin, Config.skinPath)) {
                     String folderName = skin.substring(0, skin.length() - 4);
                     // We have imported the skin!
                     ToastLogger.showText(
-                            StringManager.format(R.string.message_lib_imported, folderName),
+                            StringTable.format(R.string.message_lib_imported, folderName),
                             true);
-                    Config.addSkin(folderName.substring(folderName.lastIndexOf("/") + 1), skin);
+                    String name = folderName.substring(folderName.lastIndexOf("/") + 1);
+                    Config.skins.put(name, skin);
                 }
             }
         }
@@ -518,6 +516,8 @@ public class MainActivity extends BaseGameActivity implements
 
     @Override
     protected void onCreate(Bundle pSavedInstanceState) {
+
+        Osu.Activity = this;
         super.onCreate(pSavedInstanceState);
 
         try {
@@ -685,14 +685,8 @@ public class MainActivity extends BaseGameActivity implements
             }
         }
 
-        if (hasFocus && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Config.isHideNaviBar()) {
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        if (hasFocus && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Config.hideNavigationBar) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
     }
 

@@ -69,7 +69,7 @@ public class ComboBurst {
     }
 
     public void checkAndShow(int currentCombo) {
-        if (Config.isComboburst() && currentCombo >= nextKeyComboNum) {
+        if (Config.showComboburstEffects && currentCombo >= nextKeyComboNum) {
             if (comboBurstVocals.size() > 0) {
                 comboBurstVocals.get(nextSoundId).play(0.8f);
             }

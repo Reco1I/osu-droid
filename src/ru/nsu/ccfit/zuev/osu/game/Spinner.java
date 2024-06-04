@@ -65,16 +65,15 @@ public class Spinner extends GameObject {
         center = Utils.trackToRealCoords(pos);
         background = SpritePool.getInstance().getCenteredSprite(
                 "spinner-background", center);
-        final float scaleX = Config.getRES_WIDTH() / background.getWidth();
+        final float scaleX = Config.screenWidth / background.getWidth();
         background.setScale(scaleX);
 
         circle = SpritePool.getInstance().getCenteredSprite("spinner-circle",
                 center);
         mregion = ResourceManager.getTexture("spinner-metre")
                 .deepCopy();
-        metre = new Sprite(center.x - (float) Config.getRES_WIDTH() / 2,
-                Config.getRES_HEIGHT(), mregion);
-        metre.setWidth(Config.getRES_WIDTH());
+        metre = new Sprite(center.x - (float) Config.screenWidth / 2, Config.screenHeight, mregion);
+        metre.setWidth(Config.screenWidth);
         metre.setHeight(background.getHeightScaled());
         approachCircle = SpritePool.getInstance().getCenteredSprite(
                 "spinner-approachcircle", center);
@@ -135,7 +134,7 @@ public class Spinner extends GameObject {
         circle.setAlpha(0);
         circle.registerEntityModifier(appearMoifier.deepCopy());
 
-        metreY = (Config.getRES_HEIGHT() - background.getHeightScaled()) / 2;
+        metreY = (Config.screenHeight - background.getHeightScaled()) / 2;
         metre.setAlpha(0);
         metre.registerEntityModifier(appearMoifier.deepCopy());
         mregion.setTexturePosition(0, (int) metre.getHeightScaled());

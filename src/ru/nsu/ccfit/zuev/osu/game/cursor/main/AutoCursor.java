@@ -24,7 +24,7 @@ public class AutoCursor extends CursorEntity implements ISliderListener {
 
     public AutoCursor() {
         super();
-        this.setPosition(Config.getRES_WIDTH() / 2f, Config.getRES_HEIGHT() / 2f);
+        this.setPosition(Config.screenWidth / 2f, Config.screenHeight / 2f);
         this.setShowing(true);
     }
 

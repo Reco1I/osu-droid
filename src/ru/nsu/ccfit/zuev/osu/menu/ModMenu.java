@@ -27,7 +27,7 @@ import ru.nsu.ccfit.zuev.osu.game.GameHelper;
 import ru.nsu.ccfit.zuev.osu.game.mods.GameMod;
 import ru.nsu.ccfit.zuev.osu.game.mods.IModSwitcher;
 import ru.nsu.ccfit.zuev.osu.game.mods.ModButton;
-import ru.nsu.ccfit.zuev.osu.helper.StringManager;
+import ru.nsu.ccfit.zuev.osu.helper.StringTable;
 import ru.nsu.ccfit.zuev.osu.helper.TextButton;
 import ru.nsu.ccfit.zuev.osu.scoring.StatisticV2;
 import ru.nsu.ccfit.zuev.osuplus.R;
@@ -130,8 +130,8 @@ public class ModMenu implements IModSwitcher {
         {
             if (modSet.contains(GameMod.MOD_DOUBLETIME) || modSet.contains(GameMod.MOD_NIGHTCORE))
             {
-                mod.remove(Config.isUseNightcoreOnMultiplayer() ? GameMod.MOD_DOUBLETIME : GameMod.MOD_NIGHTCORE);
-                mod.add(Config.isUseNightcoreOnMultiplayer() ? GameMod.MOD_NIGHTCORE : GameMod.MOD_DOUBLETIME);
+                mod.remove(Config.useNightcoreOnMultiplayer ? GameMod.MOD_DOUBLETIME : GameMod.MOD_NIGHTCORE);
+                mod.add(Config.useNightcoreOnMultiplayer ? GameMod.MOD_NIGHTCORE : GameMod.MOD_DOUBLETIME);
             }
             else {
                 mod.remove(GameMod.MOD_NIGHTCORE);
@@ -222,14 +222,13 @@ public class ModMenu implements IModSwitcher {
         modButtons.clear();
         scene = new Scene();
         scene.setBackgroundEnabled(false);
-        final Rectangle bg = new Rectangle(0, 0, Config.getRES_WIDTH(),
-                Config.getRES_HEIGHT());
+        final Rectangle bg = new Rectangle(0, 0, Config.screenWidth, Config.screenHeight);
         bg.setColor(0, 0, 0, 0.7f);
         scene.attachChild(bg);
 
         multiplierText = new ChangeableText(0, Utils.toRes(50),
                 ResourceManager.getFont("CaptionFont"),
-                StringManager.format(R.string.menu_mod_multiplier, 1f));
+                StringTable.format(R.string.menu_mod_multiplier, 1f));
         multiplierText.setScale(1.2f);
         scene.attachChild(multiplierText);
 
@@ -242,49 +241,44 @@ public class ModMenu implements IModSwitcher {
         final TextureRegion button = ResourceManager.getTexture("selection-mod-easy");
 
         //line 1
-        addButton(offset, Config.getRES_HEIGHT() / 2 - button.getHeight() * 3, "selection-mod-easy", GameMod.MOD_EASY);
+        addButton(offset, Config.screenHeight / 2 - button.getHeight() * 3, "selection-mod-easy", GameMod.MOD_EASY);
 
         // Used to define the X offset of each button according to its visibility
         int factor = 1;
 
-        addButton(offset + offsetGrowth * factor++, Config.getRES_HEIGHT() / 2 - button.getHeight() * 3, "selection-mod-nofail", GameMod.MOD_NOFAIL);
+        addButton(offset + offsetGrowth * factor++, Config.screenHeight / 2 - button.getHeight() * 3, "selection-mod-nofail", GameMod.MOD_NOFAIL);
 
-        if (!Multiplayer.isMultiplayer || Multiplayer.isRoomHost())
-            addButton(offset + offsetGrowth * factor++, Config.getRES_HEIGHT() / 2 - button.getHeight() * 3, "selection-mod-halftime", GameMod.MOD_HALFTIME);
+        if (!Multiplayer.isMultiplayer || Multiplayer.isRoomHost()) addButton(offset + offsetGrowth * factor++, Config.screenHeight / 2 - button.getHeight() * 3, "selection-mod-halftime", GameMod.MOD_HALFTIME);
 
-        addButton(offset + offsetGrowth * factor, Config.getRES_HEIGHT() / 2 - button.getHeight() * 3, "selection-mod-reallyeasy", GameMod.MOD_REALLYEASY);
+        addButton(offset + offsetGrowth * factor, Config.screenHeight / 2 - button.getHeight() * 3, "selection-mod-reallyeasy", GameMod.MOD_REALLYEASY);
 
         factor = 1;
 
         //line 2
-        addButton(offset, Config.getRES_HEIGHT() / 2 - button.getHeight() / 2, "selection-mod-hardrock", GameMod.MOD_HARDROCK);
+        addButton(offset, Config.screenHeight / 2 - button.getHeight() / 2, "selection-mod-hardrock", GameMod.MOD_HARDROCK);
 
-        if (!Multiplayer.isMultiplayer || Multiplayer.isRoomHost())
-            addButton(offset + offsetGrowth * factor++, Config.getRES_HEIGHT() / 2 - button.getHeight() / 2, "selection-mod-doubletime", GameMod.MOD_DOUBLETIME);
+        if (!Multiplayer.isMultiplayer || Multiplayer.isRoomHost()) addButton(offset + offsetGrowth * factor++, Config.screenHeight / 2 - button.getHeight() / 2, "selection-mod-doubletime", GameMod.MOD_DOUBLETIME);
 
-        if (!Multiplayer.isMultiplayer || Multiplayer.isRoomHost())
-            addButton(offset + offsetGrowth * factor++, Config.getRES_HEIGHT() / 2 - button.getHeight() / 2, "selection-mod-nightcore", GameMod.MOD_NIGHTCORE);
+        if (!Multiplayer.isMultiplayer || Multiplayer.isRoomHost()) addButton(offset + offsetGrowth * factor++, Config.screenHeight / 2 - button.getHeight() / 2, "selection-mod-nightcore", GameMod.MOD_NIGHTCORE);
 
-        addButton(offset + offsetGrowth * factor++, Config.getRES_HEIGHT() / 2 - button.getHeight() / 2, "selection-mod-hidden", GameMod.MOD_HIDDEN);
-        addButton(offset + offsetGrowth * factor++, Config.getRES_HEIGHT() / 2 - button.getHeight() / 2, "selection-mod-flashlight", GameMod.MOD_FLASHLIGHT);
-        addButton(offset + offsetGrowth * factor++, Config.getRES_HEIGHT() / 2 - button.getHeight() / 2, "selection-mod-suddendeath", GameMod.MOD_SUDDENDEATH);
-        addButton(offset + offsetGrowth * factor, Config.getRES_HEIGHT() / 2 - button.getHeight() / 2, "selection-mod-perfect", GameMod.MOD_PERFECT);
+        addButton(offset + offsetGrowth * factor++, Config.screenHeight / 2 - button.getHeight() / 2, "selection-mod-hidden", GameMod.MOD_HIDDEN);
+        addButton(offset + offsetGrowth * factor++, Config.screenHeight / 2 - button.getHeight() / 2, "selection-mod-flashlight", GameMod.MOD_FLASHLIGHT);
+        addButton(offset + offsetGrowth * factor++, Config.screenHeight / 2 - button.getHeight() / 2, "selection-mod-suddendeath", GameMod.MOD_SUDDENDEATH);
+        addButton(offset + offsetGrowth * factor, Config.screenHeight / 2 - button.getHeight() / 2, "selection-mod-perfect", GameMod.MOD_PERFECT);
 
         factor = 1;
 
         //line 3
-        addButton(offset, Config.getRES_HEIGHT() / 2 + button.getHeight() * 2, "selection-mod-relax", GameMod.MOD_RELAX);
-        addButton(offset + offsetGrowth * factor++, Config.getRES_HEIGHT() / 2 + button.getHeight() * 2, "selection-mod-relax2", GameMod.MOD_AUTOPILOT);
+        addButton(offset, Config.screenHeight / 2 + button.getHeight() * 2, "selection-mod-relax", GameMod.MOD_RELAX);
+        addButton(offset + offsetGrowth * factor++, Config.screenHeight / 2 + button.getHeight() * 2, "selection-mod-relax2", GameMod.MOD_AUTOPILOT);
 
-        if (!Multiplayer.isMultiplayer)
-            addButton(offset + offsetGrowth * factor++, Config.getRES_HEIGHT() / 2 + button.getHeight() * 2, "selection-mod-autoplay", GameMod.MOD_AUTO);
+        if (!Multiplayer.isMultiplayer) addButton(offset + offsetGrowth * factor++, Config.screenHeight / 2 + button.getHeight() * 2, "selection-mod-autoplay", GameMod.MOD_AUTO);
 
-        if (!Multiplayer.isMultiplayer)
-            addButton(offset + offsetGrowth * factor++, Config.getRES_HEIGHT() / 2 + button.getHeight() * 2, "selection-mod-scorev2", GameMod.MOD_SCOREV2);
+        if (!Multiplayer.isMultiplayer) addButton(offset + offsetGrowth * factor++, Config.screenHeight / 2 + button.getHeight() * 2, "selection-mod-scorev2", GameMod.MOD_SCOREV2);
 
-        addButton(offset + offsetGrowth * factor, Config.getRES_HEIGHT() / 2 + button.getHeight() * 2, "selection-mod-precise", GameMod.MOD_PRECISE);
+        addButton(offset + offsetGrowth * factor, Config.screenHeight / 2 + button.getHeight() * 2, "selection-mod-precise", GameMod.MOD_PRECISE);
 
-        final TextButton resetText = new TextButton(ResourceManager.getFont("CaptionFont"), StringManager.get(R.string.menu_mod_reset)) {
+        final TextButton resetText = new TextButton(ResourceManager.getFont("CaptionFont"), StringTable.get(R.string.menu_mod_reset)) {
 
             @Override
             public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
@@ -307,7 +301,7 @@ public class ModMenu implements IModSwitcher {
         }
         resetText.setScale(1.2f);
 
-        final TextButton back = new TextButton(ResourceManager.getFont("CaptionFont"), StringManager.get(R.string.menu_mod_back)) {
+        final TextButton back = new TextButton(ResourceManager.getFont("CaptionFont"), StringTable.get(R.string.menu_mod_back)) {
 
             @Override
             public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
@@ -333,7 +327,7 @@ public class ModMenu implements IModSwitcher {
                                 ));
                                 parameters.setCustomSpeedMultiplier(changeSpeed);
 
-                                switch (Config.getDifficultyAlgorithm()) {
+                                switch (Config.difficultyAlgorithm) {
                                     case droid -> {
                                         var attributes = BeatmapDifficultyCalculator.calculateDroidDifficulty(
                                             beatmap,
@@ -368,9 +362,9 @@ public class ModMenu implements IModSwitcher {
         back.setScale(1.2f);
         back.setWidth(resetText.getWidth());
         back.setHeight(resetText.getHeight());
-        back.setPosition(Config.getRES_WIDTH() - back.getWidth() - 60, Config.getRES_HEIGHT() - back.getHeight() - 30);
+        back.setPosition(Config.screenWidth - back.getWidth() - 60, Config.screenHeight - back.getHeight() - 30);
         back.setColor(66 / 255f, 76 / 255f, 80 / 255f);
-        resetText.setPosition(Config.getRES_WIDTH() - resetText.getWidth() - 60, back.getY() - resetText.getHeight() - 20);
+        resetText.setPosition(Config.screenWidth - resetText.getWidth() - 60, back.getY() - resetText.getHeight() - 20);
 //		multiplierText.setPosition(back.getX() + (back.getWidth() / 2 - multiplierText.getWidth() / 2), resetText.getY() - multiplierText.getHeight() - 40);
 
         scene.attachChild(back);
@@ -414,10 +408,10 @@ public class ModMenu implements IModSwitcher {
             }
         }
 
-        multiplierText.setText(StringManager.format(R.string.menu_mod_multiplier,
+        multiplierText.setText(StringTable.format(R.string.menu_mod_multiplier,
                 mult));
         multiplierText.setPosition(
-                Config.getRES_WIDTH() / 2f - multiplierText.getWidth() / 2,
+                Config.screenWidth / 2f - multiplierText.getWidth() / 2,
                 multiplierText.getY());
         if (mult == 1) {
             multiplierText.setColor(1, 1, 1);

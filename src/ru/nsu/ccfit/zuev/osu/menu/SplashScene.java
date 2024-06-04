@@ -37,7 +37,7 @@ public class SplashScene implements IUpdateHandler {
         var loadTex = ResourceManager.getTexture("loading_start");
 
         mLoading = new Sprite(0, 0, loadTex);
-        mLoading.setPosition((Config.getRES_WIDTH() - mLoading.getWidth()) / 2f, (Config.getRES_HEIGHT() - mLoading.getHeight()) / 2f);
+        mLoading.setPosition((Config.screenWidth - mLoading.getWidth()) / 2f, (Config.screenHeight - mLoading.getHeight()) / 2f);
         mLoading.setRotationCenter(mLoading.getWidth() / 2f, mLoading.getHeight() / 2f);
         mLoading.setScale(0.4f);
         mLoading.setAlpha(0);
@@ -48,7 +48,7 @@ public class SplashScene implements IUpdateHandler {
 
     private void initializeInfo() {
         infoText = new ChangeableText(0, 0, ResourceManager.getFont("font"), "", HorizontalAlign.CENTER, 1024);
-        infoText.setPosition((Config.getRES_WIDTH() - infoText.getWidth()) / 2, Config.getRES_HEIGHT() - infoText.getHeight() - 20);
+        infoText.setPosition((Config.screenWidth - infoText.getWidth()) / 2, Config.screenHeight - infoText.getHeight() - 20);
         infoText.setAlpha(0);
         infoText.setScale(0.6f);
         scene.attachChild(infoText);
@@ -82,7 +82,7 @@ public class SplashScene implements IUpdateHandler {
         var welcomeSound = ResourceManager.getSound("welcome");
         var welcomePiano = ResourceManager.getSound("welcome_piano");
 
-        welcomeSprite.setPosition((Config.getRES_WIDTH() - welcomeTex.getWidth()) / 2f, (Config.getRES_HEIGHT() - welcomeTex.getHeight()) / 2f);
+        welcomeSprite.setPosition((Config.screenWidth - welcomeTex.getWidth()) / 2f, (Config.screenHeight - welcomeTex.getHeight()) / 2f);
         welcomeSprite.setAlpha(0);
         welcomeSprite.setScaleY(0);
         scene.attachChild(welcomeSprite);
@@ -100,7 +100,7 @@ public class SplashScene implements IUpdateHandler {
 
     private void initializeProgress() {
         progressText = new ChangeableText(0, 0, ResourceManager.getFont("font"), "0 %", HorizontalAlign.CENTER, 10);
-        progressText.setPosition((Config.getRES_WIDTH() - progressText.getWidth()) / 2f, (Config.getRES_HEIGHT() + mLoading.getHeight()) / 2f - mLoading.getHeight() / 4f);
+        progressText.setPosition((Config.screenWidth - progressText.getWidth()) / 2f, (Config.screenHeight + mLoading.getHeight()) / 2f - mLoading.getHeight() / 4f);
         progressText.setAlpha(0);
         progressText.setScale(0.5f);
         scene.attachChild(progressText);
@@ -115,11 +115,11 @@ public class SplashScene implements IUpdateHandler {
         }
 
         progressText.setText(String.format("%.0f %%", progress));
-        progressText.setPosition((Config.getRES_WIDTH() - progressText.getWidth()) / 2f, (Config.getRES_HEIGHT() + mLoading.getHeight()) / 2f - mLoading.getHeight() / 4f);
+        progressText.setPosition((Config.screenWidth - progressText.getWidth()) / 2f, (Config.screenHeight + mLoading.getHeight()) / 2f - mLoading.getHeight() / 4f);
 
         if (Osu.getLoadingInfo() != null) {
             infoText.setText(Osu.getLoadingInfo());
-            infoText.setPosition((Config.getRES_WIDTH() - infoText.getWidth()) / 2, Config.getRES_HEIGHT() - infoText.getHeight() - 20);
+            infoText.setPosition((Config.screenWidth - infoText.getWidth()) / 2, Config.screenHeight - infoText.getHeight() - 20);
         }
     }
 

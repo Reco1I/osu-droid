@@ -64,7 +64,7 @@ public class FileUtils {
         try (ZipFile zip = new ZipFile(file)) {
             if(!zip.isValidZipFile()) {
                 ToastLogger.showText(
-                        StringManager.format(R.string.message_error, "Invalid file"),
+                        StringTable.format(R.string.message_error, "Invalid file"),
                         false);
                 Debug.e("FileUtils.extractZip: " + file.getName() + " is invalid");
                 file.renameTo(new File(file.getParentFile(), sourceFileName + ".badzip"));
@@ -73,7 +73,7 @@ public class FileUtils {
             }
 
             zip.extractAll(folderFile.getAbsolutePath());
-            if((Config.isDELETE_OSZ() && sourceFileName.toLowerCase().endsWith(".osz"))
+            if((Config.deleteBeatmapFileOnImportSuccess && sourceFileName.toLowerCase().endsWith(".osz"))
                 || sourceFileName.toLowerCase().endsWith(".osk")) {
                 file.delete();
             }
@@ -129,11 +129,11 @@ public class FileUtils {
             if (Environment.getExternalStorageState().equals(
                     Environment.MEDIA_MOUNTED_READ_ONLY)) {
                 ToastLogger.showText(
-                        StringManager.get(R.string.message_error_sdcardread),
+                        StringTable.get(R.string.message_error_sdcardread),
                         false);
             } else {
                 ToastLogger.showText(
-                        StringManager.get(R.string.message_error_sdcard), false);
+                        StringTable.get(R.string.message_error_sdcard), false);
             }
         }
 

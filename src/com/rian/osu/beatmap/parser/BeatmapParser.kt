@@ -12,7 +12,7 @@ import okio.buffer
 import okio.source
 import ru.nsu.ccfit.zuev.osu.ToastLogger
 import ru.nsu.ccfit.zuev.osu.helper.FileUtils
-import ru.nsu.ccfit.zuev.osu.helper.StringManager
+import ru.nsu.ccfit.zuev.osu.helper.StringTable
 import ru.nsu.ccfit.zuev.osuplus.R
 import java.io.Closeable
 import java.io.File
@@ -98,7 +98,7 @@ class BeatmapParser : Closeable {
     fun parse(withHitObjects: Boolean, mode: GameMode = GameMode.Standard): Beatmap? {
         if (source == null && !openFile()) {
             ToastLogger.showText(
-                StringManager.format(R.string.beatmap_parser_cannot_open_file, file.nameWithoutExtension),
+                StringTable.format(R.string.beatmap_parser_cannot_open_file, file.nameWithoutExtension),
                 true
             )
 

@@ -19,7 +19,7 @@ import ru.nsu.ccfit.zuev.osu.ResourceManager;
 import ru.nsu.ccfit.zuev.osu.TrackInfo;
 import ru.nsu.ccfit.zuev.osu.Utils;
 import ru.nsu.ccfit.zuev.osu.DifficultyAlgorithm;
-import ru.nsu.ccfit.zuev.osu.helper.StringManager;
+import ru.nsu.ccfit.zuev.osu.helper.StringTable;
 import ru.nsu.ccfit.zuev.osu.scoring.ScoreLibrary;
 import ru.nsu.ccfit.zuev.osuplus.R;
 
@@ -50,7 +50,7 @@ public class MenuItem {
 //        titleStr = (beatmap.getArtistUnicode() == null ? beatmap.getArtist() : beatmap.getArtistUnicode()) + " - "
 //                + (beatmap.getTitleUnicode() == null ? beatmap.getTitle() : beatmap.getTitleUnicode());
         titleStr = beatmap.getArtist() + " - " + beatmap.getTitle();
-        creatorStr = StringManager.format(R.string.menu_creator,
+        creatorStr = StringTable.format(R.string.menu_creator,
                 beatmap.getCreator());
         trackSprites = new MenuItemTrack[info.getCount()];
 
@@ -67,7 +67,7 @@ public class MenuItem {
 //        titleStr = (beatmap.getArtistUnicode() == null ? beatmap.getArtist() : beatmap.getArtistUnicode()) + " - "
 //                + (beatmap.getTitleUnicode() == null ? beatmap.getTitle() : beatmap.getTitleUnicode());
         titleStr = beatmap.getArtist() + " - " + beatmap.getTitle();
-        creatorStr = StringManager.format(R.string.menu_creator, beatmap.getCreator());
+        creatorStr = StringTable.format(R.string.menu_creator, beatmap.getCreator());
         trackSprites = new MenuItemTrack[1];
         trackId = id;
         final BeatmapProperties props = PropertyManager.getProperties(info.getPath());
@@ -118,13 +118,12 @@ public class MenuItem {
     public void setPos(final float x, final float y) {
         if (background != null) {
             background.setPosition(x, y);
-            if (y > Config.getRES_HEIGHT() || y < -background.getHeight()) {
+            if (y > Config.screenHeight || y < -background.getHeight()) {
                 freeBackground();
             }
         }
         if (!selected) {
-            if (visible && background == null
-                    && y < Config.getRES_HEIGHT() && y > -bgHeight) {
+            if (visible && background == null && y < Config.screenHeight && y > -bgHeight) {
                 initBackground();
                 background.setPosition(x, y);
             }
@@ -135,11 +134,11 @@ public class MenuItem {
             if (s == null) {
                 continue;
             }
-            final float cy = y + oy + Config.getRES_HEIGHT() / 2f
+            final float cy = y + oy + Config.screenHeight / 2f
                     + s.getHeight() / 2;
             final float ox = x
                     + Utils.toRes(170 * (float) Math.abs(Math.cos(cy * Math.PI
-                    / (Config.getRES_HEIGHT() * 2))));
+                    / (Config.screenHeight * 2))));
             s.setPosition(ox - Utils.toRes(100), y + oy);
             oy += (s.getHeight() - Utils.toRes(25)) * percentAppeared;
         }
@@ -378,7 +377,7 @@ public class MenuItem {
     public void reloadTracks() {
         if (trackId == -1) {
             // Tracks are originally sorted by osu!droid difficulty, so for osu!standard difficulty they need to be sorted again.
-            if (Config.getDifficultyAlgorithm() == DifficultyAlgorithm.standard) {
+            if (Config.difficultyAlgorithm == DifficultyAlgorithm.standard) {
                 Collections.sort(beatmap.getTracks(), (o1, o2) -> Float.compare(o1.getStandardDifficulty(), o2.getStandardDifficulty()));
             } else {
                 Collections.sort(beatmap.getTracks(), (o1, o2) -> Float.compare(o1.getDroidDifficulty(), o2.getDroidDifficulty()));
@@ -405,7 +404,7 @@ public class MenuItem {
     private void initTracks() {
         if (trackId == -1) {
             // Tracks are originally sorted by osu!droid difficulty, so for osu!standard difficulty they need to be sorted again.
-            if (Config.getDifficultyAlgorithm() == DifficultyAlgorithm.standard) {
+            if (Config.difficultyAlgorithm == DifficultyAlgorithm.standard) {
                 Collections.sort(beatmap.getTracks(), (o1, o2) -> Float.compare(o1.getStandardDifficulty(), o2.getStandardDifficulty()));
             } else {
                 Collections.sort(beatmap.getTracks(), (o1, o2) -> Float.compare(o1.getDroidDifficulty(), o2.getDroidDifficulty()));

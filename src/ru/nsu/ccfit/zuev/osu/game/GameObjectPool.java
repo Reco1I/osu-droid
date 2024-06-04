@@ -41,7 +41,7 @@ public class GameObjectPool {
         }
 
         objectsCreated++;
-        if (Config.getSpinnerStyle() == 1) {
+        if (Config.spinnerStyle == 1) {
             return new ModernSpinner();
         } else {
             return new Spinner();

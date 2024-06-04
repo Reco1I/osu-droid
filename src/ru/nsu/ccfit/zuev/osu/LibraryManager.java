@@ -6,7 +6,7 @@ import com.rian.osu.beatmap.parser.BeatmapParser;
 import org.anddev.andengine.util.Debug;
 import org.jetbrains.annotations.Nullable;
 import ru.nsu.ccfit.zuev.osu.helper.FileUtils;
-import ru.nsu.ccfit.zuev.osu.helper.StringManager;
+import ru.nsu.ccfit.zuev.osu.helper.StringTable;
 import ru.nsu.ccfit.zuev.osuplus.R;
 
 import java.io.*;
@@ -39,10 +39,10 @@ public enum LibraryManager {
             return true;
         }
 
-        final File replayDir = new File(Config.getScorePath());
+        final File replayDir = new File(Config.scoresDirectory);
         if (!replayDir.exists()) {
             if (!replayDir.mkdir()) {
-                ToastLogger.showText(StringManager.format(
+                ToastLogger.showText(StringTable.format(
                         R.string.message_error_createdir, replayDir.getPath()), true);
                 return false;
             }
@@ -50,7 +50,7 @@ public enum LibraryManager {
         }
 
         final File lib = getLibraryCacheFile();
-        final File dir = new File(Config.getBeatmapPath());
+        final File dir = new File(Config.beatmapsDirectory);
         if (!dir.exists()) {
             return false;
         }
@@ -95,13 +95,13 @@ public enum LibraryManager {
     }
 
     private void checkLibrary() {
-        final File dir = new File(Config.getBeatmapPath());
+        final File dir = new File(Config.beatmapsDirectory);
         final File[] files = FileUtils.listFiles(dir);
         if (files.length == fileCount) {
             return;
         }
 
-        ToastLogger.showText(StringManager.get(R.string.message_lib_update), true);
+        ToastLogger.showText(StringTable.get(R.string.message_lib_update), true);
 
         final int fileCount = files.length;
         LibraryCacheManager manager = new LibraryCacheManager(fileCount, files);
@@ -124,11 +124,11 @@ public enum LibraryManager {
     public synchronized void scanLibrary() {
         library.clear();
 
-        final File dir = new File(Config.getBeatmapPath());
+        final File dir = new File(Config.beatmapsDirectory);
         // Creating Osu directory if it doesn't exist
         if (!dir.exists()) {
             if (!dir.mkdirs()) {
-                ToastLogger.showText(StringManager.format(
+                ToastLogger.showText(StringTable.format(
                         R.string.message_error_createdir, dir.getPath()), true);
                 return;
             }
@@ -158,7 +158,7 @@ public enum LibraryManager {
 
         saveToCache();
         ToastLogger.showText(
-                StringManager.format(R.string.message_lib_complete, manager.getTotalMaps()),
+                StringTable.format(R.string.message_lib_complete, manager.getTotalMaps()),
                 true);
     }
 
@@ -219,7 +219,7 @@ public enum LibraryManager {
             }
         } catch (final IOException e) {
             ToastLogger.showText(
-                    StringManager.format(R.string.message_error, e.getMessage()),
+                    StringTable.format(R.string.message_error, e.getMessage()),
                     false);
             Debug.e("LibraryManager: " + e.getMessage(), e);
         }
@@ -231,7 +231,7 @@ public enum LibraryManager {
         final File lib = getLibraryCacheFile();
         if (lib.exists()) {
             lib.delete();
-            ToastLogger.showText(StringManager.get(R.string.message_lib_cleared),
+            ToastLogger.showText(StringTable.get(R.string.message_lib_cleared),
                     false);
         }
         currentIndex = 0;
@@ -261,7 +261,7 @@ public enum LibraryManager {
         for (final File file : filelist) {
             try (var parser = new BeatmapParser(file)) {
                 if (!parser.openFile()) {
-                    if (Config.isDeleteUnimportedBeatmaps()) {
+                    if (Config.deleteBeatmapFileOnImportFail) {
                         file.delete();
                     }
                     continue;
@@ -273,13 +273,13 @@ public enum LibraryManager {
 
                 var beatmap = parser.parse(true);
                 if (beatmap == null || !info.populate(beatmap) || !track.populate(beatmap)) {
-                    if (Config.isDeleteUnimportedBeatmaps()) {
+                    if (Config.deleteBeatmapFileOnImportFail) {
                         file.delete();
                     }
                     continue;
                 }
 
-                if (beatmap.events.videoFilename != null && Config.isDeleteUnsupportedVideos()) {
+                if (beatmap.events.videoFilename != null && Config.deleteUnsupportedVideos) {
                     try {
                         var videoFile = new File(info.getPath(), beatmap.events.videoFilename);
 
@@ -295,7 +295,7 @@ public enum LibraryManager {
             }
         }
 
-        if (Config.isDeleteUnimportedBeatmaps() && info.getCount() == 0) {
+        if (Config.deleteBeatmapFileOnImportFail && info.getCount() == 0) {
             deleteDir(dir);
         }
 

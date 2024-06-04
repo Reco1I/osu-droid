@@ -52,13 +52,13 @@ public class BreakAnimator extends GameObject {
             }
         }
         arrows[0].setPosition(Utils.toRes(64), Utils.toRes(72));
-        arrows[1].setPosition(Utils.toRes(64), Config.getRES_HEIGHT()
+        arrows[1].setPosition(Utils.toRes(64), Config.screenHeight
                 - arrows[1].getHeight());
-        arrows[2].setPosition(Config.getRES_WIDTH() - arrows[1].getWidth()
+        arrows[2].setPosition(Config.screenWidth - arrows[1].getWidth()
                 - Utils.toRes(64), Utils.toRes(72));
-        arrows[3].setPosition(Config.getRES_WIDTH() - arrows[1].getWidth()
+        arrows[3].setPosition(Config.screenWidth - arrows[1].getWidth()
                         - Utils.toRes(64),
-                Config.getRES_HEIGHT() - arrows[1].getHeight());
+                Config.screenHeight - arrows[1].getHeight());
 
     }
 
@@ -81,8 +81,8 @@ public class BreakAnimator extends GameObject {
         this.length = length;
         time = 0;
         ending = stat.getHp() > 0.5f ? "pass" : "fail";
-        final PointF center = new PointF((float) Config.getRES_WIDTH() / 2,
-                (float) Config.getRES_HEIGHT() / 2);
+        final PointF center = new PointF((float) Config.screenWidth / 2,
+                (float) Config.screenHeight / 2);
         passfail = SpritePool.getInstance().getCenteredSprite(
                 "section-" + ending, center);
         scene.attachChild(passfail, 0);
@@ -95,21 +95,21 @@ public class BreakAnimator extends GameObject {
         }
         if (showMark) {
             final TextureRegion zeroRect = ResourceManager.getTextureWithPrefix(OsuSkin.get().getScorePrefix(), "0");
-            mark = new Sprite(Config.getRES_WIDTH() - zeroRect.getWidth() * 11, Utils.toRes(5), ResourceManager.getTexture("ranking-" + stat.getMark() + "-small"));
+            mark = new Sprite(Config.screenWidth - zeroRect.getWidth() * 11, Utils.toRes(5), ResourceManager.getTexture("ranking-" + stat.getMark() + "-small"));
             mark.setScale(1.2f);
             scene.attachChild(mark, 0);
         }
     }
 
     private void setBgFade(float percent) {
-        if (dimRectangle != null && !Config.isNoChangeDimInBreaks()) {
-            dimRectangle.setAlpha((1 - Config.getBackgroundBrightness()) * (1 - percent));
+        if (dimRectangle != null && !Config.keepBackgroundDimOnBreaks) {
+            dimRectangle.setAlpha((1 - Config.backgroundBrightness) * (1 - percent));
         }
     }
 
     private void resumeBgFade() {
-        if (dimRectangle != null && !Config.isNoChangeDimInBreaks()) {
-            dimRectangle.setAlpha(1 - Config.getBackgroundBrightness());
+        if (dimRectangle != null && !Config.keepBackgroundDimOnBreaks) {
+            dimRectangle.setAlpha(1 - Config.backgroundBrightness);
         }
     }
 

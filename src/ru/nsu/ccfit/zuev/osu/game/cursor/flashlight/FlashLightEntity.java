@@ -24,7 +24,7 @@ public class FlashLightEntity extends Entity  {
     public static final float defaultMoveDelayS = 0.12f;
 
     public FlashLightEntity() {
-        super(Config.getRES_WIDTH() / 2f, Config.getRES_HEIGHT() / 2f);
+        super(Config.screenWidth / 2f, Config.screenHeight / 2f);
 
         mainSprite = new MainFlashLightSprite();
         dimLayer = new FlashLightDimLayerSprite();
@@ -44,8 +44,8 @@ public class FlashLightEntity extends Entity  {
             unregisterEntityModifier(currentModifier);
         }
 
-        nextPX = FMath.clamp(pX, 0, Config.getRES_WIDTH());
-        nextPY = FMath.clamp(pY, 0, Config.getRES_HEIGHT());
+        nextPX = FMath.clamp(pX, 0, Config.screenWidth);
+        nextPY = FMath.clamp(pY, 0, Config.screenHeight);
 
         if (flFollowDelay == 0) {
             setPosition(nextPX, nextPY);

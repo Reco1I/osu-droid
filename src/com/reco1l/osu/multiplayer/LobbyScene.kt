@@ -17,6 +17,9 @@ import org.anddev.andengine.entity.text.ChangeableText
 import org.anddev.andengine.input.touch.TouchEvent
 import org.anddev.andengine.util.MathUtils
 import ru.nsu.ccfit.zuev.osu.*
+import ru.nsu.ccfit.zuev.osu.Config.screenHeight
+import ru.nsu.ccfit.zuev.osu.Config.screenWidth
+import ru.nsu.ccfit.zuev.osu.Config.forceSkinBackground
 import ru.nsu.ccfit.zuev.osu.helper.AnimSprite
 import ru.nsu.ccfit.zuev.osu.helper.TextButton
 import ru.nsu.ccfit.zuev.osu.menu.LoadingScreen
@@ -73,12 +76,12 @@ object LobbyScene : Scene()
         updateBackground()
 
         // Background dim
-        val dim = Rectangle(0f, 0f, Config.getRES_WIDTH().toFloat(), Config.getRES_HEIGHT().toFloat())
+        val dim = Rectangle(0f, 0f, screenWidth.toFloat(), screenHeight.toFloat())
         dim.setColor(0f, 0f, 0f, 0.5f)
         attachChild(dim)
 
         // Top bar
-        val top = Rectangle(0f, 0f, Config.getRES_WIDTH().toFloat(), 120f)
+        val top = Rectangle(0f, 0f, screenWidth.toFloat(), 120f)
         top.setColor(0f, 0f, 0f, 0.3f)
         attachChild(top)
 
@@ -95,7 +98,7 @@ object LobbyScene : Scene()
         attachChild(roomList, 1)
 
         // Loading
-        loading.setPosition((Config.getRES_WIDTH() - loading.width) / 2f, (Config.getRES_HEIGHT() - loading.height) / 2f)
+        loading.setPosition((screenWidth - loading.width) / 2f, (screenHeight - loading.height) / 2f)
         loading.setRotationCenter(loading.width / 2f, loading.height / 2f)
         loading.setScale(0.4f)
         attachChild(loading)
@@ -152,16 +155,16 @@ object LobbyScene : Scene()
             if (OsuSkin.get().isUseNewLayout)
             {
                 layoutBackButton?.baseApply(it)
-                it.setPosition(0f, Config.getRES_HEIGHT() - it.heightScaled)
+                it.setPosition(0f, screenHeight - it.heightScaled)
             }
-            else it.setPosition(0f, Config.getRES_HEIGHT() - it.height)
+            else it.setPosition(0f, screenHeight - it.height)
 
             attachChild(it)
             registerTouchArea(it)
         }
 
         // Online panel
-        onlinePanel.setPosition(Config.getRES_WIDTH() - 410f - 6f, 6f)
+        onlinePanel.setPosition(screenWidth - 410f - 6f, 6f)
         attachChild(onlinePanel)
 
         createButton = object : TextButton(ResourceManager.getFont("CaptionFont"), "Create New Room")
@@ -316,15 +319,15 @@ object LobbyScene : Scene()
     {
         var texture = ResourceManager.getTexture("menu-background")
 
-        if (!Config.isSafeBeatmapBg())
+        if (!forceSkinBackground)
                 texture = ResourceManager.getTexture("::background") ?: texture
 
         texture?.also {
 
-            val height = it.height * (Config.getRES_WIDTH() / it.width.toFloat())
-            val width = Config.getRES_WIDTH().toFloat()
+            val height = it.height * (screenWidth / it.width.toFloat())
+            val width = screenWidth.toFloat()
 
-            background = SpriteBackground(Sprite(0f, (Config.getRES_HEIGHT() - height) / 2f, width, height, it))
+            background = SpriteBackground(Sprite(0f, (screenHeight - height) / 2f, width, height, it))
         }
     }
 

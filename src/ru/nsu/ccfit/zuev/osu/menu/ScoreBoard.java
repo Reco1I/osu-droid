@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.nsu.ccfit.zuev.osu.*;
 import ru.nsu.ccfit.zuev.osu.game.GameHelper;
 import ru.nsu.ccfit.zuev.osu.helper.MD5Calculator;
-import ru.nsu.ccfit.zuev.osu.helper.StringManager;
+import ru.nsu.ccfit.zuev.osu.helper.StringTable;
 import ru.nsu.ccfit.zuev.osu.online.OnlineManager;
 import ru.nsu.ccfit.zuev.osu.scoring.ScoreLibrary;
 import ru.nsu.ccfit.zuev.osuplus.R;
@@ -249,7 +249,7 @@ public class ScoreBoard extends Entity implements ScrollDetector.IScrollDetector
                             + beatmapRank
                             + " "
                             + playerName + "\n"
-                            + StringManager.format(R.string.menu_score, formatScore(sb, currentTotalScore), combo);
+                            + StringTable.format(R.string.menu_score, formatScore(sb, currentTotalScore), combo);
 
                     if (i < scores.size() - 1) {
                         String[] nextData = scores.get(i + 1).split("\\s+");
@@ -321,7 +321,7 @@ public class ScoreBoard extends Entity implements ScrollDetector.IScrollDetector
                                 + " "
                                 + scoreSet.getString(scoreSet.getColumnIndexOrThrow("playername"))
                                 + "\n"
-                                + StringManager.format(R.string.menu_score, totalScore, scoreSet.getInt(scoreSet.getColumnIndexOrThrow("combo")));
+                                + StringTable.format(R.string.menu_score, totalScore, scoreSet.getInt(scoreSet.getColumnIndexOrThrow("combo")));
 
                         if (i < scoreSet.getCount() - 1) {
                             scoreSet.moveToPosition(i + 1);
@@ -413,7 +413,7 @@ public class ScoreBoard extends Entity implements ScrollDetector.IScrollDetector
 
             y += camY;
             camY += velocityY * pSecondsElapsed;
-            maxY = y - 0.8f * (Config.getRES_HEIGHT() - 110 - (height - 32));
+            maxY = y - 0.8f * (Config.screenHeight - 110 - (height - 32));
 
             if (camY <= -146 && velocityY < 0 || camY > maxY && velocityY > 0) {
                 camY -= velocityY * pSecondsElapsed;
@@ -584,7 +584,7 @@ public class ScoreBoard extends Entity implements ScrollDetector.IScrollDetector
             this.scoreID = scoreID;
 
             var shouldLoadAvatar = showOnlineScores
-                    && Config.getLoadAvatar()
+                    && Config.loadAvatarsInScoreboard
                     && avaURL != null
                     && avatarExecutor != null;
 

@@ -31,6 +31,10 @@ import org.anddev.andengine.input.touch.TouchEvent
 import org.anddev.andengine.util.MathUtils
 import org.json.JSONArray
 import ru.nsu.ccfit.zuev.osu.Config
+import ru.nsu.ccfit.zuev.osu.Config.screenHeight
+import ru.nsu.ccfit.zuev.osu.Config.screenWidth
+import ru.nsu.ccfit.zuev.osu.Config.forceSkinBackground
+import ru.nsu.ccfit.zuev.osu.Config.shrinkPlayfieldDownwards
 import ru.nsu.ccfit.zuev.osu.DifficultyAlgorithm
 import ru.nsu.ccfit.zuev.osu.Osu
 import ru.nsu.ccfit.zuev.osu.Osu.Engine
@@ -139,12 +143,12 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
         isBackgroundEnabled = true
 
         // Background dim
-        val dim = Rectangle(0f, 0f, Config.getRES_WIDTH().toFloat(), Config.getRES_HEIGHT().toFloat())
+        val dim = Rectangle(0f, 0f, screenWidth.toFloat(), screenHeight.toFloat())
         dim.setColor(0f, 0f, 0f, 0.5f)
         attachChild(dim, 0)
 
         // Top bar
-        val top = Rectangle(0f, 0f, Config.getRES_WIDTH().toFloat(), 120f)
+        val top = Rectangle(0f, 0f, screenWidth.toFloat(), 120f)
         top.setColor(0f, 0f, 0f, 0.3f)
         attachChild(top)
 
@@ -159,7 +163,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
         // Track selection button
         trackButton = BeatmapButton().also {
 
-            it.setPosition(Config.getRES_WIDTH() - it.width + 20f, 130f + 40f)
+            it.setPosition(screenWidth - it.width + 20f, 130f + 40f)
 
             registerTouchArea(it)
             attachChild(it)
@@ -233,7 +237,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
             it.width = 400f
             it.setColor(0.2f, 0.9f, 0.2f)
-            it.setPosition(Config.getRES_WIDTH() - it.width - 20f, Config.getRES_HEIGHT() - it.height - 20f)
+            it.setPosition(screenWidth - it.width - 20f, screenHeight - it.height - 20f)
 
             registerTouchArea(it)
             attachChild(it)
@@ -297,7 +301,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
             it.width = 400f
             it.setColor(0.2f, 0.2f, 0.2f)
-            it.setPosition(Config.getRES_WIDTH() - it.width - 20f, readyButton!!.y - it.height - 20f)
+            it.setPosition(screenWidth - it.width - 20f, readyButton!!.y - it.height - 20f)
 
             registerTouchArea(it)
             attachChild(it)
@@ -357,9 +361,9 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
             if (OsuSkin.get().isUseNewLayout)
             {
                 layoutBackButton?.baseApply(it)
-                it.setPosition(0f, Config.getRES_HEIGHT() - it.heightScaled)
+                it.setPosition(0f, screenHeight - it.heightScaled)
             }
-            else it.setPosition(0f, Config.getRES_HEIGHT() - it.height)
+            else it.setPosition(0f, screenHeight - it.height)
 
             registerTouchArea(it)
             attachChild(it)
@@ -411,22 +415,22 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
             if (OsuSkin.get().isUseNewLayout)
             {
                 layoutMods?.baseApply(it)
-                it.setPosition(backButton!!.x + backButton!!.width, Config.getRES_HEIGHT() - it.heightScaled)
+                it.setPosition(backButton!!.x + backButton!!.width, screenHeight - it.heightScaled)
             }
-            else it.setPosition(backButton!!.x + backButton!!.width, Config.getRES_HEIGHT() - 90f)
+            else it.setPosition(backButton!!.x + backButton!!.width, screenHeight - 90f)
         }
 
         // Difficulty switcher
         difficultySwitcher = DifficultyAlgorithmSwitcher().also {
 
-            it.setPosition(modsButton!!.x + modsButton!!.widthScaled, Config.getRES_HEIGHT() - it.heightScaled)
+            it.setPosition(modsButton!!.x + modsButton!!.widthScaled, screenHeight - it.heightScaled)
 
             registerTouchArea(it)
             attachChild(it)
         }
 
         // Online panel
-        onlinePanel.setPosition(Config.getRES_WIDTH() - 410f - 6f, 6f)
+        onlinePanel.setPosition(screenWidth - 410f - 6f, 6f)
         attachChild(onlinePanel)
 
         sortChildren()
@@ -455,13 +459,13 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
     private fun updateBackground(path: String?)
     {
-        val texture = if (path != null && !Config.isSafeBeatmapBg())
+        val texture = if (path != null && !forceSkinBackground)
             ResourceManager.loadBackground(path) else ResourceManager.getTexture("menu-background")
 
-        val height = texture.height * Config.getRES_WIDTH() / texture.width.toFloat()
-        val width = Config.getRES_WIDTH().toFloat()
+        val height = texture.height * screenWidth / texture.width.toFloat()
+        val width = screenWidth.toFloat()
 
-        background = SpriteBackground(Sprite(0f, (Config.getRES_HEIGHT() - height) / 2f, width, height, texture))
+        background = SpriteBackground(Sprite(0f, (screenHeight - height) / 2f, width, height, texture))
     }
 
     private fun updateInformation()
@@ -564,7 +568,7 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
                         "%.1f-%.1f".format(track.bpmMin, track.bpmMax)
                 } 
                 CS: ${track.circleSize} AR: ${track.approachRate} OD: ${track.overallDifficulty} HP: ${track.hpDrain} Star Rating: ${
-                    if (Config.getDifficultyAlgorithm() == DifficultyAlgorithm.standard) track.standardDifficulty
+                    if (Config.difficultyAlgorithm == DifficultyAlgorithm.standard) track.standardDifficulty
                     else track.droidDifficulty
                 }
             """.trimIndent()
@@ -649,8 +653,8 @@ object RoomScene : Scene(), IRoomEventListener, IPlayerEventListener
 
             setZoomFactorDirect(1f)
 
-            if (Config.isShrinkPlayfieldDownwards())
-                setCenterDirect(Config.getRES_WIDTH() / 2f, Config.getRES_HEIGHT() / 2f)
+            if (shrinkPlayfieldDownwards)
+                setCenterDirect(screenWidth / 2f, screenHeight / 2f)
         }
 
         if (!isConnected)

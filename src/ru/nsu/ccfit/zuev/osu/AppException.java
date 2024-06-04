@@ -29,7 +29,7 @@ import java.net.UnknownHostException;
 import java.util.Date;
 
 import ru.nsu.ccfit.zuev.audio.serviceAudio.SaveServiceObject;
-import ru.nsu.ccfit.zuev.osu.helper.StringManager;
+import ru.nsu.ccfit.zuev.osu.helper.StringTable;
 import ru.nsu.ccfit.zuev.osuplus.R;
 
 /**
@@ -203,7 +203,7 @@ public class AppException extends Exception implements Thread.UncaughtExceptionH
             // 判断是否挂载了SD卡
             String storageState = Environment.getExternalStorageState();
             if (storageState.equals(Environment.MEDIA_MOUNTED)) {
-                savePath = Config.getCorePath() + File.separator + "Log/";
+                savePath = Config.mainDirectory + File.separator + "Log/";
                 File file = new File(savePath);
                 if (!file.exists()) {
                     file.mkdirs();
@@ -287,7 +287,7 @@ public class AppException extends Exception implements Thread.UncaughtExceptionH
         new Thread() {
             public void run() {
                 Looper.prepare();
-                Toast.makeText(Osu.Activity, StringManager.get(R.string.crash), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Osu.Activity, StringTable.get(R.string.crash), Toast.LENGTH_SHORT).show();
                 Looper.loop();
             }
 

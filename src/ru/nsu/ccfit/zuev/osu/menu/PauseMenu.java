@@ -60,10 +60,9 @@ public class PauseMenu implements IOnMenuItemClickListener {
 
         if (tex != null) {
             float height = tex.getHeight();
-            height *= Config.getRES_WIDTH() / (float) (tex.getWidth());
+            height *= Config.screenWidth / (float) (tex.getWidth());
             final Sprite bg = new Sprite(0,
-                    (Config.getRES_HEIGHT() - height) / 2,
-                    Config.getRES_WIDTH(), height, tex);
+                    (Config.screenHeight - height) / 2, Config.screenWidth, height, tex);
             scene.attachChild(bg, 0);
         }
 

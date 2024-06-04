@@ -84,7 +84,7 @@ public class BassAudioFunc {
 
         if (BASS.BASS_ChannelPlay(channel, false))
         {
-            setVolume(Config.getBgmVolume());
+            setVolume(Config.musicVolume);
             return true;
         }
         return false;
@@ -189,7 +189,7 @@ public class BassAudioFunc {
             setEndSync();
             if (BASS.BASS_ChannelPlay(channel, true))
             {
-                setVolume(Config.getBgmVolume());
+                setVolume(Config.musicVolume);
                 return true;
             }
         }

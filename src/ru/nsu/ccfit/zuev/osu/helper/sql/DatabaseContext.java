@@ -28,7 +28,7 @@ public class DatabaseContext extends ContextWrapper {
 
     @Override
     public File getDatabasePath(String name) {
-        String dbfile = Config.getCorePath() + "databases/" + name;
+        String dbfile = Config.mainDirectory + "databases/" + name;
         if (!dbfile.endsWith(".db")) {
             dbfile += ".db";
         }
@@ -47,7 +47,7 @@ public class DatabaseContext extends ContextWrapper {
                 Debug.e(e);
             }
         }
-        final String olddbfile = Config.getCorePath() + File.separator + "databases" + File.separator + name;
+        final String olddbfile = Config.mainDirectory + File.separator + "databases" + File.separator + name;
         final File olddb2 = new File(olddbfile);
         if (result.exists() == false && olddb2.exists() == true) {
             try {
@@ -56,7 +56,7 @@ public class DatabaseContext extends ContextWrapper {
                 Debug.e(e);
             }
         }
-        final String olddbfile2 = Config.getCorePath() + File.separator + "databases" + File.separator + "osudroid.db";
+        final String olddbfile2 = Config.mainDirectory + File.separator + "databases" + File.separator + "osudroid.db";
         final File olddb3 = new File(olddbfile2);
         if (result.exists() == false && olddb3.exists() == true) {
             try {

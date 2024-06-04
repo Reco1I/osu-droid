@@ -54,12 +54,12 @@ public class Utils {
 
     public static PointF trackToRealCoords(final PointF coords) {
         final PointF pos = scaleToReal(coords);
-        pos.y += (Config.getRES_HEIGHT() - toRes(Constants.MAP_ACTUAL_HEIGHT)) / 2f;
-        pos.x += (Config.getRES_WIDTH() - toRes(Constants.MAP_ACTUAL_WIDTH)) / 2f;
+        pos.y += (Config.screenHeight - toRes(Constants.MAP_ACTUAL_HEIGHT)) / 2f;
+        pos.x += (Config.screenWidth - toRes(Constants.MAP_ACTUAL_WIDTH)) / 2f;
         if (GameHelper.isHardrock()) {
-            pos.y -= (float) Config.getRES_HEIGHT() / 2;
+            pos.y -= (float) Config.screenHeight / 2;
             pos.y *= -1;
-            pos.y += (float) Config.getRES_HEIGHT() / 2;
+            pos.y += (float) Config.screenHeight / 2;
         }
 		/*if (pos.y < 18) {
 			pos.y = 18;
@@ -72,17 +72,17 @@ public class Utils {
 
     public static void changeTrackToRealCoords(final PointF coords) {
         final PointF pos = scaleToRealC(coords);
-        pos.y += (Config.getRES_HEIGHT() - toRes(Constants.MAP_ACTUAL_HEIGHT)) / 2f;
-        pos.x += (Config.getRES_WIDTH() - toRes(Constants.MAP_ACTUAL_WIDTH)) / 2f;
+        pos.y += (Config.screenHeight - toRes(Constants.MAP_ACTUAL_HEIGHT)) / 2f;
+        pos.x += (Config.screenWidth - toRes(Constants.MAP_ACTUAL_WIDTH)) / 2f;
         if (GameHelper.isHardrock()) {
-            pos.y -= (float) Config.getRES_HEIGHT() / 2;
+            pos.y -= (float) Config.screenHeight / 2;
             pos.y *= -1;
-            pos.y += (float) Config.getRES_HEIGHT() / 2;
+            pos.y += (float) Config.screenHeight / 2;
         }
     }
 
     public static PointF realToTrackCoords(final PointF coords) {
-        return realToTrackCoords(coords, Config.getRES_WIDTH(), Config.getRES_HEIGHT(), false);
+        return realToTrackCoords(coords, Config.screenWidth, Config.screenHeight, false);
     }
 
     public static PointF realToTrackCoords(final PointF coords, float width, float height, boolean isOld) {
@@ -98,7 +98,7 @@ public class Utils {
     }
 
     public static short flipY(final short y) {
-        final int height = Config.getRES_HEIGHT() / 2;
+        final int height = Config.screenHeight / 2;
         return (short) (((y - height) * -1) + height);
     }
 
@@ -217,11 +217,11 @@ public class Utils {
     }
 
     static public int toRes(final int i) {
-        return i / Config.getTextureQuality();
+        return i;
     }
 
     public static float toRes(final float i) {
-        return i / Config.getTextureQuality();
+        return i;
     }
 
     public static String toFSValidString(final String s) {

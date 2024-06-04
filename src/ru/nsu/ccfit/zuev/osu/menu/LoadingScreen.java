@@ -36,12 +36,11 @@ public class LoadingScreen implements IUpdateHandler {
         final TextureRegion tex = ResourceManager.getTexture("menu-background");
         if (tex != null) {
             float height = tex.getHeight();
-            height *= Config.getRES_WIDTH()
+            height *= Config.screenWidth
                     / (float) tex.getWidth();
             final Sprite menuBg = new Sprite(
                     0,
-                    (Config.getRES_HEIGHT() - height) / 2,
-                    Config.getRES_WIDTH(),
+                    (Config.screenHeight - height) / 2, Config.screenWidth,
                     height, tex);
             scene.setBackground(new SpriteBackground(menuBg));
         } else {
@@ -50,8 +49,7 @@ public class LoadingScreen implements IUpdateHandler {
         }
 
         final TextureRegion loadingTexture = ResourceManager.getTexture("loading-title");
-        final Sprite loadingTitle = new Sprite(0, 0,
-                Config.getRES_WIDTH(), loadingTexture.getHeight(), loadingTexture);
+        final Sprite loadingTitle = new Sprite(0, 0, Config.screenWidth, loadingTexture.getHeight(), loadingTexture);
         scene.attachChild(loadingTitle);
 
         logText = new ChangeableText(0, 0, ResourceManager.getFont("logFont"), "", 5);
@@ -60,8 +58,8 @@ public class LoadingScreen implements IUpdateHandler {
         percentage = -1;
 
         final TextureRegion ltexture = ResourceManager.getTexture("loading");
-        final Sprite circle = new CentredSprite(Config.getRES_WIDTH() / 2f,
-                Config.getRES_HEIGHT() / 2f, ltexture);
+        final Sprite circle = new CentredSprite(Config.screenWidth / 2f,
+                Config.screenHeight / 2f, ltexture);
         circle.registerEntityModifier(new LoopEntityModifier(
                 new RotationByModifier(2.0f, 360)));
         scene.attachChild(circle);
@@ -82,8 +80,8 @@ public class LoadingScreen implements IUpdateHandler {
         if (ToastLogger.getPercentage() != percentage) {
             percentage = ToastLogger.getPercentage();
             logText.setText(String.format("%d%%", (int) percentage));
-            logText.setPosition(Config.getRES_WIDTH() / 2f - logText.getWidth()
-                    / 2, Config.getRES_HEIGHT() - Utils.toRes(100));
+            logText.setPosition(Config.screenWidth / 2f - logText.getWidth()
+                    / 2, Config.screenHeight - Utils.toRes(100));
         }
     }
 

@@ -6,7 +6,7 @@ import org.anddev.andengine.input.touch.TouchEvent
 import org.anddev.andengine.input.touch.detector.ScrollDetector
 import org.anddev.andengine.input.touch.detector.ScrollDetector.IScrollDetectorListener
 import org.anddev.andengine.input.touch.detector.SurfaceScrollDetector
-import ru.nsu.ccfit.zuev.osu.Config
+import ru.nsu.ccfit.zuev.osu.Config.screenHeight
 import ru.nsu.ccfit.zuev.osu.Utils
 import kotlin.math.abs
 import kotlin.math.sign
@@ -66,7 +66,7 @@ abstract class ScrollableList : Scene(), IScrollDetectorListener
 
             y += camY
             camY += velocityY * secondsElapsed
-            maxY = y - 0.8f * (Config.getRES_HEIGHT() - 110 - (itemHeight - 32))
+            maxY = y - 0.8f * (screenHeight - 110 - (itemHeight - 32))
 
             if (camY <= -146 && velocityY < 0 || camY > maxY && velocityY > 0)
             {

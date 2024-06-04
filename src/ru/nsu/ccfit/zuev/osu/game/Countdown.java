@@ -59,7 +59,7 @@ public class Countdown extends GameObject {
                 new FadeOutModifier(COUNTDOWN_LENGTH * speed / 18)));
 
         count2 = new Sprite(0, 0, ResourceManager.getTexture("count2"));
-        count2.setPosition(Config.getRES_WIDTH() - count2.getWidth(), center.y - count2.getHeight() / 2);
+        count2.setPosition(Config.screenWidth - count2.getWidth(), center.y - count2.getHeight() / 2);
         count2.setVisible(false);
         count2.setIgnoreUpdate(true);
         count2.registerEntityModifier(new SequenceEntityModifier(

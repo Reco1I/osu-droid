@@ -22,7 +22,7 @@ public class CursorEntity extends Entity {
         TextureRegion cursorTex = ResourceManager.getTexture("cursor");
         cursorSprite = new CursorSprite(-cursorTex.getWidth() / 2f, -cursorTex.getWidth() / 2f, cursorTex);
 
-        if (Config.isUseParticles()) {
+        if (Config.showCursorTrail) {
             TextureRegion trailTex = ResourceManager.getTexture("cursortrail");
 
             particleOffsetX = -trailTex.getWidth() / 2f;

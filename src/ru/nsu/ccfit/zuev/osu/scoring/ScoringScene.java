@@ -67,12 +67,11 @@ public class ScoringScene {
             tex = ResourceManager.getTexture("menu-background");
         }
         float height = tex.getHeight();
-        height *= Config.getRES_WIDTH() / (float) tex.getWidth();
-        final Sprite bg = new Sprite(0, (Config.getRES_HEIGHT() - height) / 2,
-                Config.getRES_WIDTH(), height, tex);
+        height *= Config.screenWidth / (float) tex.getWidth();
+        final Sprite bg = new Sprite(0, (Config.screenHeight - height) / 2, Config.screenWidth, height, tex);
         scene.setBackground(new SpriteBackground(bg));
 
-        final Rectangle bgTopRect = new Rectangle(0, 0, Config.getRES_WIDTH(), Utils.toRes(100));
+        final Rectangle bgTopRect = new Rectangle(0, 0, Config.screenWidth, Utils.toRes(100));
         bgTopRect.setColor(0, 0, 0, 0.8f);
         scene.attachChild(bgTopRect);
 
@@ -126,7 +125,7 @@ public class ScoringScene {
 
         final Sprite rankingText = new Sprite(Utils.toRes(580), 0,
                 ResourceManager.getTexture("ranking-title"));
-        rankingText.setPosition((float) (Config.getRES_WIDTH() * 5) / 6 - rankingText.getWidth() / 2, 0);
+        rankingText.setPosition((float) (Config.screenWidth * 5) / 6 - rankingText.getWidth() / 2, 0);
         scene.attachChild(rankingText);
 
         StringBuilder scoreStr = new StringBuilder(String.valueOf(stat.getTotalScoreWithMultiplier()));
@@ -187,7 +186,7 @@ public class ScoringScene {
             mark.registerEntityModifier(new ParallelEntityModifier(
                     new FadeInModifier(2), new ScaleModifier(2, 2, 1)));
         }
-        mark.setPosition((float) (Config.getRES_WIDTH() * 5) / 6 - mark.getWidth() / 2, 80);
+        mark.setPosition((float) (Config.screenWidth * 5) / 6 - mark.getWidth() / 2, 80);
 
         final Sprite backBtn = new Sprite(Utils.toRes(580), Utils.toRes(490),
                 ResourceManager.getTexture("ranking-back")) {
@@ -209,7 +208,7 @@ public class ScoringScene {
             }
 
         };
-        backBtn.setPosition(Config.getRES_WIDTH() - backBtn.getWidth() - 10, Config.getRES_HEIGHT() - backBtn.getHeight() - 10);
+        backBtn.setPosition(Config.screenWidth - backBtn.getWidth() - 10, Config.screenHeight - backBtn.getHeight() - 10);
         scene.attachChild(backBtn);
 
         Sprite retryBtn = null;
@@ -297,10 +296,10 @@ public class ScoringScene {
             scene.attachChild(perfect);
         }
         if (track != null && retryBtn != null) {
-            retryBtn.setPosition(Config.getRES_WIDTH() - backBtn.getWidth() - 10, backBtn.getY() - retryBtn.getHeight() - 10);
+            retryBtn.setPosition(Config.screenWidth - backBtn.getWidth() - 10, backBtn.getY() - retryBtn.getHeight() - 10);
             scene.attachChild(retryBtn);
         } else if (replay != null && replayBtn != null) {
-            replayBtn.setPosition(Config.getRES_WIDTH() - backBtn.getWidth() - 10, backBtn.getY() - replayBtn.getHeight() - 10);
+            replayBtn.setPosition(Config.screenWidth - backBtn.getWidth() - 10, backBtn.getY() - replayBtn.getHeight() - 10);
             scene.attachChild(replayBtn);
         }
 
@@ -393,8 +392,8 @@ public class ScoringScene {
             scene.attachChild(modSprite);
         }
 
-        String infoStr = (trackInfo.getBeatmap().getArtistUnicode() == null || Config.isForceRomanized() ? trackInfo.getBeatmap().getArtist() : trackInfo.getBeatmap().getArtistUnicode()) + " - " +
-                (trackInfo.getBeatmap().getTitleUnicode() == null || Config.isForceRomanized() ? trackInfo.getBeatmap().getTitle() : trackInfo.getBeatmap().getTitleUnicode()) + " [" + trackInfo.getMode() + "]";
+        String infoStr = (trackInfo.getBeatmap().getArtistUnicode() == null || Config.forceMetadataRomanization ? trackInfo.getBeatmap().getArtist() : trackInfo.getBeatmap().getArtistUnicode()) + " - " +
+                (trackInfo.getBeatmap().getTitleUnicode() == null || Config.forceMetadataRomanization ? trackInfo.getBeatmap().getTitle() : trackInfo.getBeatmap().getTitleUnicode()) + " [" + trackInfo.getMode() + "]";
         String mapperStr = "Beatmap by " + trackInfo.getCreator();
         String playerStr = "Played by " + stat.getPlayerName() + " on " +
                 new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault()).format(new java.util.Date(stat.getTime()));
@@ -439,7 +438,7 @@ public class ScoringScene {
         final Text playerInfo = new Text(Utils.toRes(4), mapperInfo.getY() + mapperInfo.getHeight() + Utils.toRes(2),
                 ResourceManager.getFont("smallFont"), playerStr);
         //calculatePP
-        if (Config.isDisplayScoreStatistics()){
+        if (Config.showAdvancedStatisticsOnResults){
             StringBuilder ppinfo = new StringBuilder();
 
             Beatmap beatmap;
@@ -449,7 +448,7 @@ public class ScoringScene {
             }
 
             if (beatmap != null) {
-                switch (Config.getDifficultyAlgorithm()) {
+                switch (Config.difficultyAlgorithm) {
                     case droid -> {
                         var difficultyAttributes = BeatmapDifficultyCalculator.calculateDroidDifficulty(beatmap, stat);
 
@@ -496,10 +495,10 @@ public class ScoringScene {
                 ppinfo.append(String.format(Locale.ENGLISH, "Unstable Rate: %.2f", stat.getUnstableRate()));
             }
 
-            final Text ppInfo = new Text(Utils.toRes(4), Config.getRES_HEIGHT() - playerInfo.getHeight() - Utils.toRes(2),
+            final Text ppInfo = new Text(Utils.toRes(4), Config.screenHeight - playerInfo.getHeight() - Utils.toRes(2),
                     ResourceManager.getFont("smallFont"), ppinfo.toString());
-            ppInfo.setPosition(Utils.toRes(244), Config.getRES_HEIGHT() - ppInfo.getHeight() - Utils.toRes(2));
-            final Rectangle statisticRectangle = new Rectangle(Utils.toRes(240), Config.getRES_HEIGHT() - ppInfo.getHeight() - Utils.toRes(4), ppInfo.getWidth() + Utils.toRes(12), ppInfo.getHeight() + Utils.toRes(4));
+            ppInfo.setPosition(Utils.toRes(244), Config.screenHeight - ppInfo.getHeight() - Utils.toRes(2));
+            final Rectangle statisticRectangle = new Rectangle(Utils.toRes(240), Config.screenHeight - ppInfo.getHeight() - Utils.toRes(4), ppInfo.getWidth() + Utils.toRes(12), ppInfo.getHeight() + Utils.toRes(4));
             statisticRectangle.setColor(0, 0, 0, 0.5f);
             scene.attachChild(statisticRectangle);
             scene.attachChild(ppInfo);
@@ -524,7 +523,7 @@ public class ScoringScene {
                     OnlineManager.getInstance().isReadyToSend()) {
 
                 if (Osu.GameScene.hasFailed ||
-                        (Multiplayer.isMultiplayer && !Config.isSubmitScoreOnMultiplayer()))
+                        (Multiplayer.isMultiplayer && !Config.submitScoresOnMultiplayer))
                     return;
 
                 boolean hasUnrankedMod = SmartIterator.wrap(stat.getMod().iterator()).applyFilter(m -> m.unranked).hasNext();

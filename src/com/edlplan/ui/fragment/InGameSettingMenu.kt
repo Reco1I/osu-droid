@@ -17,6 +17,7 @@ import com.reco1l.osu.multiplayer.Multiplayer
 import com.reco1l.toolkt.android.dp
 import org.anddev.andengine.input.touch.TouchEvent
 import ru.nsu.ccfit.zuev.osu.Config
+import ru.nsu.ccfit.zuev.osu.Config.showVideoBackground
 import ru.nsu.ccfit.zuev.osu.Osu
 import ru.nsu.ccfit.zuev.osu.game.cursor.flashlight.FlashLightEntity
 import ru.nsu.ccfit.zuev.osu.game.mods.GameMod
@@ -131,27 +132,27 @@ class InGameSettingMenu : BaseFragment() {
         findViewById<View>(R.id.frg_background)!!.isClickable = false
 
         findViewById<CheckBox>(R.id.enableStoryboard)!!.apply {
-            isChecked = Config.isEnableStoryboard()
+            isChecked = Config.isShowStoryboard()
             setOnCheckedChangeListener { _, isChecked ->
-                Config.setEnableStoryboard(isChecked)
+                showStoryboard = isChecked
                 PreferenceManager.getDefaultSharedPreferences(context).edit()
                     .putBoolean("enableStoryboard", isChecked).commit()
             }
         }
 
         findViewById<CheckBox>(R.id.showScoreboard)!!.apply {
-            isChecked = Config.isShowScoreboard()
+            isChecked = Config.showScoreboard
             setOnCheckedChangeListener { _, isChecked ->
-                Config.setShowScoreboard(isChecked)
+                Config.showScoreboard = isChecked
                 PreferenceManager.getDefaultSharedPreferences(context).edit()
                     .putBoolean("showscoreboard", isChecked).commit()
             }
         }
 
         findViewById<CheckBox>(R.id.enableVideo)!!.apply {
-            isChecked = Config.isVideoEnabled()
+            isChecked = Config.showVideoBackground
             setOnCheckedChangeListener { _, isChecked ->
-                Config.setVideoEnabled(isChecked)
+                showVideoBackground = isChecked
                 PreferenceManager.getDefaultSharedPreferences(context).edit()
                     .putBoolean("enableVideo", isChecked).commit()
             }
@@ -199,7 +200,7 @@ class InGameSettingMenu : BaseFragment() {
                     val progress = seekBar!!.progress
                     findViewById<TextView>(R.id.bgBrightnessText)!!.text = "$progress%"
 
-                    Config.setBackgroundBrightness(seekBar.progress / 100f)
+                    Config.backgroundBrightness = seekBar.progress / 100f
                     PreferenceManager.getDefaultSharedPreferences(context!!).edit().putInt("bgbrightness", progress).commit()
                 }
             }

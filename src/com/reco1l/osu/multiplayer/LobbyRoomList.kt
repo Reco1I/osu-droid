@@ -15,7 +15,7 @@ import org.anddev.andengine.entity.sprite.Sprite
 import org.anddev.andengine.entity.text.Text
 import org.anddev.andengine.input.touch.TouchEvent
 import org.anddev.andengine.util.MathUtils
-import ru.nsu.ccfit.zuev.osu.Config
+import ru.nsu.ccfit.zuev.osu.Config.screenWidth
 import ru.nsu.ccfit.zuev.osu.ResourceManager
 import ru.nsu.ccfit.zuev.osu.ToastLogger
 import ru.nsu.ccfit.zuev.osu.menu.LoadingScreen
@@ -86,7 +86,7 @@ class LobbyRoomList : ScrollableList()
 
         camY = -146f
 
-        val sprite = object : Sprite(Config.getRES_WIDTH() - texture.width - 20f, 0f, texture)
+        val sprite = object : Sprite(screenWidth - texture.width - 20f, 0f, texture)
         {
             private var moved = false
             private var dx = 0f

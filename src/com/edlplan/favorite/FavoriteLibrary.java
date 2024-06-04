@@ -54,7 +54,7 @@ public class FavoriteLibrary {
     }
 
     public void load() {
-        String jsonPath = Config.getCorePath() + "json/favorite.json";
+        String jsonPath = Config.mainDirectory + "json/favorite.json";
         json = new File(jsonPath);
         try {
             ensureFile(json);

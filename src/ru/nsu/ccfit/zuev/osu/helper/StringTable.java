@@ -10,7 +10,7 @@ import ru.nsu.ccfit.zuev.osu.Osu;
 /**
  * Reordered by Reco1l
  */
-public class StringManager {
+public class StringTable {
 
 
     private static StringBuilder _builder;
@@ -18,7 +18,7 @@ public class StringManager {
     private static Formatter _formatter;
 
 
-    private StringManager() {
+    private StringTable() {
         // Prevent instantiation
     }
 

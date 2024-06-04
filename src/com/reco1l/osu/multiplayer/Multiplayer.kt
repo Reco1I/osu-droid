@@ -11,7 +11,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONArray
-import ru.nsu.ccfit.zuev.osu.Config
+import ru.nsu.ccfit.zuev.osu.Config.mainDirectory
 import ru.nsu.ccfit.zuev.osu.Osu
 import ru.nsu.ccfit.zuev.osu.Osu.Engine
 import ru.nsu.ccfit.zuev.osu.MainActivity
@@ -72,7 +72,7 @@ object Multiplayer
         get() = room != null
 
 
-    private val LOG_FILE = File("${Config.getDefaultCorePath()}/Log", "multi_log.txt").apply {
+    private val LOG_FILE = File("$mainDirectory/Log", "multi_log.txt").apply {
 
         parentFile?.mkdirs()
 

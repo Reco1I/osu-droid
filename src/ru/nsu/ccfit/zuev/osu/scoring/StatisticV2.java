@@ -17,7 +17,6 @@ import ru.nsu.ccfit.zuev.osu.game.GameHelper;
 import ru.nsu.ccfit.zuev.osu.game.cursor.flashlight.FlashLightEntity;
 import ru.nsu.ccfit.zuev.osu.game.mods.GameMod;
 import ru.nsu.ccfit.zuev.osu.menu.ScoreBoardItem;
-import ru.nsu.ccfit.zuev.osu.online.OnlineManager;
 
 public class StatisticV2 implements Serializable {
     private static final long serialVersionUID = 8339570462000129479L;
@@ -39,7 +38,7 @@ public class StatisticV2 implements Serializable {
     private float hp = 1;
     private float diffModifier = 1;
     private EnumSet<GameMod> mod = EnumSet.noneOf(GameMod.class);
-    private String playerName = Config.getOnlineUsername();
+    private String playerName = Config.getUsername();
     private String fileName = "";
     private String replayName = "";
     private int forcedScore = -1;
@@ -108,7 +107,7 @@ public class StatisticV2 implements Serializable {
             life = 3;
         }
 
-        setPlayerName(Config.getOnlineUsername());
+        setPlayerName(Config.getUsername());
         computeModScoreMultiplier();
     }
 

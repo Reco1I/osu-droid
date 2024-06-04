@@ -8,7 +8,7 @@ import org.anddev.andengine.entity.text.ChangeableText
 import org.anddev.andengine.entity.text.Text
 import org.anddev.andengine.input.touch.TouchEvent
 import org.anddev.andengine.util.HorizontalAlign
-import ru.nsu.ccfit.zuev.osu.Config
+import ru.nsu.ccfit.zuev.osu.Config.screenWidth
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.round
@@ -176,7 +176,7 @@ class SendingPanel(
     }
 
     private fun resetPosition() {
-        setPosition((Config.getRES_WIDTH() - width) / 2f, -height)
+        setPosition((screenWidth - width) / 2f, -height)
     }
 
     private fun updateColumn(column: Column, value: String, difference: Float, prevColumn: Column? = null) = column.apply {

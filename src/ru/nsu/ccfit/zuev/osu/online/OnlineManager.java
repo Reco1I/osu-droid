@@ -70,10 +70,10 @@ public class OnlineManager {
     }
 
     public void Init(Context context) {
-        this.stayOnline = Config.isStayOnline();
-        this.username = Config.getOnlineUsername();
-        this.password = Config.getOnlinePassword();
-        this.deviceID = Config.getOnlineDeviceID();
+        this.stayOnline = Config.isOnlineConnectionEnabled();
+        this.username = Config.getUsername();
+        this.password = Config.password;
+        this.deviceID = Config.deviceUUID;
         this.context = context;
     }
 
@@ -337,7 +337,7 @@ public class OnlineManager {
         String filename = MD5Calculator.getStringMD5(avatarURL);
         Debug.i("Loading avatar from " + avatarURL);
         Debug.i("filename = " + filename);
-        File picfile = new File(Config.getCachePath(), filename);
+        File picfile = new File(Osu.Activity.getCacheDir(), filename);
         OnlineFileOperator.downloadFile(avatarURL, picfile.getAbsolutePath(), true);
 
         var bitmap = loadAvatarToBitmap(picfile);
@@ -357,7 +357,7 @@ public class OnlineManager {
         } else {
             // Avatar not found, download the default avatar
             String defaultAvatarFilename = MD5Calculator.getStringMD5(defaultAvatarURL);
-            File avatarFile = new File(Config.getCachePath(), defaultAvatarFilename);
+            File avatarFile = new File(Osu.Activity.getCacheDir(), defaultAvatarFilename);
             OnlineFileOperator.downloadFile(defaultAvatarURL, avatarFile.getAbsolutePath());
 
             bitmap = loadAvatarToBitmap(avatarFile);

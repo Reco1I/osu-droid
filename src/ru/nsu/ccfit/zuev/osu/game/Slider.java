@@ -209,7 +209,7 @@ public class Slider extends GameObject {
         approachCircle.setAlpha(0);
         Utils.putSpriteAnchorCenter(pos, approachCircle);
         if (GameHelper.isHidden()) {
-            approachCircle.setVisible(Config.isShowFirstApproachCircle() && isFirstNote);
+            approachCircle.setVisible(Config.showFirstApproachCircleOnHidden && isFirstNote);
         }
 
         // End circle
@@ -221,11 +221,11 @@ public class Slider extends GameObject {
         endCircle.setColor(r, g, b);
         endCircle.setAlpha(0);
         endPosition = endPos;
-        Utils.putSpriteAnchorCenter(Config.isSnakingInSliders() ? pos : endPos, endCircle);
+        Utils.putSpriteAnchorCenter(Config.useSnakingInSliders ? pos : endPos, endCircle);
 
         endOverlay.setScale(scale);
         endOverlay.setAlpha(0);
-        Utils.putSpriteAnchorCenter(Config.isSnakingInSliders() ? pos : endPos, endOverlay);
+        Utils.putSpriteAnchorCenter(Config.useSnakingInSliders ? pos : endPos, endOverlay);
 
         scene.attachChild(startOverlay, 0);
         // Repeat arrow at start
@@ -304,7 +304,7 @@ public class Slider extends GameObject {
                 endArrow.setRotation(MathUtils.radToDeg(Utils.direction(
                         path.points.get(lastIndex), path.points.get(lastIndex - 1))));
             }
-            Utils.putSpriteAnchorCenter(Config.isSnakingInSliders() ? pos : endPos, endArrow);
+            Utils.putSpriteAnchorCenter(Config.useSnakingInSliders ? pos : endPos, endArrow);
             scene.attachChild(endArrow, 0);
         }
         scene.attachChild(endCircle, 0);
@@ -359,7 +359,7 @@ public class Slider extends GameObject {
                 }
             }
 
-            abstractSliderBody.applyToScene(scene, Config.isSnakingInSliders());
+            abstractSliderBody.applyToScene(scene, Config.useSnakingInSliders);
             abstractSliderBody.setBodyColor(color.r(), color.g(), color.b());
             RGBColor scolor = GameHelper.getSliderColor();
             abstractSliderBody.setBorderColor(scolor.r(), scolor.g(), scolor.b());
@@ -444,7 +444,7 @@ public class Slider extends GameObject {
             }
         }));
 
-        if (!Config.isAnimateFollowCircle()) {
+        if (!Config.animateFollowCircle) {
             followCircle.detachSelf();
         }
         startCircle.detachSelf();
@@ -566,7 +566,7 @@ public class Slider extends GameObject {
         listener.onSliderEnd(id, firstHitAccuracy, tickSet);
         // Remove slider from scene
 
-        if (Config.isAnimateFollowCircle() && mWasInRadius) {
+        if (Config.animateFollowCircle && mWasInRadius) {
             mIsAnimating = true;
 
             followCircle.clearEntityModifiers();
@@ -683,7 +683,7 @@ public class Slider extends GameObject {
                     endArrow.setAlpha(percentage);
                 }
 
-                if (Config.isSnakingInSliders()) {
+                if (Config.useSnakingInSliders) {
                     if (superPath != null && abstractSliderBody != null) {
                         float l = superPath.getMeasurer().maxLength() * percentage;
 
@@ -705,7 +705,7 @@ public class Slider extends GameObject {
                 if (repeatCount > 1) {
                     endArrow.setAlpha(1);
                 }
-                if (Config.isSnakingInSliders()) {
+                if (Config.useSnakingInSliders) {
                     if (!preStageFinish && superPath != null && abstractSliderBody != null) {
                         abstractSliderBody.setEndLength(superPath.getMeasurer().maxLength());
                         abstractSliderBody.onUpdate();
@@ -742,7 +742,7 @@ public class Slider extends GameObject {
 
             followCircle = SpritePool.getInstance().getSprite("sliderfollowcircle");
             followCircle.setAlpha(0);
-            if (!Config.isAnimateFollowCircle()) {
+            if (!Config.animateFollowCircle) {
                 followCircle.setScale(scale);
             }
 
@@ -769,7 +769,7 @@ public class Slider extends GameObject {
         listener.onTrackingSliders(inRadius);
         tickTime += dt;
 
-        if (Config.isAnimateFollowCircle()) {
+        if (Config.animateFollowCircle) {
             float remainTime = (float) ((maxTime * GameHelper.getTimeMultiplier() * repeatCount) - passedTime);
 
             if (inRadius && !mWasInRadius) {
@@ -822,7 +822,7 @@ public class Slider extends GameObject {
                 Utils.playHitSound(listener, 16);
                 listener.onSliderHit(id, 10, null, ballpos, false, color, GameObjectListener.SLIDER_TICK);
 
-                if (Config.isAnimateFollowCircle() && !mIsAnimating) {
+                if (Config.animateFollowCircle && !mIsAnimating) {
                     followCircle.clearEntityModifiers();
                     followCircle.registerEntityModifier(new ScaleModifier((float)
                         Math.min(tickInterval / GameHelper.getTickRate(), 0.2f) * GameHelper.getTimeMultiplier(),

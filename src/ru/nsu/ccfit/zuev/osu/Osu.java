@@ -11,6 +11,7 @@ import ru.nsu.ccfit.zuev.osu.game.GameScene;
 import ru.nsu.ccfit.zuev.osu.menu.SongMenu;
 import ru.nsu.ccfit.zuev.osu.scoring.ScoreLibrary;
 import ru.nsu.ccfit.zuev.osu.scoring.ScoringScene;
+import ru.nsu.ccfit.zuev.osuplus.BuildConfig;
 
 /**
  * Global entry for every main component used in the game.
@@ -64,7 +65,7 @@ public class Osu {
         MainScene = new MainScene();
         MainScene.init();
         setLoadingInfo("Loading skin...");
-        ResourceManager.loadSkin(Config.getSkinPath());
+        ResourceManager.loadSkin(Config.skinsDirectory);
         ScoreLibrary.init();
         setLoadingProgress(20);
 
@@ -126,6 +127,13 @@ public class Osu {
      */
     public static void setLoadingInfo(String value) {
         loadingInfo = value;
+    }
+
+    /**
+     * Whether the current build has online access.
+     */
+    public static boolean hasOnlineAccess() {
+        return BuildConfig.BUILD_TYPE.matches("(release|pre_release)");
     }
 
 }

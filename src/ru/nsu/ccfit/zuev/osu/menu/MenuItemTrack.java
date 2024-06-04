@@ -72,7 +72,7 @@ public class MenuItemTrack extends Sprite {
         halfStar.setVisible(false);
 
         final float diff = Math.min(
-            Config.getDifficultyAlgorithm() == DifficultyAlgorithm.standard ?
+            Config.difficultyAlgorithm == DifficultyAlgorithm.standard ?
                 track.getStandardDifficulty() : track.getDroidDifficulty(),
             10
         );

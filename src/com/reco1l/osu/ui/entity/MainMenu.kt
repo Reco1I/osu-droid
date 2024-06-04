@@ -16,7 +16,7 @@ import ru.nsu.ccfit.zuev.osu.MainScene.MusicOption
 import ru.nsu.ccfit.zuev.osu.ResourceManager
 import ru.nsu.ccfit.zuev.osu.ToastLogger
 import ru.nsu.ccfit.zuev.osu.helper.AnimSprite
-import ru.nsu.ccfit.zuev.osu.helper.StringManager
+import ru.nsu.ccfit.zuev.osu.helper.StringTable
 import ru.nsu.ccfit.zuev.osu.menu.LoadingScreen
 import ru.nsu.ccfit.zuev.osuplus.R
 import ru.nsu.ccfit.zuev.osu.online.OnlineManager.getInstance as getOnline
@@ -134,7 +134,7 @@ class MainMenu(val main: MainScene)
                 setColor(1f, 1f, 1f)
 
                 if (!getOnline().isStayOnline) {
-                    ToastLogger.showText(StringManager.format(R.string.multiplayer_not_online), true)
+                    ToastLogger.showText(StringTable.format(R.string.multiplayer_not_online), true)
                     return true
                 }
 

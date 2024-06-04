@@ -44,10 +44,9 @@ class DifficultyAlgorithmSwitcher : AnimSprite(
             return true
         }
 
-        Config.setDifficultyAlgorithm(
-            if (Config.getDifficultyAlgorithm() == DifficultyAlgorithm.standard) DifficultyAlgorithm.droid
+        Config.difficultyAlgorithm =
+            if (Config.difficultyAlgorithm == DifficultyAlgorithm.standard) DifficultyAlgorithm.droid
             else DifficultyAlgorithm.standard
-        )
 
         if (Multiplayer.isConnected) {
             RoomScene.switchDifficultyAlgorithm()
@@ -61,10 +60,10 @@ class DifficultyAlgorithmSwitcher : AnimSprite(
     }
 
     private fun onSelect() {
-        frame = if (Config.getDifficultyAlgorithm() == DifficultyAlgorithm.standard) 3 else 1
+        frame = if (Config.difficultyAlgorithm == DifficultyAlgorithm.standard) 3 else 1
     }
 
     private fun onDeselect() {
-        frame = if (Config.getDifficultyAlgorithm() == DifficultyAlgorithm.standard) 2 else 0
+        frame = if (Config.difficultyAlgorithm == DifficultyAlgorithm.standard) 2 else 0
     }
 }

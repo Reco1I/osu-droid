@@ -4,8 +4,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
-
 import com.dgsrz.bancho.security.SecurityUtils;
 import com.reco1l.osu.graphics.BlankTextureRegion;
 import com.reco1l.osu.skinning.IniReader;
@@ -27,10 +25,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 import ru.nsu.ccfit.zuev.audio.BassSoundProvider;
@@ -200,7 +196,7 @@ public class ResourceManager {
             for (var asset : gfxAssets) {
                 var name = asset.substring(0, asset.length() - 4);
 
-                if (!Config.isCorovans() && (name.equals("count1") || name.equals("count2") || name.equals("count3") || name.equals("go") || name.equals("ready"))) {
+                if (!Config.showCountdown && (name.equals("count1") || name.equals("count2") || name.equals("count3") || name.equals("go") || name.equals("ready"))) {
                     continue;
                 }
 
@@ -683,7 +679,7 @@ public class ResourceManager {
         var customName = prefix.getCurrentValue() + "-" + name;
 
         if (!textures.containsKey(customName)) {
-            loadTexture(customName, new File(Config.getSkinPath() + customName.replace("\\", "") + ".png"));
+            loadTexture(customName, new File(Config.skinsDirectory + customName.replace("\\", "") + ".png"));
         }
 
         if (textures.get(customName) != null) {

@@ -149,7 +149,7 @@ class BeatmapButton : Sprite(0f, 0f, ResourceManager.getTexture("menu-button-bac
         }
 
         val difficulty =
-            if (Config.getDifficultyAlgorithm() == DifficultyAlgorithm.standard) Osu.getSelectedTrack()!!.standardDifficulty
+            if (Config.difficultyAlgorithm == DifficultyAlgorithm.standard) Osu.getSelectedTrack()!!.standardDifficulty
             else Osu.getSelectedTrack()!!.droidDifficulty
 
         stars.forEachIndexed { i, it ->

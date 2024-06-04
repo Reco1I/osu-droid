@@ -1,7 +1,5 @@
 package com.edlplan.replay;
 
-import android.os.Environment;
-
 import ru.nsu.ccfit.zuev.osu.Config;
 
 import java.io.File;
@@ -9,15 +7,15 @@ import java.io.File;
 public class OdrConfig {
 
     public static File getSongDir() {
-        return new File(Config.getBeatmapPath());
+        return new File(Config.beatmapsDirectory);
     }
 
     public static File getDatabaseDir() {
-        return new File(Config.getCorePath() + "/databases");
+        return new File(Config.mainDirectory + "/databases");
     }
 
     public static File getScoreDir() {
-        return new File(Config.getScorePath());
+        return new File(Config.scoresDirectory);
     }
 
     public static File getMainDatabase() {

@@ -51,7 +51,7 @@ import ru.nsu.ccfit.zuev.osu.Utils;
 import ru.nsu.ccfit.zuev.osu.game.GameHelper;
 import ru.nsu.ccfit.zuev.osu.game.mods.GameMod;
 import ru.nsu.ccfit.zuev.osu.helper.AnimSprite;
-import ru.nsu.ccfit.zuev.osu.helper.StringManager;
+import ru.nsu.ccfit.zuev.osu.helper.StringTable;
 import ru.nsu.ccfit.zuev.osu.online.OnlineManager;
 import ru.nsu.ccfit.zuev.osu.online.OnlineManager.OnlineManagerException;
 import ru.nsu.ccfit.zuev.osu.online.OnlinePanel;
@@ -167,12 +167,11 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
 
         final TextureRegion tex = ResourceManager.getTexture("menu-background");
         float height = tex.getHeight();
-        height *= Config.getRES_WIDTH() / (float) tex.getWidth();
-        final Sprite bg = new Sprite(0, (Config.getRES_HEIGHT() - height) / 2,
-                Config.getRES_WIDTH(), height, tex);
+        height *= Config.screenWidth / (float) tex.getWidth();
+        final Sprite bg = new Sprite(0, (Config.screenHeight - height) / 2, Config.screenWidth, height, tex);
         scene.setBackground(new SpriteBackground(bg));
 
-        final Rectangle bgDimRect = new Rectangle(0, 0, Config.getRES_WIDTH(), Config.getRES_HEIGHT());
+        final Rectangle bgDimRect = new Rectangle(0, 0, Config.screenWidth, Config.screenHeight);
         bgDimRect.setColor(0, 0, 0, 0.2f);
         backLayer.attachChild(bgDimRect);
 
@@ -190,8 +189,8 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
 
         if (items.size() == 0) {
             final Text text = new Text(0, 0, ResourceManager.getFont("CaptionFont"), "There are no songs in library, try using chimu.moe", HorizontalAlign.CENTER);
-            text.setPosition(Config.getRES_WIDTH() / 2f - text.getWidth() / 2,
-                    Config.getRES_HEIGHT() / 2f - text.getHeight() / 2);
+            text.setPosition(Config.screenWidth / 2f - text.getWidth() / 2,
+                    Config.screenHeight / 2f - text.getHeight() / 2);
             text.setScale(1.5f);
             text.setColor(0, 0, 0);
             scene.attachChild(text);
@@ -199,7 +198,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
         }
 
         scene.setOnSceneTouchListener((pScene, evt) -> {
-            if (evt.getX() < Config.getRES_WIDTH() / 5f * 2) {
+            if (evt.getX() < Config.screenWidth / 5f * 2) {
                 return false;
             }
             switch (evt.getAction()) {
@@ -225,8 +224,8 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
 
                     camY -= dy;
                     touchY = evt.getY();
-                    if (camY <= -Config.getRES_HEIGHT() / 2f) {
-                        camY = -Config.getRES_HEIGHT() / 2f;
+                    if (camY <= -Config.screenHeight / 2f) {
+                        camY = -Config.screenHeight / 2f;
                         velocityY = 0;
                     } else if (camY >= maxY) {
                         camY = maxY;
@@ -604,40 +603,40 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
             if (layoutRandom != null) {
                 layoutRandom.baseApply(randomMap);
             }
-            backButton.setPosition(0, Config.getRES_HEIGHT() - backButton.getHeightScaled());
+            backButton.setPosition(0, Config.screenHeight - backButton.getHeightScaled());
 
             if (modSelection != null) {
                 modSelection.setPosition(backButton.getX() + backButton.getWidth(),
-                                         Config.getRES_HEIGHT() - modSelection.getHeightScaled());
+                                         Config.screenHeight - modSelection.getHeightScaled());
                 optionSelection.setPosition(
                         modSelection.getX() + modSelection.getWidthScaled(),
-                        Config.getRES_HEIGHT() - optionSelection.getHeightScaled());
+                        Config.screenHeight - optionSelection.getHeightScaled());
             } else {
                 optionSelection.setPosition(backButton.getX() + backButton.getWidth(),
-                                         Config.getRES_HEIGHT() - optionSelection.getHeightScaled());
+                                         Config.screenHeight - optionSelection.getHeightScaled());
             }
             randomMap.setPosition(
                     optionSelection.getX() + optionSelection.getWidthScaled(),
-                    Config.getRES_HEIGHT() - randomMap.getHeightScaled());
+                    Config.screenHeight - randomMap.getHeightScaled());
         } else {
-            backButton.setPosition(0, Config.getRES_HEIGHT() - backButton.getHeight());
+            backButton.setPosition(0, Config.screenHeight - backButton.getHeight());
 
             if (modSelection != null) {
                 modSelection.setPosition(backButton.getX() + backButton.getWidth(),
-                                         Config.getRES_HEIGHT() - Utils.toRes(90));
+                                         Config.screenHeight - Utils.toRes(90));
                 optionSelection.setPosition(
                         modSelection.getX() + modSelection.getWidthScaled(),
-                        Config.getRES_HEIGHT() - Utils.toRes(90));
+                        Config.screenHeight - Utils.toRes(90));
             } else {
                 optionSelection.setPosition(backButton.getX() + backButton.getWidth(),
-                                         Config.getRES_HEIGHT() - Utils.toRes(90));
+                                         Config.screenHeight - Utils.toRes(90));
             }
             randomMap.setPosition(
                     optionSelection.getX() + optionSelection.getWidthScaled(),
-                    Config.getRES_HEIGHT() - Utils.toRes(90));
+                    Config.screenHeight - Utils.toRes(90));
         }
 
-        difficultySwitcher.setPosition(randomMap.getX() + randomMap.getWidthScaled() - 18, Config.getRES_HEIGHT() - difficultySwitcher.getHeightScaled());
+        difficultySwitcher.setPosition(randomMap.getX() + randomMap.getWidthScaled() - 18, Config.screenHeight - difficultySwitcher.getHeightScaled());
 
         frontLayer.attachChild(backButton);
         scene.registerTouchArea(backButton);
@@ -657,7 +656,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
         if (OnlineScoring.getInstance().createSecondPanel() != null) {
             OnlinePanel panel = OnlineScoring.getInstance().getSecondPanel();
             panel.detachSelf();
-            panel.setPosition(difficultySwitcher.getX() + difficultySwitcher.getWidthScaled() + 20, Config.getRES_HEIGHT() - 110);
+            panel.setPosition(difficultySwitcher.getX() + difficultySwitcher.getWidthScaled() + 20, Config.screenHeight - 110);
             OnlineScoring.getInstance().loadAvatar(false);
             frontLayer.attachChild(panel);
 
@@ -801,18 +800,18 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
         secondsSinceLastSelect += pSecondsElapsed;
         float oy = -camY;
         for (final MenuItem item : items) {
-            final float cy = oy + Config.getRES_HEIGHT() / 2f + item.getHeight()
+            final float cy = oy + Config.screenHeight / 2f + item.getHeight()
                     / 2;
-            float ox = Config.getRES_WIDTH() / 1.85f + 200 * (float) Math.abs(Math.cos(cy * Math.PI
-                    / (Config.getRES_HEIGHT() * 2)));
+            float ox = Config.screenWidth / 1.85f + 200 * (float) Math.abs(Math.cos(cy * Math.PI
+                    / (Config.screenHeight * 2)));
             ox = Utils.toRes(ox);
             item.setPos(ox, oy);
             oy += item.getHeight();
         }
         oy += camY;
         camY += velocityY * pSecondsElapsed;
-        maxY = oy - Config.getRES_HEIGHT() / 2f;
-        if (camY <= -Config.getRES_HEIGHT() / 2f && velocityY < 0
+        maxY = oy - Config.screenHeight / 2f;
+        if (camY <= -Config.screenHeight / 2f && velocityY < 0
                 || camY >= maxY && velocityY > 0) {
             camY -= velocityY * pSecondsElapsed;
             velocityY = 0;
@@ -826,7 +825,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
 
         expandSelectedItem(pSecondsElapsed);
 
-        updateScrollbar(camY + Config.getRES_HEIGHT() / 2f, oy);
+        updateScrollbar(camY + Config.screenHeight / 2f, oy);
     }
 
     public void increaseVolume() {
@@ -834,7 +833,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
             synchronized (musicMutex) {
                 if (Osu.SongService != null) {
                     if (Osu.SongService.getStatus() == Status.PLAYING) {
-                        if (Osu.SongService.getVolume() < Config.getBgmVolume()) {
+                        if (Osu.SongService.getVolume() < Config.musicVolume) {
                             float vol = Math.min(1, Osu.SongService.getVolume() + 0.01f);
                             Osu.SongService.setVolume(vol);
                         }
@@ -897,7 +896,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
             }
             height += items.get(i).getInitialHeight();
         }
-        camY = height - Config.getRES_HEIGHT() / 2f;
+        camY = height - Config.screenHeight / 2f;
         camY += item.getTotalHeight() / 2;
     }
 
@@ -988,13 +987,13 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
 
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT+0"));
-        String binfoStr = String.format(StringManager.get(R.string.binfoStr1), sdf.format(length),
+        String binfoStr = String.format(StringTable.get(R.string.binfoStr1), sdf.format(length),
                 (bpm_min == bpm_max ? GameHelper.Round(bpm_min, 1) : GameHelper.Round(bpm_min, 1) + "-" + GameHelper.Round(bpm_max, 1)),
                 track.getMaxCombo());
         if (length > 3600 * 1000) {
             sdf = new SimpleDateFormat("HH:mm:ss");
             sdf.setTimeZone(TimeZone.getTimeZone("GMT+0"));
-            binfoStr = String.format(StringManager.get(R.string.binfoStr1), sdf.format(length),
+            binfoStr = String.format(StringTable.get(R.string.binfoStr1), sdf.format(length),
                     (bpm_min == bpm_max ? GameHelper.Round(bpm_min, 1) : GameHelper.Round(bpm_min, 1) + "-" + GameHelper.Round(bpm_max, 1)),
                     track.getMaxCombo());
         }
@@ -1041,7 +1040,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
                 .append("HP: ").append(GameHelper.Round(hp, 2)).append(" ")
                 .append("Stars: ");
 
-        switch (Config.getDifficultyAlgorithm()) {
+        switch (Config.difficultyAlgorithm) {
             case droid:
                 dimensionStringBuilder.append(GameHelper.Round(track.getDroidDifficulty(), 2));
                 break;
@@ -1066,10 +1065,10 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
             return;
         }
 
-        String tinfoStr = (track.getBeatmap().getArtistUnicode() == null || Config.isForceRomanized() ? track.getBeatmap().getArtist() : track.getBeatmap().getArtistUnicode()) + " - " +
-                (track.getBeatmap().getTitleUnicode() == null || Config.isForceRomanized() ? track.getBeatmap().getTitle() : track.getBeatmap().getTitleUnicode()) + " [" + track.getMode() + "]";
+        String tinfoStr = (track.getBeatmap().getArtistUnicode() == null || Config.forceMetadataRomanization ? track.getBeatmap().getArtist() : track.getBeatmap().getArtistUnicode()) + " - " +
+                (track.getBeatmap().getTitleUnicode() == null || Config.forceMetadataRomanization ? track.getBeatmap().getTitle() : track.getBeatmap().getTitleUnicode()) + " [" + track.getMode() + "]";
         String mapperStr = "Beatmap by " + track.getCreator();
-        String binfoStr2 = String.format(StringManager.get(R.string.binfoStr2),
+        String binfoStr2 = String.format(StringTable.get(R.string.binfoStr2),
                 track.getHitCircleCount(), track.getSliderCount(), track.getSpinnerCount(), track.getBeatmapSetID());
         trackInfo.setText(tinfoStr);
         mapper.setText(mapperStr);
@@ -1098,7 +1097,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
                 ));
                 parameters.setCustomSpeedMultiplier(modMenu.getChangeSpeed());
 
-                switch (Config.getDifficultyAlgorithm()) {
+                switch (Config.difficultyAlgorithm) {
                     case droid -> {
                         var attributes = BeatmapDifficultyCalculator.calculateDroidDifficulty(
                             beatmap,
@@ -1181,16 +1180,15 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
 
         Execution.async(() -> {
             synchronized (backgroundMutex) {
-                final TextureRegion tex = Config.isSafeBeatmapBg() || track.getBackground() == null?
+                final TextureRegion tex = Config.forceSkinBackground || track.getBackground() == null?
                         ResourceManager.getTexture("menu-background") :
                         ResourceManager.loadBackground(bgName);
                 if (tex != null) {
                     float height = tex.getHeight();
-                    height *= Config.getRES_WIDTH()
+                    height *= Config.screenWidth
                             / (float) tex.getWidth();
                     bg = new Sprite(0,
-                            (Config.getRES_HEIGHT() - height) / 2, Config
-                            .getRES_WIDTH(), height, tex);
+                            (Config.screenHeight - height) / 2, Config.screenWidth, height, tex);
                     bg.setColor(0, 0, 0);
                 }
 
@@ -1199,12 +1197,11 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
                         if (bg == null) {
                             final TextureRegion tex1 = ResourceManager.getTexture("menu-background");
                             float height = tex1.getHeight();
-                            height *= Config.getRES_WIDTH()
+                            height *= Config.screenWidth
                                     / (float) tex1.getWidth();
                             bg = new Sprite(
                                     0,
-                                    (Config.getRES_HEIGHT() - height) / 2,
-                                    Config.getRES_WIDTH(), height, tex1);
+                                    (Config.screenHeight - height) / 2, Config.screenWidth, height, tex1);
                             bgName = "";
                         }
                         scene.setBackground(new SpriteBackground(bg));
@@ -1273,7 +1270,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
 
     public void onScroll(final float where) {
         velocityY = 0;
-        camY = where - Config.getRES_HEIGHT() / 2f;
+        camY = where - Config.screenHeight / 2f;
     }
 
     public void unload() {
@@ -1374,7 +1371,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
     }
 
     public void playMusic(final String filename, final int previewTime) {
-        if (!Config.isPlayMusicPreview()) {
+        if (!Config.playMusicPreview) {
             return;
         }
 
@@ -1519,7 +1516,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
                     }
                     height += items.get(i).getInitialHeight();
                 }
-                camY = height - Config.getRES_HEIGHT() / 2f;
+                camY = height - Config.screenHeight / 2f;
                 camY += items.get(0).getTotalHeight() / 2;
                 return;
             }

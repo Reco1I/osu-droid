@@ -14,7 +14,7 @@ public class ScrollBar {
     public ScrollBar(final Scene scene) {
         visible = false;
 
-        barRectangle = new Rectangle(Config.getRES_WIDTH() - Utils.toRes(20),
+        barRectangle = new Rectangle(Config.screenWidth - Utils.toRes(20),
                 0, Utils.toRes(20), Utils.toRes(50));
         barRectangle.setAlpha(0.8f);
         barRectangle.setColor(1, 1, 1);
@@ -30,7 +30,7 @@ public class ScrollBar {
 
         barRectangle
                 .setPosition(barRectangle.getX(),
-                        (Config.getRES_HEIGHT() - barRectangle.getHeight())
+                        (Config.screenHeight - barRectangle.getHeight())
                                 * vy / maxy);
     }
 

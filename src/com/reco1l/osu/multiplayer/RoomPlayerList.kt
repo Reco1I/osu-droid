@@ -12,7 +12,7 @@ import org.anddev.andengine.entity.text.ChangeableText
 import org.anddev.andengine.input.touch.TouchEvent
 import org.anddev.andengine.input.touch.detector.ScrollDetector.IScrollDetectorListener
 import org.anddev.andengine.util.MathUtils
-import ru.nsu.ccfit.zuev.osu.Config
+import ru.nsu.ccfit.zuev.osu.Config.screenWidth
 import ru.nsu.ccfit.zuev.osu.ResourceManager
 
 class RoomPlayerList(val room: Room) : ScrollableList(), IScrollDetectorListener
@@ -73,7 +73,7 @@ class RoomPlayerList(val room: Room) : ScrollableList(), IScrollDetectorListener
     }
 
 
-    inner class PlayerItem : Rectangle(40f, 0f, Config.getRES_WIDTH() * 0.4f, 80f)
+    inner class PlayerItem : Rectangle(40f, 0f, screenWidth * 0.4f, 80f)
     {
 
         var room: Room? = null

@@ -12,7 +12,7 @@ import ru.nsu.ccfit.zuev.osu.game.ISliderListener;
 import ru.nsu.ccfit.zuev.skins.OsuSkin;
 
 public class CursorSprite extends Sprite implements ISliderListener {
-    public final float baseSize = Config.getCursorSize() * 2;
+    public final float baseSize = Config.cursorSize * 2;
     private final float clickAnimationTime = 0.5f / 2f;
     private ParallelEntityModifier previousClickModifier;
     private RotationByModifier currentRotation;

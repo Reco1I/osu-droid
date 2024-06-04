@@ -107,7 +107,7 @@ public class GameScoreTextShadow extends GameObject {
             }
 
             letters[0].setScale(1.5f - Math.abs(0.6f - alpha));
-            letters[0].setPosition(20, Config.getRES_HEIGHT()
+            letters[0].setPosition(20, Config.screenHeight
                     - letters[0].getHeightScaled() - 20);
             for (final AnimSprite sp : letters) {
                 sp.setAlpha(alpha);

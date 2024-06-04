@@ -96,9 +96,9 @@ public class TriangleDrawable extends Drawable {
     }
 
     protected void onDraw(Canvas canvas) {
-        if(!Config.isTrianglesAnimation()) {
-            return;
-        }
+        //if(!Config.isTrianglesAnimation()) {
+        //    return;
+        //}
 
         width = getBounds().width();
         height = getBounds().height();

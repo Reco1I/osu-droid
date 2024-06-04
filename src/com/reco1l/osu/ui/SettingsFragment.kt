@@ -38,6 +38,10 @@ import com.reco1l.toolkt.android.drawableLeft
 import com.reco1l.toolkt.android.layoutWidth
 import com.reco1l.toolkt.android.topMargin
 import ru.nsu.ccfit.zuev.osu.Config
+import ru.nsu.ccfit.zuev.osu.Config.mainDirectory
+import ru.nsu.ccfit.zuev.osu.Config.musicVolume
+import ru.nsu.ccfit.zuev.osu.Config.skinPath
+import ru.nsu.ccfit.zuev.osu.Config.useNightcoreOnMultiplayer
 import ru.nsu.ccfit.zuev.osu.Osu
 import ru.nsu.ccfit.zuev.osu.Osu.Engine
 import ru.nsu.ccfit.zuev.osu.LibraryManager
@@ -45,7 +49,7 @@ import ru.nsu.ccfit.zuev.osu.MainActivity
 import ru.nsu.ccfit.zuev.osu.PropertyManager
 import ru.nsu.ccfit.zuev.osu.ResourceManager
 import ru.nsu.ccfit.zuev.osu.ToastLogger
-import ru.nsu.ccfit.zuev.osu.helper.StringManager
+import ru.nsu.ccfit.zuev.osu.helper.StringTable
 import ru.nsu.ccfit.zuev.osu.online.OnlineManager
 import ru.nsu.ccfit.zuev.osuplus.R
 import ru.nsu.ccfit.zuev.skins.SkinManager
@@ -190,8 +194,8 @@ class SettingsFragment : com.edlplan.ui.fragment.SettingsFragment() {
         Section.Gameplay -> {
             findPreference<SelectPreference>("skinPath")!!.apply {
 
-                val skinMain = File(Config.getSkinTopPath())
-                val skins = Config.getSkins().map { Option(it.key, it.value) }.toMutableList()
+                val skinMain = File(skinPath)
+                val skins = Config.skins.map { Option(it.key, it.value) }.toMutableList()
                 skins.add(0, Option(skinMain.name + " (Default)", skinMain.path))
 
                 options = skins
@@ -236,20 +240,20 @@ class SettingsFragment : com.edlplan.ui.fragment.SettingsFragment() {
                 it as InputPreference
 
                 if (newValue.toString().trim { it <= ' ' }.isEmpty()) {
-                    it.setText(Config.getCorePath() + "Skin/")
-                    Config.loadConfig(requireActivity())
+                    it.setText(mainDirectory + "Skin/")
+                    Config.init()
                     return@setOnPreferenceChangeListener false
                 }
 
                 val file = File(newValue.toString())
 
                 if (!file.exists() && !file.mkdirs()) {
-                    ToastLogger.showText(StringManager.get(R.string.message_error_dir_not_found), true)
+                    ToastLogger.showText(StringTable.get(R.string.message_error_dir_not_found), true)
                     return@setOnPreferenceChangeListener false
                 }
 
                 it.setText(newValue.toString())
-                Config.loadConfig(requireActivity())
+                Config.init()
                 false
             }
         }
@@ -273,7 +277,7 @@ class SettingsFragment : com.edlplan.ui.fragment.SettingsFragment() {
             findPreference<CheckBoxPreference>("player_nightcore")!!.apply {
 
                 setOnPreferenceChangeListener { _, newValue ->
-                    Config.setUseNightcoreOnMultiplayer(newValue as Boolean)
+                    useNightcoreOnMultiplayer = newValue as Boolean
                     RoomScene.onRoomModsChange(Multiplayer.room!!.mods)
                     true
                 }
@@ -368,7 +372,7 @@ class SettingsFragment : com.edlplan.ui.fragment.SettingsFragment() {
 
 
     override fun dismiss() {
-        Config.loadConfig(requireActivity())
+        Config.init()
 
         if (!Multiplayer.isMultiplayer) {
             Osu.MainScene.reloadOnlinePanel()
@@ -376,7 +380,7 @@ class SettingsFragment : com.edlplan.ui.fragment.SettingsFragment() {
             Osu.SongService.isGaming = false
         }
 
-        Osu.SongService.volume = Config.getBgmVolume()
+        Osu.SongService.volume = musicVolume
         super.dismiss()
     }
 

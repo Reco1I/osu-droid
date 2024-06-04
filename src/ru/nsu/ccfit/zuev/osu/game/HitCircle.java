@@ -87,7 +87,7 @@ public class HitCircle extends GameObject {
         approachCircle.setAlpha(0);
         Utils.putSpriteAnchorCenter(pos, approachCircle);
         if (GameHelper.isHidden()) {
-            approachCircle.setVisible(Config.isShowFirstApproachCircle() && this.isFirstNote);
+            approachCircle.setVisible(Config.showFirstApproachCircleOnHidden && this.isFirstNote);
         }
 
         // and getting new number from sprite pool
@@ -224,7 +224,7 @@ public class HitCircle extends GameObject {
             }
         } else if (passedTime * 2 > time && isHit()) {
             float signAcc = passedTime - time;
-            if (Config.isFixFrameOffset()) {
+            if (Config.synchronizeFrameOffsetOnInput) {
                 signAcc += (float) hitOffsetToPreviousFrame() / 1000f;
             }
             final float acc = Math.abs(signAcc);
@@ -286,7 +286,7 @@ public class HitCircle extends GameObject {
     public void tryHit(final float dt){
         if (passedTime * 2 > time && isHit()) {
             float signAcc = passedTime - time;
-            if (Config.isFixFrameOffset()) {
+            if (Config.synchronizeFrameOffsetOnInput) {
                 signAcc += (float) hitOffsetToPreviousFrame() / 1000f;
             }
             final float acc = Math.abs(signAcc);

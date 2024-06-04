@@ -89,13 +89,13 @@ public class SkinManager {
             if (!f.isFile()) {
                 continue;
             }
-            if (Config.isUseCustomSounds()
+            if (Config.useCustomSounds
                     && (f.getName().toLowerCase().matches(".*[.]wav")
                     || f.getName().toLowerCase().matches(".*[.]mp3")
                     || f.getName().toLowerCase().matches(".*[.]ogg"))
                 && f.length() >= 1024) {
                 ResourceManager.loadCustomSound(f);
-            } else if (Config.isUseCustomSkins()
+            } else if (Config.useCustomSkins
                     && (f.getName().toLowerCase().matches(".*[.]png")
                     || f.getName().toLowerCase().matches(".*[.]jpg"))) {
                 ResourceManager.loadCustomTexture(f);
@@ -103,7 +103,7 @@ public class SkinManager {
 
         }
 
-        if (!Config.isUseCustomSkins()) return;
+        if (!Config.useCustomSkins) return;
 
         for (final String s : frameCount.keySet()) {
             final int fcount = ResourceManager.getFrameCount(s);

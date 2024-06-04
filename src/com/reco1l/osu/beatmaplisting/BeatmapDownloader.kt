@@ -13,12 +13,12 @@ import com.reco1l.toolkt.kotlin.decodeAsURL
 import com.reco1l.toolkt.kotlin.replaceAlphanumeric
 import net.lingala.zip4j.ZipFile
 import org.apache.commons.io.FilenameUtils
-import ru.nsu.ccfit.zuev.osu.Config
+import ru.nsu.ccfit.zuev.osu.Config.beatmapsDirectory
 import ru.nsu.ccfit.zuev.osu.Osu
 import ru.nsu.ccfit.zuev.osu.LibraryManager
 import ru.nsu.ccfit.zuev.osu.ToastLogger
 import ru.nsu.ccfit.zuev.osu.helper.FileUtils
-import ru.nsu.ccfit.zuev.osu.helper.StringManager
+import ru.nsu.ccfit.zuev.osu.helper.StringTable
 import ru.nsu.ccfit.zuev.osuplus.R
 import java.io.IOException
 
@@ -73,7 +73,7 @@ object BeatmapDownloader : IDownloaderObserver {
                 downloader.execute()
 
                 mainThread {
-                    fragment.text.text = StringManager.format(R.string.beatmap_downloader_downloading, currentFilename)
+                    fragment.text.text = StringTable.format(R.string.beatmap_downloader_downloading, currentFilename)
                 }
             }
 
@@ -91,7 +91,7 @@ object BeatmapDownloader : IDownloaderObserver {
             fragment.progressBar.isIndeterminate = true
             fragment.progressBar.visibility = View.VISIBLE
 
-            fragment.text.text = StringManager.format(R.string.beatmap_downloader_importing, currentFilename)
+            fragment.text.text = StringTable.format(R.string.beatmap_downloader_importing, currentFilename)
             fragment.button.visibility = View.GONE
         }
 
@@ -105,7 +105,7 @@ object BeatmapDownloader : IDownloaderObserver {
                     return
                 }
 
-                if (!FileUtils.extractZip(file.path, Config.getBeatmapPath())) {
+                if (!FileUtils.extractZip(file.path, beatmapsDirectory)) {
                     mainThread(fragment::dismiss)
                     ToastLogger.showText("Import failed, failed to extract ZIP file.", true)
                     return
