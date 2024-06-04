@@ -4,7 +4,6 @@ import android.graphics.PointF;
 import android.os.Build;
 import android.os.SystemClock;
 
-import com.edlplan.ext.EdExtensionHelper;
 import com.edlplan.framework.math.FMath;
 import com.edlplan.framework.support.ProxySprite;
 import com.edlplan.framework.support.osb.StoryboardSprite;
@@ -672,17 +671,11 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
     }
 
     public void restartGame() {
-        if (!replaying) {
-            EdExtensionHelper.onRestartGame(lastTrack);
-        }
         startGame(null, null);
     }
 
     public void startGame(final TrackInfo track, final String replayFile) {
         GameHelper.updateGameid();
-        if (!replaying) {
-            EdExtensionHelper.onStartGame(track);
-        }
 
         scene = new Scene();
         if (Config.isEnableStoryboard()) {
@@ -1699,8 +1692,6 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
                     stat.setPlayerName("osu!");
                 }
 
-                EdExtensionHelper.onEndGame(lastTrack, stat);
-
                 if (Multiplayer.isConnected())
                 {
                     Multiplayer.log("Match ended, moving to results scene.");
@@ -1832,12 +1823,6 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
 
     private void onExit() {
 
-        //游戏退出
-
-        if (!replaying) {
-            EdExtensionHelper.onExitGame(lastTrack);
-        }
-
         SkinManager.setSkinEnabled(false);
         GameObjectPool.getInstance().purge();
         SpritePool.getInstance().purge();
@@ -1876,10 +1861,6 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         var touchOptions = new TouchOptions();
         touchOptions.setRunOnUpdateThread(true);
         Osu.Engine.getTouchController().applyTouchOptions(touchOptions);
-
-        if (!replaying) {
-            EdExtensionHelper.onQuitGame(lastTrack);
-        }
 
         if (storyboardSprite != null) {
             storyboardSprite.detachSelf();
@@ -2416,10 +2397,6 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
             return;
         }
 
-        if (!replaying) {
-            EdExtensionHelper.onPauseGame(lastTrack);
-        }
-
         if (video != null) {
             video.getTexture().pause();
         }
@@ -2467,10 +2444,6 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
             return;
         }
 
-        if (!replaying) {
-            EdExtensionHelper.onGameover(lastTrack);
-        }
-
         if(scorebar != null) scorebar.flush();
         ResourceManager.getSound("failsound").play();
         final PauseMenu menu = new PauseMenu(Osu.Engine, this, true);
@@ -2501,10 +2474,6 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
                 && !stat.getMod().contains(GameMod.MOD_AUTOPILOT)) {
             quit();
             return;
-        }
-
-        if (!replaying) {
-            EdExtensionHelper.onResume(lastTrack);
         }
 
         if (video != null && videoStarted) {

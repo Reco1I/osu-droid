@@ -57,7 +57,6 @@ public class Config {
         hideNaviBar,
         showScoreboard,
         enablePP,
-        enableExtension,
         loadAvatar,
         stayOnline,
         syncMusic,
@@ -180,7 +179,6 @@ public class Config {
         }
 
         syncMusic = prefs.getBoolean("syncMusic", syncMusic);
-        enableExtension = false;// prefs.getBoolean("enableExtension", false);
         cachePath = context.getCacheDir().getPath();
         burstEffects = prefs.getBoolean("bursts", burstEffects);
         hitLighting = prefs.getBoolean("hitlighting", hitLighting);
@@ -310,13 +308,6 @@ public class Config {
         Config.difficultyAlgorithm = algorithm;
     }
 
-    public static boolean isEnableExtension() {
-        return enableExtension;
-    }
-
-    public static void setEnableExtension(boolean enableExtension) {
-        Config.enableExtension = enableExtension;
-    }
 
     public static boolean isShowFPS() {
         return showFPS;

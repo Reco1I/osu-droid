@@ -2,7 +2,6 @@ package ru.nsu.ccfit.zuev.osu.menu;
 
 import android.annotation.SuppressLint;
 
-import com.edlplan.ext.EdExtensionHelper;
 import com.edlplan.favorite.FavoriteLibrary;
 import com.edlplan.replay.OdrDatabase;
 import com.edlplan.ui.fragment.FilterMenuFragment;
@@ -1163,7 +1162,6 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
         }
         isSelectComplete = false;
         selectedTrack = track;
-        EdExtensionHelper.onSelectTrack(track);
         Osu.setSelectedTrack(track);
         updateInfo(track);
         updateScoringSwitcherStatus(false);
