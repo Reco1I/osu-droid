@@ -6,7 +6,7 @@ import com.rian.osu.beatmap.parser.BeatmapParser;
 import org.anddev.andengine.util.Debug;
 import org.jetbrains.annotations.Nullable;
 import ru.nsu.ccfit.zuev.osu.helper.FileUtils;
-import ru.nsu.ccfit.zuev.osu.helper.StringTable;
+import ru.nsu.ccfit.zuev.osu.helper.StringManager;
 import ru.nsu.ccfit.zuev.osuplus.R;
 
 import java.io.*;
@@ -42,7 +42,7 @@ public enum LibraryManager {
         final File replayDir = new File(Config.getScorePath());
         if (!replayDir.exists()) {
             if (!replayDir.mkdir()) {
-                ToastLogger.showText(StringTable.format(
+                ToastLogger.showText(StringManager.format(
                         R.string.message_error_createdir, replayDir.getPath()), true);
                 return false;
             }
@@ -101,7 +101,7 @@ public enum LibraryManager {
             return;
         }
 
-        ToastLogger.showText(StringTable.get(R.string.message_lib_update), true);
+        ToastLogger.showText(StringManager.get(R.string.message_lib_update), true);
 
         final int fileCount = files.length;
         LibraryCacheManager manager = new LibraryCacheManager(fileCount, files);
@@ -128,7 +128,7 @@ public enum LibraryManager {
         // Creating Osu directory if it doesn't exist
         if (!dir.exists()) {
             if (!dir.mkdirs()) {
-                ToastLogger.showText(StringTable.format(
+                ToastLogger.showText(StringManager.format(
                         R.string.message_error_createdir, dir.getPath()), true);
                 return;
             }
@@ -158,7 +158,7 @@ public enum LibraryManager {
 
         saveToCache();
         ToastLogger.showText(
-                StringTable.format(R.string.message_lib_complete, manager.getTotalMaps()),
+                StringManager.format(R.string.message_lib_complete, manager.getTotalMaps()),
                 true);
     }
 
@@ -219,7 +219,7 @@ public enum LibraryManager {
             }
         } catch (final IOException e) {
             ToastLogger.showText(
-                    StringTable.format(R.string.message_error, e.getMessage()),
+                    StringManager.format(R.string.message_error, e.getMessage()),
                     false);
             Debug.e("LibraryManager: " + e.getMessage(), e);
         }
@@ -231,7 +231,7 @@ public enum LibraryManager {
         final File lib = getLibraryCacheFile();
         if (lib.exists()) {
             lib.delete();
-            ToastLogger.showText(StringTable.get(R.string.message_lib_cleared),
+            ToastLogger.showText(StringManager.get(R.string.message_lib_cleared),
                     false);
         }
         currentIndex = 0;

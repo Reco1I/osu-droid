@@ -16,7 +16,7 @@ import org.anddev.andengine.util.MathUtils;
 
 import ru.nsu.ccfit.zuev.osu.ResourceManager;
 import ru.nsu.ccfit.zuev.osu.helper.MD5Calculator;
-import ru.nsu.ccfit.zuev.osu.helper.StringTable;
+import ru.nsu.ccfit.zuev.osu.helper.StringManager;
 import ru.nsu.ccfit.zuev.osuplus.R;
 
 import java.util.Locale;
@@ -51,7 +51,7 @@ public class OnlinePanel extends Entity {
                     if (!moved && OnlineManager.getInstance().isStayOnline()) {
 
                         new MessageDialog()
-                            .setMessage(StringTable.get(R.string.dialog_visit_profile_page))
+                            .setMessage(StringManager.get(R.string.dialog_visit_profile_page))
                             .addButton("Yes", dialog -> {
                                 new WebViewFragment().setURL(WebViewFragment.PROFILE_URL + OnlineManager.getInstance().getUserId()).show();
                                 dialog.dismiss();

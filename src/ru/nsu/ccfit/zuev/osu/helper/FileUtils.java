@@ -64,7 +64,7 @@ public class FileUtils {
         try (ZipFile zip = new ZipFile(file)) {
             if(!zip.isValidZipFile()) {
                 ToastLogger.showText(
-                        StringTable.format(R.string.message_error, "Invalid file"),
+                        StringManager.format(R.string.message_error, "Invalid file"),
                         false);
                 Debug.e("FileUtils.extractZip: " + file.getName() + " is invalid");
                 file.renameTo(new File(file.getParentFile(), sourceFileName + ".badzip"));
@@ -129,11 +129,11 @@ public class FileUtils {
             if (Environment.getExternalStorageState().equals(
                     Environment.MEDIA_MOUNTED_READ_ONLY)) {
                 ToastLogger.showText(
-                        StringTable.get(R.string.message_error_sdcardread),
+                        StringManager.get(R.string.message_error_sdcardread),
                         false);
             } else {
                 ToastLogger.showText(
-                        StringTable.get(R.string.message_error_sdcard), false);
+                        StringManager.get(R.string.message_error_sdcard), false);
             }
         }
 

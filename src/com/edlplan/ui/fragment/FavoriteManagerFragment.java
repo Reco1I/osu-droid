@@ -1,7 +1,6 @@
 package com.edlplan.ui.fragment;
 
 import android.animation.Animator;
-import android.app.AlertDialog;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import ru.nsu.ccfit.zuev.osu.helper.StringTable;
+import ru.nsu.ccfit.zuev.osu.helper.StringManager;
 import ru.nsu.ccfit.zuev.osuplus.R;
 
 public class FavoriteManagerFragment extends BaseFragment {
@@ -63,7 +62,7 @@ public class FavoriteManagerFragment extends BaseFragment {
                         return null;
                     }
 
-                    if (FavoriteLibrary.get().getMaps(input) == null && !input.equals(StringTable.get(R.string.favorite_default))) {
+                    if (FavoriteLibrary.get().getMaps(input) == null && !input.equals(StringManager.get(R.string.favorite_default))) {
                         FavoriteLibrary.get().addFolder(input);
                         adapter.add(input);
                     }
@@ -191,7 +190,7 @@ public class FavoriteManagerFragment extends BaseFragment {
             Collections.sort(folders);
 
             if (includeDefaultFolder()) {
-                folders.add(0, StringTable.get(R.string.favorite_default));
+                folders.add(0, StringManager.get(R.string.favorite_default));
             }
         }
 

@@ -29,7 +29,7 @@ import java.net.UnknownHostException;
 import java.util.Date;
 
 import ru.nsu.ccfit.zuev.audio.serviceAudio.SaveServiceObject;
-import ru.nsu.ccfit.zuev.osu.helper.StringTable;
+import ru.nsu.ccfit.zuev.osu.helper.StringManager;
 import ru.nsu.ccfit.zuev.osuplus.R;
 
 /**
@@ -287,7 +287,7 @@ public class AppException extends Exception implements Thread.UncaughtExceptionH
         new Thread() {
             public void run() {
                 Looper.prepare();
-                Toast.makeText(Osu.Activity, StringTable.get(R.string.crash), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Osu.Activity, StringManager.get(R.string.crash), Toast.LENGTH_SHORT).show();
                 Looper.loop();
             }
 

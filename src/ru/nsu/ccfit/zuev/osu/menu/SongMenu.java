@@ -51,7 +51,7 @@ import ru.nsu.ccfit.zuev.osu.Utils;
 import ru.nsu.ccfit.zuev.osu.game.GameHelper;
 import ru.nsu.ccfit.zuev.osu.game.mods.GameMod;
 import ru.nsu.ccfit.zuev.osu.helper.AnimSprite;
-import ru.nsu.ccfit.zuev.osu.helper.StringTable;
+import ru.nsu.ccfit.zuev.osu.helper.StringManager;
 import ru.nsu.ccfit.zuev.osu.online.OnlineManager;
 import ru.nsu.ccfit.zuev.osu.online.OnlineManager.OnlineManagerException;
 import ru.nsu.ccfit.zuev.osu.online.OnlinePanel;
@@ -988,13 +988,13 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
 
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT+0"));
-        String binfoStr = String.format(StringTable.get(R.string.binfoStr1), sdf.format(length),
+        String binfoStr = String.format(StringManager.get(R.string.binfoStr1), sdf.format(length),
                 (bpm_min == bpm_max ? GameHelper.Round(bpm_min, 1) : GameHelper.Round(bpm_min, 1) + "-" + GameHelper.Round(bpm_max, 1)),
                 track.getMaxCombo());
         if (length > 3600 * 1000) {
             sdf = new SimpleDateFormat("HH:mm:ss");
             sdf.setTimeZone(TimeZone.getTimeZone("GMT+0"));
-            binfoStr = String.format(StringTable.get(R.string.binfoStr1), sdf.format(length),
+            binfoStr = String.format(StringManager.get(R.string.binfoStr1), sdf.format(length),
                     (bpm_min == bpm_max ? GameHelper.Round(bpm_min, 1) : GameHelper.Round(bpm_min, 1) + "-" + GameHelper.Round(bpm_max, 1)),
                     track.getMaxCombo());
         }
@@ -1069,7 +1069,7 @@ public class SongMenu implements IUpdateHandler, MenuItemListener,
         String tinfoStr = (track.getBeatmap().getArtistUnicode() == null || Config.isForceRomanized() ? track.getBeatmap().getArtist() : track.getBeatmap().getArtistUnicode()) + " - " +
                 (track.getBeatmap().getTitleUnicode() == null || Config.isForceRomanized() ? track.getBeatmap().getTitle() : track.getBeatmap().getTitleUnicode()) + " [" + track.getMode() + "]";
         String mapperStr = "Beatmap by " + track.getCreator();
-        String binfoStr2 = String.format(StringTable.get(R.string.binfoStr2),
+        String binfoStr2 = String.format(StringManager.get(R.string.binfoStr2),
                 track.getHitCircleCount(), track.getSliderCount(), track.getSpinnerCount(), track.getBeatmapSetID());
         trackInfo.setText(tinfoStr);
         mapper.setText(mapperStr);

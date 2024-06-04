@@ -13,7 +13,7 @@ import com.reco1l.framework.net.IDownloaderObserver
 import okhttp3.Request
 import org.json.JSONObject
 import ru.nsu.ccfit.zuev.osu.Osu
-import ru.nsu.ccfit.zuev.osu.helper.StringTable
+import ru.nsu.ccfit.zuev.osu.helper.StringManager
 import ru.nsu.ccfit.zuev.osu.online.OnlineManager
 import ru.nsu.ccfit.zuev.osu.online.OnlineManager.updateEndpoint
 import ru.nsu.ccfit.zuev.osuplus.BuildConfig.APPLICATION_ID
@@ -203,7 +203,7 @@ object UpdateManager: IDownloaderObserver {
 
                     duration = LENGTH_INDEFINITE
 
-                    setText(StringTable.format(update_info_downloading, 0))
+                    setText(StringManager.format(update_info_downloading, 0))
                     setAction(beatmap_downloader_cancel) { downloader.cancel() }
                     show()
                 }
@@ -282,7 +282,7 @@ object UpdateManager: IDownloaderObserver {
 
     override fun onDownloadUpdate(downloader: FileRequest) = mainThread {
 
-        snackBar.setText(StringTable.format(update_info_downloading, downloader.progress.toInt()))
+        snackBar.setText(StringManager.format(update_info_downloading, downloader.progress.toInt()))
     }
 
     override fun onDownloadEnd(downloader: FileRequest) {

@@ -45,7 +45,7 @@ import ru.nsu.ccfit.zuev.osu.MainActivity
 import ru.nsu.ccfit.zuev.osu.PropertyManager
 import ru.nsu.ccfit.zuev.osu.ResourceManager
 import ru.nsu.ccfit.zuev.osu.ToastLogger
-import ru.nsu.ccfit.zuev.osu.helper.StringTable
+import ru.nsu.ccfit.zuev.osu.helper.StringManager
 import ru.nsu.ccfit.zuev.osu.online.OnlineManager
 import ru.nsu.ccfit.zuev.osuplus.R
 import ru.nsu.ccfit.zuev.skins.SkinManager
@@ -244,7 +244,7 @@ class SettingsFragment : com.edlplan.ui.fragment.SettingsFragment() {
                 val file = File(newValue.toString())
 
                 if (!file.exists() && !file.mkdirs()) {
-                    ToastLogger.showText(StringTable.get(R.string.message_error_dir_not_found), true)
+                    ToastLogger.showText(StringManager.get(R.string.message_error_dir_not_found), true)
                     return@setOnPreferenceChangeListener false
                 }
 

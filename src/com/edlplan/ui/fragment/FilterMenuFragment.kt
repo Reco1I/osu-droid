@@ -22,7 +22,7 @@ import org.anddev.andengine.engine.handler.IUpdateHandler
 import org.anddev.andengine.entity.scene.Scene
 import ru.nsu.ccfit.zuev.osu.Osu
 import ru.nsu.ccfit.zuev.osu.helper.InputManager
-import ru.nsu.ccfit.zuev.osu.helper.StringTable
+import ru.nsu.ccfit.zuev.osu.helper.StringManager
 import ru.nsu.ccfit.zuev.osu.menu.IFilterMenu
 import ru.nsu.ccfit.zuev.osu.menu.SongMenu
 import ru.nsu.ccfit.zuev.osuplus.R
@@ -76,7 +76,7 @@ class FilterMenuFragment : BaseFragment(), IUpdateHandler, IFilterMenu {
     override fun isFavoritesOnly(): Boolean = favoritesOnly.isChecked
 
     override fun getFavoriteFolder(): String =
-        if (StringTable.get(R.string.favorite_default) == favoriteFolder.text) "" else favoriteFolder.text.toString()
+        if (StringManager.get(R.string.favorite_default) == favoriteFolder.text) "" else favoriteFolder.text.toString()
 
     override fun loadConfig(context: Context?) {
         configContext = context
@@ -144,7 +144,7 @@ class FilterMenuFragment : BaseFragment(), IUpdateHandler, IFilterMenu {
                 val favoriteManagerFragment = FavoriteManagerFragment()
                 favoriteManagerFragment.showToSelectFolder {
                     savedFolder = it
-                    favoriteFolder.text = it ?: StringTable.get(R.string.favorite_default)
+                    favoriteFolder.text = it ?: StringManager.get(R.string.favorite_default)
                     updateUpdater()
                 }
             }
@@ -228,14 +228,14 @@ class FilterMenuFragment : BaseFragment(), IUpdateHandler, IFilterMenu {
 
     private fun updateOrderButton() {
         val s = when (order) {
-            SongMenu.SortOrder.Title -> StringTable.get(R.string.menu_search_sort_title)
-            SongMenu.SortOrder.Artist -> StringTable.get(R.string.menu_search_sort_artist)
-            SongMenu.SortOrder.Creator -> StringTable.get(R.string.menu_search_sort_creator)
-            SongMenu.SortOrder.Date -> StringTable.get(R.string.menu_search_sort_date)
-            SongMenu.SortOrder.Bpm -> StringTable.get(R.string.menu_search_sort_bpm)
-            SongMenu.SortOrder.DroidStars -> StringTable.get(R.string.menu_search_sort_droid_stars)
-            SongMenu.SortOrder.StandardStars -> StringTable.get(R.string.menu_search_sort_standard_stars)
-            SongMenu.SortOrder.Length -> StringTable.get(R.string.menu_search_sort_length)
+            SongMenu.SortOrder.Title -> StringManager.get(R.string.menu_search_sort_title)
+            SongMenu.SortOrder.Artist -> StringManager.get(R.string.menu_search_sort_artist)
+            SongMenu.SortOrder.Creator -> StringManager.get(R.string.menu_search_sort_creator)
+            SongMenu.SortOrder.Date -> StringManager.get(R.string.menu_search_sort_date)
+            SongMenu.SortOrder.Bpm -> StringManager.get(R.string.menu_search_sort_bpm)
+            SongMenu.SortOrder.DroidStars -> StringManager.get(R.string.menu_search_sort_droid_stars)
+            SongMenu.SortOrder.StandardStars -> StringManager.get(R.string.menu_search_sort_standard_stars)
+            SongMenu.SortOrder.Length -> StringManager.get(R.string.menu_search_sort_length)
         }
 
         sortButton.text = s
@@ -243,7 +243,7 @@ class FilterMenuFragment : BaseFragment(), IUpdateHandler, IFilterMenu {
 
     private fun updateFavFolderText() {
         favoriteFolder.text =
-            savedFolder.orEmpty().ifEmpty { StringTable.get(R.string.favorite_default) }
+            savedFolder.orEmpty().ifEmpty { StringManager.get(R.string.favorite_default) }
     }
 
     private fun nextOrder() {

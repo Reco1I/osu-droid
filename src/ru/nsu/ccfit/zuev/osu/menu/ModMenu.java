@@ -27,7 +27,7 @@ import ru.nsu.ccfit.zuev.osu.game.GameHelper;
 import ru.nsu.ccfit.zuev.osu.game.mods.GameMod;
 import ru.nsu.ccfit.zuev.osu.game.mods.IModSwitcher;
 import ru.nsu.ccfit.zuev.osu.game.mods.ModButton;
-import ru.nsu.ccfit.zuev.osu.helper.StringTable;
+import ru.nsu.ccfit.zuev.osu.helper.StringManager;
 import ru.nsu.ccfit.zuev.osu.helper.TextButton;
 import ru.nsu.ccfit.zuev.osu.scoring.StatisticV2;
 import ru.nsu.ccfit.zuev.osuplus.R;
@@ -229,7 +229,7 @@ public class ModMenu implements IModSwitcher {
 
         multiplierText = new ChangeableText(0, Utils.toRes(50),
                 ResourceManager.getFont("CaptionFont"),
-                StringTable.format(R.string.menu_mod_multiplier, 1f));
+                StringManager.format(R.string.menu_mod_multiplier, 1f));
         multiplierText.setScale(1.2f);
         scene.attachChild(multiplierText);
 
@@ -284,7 +284,7 @@ public class ModMenu implements IModSwitcher {
 
         addButton(offset + offsetGrowth * factor, Config.getRES_HEIGHT() / 2 + button.getHeight() * 2, "selection-mod-precise", GameMod.MOD_PRECISE);
 
-        final TextButton resetText = new TextButton(ResourceManager.getFont("CaptionFont"), StringTable.get(R.string.menu_mod_reset)) {
+        final TextButton resetText = new TextButton(ResourceManager.getFont("CaptionFont"), StringManager.get(R.string.menu_mod_reset)) {
 
             @Override
             public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
@@ -307,7 +307,7 @@ public class ModMenu implements IModSwitcher {
         }
         resetText.setScale(1.2f);
 
-        final TextButton back = new TextButton(ResourceManager.getFont("CaptionFont"), StringTable.get(R.string.menu_mod_back)) {
+        final TextButton back = new TextButton(ResourceManager.getFont("CaptionFont"), StringManager.get(R.string.menu_mod_back)) {
 
             @Override
             public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
@@ -414,7 +414,7 @@ public class ModMenu implements IModSwitcher {
             }
         }
 
-        multiplierText.setText(StringTable.format(R.string.menu_mod_multiplier,
+        multiplierText.setText(StringManager.format(R.string.menu_mod_multiplier,
                 mult));
         multiplierText.setPosition(
                 Config.getRES_WIDTH() / 2f - multiplierText.getWidth() / 2,

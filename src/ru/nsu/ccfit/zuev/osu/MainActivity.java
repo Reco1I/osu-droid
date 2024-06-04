@@ -79,7 +79,7 @@ import ru.nsu.ccfit.zuev.audio.serviceAudio.SongService;
 import ru.nsu.ccfit.zuev.osu.game.SpritePool;
 import ru.nsu.ccfit.zuev.osu.helper.FileUtils;
 import ru.nsu.ccfit.zuev.osu.helper.InputManager;
-import ru.nsu.ccfit.zuev.osu.helper.StringTable;
+import ru.nsu.ccfit.zuev.osu.helper.StringManager;
 import ru.nsu.ccfit.zuev.osu.menu.LoadingScreen;
 import ru.nsu.ccfit.zuev.osu.menu.ModMenu;
 import ru.nsu.ccfit.zuev.osu.menu.SplashScene;
@@ -115,7 +115,6 @@ public class MainActivity extends BaseGameActivity implements
         crashlytics = FirebaseCrashlytics.getInstance();
         Config.loadConfig(this);
         initialGameDirectory();
-        StringTable.setContext(this);
         ToastLogger.init(this);
         InputManager.setContext(this);
         OnlineManager.getInstance().Init(getApplicationContext());
@@ -141,7 +140,7 @@ public class MainActivity extends BaseGameActivity implements
         try {
             Osu.Engine.setTouchController(new MultiTouchController());
         } catch (final MultiTouchException e) {
-            ToastLogger.showText(StringTable.get(R.string.message_error_multitouch), false);
+            ToastLogger.showText(StringManager.get(R.string.message_error_multitouch), false);
         }
 
         Osu.Activity = this;
@@ -157,7 +156,7 @@ public class MainActivity extends BaseGameActivity implements
                 Config.setBeatmapPath(Config.getCorePath() + "Songs/");
                 dir = new File(Config.getBeatmapPath());
                 if (!(dir.exists() || dir.mkdirs())) {
-                    ToastLogger.showText(StringTable.format(
+                    ToastLogger.showText(StringManager.format(
                                     R.string.message_error_createdir, dir.getPath()),
                             true);
                 } else {
@@ -328,7 +327,7 @@ public class MainActivity extends BaseGameActivity implements
         File internal = Environment.getDataDirectory();
         StatFs stat = new StatFs(internal.getPath());
         availableMemory = (double) stat.getAvailableBytes();
-        String toastMessage = String.format(StringTable.get(R.string.message_low_storage_space), df.format(availableMemory / minMem));
+        String toastMessage = String.format(StringManager.get(R.string.message_low_storage_space), df.format(availableMemory / minMem));
         if (availableMemory < 0.5 * minMem) { //I set 512MiB as a minimum
             Execution.mainThread(() -> Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show());
         }
@@ -377,7 +376,7 @@ public class MainActivity extends BaseGameActivity implements
             File file = new File(beatmapToAdd);
             if (file.getName().toLowerCase().endsWith(".osz")) {
                 ToastLogger.showText(
-                        StringTable.get(R.string.message_lib_importing),
+                        StringManager.get(R.string.message_lib_importing),
                         false);
 
                 FileUtils.extractZip(beatmapToAdd, Config.getBeatmapPath());
@@ -430,7 +429,7 @@ public class MainActivity extends BaseGameActivity implements
             if (beatmaps.size() > 0) {
                 // final boolean deleteOsz = Config.isDELETE_OSZ();
                 // Config.setDELETE_OSZ(true);
-                ToastLogger.showText(StringTable.format(
+                ToastLogger.showText(StringManager.format(
                         R.string.message_lib_importing_several,
                         beatmaps.size()), false);
                 for (final String beatmap : beatmaps) {
@@ -484,7 +483,7 @@ public class MainActivity extends BaseGameActivity implements
         }
 
         if (skins.size() > 0) {
-            ToastLogger.showText(StringTable.format(
+            ToastLogger.showText(StringManager.format(
                     R.string.message_skin_importing_several,
                     skins.size()), false);
 
@@ -493,7 +492,7 @@ public class MainActivity extends BaseGameActivity implements
                     String folderName = skin.substring(0, skin.length() - 4);
                     // We have imported the skin!
                     ToastLogger.showText(
-                            StringTable.format(R.string.message_lib_imported, folderName),
+                            StringManager.format(R.string.message_lib_imported, folderName),
                             true);
                     Config.addSkin(folderName.substring(folderName.lastIndexOf("/") + 1), skin);
                 }

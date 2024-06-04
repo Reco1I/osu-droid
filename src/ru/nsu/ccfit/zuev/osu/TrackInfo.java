@@ -3,7 +3,7 @@ package ru.nsu.ccfit.zuev.osu;
 import com.rian.osu.beatmap.Beatmap;
 import com.rian.osu.difficulty.BeatmapDifficultyCalculator;
 import ru.nsu.ccfit.zuev.osu.game.GameHelper;
-import ru.nsu.ccfit.zuev.osu.helper.StringTable;
+import ru.nsu.ccfit.zuev.osu.helper.StringManager;
 import ru.nsu.ccfit.zuev.osuplus.R;
 
 import java.io.File;
@@ -279,7 +279,7 @@ public class TrackInfo implements Serializable {
         // General
         var musicFile = new File(beatmap.folder, beatmap.general.audioFilename);
         if (!musicFile.exists()) {
-            ToastLogger.showText(StringTable.format(R.string.beatmap_parser_music_not_found,
+            ToastLogger.showText(StringManager.format(R.string.beatmap_parser_music_not_found,
                     filename.substring(0, Math.max(0, filename.length() - 4))), true);
             return false;
         }

@@ -19,7 +19,7 @@ import ru.nsu.ccfit.zuev.osu.ResourceManager;
 import ru.nsu.ccfit.zuev.osu.TrackInfo;
 import ru.nsu.ccfit.zuev.osu.Utils;
 import ru.nsu.ccfit.zuev.osu.DifficultyAlgorithm;
-import ru.nsu.ccfit.zuev.osu.helper.StringTable;
+import ru.nsu.ccfit.zuev.osu.helper.StringManager;
 import ru.nsu.ccfit.zuev.osu.scoring.ScoreLibrary;
 import ru.nsu.ccfit.zuev.osuplus.R;
 
@@ -50,7 +50,7 @@ public class MenuItem {
 //        titleStr = (beatmap.getArtistUnicode() == null ? beatmap.getArtist() : beatmap.getArtistUnicode()) + " - "
 //                + (beatmap.getTitleUnicode() == null ? beatmap.getTitle() : beatmap.getTitleUnicode());
         titleStr = beatmap.getArtist() + " - " + beatmap.getTitle();
-        creatorStr = StringTable.format(R.string.menu_creator,
+        creatorStr = StringManager.format(R.string.menu_creator,
                 beatmap.getCreator());
         trackSprites = new MenuItemTrack[info.getCount()];
 
@@ -67,7 +67,7 @@ public class MenuItem {
 //        titleStr = (beatmap.getArtistUnicode() == null ? beatmap.getArtist() : beatmap.getArtistUnicode()) + " - "
 //                + (beatmap.getTitleUnicode() == null ? beatmap.getTitle() : beatmap.getTitleUnicode());
         titleStr = beatmap.getArtist() + " - " + beatmap.getTitle();
-        creatorStr = StringTable.format(R.string.menu_creator, beatmap.getCreator());
+        creatorStr = StringManager.format(R.string.menu_creator, beatmap.getCreator());
         trackSprites = new MenuItemTrack[1];
         trackId = id;
         final BeatmapProperties props = PropertyManager.getProperties(info.getPath());

@@ -7,7 +7,7 @@ import androidx.annotation.StringRes;
 
 import java.util.ArrayList;
 
-import ru.nsu.ccfit.zuev.osu.helper.StringTable;
+import ru.nsu.ccfit.zuev.osu.helper.StringManager;
 
 public class ToastLogger {
     private static ToastLogger instance = null;
@@ -34,7 +34,7 @@ public class ToastLogger {
     }
 
     public static void showTextId(@StringRes final int resID, final boolean showlong) {
-        showText(StringTable.get(resID), showlong);
+        showText(StringManager.get(resID), showlong);
     }
 
     public static ArrayList<String> getLog() {

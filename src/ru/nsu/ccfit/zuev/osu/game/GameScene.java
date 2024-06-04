@@ -80,7 +80,7 @@ import ru.nsu.ccfit.zuev.osu.helper.AnimSprite;
 import ru.nsu.ccfit.zuev.osu.helper.DifficultyHelper;
 import ru.nsu.ccfit.zuev.osu.helper.MD5Calculator;
 import ru.nsu.ccfit.zuev.osu.helper.ModifierFactory;
-import ru.nsu.ccfit.zuev.osu.helper.StringTable;
+import ru.nsu.ccfit.zuev.osu.helper.StringManager;
 import ru.nsu.ccfit.zuev.osu.menu.LoadingScreen;
 import ru.nsu.ccfit.zuev.osu.menu.ModMenu;
 import ru.nsu.ccfit.zuev.osu.menu.PauseMenu;
@@ -336,7 +336,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
             } else {
                 Debug.e("startGame: cannot open file");
                 ToastLogger.showText(
-                        StringTable.format(R.string.message_error_open,
+                        StringManager.format(R.string.message_error_open,
                                 track.getFilename()), true);
                 return false;
             }
@@ -2778,12 +2778,12 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
             replay.setStat(stat);
             replay.save(replayFile);
             ScoreLibrary.addScore(lastTrack.getFilename(), stat, replayFile);
-            ToastLogger.showText(StringTable.get(R.string.message_save_replay_successful), true);
+            ToastLogger.showText(StringManager.get(R.string.message_save_replay_successful), true);
             replayFile = null;
             return true;
         }
         else{
-            ToastLogger.showText(StringTable.get(R.string.message_save_replay_failed), true);
+            ToastLogger.showText(StringManager.get(R.string.message_save_replay_failed), true);
             return false;
         }
     }
