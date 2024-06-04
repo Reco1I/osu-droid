@@ -17,7 +17,6 @@ import com.reco1l.osu.multiplayer.Multiplayer
 import com.reco1l.toolkt.android.dp
 import org.anddev.andengine.input.touch.TouchEvent
 import ru.nsu.ccfit.zuev.osu.Config
-import ru.nsu.ccfit.zuev.osu.Config.showVideoBackground
 import ru.nsu.ccfit.zuev.osu.Osu
 import ru.nsu.ccfit.zuev.osu.game.cursor.flashlight.FlashLightEntity
 import ru.nsu.ccfit.zuev.osu.game.mods.GameMod
@@ -134,27 +133,21 @@ class InGameSettingMenu : BaseFragment() {
         findViewById<CheckBox>(R.id.enableStoryboard)!!.apply {
             isChecked = Config.isShowStoryboard()
             setOnCheckedChangeListener { _, isChecked ->
-                showStoryboard = isChecked
-                PreferenceManager.getDefaultSharedPreferences(context).edit()
-                    .putBoolean("enableStoryboard", isChecked).commit()
+                Config.set("enableStoryboard", isChecked)
             }
         }
 
         findViewById<CheckBox>(R.id.showScoreboard)!!.apply {
             isChecked = Config.showScoreboard
             setOnCheckedChangeListener { _, isChecked ->
-                Config.showScoreboard = isChecked
-                PreferenceManager.getDefaultSharedPreferences(context).edit()
-                    .putBoolean("showscoreboard", isChecked).commit()
+                Config.set("showscoreboard", isChecked)
             }
         }
 
         findViewById<CheckBox>(R.id.enableVideo)!!.apply {
             isChecked = Config.showVideoBackground
             setOnCheckedChangeListener { _, isChecked ->
-                showVideoBackground = isChecked
-                PreferenceManager.getDefaultSharedPreferences(context).edit()
-                    .putBoolean("enableVideo", isChecked).commit()
+                Config.set("enableVideo", isChecked)
             }
         }
 
@@ -180,8 +173,7 @@ class InGameSettingMenu : BaseFragment() {
         }
 
         val backgroundBrightness = findViewById<SeekBar>(R.id.backgroundBrightnessBar)!!
-        backgroundBrightness.progress = PreferenceManager.getDefaultSharedPreferences(requireContext())
-            .getInt("bgbrightness", 25)
+        backgroundBrightness.progress = Config.get("bgBrightness", 25)
         backgroundBrightness.setOnSeekBarChangeListener(
             object : OnSeekBarChangeListener {
                 override fun onProgressChanged(

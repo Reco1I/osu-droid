@@ -16,7 +16,8 @@ import java.util.Map;
  */
 public class PropertyManager {
 
-    private static String version = "properties1";
+
+    private static final String VERSION = "properties1";
 
     private static Map<String, BeatmapProperties> properties = new HashMap<>();
 
@@ -38,7 +39,7 @@ public class PropertyManager {
             var obj = istream.readObject();
 
             if (obj instanceof String) {
-                if (!obj.equals(version)) {
+                if (!obj.equals(VERSION)) {
                     return;
                 }
             } else {
@@ -63,7 +64,7 @@ public class PropertyManager {
 
         try(var ostream = new ObjectOutputStream(new FileOutputStream(lib))) {
 
-            ostream.writeObject(version);
+            ostream.writeObject(VERSION);
             ostream.writeObject(properties);
 
         } catch (IOException e) {
