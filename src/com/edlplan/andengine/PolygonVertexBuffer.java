@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.zuev.osu.polygon;
+package com.edlplan.andengine;
 
 import org.anddev.andengine.opengl.util.FastFloatBuffer;
 import org.anddev.andengine.opengl.vertex.VertexBuffer;
