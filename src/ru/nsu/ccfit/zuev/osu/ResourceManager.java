@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.dgsrz.bancho.security.SecurityUtils;
 import com.reco1l.osu.graphics.BlankTextureRegion;
+import com.reco1l.osu.graphics.InputStreamTextureAtlasSource;
 import com.reco1l.osu.skinning.IniReader;
 import com.reco1l.osu.skinning.SkinConverter;
 
@@ -14,7 +15,6 @@ import org.anddev.andengine.opengl.font.FontFactory;
 import org.anddev.andengine.opengl.font.StrokeFont;
 import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
-import org.anddev.andengine.opengl.texture.atlas.bitmap.source.AssetBitmapTextureAtlasSource;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.source.FileBitmapTextureAtlasSource;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import org.anddev.andengine.opengl.texture.region.TextureRegionFactory;
@@ -427,12 +427,10 @@ public class ResourceManager {
     public static TextureRegion loadBackground(String filepath) {
 
         try {
-            var source = new FileBitmapTextureAtlasSource(new File(filepath));
-            var atlas = new BitmapTextureAtlas(source.getWidth(), source.getHeight(), TextureOptions.BILINEAR);
+            var source = new InputStreamTextureAtlasSource(new File(filepath));
+            var texture = TextureRegionFactory.createFromSource(source.createAtlas(TextureOptions.BILINEAR), source, 0, 0, false);
 
-            var texture = TextureRegionFactory.createFromSource(atlas, source, source.getWidth(), source.getHeight(), false);
             var previous = textures.put("::background", texture);
-
             if (previous != null) {
                 Osu.Engine.getTextureManager().unloadTexture(previous.getTexture());
             }
@@ -469,12 +467,10 @@ public class ResourceManager {
     public static TextureRegion loadTexture(String name, String filename, TextureOptions options) {
 
         try {
-            var source = new AssetBitmapTextureAtlasSource(Osu.Activity, filename);
-            var atlas = new BitmapTextureAtlas(source.getWidth(), source.getHeight(), options);
+            var source = new InputStreamTextureAtlasSource(() -> Osu.Activity.getAssets().open(filename));
+            var texture = TextureRegionFactory.createFromSource(source.createAtlas(options), source, 0, 0, false);
 
-            var texture = TextureRegionFactory.createFromSource(atlas, source, source.getWidth(), source.getHeight(), false);
             var previous = textures.put(name, texture);
-
             if (previous != null) {
                 Osu.Engine.getTextureManager().unloadTexture(previous.getTexture());
             }
@@ -510,15 +506,10 @@ public class ResourceManager {
     public static TextureRegion loadTexture(String name, File file, TextureOptions options) {
 
         try {
-            // Whenever the file is sampled in 2x size we must know before decoding.
-            var isHDTexture = file.getName().contains("@2x");
+            var source = new InputStreamTextureAtlasSource(file, file.getName().contains("@2x") ? 2 : 1);
+            var texture = TextureRegionFactory.createFromSource(source.createAtlas(options), source, 0, 0, false);
 
-            var source = new FileBitmapTextureAtlasSource(file, isHDTexture ? 2 : 1);
-            var atlas = new BitmapTextureAtlas(source.getWidth(), source.getHeight(), options);
-
-            var texture = TextureRegionFactory.createFromSource(atlas, source, source.getWidth(), source.getHeight(), false);
             var previous = textures.put(name, texture);
-
             if (previous != null) {
                 Osu.Engine.getTextureManager().unloadTexture(previous.getTexture());
             }
@@ -585,11 +576,10 @@ public class ResourceManager {
 
         try {
 
-            var source = new FileBitmapTextureAtlasSource(file);
-            var atlas = new BitmapTextureAtlas(source.getWidth(), source.getHeight(), TextureOptions.BILINEAR);
+            var source = new InputStreamTextureAtlasSource(file);
+            var texture = TextureRegionFactory.createFromSource(source.createAtlas(TextureOptions.BILINEAR), source, 0, 0, false);
 
-            var texture = TextureRegionFactory.createFromSource(atlas, source, source.getWidth(), source.getHeight(), false);
-            Osu.Engine.getTextureManager().loadTexture(atlas);
+            Osu.Engine.getTextureManager().loadTexture(texture.getTexture());
 
             if (multiframe) {
 
@@ -707,22 +697,27 @@ public class ResourceManager {
      */
     public static TextureRegion getTexture(String name, boolean shouldLoad) {
 
+        TextureRegion texture;
+
         if (SkinManager.isSkinEnabled() && customTextures.containsKey(name)) {
-            return customTextures.get(name);
+            texture = customTextures.get(name);
+        } else {
+            if (shouldLoad && !textures.containsKey(name)) {
+                return loadTexture(name, "gfx/" + name + ".png");
+            }
+
+            texture = textures.get(name);
         }
 
-        if (shouldLoad && !textures.containsKey(name)) {
-            return loadTexture(name, "gfx/" + name + ".png");
-        }
+        return texture == null ? BlankTextureRegion.Companion : texture;
 
-        return textures.get(name);
     }
 
     /**
      * Whenever the texture is loaded.
      */
-    public static boolean isTextureLoaded(final String resname) {
-        return textures.containsKey(resname);
+    public static boolean isTextureLoaded(final String name) {
+        return textures.containsKey(name);
     }
 
 
@@ -765,7 +760,7 @@ public class ResourceManager {
             var sound = new BassSoundProvider();
 
             if (!sound.prepare(Osu.Activity.getAssets(), filename)) {
-                return null;
+                return BassSoundProvider.EMPTY_SOUND;
             }
             sounds.put(name, sound);
 
@@ -818,7 +813,7 @@ public class ResourceManager {
         var sound = sounds.get(name);
 
         if (sound == null) {
-            return loadSound(name, "sfx/" + name + ".wav");
+            return loadSound(name, "sfx/" + name + ".ogg");
         }
         return sound;
     }

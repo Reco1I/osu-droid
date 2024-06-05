@@ -28,7 +28,7 @@ public class TextureHelper {
             File tmp = File.createTempFile("bmp_cache" + tmpFileId, ".png");
             tmp.deleteOnExit();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(tmp));
-            return new InputStreamTextureAtlasSource(() -> new FileInputStream(tmp));
+            return new InputStreamTextureAtlasSource(tmp);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -43,41 +43,26 @@ public class TextureHelper {
     }
 
     public static TextureRegion createRegion(Bitmap bitmap) {
-        int tw = 4, th = 4;
         var source = createSourceFromBitmap(bitmap);
         if (source == null || source.getWidth() == 0 || source.getHeight() == 0) {
             return null;
         }
 
-        final BitmapTextureAtlas tex = new BitmapTextureAtlas(tw, th, TextureOptions.BILINEAR);
-
-        TextureRegion region = TextureRegionFactory.createFromSource(tex, source, 0, 0,
-                false);
-        
-        Osu.Engine.getTextureManager().loadTexture(tex);
+        var region = TextureRegionFactory.createFromSource(source.createAtlas(TextureOptions.BILINEAR), source, 0, 0, false);
+        Osu.Engine.getTextureManager().loadTexture(region.getTexture());
         return region;
     }
 
     public static TextureRegion create1xRegion(int color) {
         Bitmap bmp = Bitmap.createBitmap(8, 8, Bitmap.Config.ARGB_8888);
         bmp.eraseColor(color);
-        int tw = 4, th = 4;
         var source = createMemorySourceFromBitmap(bmp);
         if (source.getWidth() == 0 || source.getHeight() == 0) {
             return null;
         }
-        while (tw < source.getWidth()) {
-            tw *= 2;
-        }
-        while (th < source.getHeight()) {
-            th *= 2;
-        }
 
-        final BitmapTextureAtlas tex = new BitmapTextureAtlas(tw, th, TextureOptions.BILINEAR);
-
-        TextureRegion region = TextureRegionFactory.createFromSource(tex, source, 0, 0,
-                false);
-        Osu.Engine.getTextureManager().loadTexture(tex);
+        var region = TextureRegionFactory.createFromSource(source.createAtlas(TextureOptions.BILINEAR), source, 0, 0, false);
+        Osu.Engine.getTextureManager().loadTexture(region.getTexture());
         return region;
     }
 
