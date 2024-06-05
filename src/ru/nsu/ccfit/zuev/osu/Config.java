@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 
-import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 
 import com.edlplan.favorite.FavoriteLibrary;
@@ -20,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import ru.nsu.ccfit.zuev.osu.data.Color4;
 import ru.nsu.ccfit.zuev.osu.helper.FileUtils;
 
 /**
@@ -163,7 +163,7 @@ public class Config {
 
     public static Map<String, String> skins = new HashMap<>();
 
-    public static RGBColor[] comboColors;
+    public static Color4[] comboColors;
 
 
     /// Private: Properties with custom getters.
@@ -278,9 +278,9 @@ public class Config {
             cursorSize = 50;
         }
 
-        comboColors = new RGBColor[4];
+        comboColors = new Color4[4];
         for (int i = 1; i <= 4; i++) {
-            comboColors[i - 1] = RGBColor.hex2Rgb(ColorPickerPreference.convertToRGB(get("combo" + i, 0xff000000)));
+            comboColors[i - 1] = Color4.createFromHex(ColorPickerPreference.convertToRGB(get("combo" + i, 0xff000000)));
         }
 
         deviceUUID = get("installID", null);

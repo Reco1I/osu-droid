@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 
-import ru.nsu.ccfit.zuev.osu.RGBColor;
+import ru.nsu.ccfit.zuev.osu.data.Color4;
 import ru.nsu.ccfit.zuev.skins.OsuSkin;
 import ru.nsu.ccfit.zuev.osu.Utils;
 import ru.nsu.ccfit.zuev.osu.helper.DifficultyHelper;
@@ -27,7 +27,7 @@ public class GameHelper {
     private static float drain = 0;
     private static float stackLeniency = 0;
     private static float timeMultiplier = 0;
-    private static RGBColor sliderColor = new RGBColor();
+    private static Color4 sliderColor = new Color4();
     private static boolean hidden = false;
     private static boolean flashLight = false;
     private static boolean hardrock = false;
@@ -249,11 +249,11 @@ public class GameHelper {
         GameHelper.stackLeniency = stackLeniency;
     }
 
-    public static RGBColor getSliderColor() {
+    public static Color4 getSliderColor() {
         return sliderColor;
     }
 
-    public static void setSliderColor(final RGBColor sliderColor) {
+    public static void setSliderColor(final Color4 sliderColor) {
         GameHelper.sliderColor = sliderColor;
     }
 

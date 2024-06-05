@@ -2,7 +2,7 @@ package com.rian.osu.beatmap.parser.sections
 
 import com.rian.osu.beatmap.Beatmap
 import com.rian.osu.beatmap.timings.BreakPeriod
-import ru.nsu.ccfit.zuev.osu.RGBColor
+import ru.nsu.ccfit.zuev.osu.data.Color4
 import kotlin.math.max
 
 /**
@@ -32,7 +32,7 @@ object BeatmapEventsParser : BeatmapSectionParser() {
             }
     
             if (it.size >= 5 && line.startsWith("3")) {
-                beatmap.events.backgroundColor = RGBColor(
+                beatmap.events.backgroundColor = Color4(
                     parseInt(it[2]).toFloat(),
                     parseInt(it[3]).toFloat(),
                     parseInt(it[4]).toFloat()

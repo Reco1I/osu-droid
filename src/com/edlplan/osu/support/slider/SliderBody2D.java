@@ -3,7 +3,6 @@ package com.edlplan.osu.support.slider;
 import com.edlplan.andengine.SpriteCache;
 import com.edlplan.andengine.TriangleBuilder;
 import com.edlplan.andengine.TrianglePack;
-import com.edlplan.framework.math.Color4;
 import com.edlplan.framework.math.line.LinePath;
 import com.reco1l.osu.Execution;
 
@@ -13,7 +12,7 @@ import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.util.modifier.IModifier;
 import org.anddev.andengine.util.modifier.ease.EaseQuadOut;
 
-import ru.nsu.ccfit.zuev.osu.RGBColor;
+import ru.nsu.ccfit.zuev.osu.data.Color4;
 
 public class SliderBody2D extends AbstractSliderBody {
 
@@ -31,7 +30,7 @@ public class SliderBody2D extends AbstractSliderBody {
     private float sliderBodyBaseAlpha = 0.7f;
     private float hintAlpha = 0.3f;
     private TrianglePack body = null, border = null, hint = null;
-    private RGBColor bodyColor = new RGBColor(), borderColor = new RGBColor(), hintColor = new RGBColor();
+    private Color4 bodyColor = new Color4(), borderColor = new Color4(), hintColor = new Color4();
     private float bodyWidth, borderWidth, hintWidth;
     private float startLength = 0, endLength = 0;
     private boolean enableHint = false;
@@ -284,7 +283,7 @@ public class SliderBody2D extends AbstractSliderBody {
 
     public static class SliderProperty {
 
-        public Color4 color = Color4.White.copyNew();
+        public com.edlplan.framework.math.Color4 color = com.edlplan.framework.math.Color4.White.copyNew();
 
         public float width;
 

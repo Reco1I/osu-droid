@@ -15,7 +15,7 @@ import org.anddev.andengine.util.MathUtils
 import ru.nsu.ccfit.zuev.osu.Config
 import ru.nsu.ccfit.zuev.osu.DifficultyAlgorithm
 import ru.nsu.ccfit.zuev.osu.Osu
-import ru.nsu.ccfit.zuev.osu.RGBColor
+import ru.nsu.ccfit.zuev.osu.data.Color4
 import ru.nsu.ccfit.zuev.osu.ResourceManager
 import ru.nsu.ccfit.zuev.osu.ToastLogger
 import ru.nsu.ccfit.zuev.osu.menu.MenuItemTrack
@@ -161,7 +161,7 @@ class BeatmapButton : Sprite(0f, 0f, ResourceManager.getTexture("menu-button-bac
 
     companion object
     {
-        private val DEFAULT_COLOR = RGBColor(25 / 255f, 25 / 255f, 240 / 255f)
-        val DEFAULT_TEXT_COLOR = RGBColor(1f, 1f, 1f)
+        private val DEFAULT_COLOR = Color4(25 / 255f, 25 / 255f, 240 / 255f)
+        val DEFAULT_TEXT_COLOR = Color4(1f, 1f, 1f)
     }
 }

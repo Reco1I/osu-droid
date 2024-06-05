@@ -64,8 +64,7 @@ import ru.nsu.ccfit.zuev.osu.Config;
 import ru.nsu.ccfit.zuev.osu.Constants;
 import ru.nsu.ccfit.zuev.osu.Osu;
 import ru.nsu.ccfit.zuev.osu.PropertyManager;
-import ru.nsu.ccfit.zuev.osu.RGBAColor;
-import ru.nsu.ccfit.zuev.osu.RGBColor;
+import ru.nsu.ccfit.zuev.osu.data.Color4;
 import ru.nsu.ccfit.zuev.osu.ResourceManager;
 import ru.nsu.ccfit.zuev.osu.ToastLogger;
 import ru.nsu.ccfit.zuev.osu.TrackInfo;
@@ -121,7 +120,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
     private float secPassed = 0;
     private float leadOut = 0;
     private LinkedList<GameObjectData> objects;
-    private ArrayList<RGBColor> combos;
+    private ArrayList<Color4> combos;
     private int comboNum; // use this to show combo color
     private int currentComboNum;
     private boolean comboWasMissed = false;
@@ -507,12 +506,12 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         }
 
         if (OsuSkin.get().isForceOverrideSliderBorderColor()) {
-            GameHelper.setSliderColor(new RGBColor(OsuSkin.get().getSliderBorderColor()));
+            GameHelper.setSliderColor(new Color4(OsuSkin.get().getSliderBorderColor()));
         }
 
         combos = new ArrayList<>();
-        for (RGBColor color : beatmap.colors.comboColors) {
-            combos.add(new RGBColor(color.r() / 255, color.g() / 255, color.b() / 255));
+        for (Color4 color : beatmap.colors.comboColors) {
+            combos.add(new Color4(color.r() / 255, color.g() / 255, color.b() / 255));
         }
 
         if (combos.isEmpty() || Config.forceComboColors) {
@@ -905,7 +904,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         if(!Config.hideHUD) {
             SongProgressBar progressBar = new SongProgressBar(this, fgScene, lastObjectTime, objects
                     .getFirst().getTime(), new PointF(0, Config.screenHeight - 7), Config.screenWidth, 7);
-            progressBar.setProgressRectColor(new RGBAColor(153f / 255f, 204f / 255f, 51f / 255f, 0.4f));
+            progressBar.setProgressRectColor(new Color4(153f / 255f, 204f / 255f, 51f / 255f, 0.4f));
         }
 
         if (Config.errorMeterDisplayMode == 1
@@ -1075,7 +1074,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         scene.registerUpdateHandler(this);
     }
 
-    public RGBColor getComboColor(int num) {
+    public Color4 getComboColor(int num) {
         return combos.get(num % combos.size());
     }
 
@@ -1501,7 +1500,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
             }
 
             if ((objDefine & 1) > 0) {
-                final RGBColor col = getComboColor(comboNum);
+                final Color4 col = getComboColor(comboNum);
                 final HitCircle circle = GameObjectPool.getInstance().getCircle();
                 String tempSound = null;
                 if (params.length > 5) {
@@ -1569,7 +1568,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
                 }
 
             } else if ((objDefine & 2) > 0) {
-                final RGBColor col = getComboColor(comboNum);
+                final Color4 col = getComboColor(comboNum);
                 final String soundspec = params.length > 8 ? params[8] : null;
                 final Slider slider = GameObjectPool.getInstance().getSlider();
                 String tempSound = null;
@@ -1979,7 +1978,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
 
 
     public void onCircleHit(int id, final float acc, final PointF pos,
-                            final boolean endCombo, byte forcedScore, RGBColor color) {
+                            final boolean endCombo, byte forcedScore, Color4 color) {
         if (GameHelper.isAuto()) {
             autoCursor.click();
         }
@@ -2025,12 +2024,12 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         createHitEffect(pos, scoreName, color);
     }
 
-    public void onSliderReverse(PointF pos, float ang, RGBColor color) {
+    public void onSliderReverse(PointF pos, float ang, Color4 color) {
         createBurstEffectSliderReverse(pos, ang, color);
     }
 
     public void onSliderHit(int id, final int score, final PointF start,
-                            final PointF end, final boolean endCombo, RGBColor color, int type) {
+                            final PointF end, final boolean endCombo, Color4 color, int type) {
         if (GameHelper.isFlashLight() && !GameHelper.isAuto() && !GameHelper.isAutopilotMod()) {
             int nearestCursorId = getNearestCursorId(end.x, end.y);
             if (nearestCursorId >= 0) {
@@ -2500,7 +2499,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
         expiredObjects.add(object);
     }
 
-    private void createHitEffect(final PointF pos, final String name, RGBColor color) {
+    private void createHitEffect(final PointF pos, final String name, Color4 color) {
         final GameEffect effect = GameObjectPool.getInstance().getEffect(name);
         if (name.equals("hit0")) {
             if(GameHelper.isSuddenDeath()){
@@ -2555,7 +2554,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
                         ModifierFactory.newAlphaModifier(0.5f, 1, 0)));
     }
 
-    private void createBurstEffect(final PointF pos, final RGBColor color) {
+    private void createBurstEffect(final PointF pos, final Color4 color) {
         if (!Config.showBurstEffects || stat.getMod().contains(GameMod.MOD_HIDDEN))
             return;
         final GameEffect burst1 = GameObjectPool.getInstance().getEffect("hitcircle");
@@ -2573,7 +2572,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
 
     }
 
-    private void createBurstEffectSliderStart(final PointF pos, final RGBColor color) {
+    private void createBurstEffectSliderStart(final PointF pos, final Color4 color) {
         if (!Config.showBurstEffects || stat.getMod().contains(GameMod.MOD_HIDDEN))
             return;
         final GameEffect burst1 = GameObjectPool.getInstance().getEffect("sliderstartcircle");
@@ -2591,7 +2590,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
 
     }
 
-    private void createBurstEffectSliderEnd(final PointF pos, final RGBColor color) {
+    private void createBurstEffectSliderEnd(final PointF pos, final Color4 color) {
         if (!Config.showBurstEffects || stat.getMod().contains(GameMod.MOD_HIDDEN))
             return;
         final GameEffect burst1 = GameObjectPool.getInstance().getEffect("sliderendcircle");
@@ -2609,7 +2608,7 @@ public class GameScene implements IUpdateHandler, GameObjectListener,
 
     }
 
-    private void createBurstEffectSliderReverse(final PointF pos, float ang, final RGBColor color) {
+    private void createBurstEffectSliderReverse(final PointF pos, float ang, final Color4 color) {
         if (!Config.showBurstEffects || stat.getMod().contains(GameMod.MOD_HIDDEN))
             return;
         final GameEffect burst1 = GameObjectPool.getInstance().getEffect("reversearrow");

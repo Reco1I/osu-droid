@@ -1,11 +1,11 @@
 package ru.nsu.ccfit.zuev.osu.datatypes;
 
-import ru.nsu.ccfit.zuev.osu.RGBColor;
+import ru.nsu.ccfit.zuev.osu.data.Color4;
 
-public class DefaultRGBColor extends DefaultData<RGBColor> {
+public class DefaultRGBColor extends DefaultData<Color4> {
     private final String instanceDefaultHex = "#FFFFFF";
 
-    public DefaultRGBColor(RGBColor defaultValue) {
+    public DefaultRGBColor(Color4 defaultValue) {
         super(defaultValue);
     }
 
@@ -14,7 +14,7 @@ public class DefaultRGBColor extends DefaultData<RGBColor> {
     }
 
     @Override
-    protected RGBColor instanceDefaultValue() {
-        return RGBColor.hex2Rgb(instanceDefaultHex);
+    protected Color4 instanceDefaultValue() {
+        return Color4.createFromHex(instanceDefaultHex);
     }
 }

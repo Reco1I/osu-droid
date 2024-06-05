@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import ru.nsu.ccfit.zuev.osu.RGBColor;
+import ru.nsu.ccfit.zuev.osu.data.Color4;
 import ru.nsu.ccfit.zuev.osu.ResourceManager;
 import ru.nsu.ccfit.zuev.osu.helper.AnimSprite;
 
@@ -52,7 +52,7 @@ public class GameEffect extends GameObject implements IEntityModifierListener {
         return animationEffects.contains(textureName);
     }
 
-    public void setColor(final RGBColor color) {
+    public void setColor(final Color4 color) {
         hit.setColor(color.r(), color.g(), color.b());
     }
 

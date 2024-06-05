@@ -1,8 +1,8 @@
 package com.rian.osu.beatmap.parser.sections
 
 import com.rian.osu.beatmap.Beatmap
-import com.rian.osu.beatmap.ComboColor
-import ru.nsu.ccfit.zuev.osu.RGBColor
+import com.rian.osu.beatmap.ComboColor4
+import ru.nsu.ccfit.zuev.osu.data.Color4
 
 /**
  * A parser for parsing a beatmap's colors section.
@@ -15,7 +15,7 @@ object BeatmapColorParser : BeatmapKeyValueSectionParser() {
             throw UnsupportedOperationException("Color specified in incorrect format (should be R,G,B or R,G,B,A)")
         }
 
-        val color = RGBColor(
+        val color = Color4(
             parseInt(s[0]).toFloat(),
             parseInt(s[1]).toFloat(),
             parseInt(s[2]).toFloat()
@@ -25,7 +25,7 @@ object BeatmapColorParser : BeatmapKeyValueSectionParser() {
             val index = p[0].substring(5).toIntOrNull() ?: (beatmap.colors.comboColors.size + 1)
 
             beatmap.colors.comboColors.apply {
-                add(ComboColor(index, color))
+                add(ComboColor4(index, color))
                 
                 sortBy { it.index }
             }

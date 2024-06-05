@@ -1,7 +1,7 @@
 package com.rian.osu.beatmap.sections
 
 import com.rian.osu.beatmap.timings.BreakPeriod
-import ru.nsu.ccfit.zuev.osu.RGBColor
+import ru.nsu.ccfit.zuev.osu.data.Color4
 
 /**
  * Contains beatmap events.
@@ -35,5 +35,5 @@ class BeatmapEvents {
      * The background color of this beatmap.
      */
     @JvmField
-    var backgroundColor: RGBColor? = null
+    var backgroundColor: Color4? = null
 }

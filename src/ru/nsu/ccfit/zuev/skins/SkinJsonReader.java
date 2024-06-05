@@ -7,7 +7,7 @@ import com.edlplan.framework.utils.interfaces.Consumer;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import ru.nsu.ccfit.zuev.osu.RGBColor;
+import ru.nsu.ccfit.zuev.osu.data.Color4;
 
 public class SkinJsonReader extends SkinReader {
     private static final SkinJsonReader reader = new SkinJsonReader();
@@ -83,11 +83,11 @@ public class SkinJsonReader extends SkinReader {
         skin.comboColor.clear();
         JSONArray array = data.optJSONArray("colors");
         if (array == null || array.length() == 0) {
-            skin.comboColor.add(RGBColor.hex2Rgb(skin.DEFAULT_COLOR_HEX));
+            skin.comboColor.add(Color4.createFromHex(skin.DEFAULT_COLOR_HEX));
         } else {
             for (int i = 0; i < array.length(); i++) {
                 String hex = array.optString(i, skin.DEFAULT_COLOR_HEX);
-                skin.comboColor.add(RGBColor.hex2Rgb(hex));
+                skin.comboColor.add(Color4.createFromHex(hex));
             }
         }
     }
@@ -143,7 +143,7 @@ public class SkinJsonReader extends SkinReader {
         JSONArray names = data.names();
         if (names == null) return;
         for (int i = 0; i < names.length(); i++) {
-            skin.colorData.put(names.optString(i), RGBColor.hex2Rgb(data.optString(names.optString(i))));
+            skin.colorData.put(names.optString(i), Color4.createFromHex(data.optString(names.optString(i))));
         }
     }
 

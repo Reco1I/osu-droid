@@ -5,7 +5,7 @@ import com.edlplan.framework.math.line.LinePath;
 
 import org.anddev.andengine.entity.scene.Scene;
 
-import ru.nsu.ccfit.zuev.osu.RGBColor;
+import ru.nsu.ccfit.zuev.osu.data.Color4;
 
 public class SliderBody3D extends AbstractSliderBody {
 
@@ -17,7 +17,7 @@ public class SliderBody3D extends AbstractSliderBody {
 
     private Triangle3DPack body = null, border = null, bodyMask = null, borderMask = null;
 
-    private RGBColor bodyColor = new RGBColor(), borderColor = new RGBColor();
+    private Color4 bodyColor = new Color4(), borderColor = new Color4();
 
     private float bodyWidth, borderWidth;
 

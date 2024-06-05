@@ -34,7 +34,7 @@ import com.reco1l.toolkt.kotlin.async
 import org.anddev.andengine.input.touch.TouchEvent
 import ru.nsu.ccfit.zuev.osu.Osu
 import ru.nsu.ccfit.zuev.osu.Osu.Engine
-import ru.nsu.ccfit.zuev.osu.RGBColor
+import ru.nsu.ccfit.zuev.osu.data.Color4
 import ru.nsu.ccfit.zuev.osu.ResourceManager
 import ru.nsu.ccfit.zuev.osuplus.R
 import kotlin.math.abs
@@ -131,8 +131,8 @@ class RoomChat : BaseFragment(), OnEditorActionListener, OnKeyListener
 
     private fun showPreview(content: String, contentColor: String? = null, tag: String? = null, tagColor: String? = null) {
 
-        RGBColor.hex2Rgb(tagColor ?: "#FFFFFF").apply(RoomScene.chatPreview.tag)
-        RGBColor.hex2Rgb(contentColor ?: "#FFFFFF").apply(RoomScene.chatPreview.content)
+        Color4.createFromHex(tagColor ?: "#FFFFFF").apply(RoomScene.chatPreview.tag)
+        Color4.createFromHex(contentColor ?: "#FFFFFF").apply(RoomScene.chatPreview.content)
 
         RoomScene.chatPreview.setTagText(tag ?: "")
         RoomScene.chatPreview.setContentText(content)

@@ -16,7 +16,7 @@ import org.anddev.andengine.util.modifier.IModifier;
 import org.anddev.andengine.util.modifier.ease.EaseQuadIn;
 import org.anddev.andengine.util.modifier.ease.EaseQuadOut;
 import ru.nsu.ccfit.zuev.osu.Config;
-import ru.nsu.ccfit.zuev.osu.RGBColor;
+import ru.nsu.ccfit.zuev.osu.data.Color4;
 import ru.nsu.ccfit.zuev.osu.Utils;
 import ru.nsu.ccfit.zuev.osu.game.GameHelper.SliderPath;
 import ru.nsu.ccfit.zuev.osu.helper.AnimSprite;
@@ -65,8 +65,8 @@ public class Slider extends GameObject {
     private float ballAngle;
 
     private boolean kiai;
-    private RGBColor color = new RGBColor();
-    private final RGBColor circleColor = new RGBColor();
+    private Color4 color = new Color4();
+    private final Color4 circleColor = new Color4();
 
     //for replay
     private int firstHitAccuracy;
@@ -157,7 +157,7 @@ public class Slider extends GameObject {
         preStageFinish = false;
         color.set(r, g, b);
         if (!OsuSkin.get().isSliderFollowComboColor()) {
-            color = new RGBColor(OsuSkin.get().getSliderBodyColor());
+            color = new Color4(OsuSkin.get().getSliderBodyColor());
         }
         circleColor.set(r, g, b);
 
@@ -351,7 +351,7 @@ public class Slider extends GameObject {
                 abstractSliderBody.setEnableHint(true);
                 abstractSliderBody.setHintAlpha(OsuSkin.get().getSliderHintAlpha());
                 abstractSliderBody.setHintWidth(Math.min(OsuSkin.get().getSliderHintWidth() * scale, bodyWidth));
-                RGBColor hintColor = OsuSkin.get().getSliderHintColor();
+                Color4 hintColor = OsuSkin.get().getSliderHintColor();
                 if (hintColor != null) {
                     abstractSliderBody.setHintColor(hintColor.r(), hintColor.g(), hintColor.b());
                 } else {
@@ -361,7 +361,7 @@ public class Slider extends GameObject {
 
             abstractSliderBody.applyToScene(scene, Config.useSnakingInSliders);
             abstractSliderBody.setBodyColor(color.r(), color.g(), color.b());
-            RGBColor scolor = GameHelper.getSliderColor();
+            Color4 scolor = GameHelper.getSliderColor();
             abstractSliderBody.setBorderColor(scolor.r(), scolor.g(), scolor.b());
         }
 

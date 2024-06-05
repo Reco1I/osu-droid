@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ru.nsu.ccfit.zuev.osu.Config;
-import ru.nsu.ccfit.zuev.osu.RGBColor;
+import ru.nsu.ccfit.zuev.osu.data.Color4;
 import ru.nsu.ccfit.zuev.osu.ResourceManager;
 import ru.nsu.ccfit.zuev.osu.helper.FileUtils;
 
@@ -24,7 +24,7 @@ public class SkinManager {
         frameCount.putAll(stdframeCount);
     }
 
-    private final RGBColor sliderColor = new RGBColor(1, 1, 1);
+    private final Color4 sliderColor = new Color4(1, 1, 1);
     private String skinname = "";
 
     private SkinManager() {
@@ -54,7 +54,7 @@ public class SkinManager {
         frameCount.put(texname, frames);
     }
 
-    public RGBColor getSliderColor() {
+    public Color4 getSliderColor() {
         return sliderColor;
     }
 

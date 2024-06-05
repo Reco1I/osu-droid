@@ -10,16 +10,17 @@ import java.lang.ref.WeakReference;
 import java.math.BigDecimal;
 
 import ru.nsu.ccfit.zuev.osu.*;
+import ru.nsu.ccfit.zuev.osu.data.Color4;
 import ru.nsu.ccfit.zuev.skins.OsuSkin;
 import ru.nsu.ccfit.zuev.osu.scoring.ScoreLibrary;
 
 public class MenuItemTrack extends Sprite {
 
-    private static final RGBColor DEFAULT_COLOR = new RGBColor(25 / 255f, 25 / 255f, 240 / 255f);
-    private static final RGBColor SELECTED_COLOR = new RGBColor(1, 1, 1);
+    private static final Color4 DEFAULT_COLOR = new Color4(25 / 255f, 25 / 255f, 240 / 255f);
+    private static final Color4 SELECTED_COLOR = new Color4(1, 1, 1);
 
-    private static final RGBColor DEFAULT_TEXT_COLOR = new RGBColor(1, 1, 1);
-    private static final RGBColor SELECTED_TEXT_COLOR = new RGBColor(0, 0, 0);
+    private static final Color4 DEFAULT_TEXT_COLOR = new Color4(1, 1, 1);
+    private static final Color4 SELECTED_TEXT_COLOR = new Color4(0, 0, 0);
     private final ChangeableText trackTitle, trackLeftText;
     private final Sprite[] stars;
     private final Sprite halfStar;

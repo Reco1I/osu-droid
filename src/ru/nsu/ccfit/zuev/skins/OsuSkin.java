@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import okio.BufferedSource;
 import okio.Okio;
-import ru.nsu.ccfit.zuev.osu.RGBColor;
+import ru.nsu.ccfit.zuev.osu.data.Color4;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class OsuSkin {
     protected final BooleanSkinData rotateCursor = new BooleanSkinData("rotateCursor", true);
 
     protected final String DEFAULT_COLOR_HEX = "#FFFFFF";
-    protected final ArrayList<RGBColor> comboColor = new ArrayList<>();
+    protected final ArrayList<Color4> comboColor = new ArrayList<>();
 
     protected final ColorSkinData sliderBorderColor = new ColorSkinData("sliderBorderColor", DEFAULT_COLOR_HEX);
     protected final ColorSkinData sliderBodyColor = new ColorSkinData("sliderBodyColor", DEFAULT_COLOR_HEX);
@@ -43,7 +43,7 @@ public class OsuSkin {
     protected final StringSkinData comboPrefix = new StringSkinData("comboPrefix", "score");
 
     protected final HashMap<String, SkinLayout> layoutData = new HashMap<>();
-    protected final HashMap<String, RGBColor> colorData = new HashMap<>();
+    protected final HashMap<String, Color4> colorData = new HashMap<>();
 
     public static OsuSkin get() {
         return skinJson;
@@ -81,7 +81,7 @@ public class OsuSkin {
         return sliderHintWidth.getCurrentValue();
     }
 
-    public RGBColor getSliderHintColor() {
+    public Color4 getSliderHintColor() {
         return sliderHintColor.getCurrentValue();
     }
 
@@ -113,9 +113,9 @@ public class OsuSkin {
         return forceOverrideComboColor.getCurrentValue();
     }
 
-    public ArrayList<RGBColor> getComboColor() {
+    public ArrayList<Color4> getComboColor() {
         if (comboColor.isEmpty()) {
-            comboColor.add(RGBColor.hex2Rgb(DEFAULT_COLOR_HEX));
+            comboColor.add(Color4.createFromHex(DEFAULT_COLOR_HEX));
         }
         return comboColor;
     }
@@ -124,7 +124,7 @@ public class OsuSkin {
         return !sliderBorderColor.currentIsDefault();
     }
 
-    public RGBColor getSliderBorderColor() {
+    public Color4 getSliderBorderColor() {
         return sliderBorderColor.getCurrentValue();
     }
 
@@ -132,7 +132,7 @@ public class OsuSkin {
         return sliderFollowComboColor.getCurrentValue();
     }
 
-    public RGBColor getSliderBodyColor() {
+    public Color4 getSliderBodyColor() {
         return sliderBodyColor.getCurrentValue();
     }
 
@@ -140,8 +140,8 @@ public class OsuSkin {
         return layoutData.get(name);
     }
 
-    public RGBColor getColor(String name, RGBColor fallback) {
-        RGBColor color = colorData.get(name);
+    public Color4 getColor(String name, Color4 fallback) {
+        Color4 color = colorData.get(name);
         return color == null ? fallback : color;
     }
 

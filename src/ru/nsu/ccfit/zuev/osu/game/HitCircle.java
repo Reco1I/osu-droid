@@ -7,7 +7,7 @@ import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.sprite.Sprite;
 
 import ru.nsu.ccfit.zuev.osu.Config;
-import ru.nsu.ccfit.zuev.osu.RGBColor;
+import ru.nsu.ccfit.zuev.osu.data.Color4;
 import ru.nsu.ccfit.zuev.osu.Utils;
 import ru.nsu.ccfit.zuev.osu.scoring.ResultType;
 import ru.nsu.ccfit.zuev.skins.OsuSkin;
@@ -16,7 +16,7 @@ public class HitCircle extends GameObject {
     private final Sprite circle;
     private final Sprite overlay;
     private final Sprite approachCircle;
-    private final RGBColor color = new RGBColor();
+    private final Color4 color = new Color4();
     private CircleNumber number;
     private GameObjectListener listener;
     private Scene scene;
