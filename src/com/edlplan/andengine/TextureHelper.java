@@ -2,7 +2,7 @@ package com.edlplan.andengine;
 
 import android.graphics.Bitmap;
 
-import com.reco1l.osu.graphics.InputStreamTextureAtlasSource;
+import com.reco1l.osu.graphics.StreamTextureSource;
 
 import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
@@ -20,24 +20,24 @@ public class TextureHelper {
 
     private static int tmpFileId = 0;
 
-    public static InputStreamTextureAtlasSource createSourceFromBitmap(Bitmap bitmap) {
+    public static StreamTextureSource createSourceFromBitmap(Bitmap bitmap) {
         tmpFileId++;
         try {
             File tmp = File.createTempFile("bmp_cache" + tmpFileId, ".png");
             tmp.deleteOnExit();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(tmp));
-            return new InputStreamTextureAtlasSource(tmp);
+            return new StreamTextureSource(tmp);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public static InputStreamTextureAtlasSource createMemorySourceFromBitmap(Bitmap bitmap) {
+    public static StreamTextureSource createMemorySourceFromBitmap(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] bytes = byteArrayOutputStream.toByteArray();
-        return new InputStreamTextureAtlasSource(() -> new ByteArrayInputStream(bytes));
+        return new StreamTextureSource(() -> new ByteArrayInputStream(bytes));
     }
 
     public static TextureRegion createRegion(Bitmap bitmap) {

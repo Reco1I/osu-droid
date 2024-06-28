@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.dgsrz.bancho.security.SecurityUtils;
 import com.reco1l.osu.graphics.BlankTextureRegion;
-import com.reco1l.osu.graphics.InputStreamTextureAtlasSource;
+import com.reco1l.osu.graphics.StreamTextureSource;
 import com.reco1l.osu.skinning.IniReader;
 import com.reco1l.osu.skinning.SkinConverter;
 
@@ -426,7 +426,7 @@ public class ResourceManager {
     public static TextureRegion loadBackground(String filepath) {
 
         try {
-            var source = new InputStreamTextureAtlasSource(new File(filepath));
+            var source = new StreamTextureSource(new File(filepath));
             var texture = TextureRegionFactory.createFromSource(source.createAtlas(TextureOptions.BILINEAR), source, 0, 0, false);
 
             var previous = textures.put("::background", texture);
@@ -466,7 +466,7 @@ public class ResourceManager {
     public static TextureRegion loadTexture(String name, String filename, TextureOptions options) {
 
         try {
-            var source = new InputStreamTextureAtlasSource(() -> GlobalManager.Activity.getAssets().open(filename));
+            var source = new StreamTextureSource(() -> GlobalManager.Activity.getAssets().open(filename));
             var texture = TextureRegionFactory.createFromSource(source.createAtlas(options), source, 0, 0, false);
 
             var previous = textures.put(name, texture);
@@ -505,7 +505,7 @@ public class ResourceManager {
     public static TextureRegion loadTexture(String name, File file, TextureOptions options) {
 
         try {
-            var source = new InputStreamTextureAtlasSource(file, file.getName().contains("@2x") ? 2 : 1);
+            var source = new StreamTextureSource(file, file.getName().contains("@2x") ? 2 : 1);
             var texture = TextureRegionFactory.createFromSource(source.createAtlas(options), source, 0, 0, false);
 
             var previous = textures.put(name, texture);
@@ -575,7 +575,7 @@ public class ResourceManager {
 
         try {
 
-            var source = new InputStreamTextureAtlasSource(file);
+            var source = new StreamTextureSource(file);
             var texture = TextureRegionFactory.createFromSource(source.createAtlas(TextureOptions.BILINEAR), source, 0, 0, false);
 
             GlobalManager.Engine.getTextureManager().loadTexture(texture.getTexture());

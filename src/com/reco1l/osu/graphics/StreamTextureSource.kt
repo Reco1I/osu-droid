@@ -5,12 +5,10 @@ import android.graphics.Bitmap.*
 import android.graphics.BitmapFactory
 import android.util.Log
 import com.reco1l.toolkt.isPowerOfTwo
-import com.reco1l.toolkt.nextPowerOfTwo
 import org.anddev.andengine.opengl.texture.TextureOptions
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas
 import org.anddev.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSource
 import org.anddev.andengine.opengl.texture.source.BaseTextureAtlasSource
-import org.anddev.andengine.util.MathUtils
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
@@ -25,7 +23,7 @@ fun interface InputStreamProvider {
 }
 
 
-class InputStreamTextureAtlasSource @JvmOverloads constructor(
+class StreamTextureSource @JvmOverloads constructor(
 
     private val inputStream: InputStreamProvider,
     private val sampleSize: Int = 1
@@ -85,7 +83,7 @@ class InputStreamTextureAtlasSource @JvmOverloads constructor(
     }
 
 
-    override fun deepCopy() = InputStreamTextureAtlasSource(inputStream, sampleSize)
+    override fun deepCopy() = StreamTextureSource(inputStream, sampleSize)
 
 
     fun createAtlas(options: TextureOptions): BitmapTextureAtlas {
