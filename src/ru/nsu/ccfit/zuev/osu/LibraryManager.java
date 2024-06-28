@@ -283,7 +283,7 @@ public enum LibraryManager {
                     try {
                         var videoFile = new File(info.getPath(), beatmap.events.videoFilename);
 
-                        if (!VideoTexture.Companion.isSupportedVideo(videoFile)) {
+                        if (!VideoTexture.isSupportedVideo(videoFile)) {
                             //noinspection ResultOfMethodCallIgnored
                             videoFile.delete();
                         }

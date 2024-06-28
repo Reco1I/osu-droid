@@ -92,7 +92,6 @@ object OsuColors {
     // Source from: https://github.com/ppy/osu/blob/b9b341affd4faea65cd29c9678385176628ace5d/osu.Game/Graphics/OsuColour.cs#L26
 
     val STAR_RATING_GRADIENT = listOf(
-        0.1f to 0xFFaaaaaa.toInt(),
         0.1f to 0xFF4290fb.toInt(),
         1.25f to 0xFF4fc0ff.toInt(),
         2.0f to 0xFF4fffd5.toInt(),

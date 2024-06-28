@@ -4,71 +4,67 @@ import android.graphics.SurfaceTexture
 import android.media.MediaPlayer
 import android.opengl.GLES11Ext.GL_TEXTURE_EXTERNAL_OES
 import android.os.Build
+import android.util.Log
 import android.view.Surface
 import org.anddev.andengine.engine.Engine
 import org.anddev.andengine.engine.camera.Camera
 import org.anddev.andengine.entity.sprite.Sprite
 import org.anddev.andengine.opengl.texture.Texture
+import org.anddev.andengine.opengl.texture.Texture.PixelFormat.UNDEFINED
 import org.anddev.andengine.opengl.texture.TextureOptions
 import org.anddev.andengine.opengl.texture.region.TextureRegion
 import java.io.File
 import javax.microedition.khronos.opengles.GL10
+import javax.microedition.khronos.opengles.GL10.GL_CLAMP_TO_EDGE
+import javax.microedition.khronos.opengles.GL10.GL_LINEAR
+import javax.microedition.khronos.opengles.GL10.GL_NEAREST
 
-class VideoSprite(source: String, private val engine: Engine) : Sprite(0f, 0f, VideoTexture(source).toRegion())
-{
+class VideoSprite(source: String, private val engine: Engine) : Sprite(0f, 0f, VideoTexture(source).toRegion()) {
+
 
     val texture = textureRegion.texture as VideoTexture
 
-    init
-    {
+
+    init {
         engine.textureManager.loadTexture(texture)
     }
 
-    fun release()
-    {
+
+    override fun doDraw(graphics: GL10, camera: Camera) {
+
+        onInitDraw(graphics)
+        graphics.glEnable(GL_TEXTURE_EXTERNAL_OES)
+
+        textureRegion.onApply(graphics)
+
+        onApplyVertices(graphics)
+        drawVertices(graphics, camera)
+
+        graphics.glDisable(GL_TEXTURE_EXTERNAL_OES)
+    }
+
+
+    fun release() {
         texture.release()
         engine.textureManager.unloadTexture(texture)
     }
 
-    override fun doDraw(pGL: GL10, pCamera: Camera?)
-    {
-        onInitDraw(pGL)
-        pGL.glEnable(GL_TEXTURE_EXTERNAL_OES)
-
-        textureRegion.onApply(pGL)
-
-        onApplyVertices(pGL)
-        drawVertices(pGL, pCamera)
-
-        pGL.glDisable(GL_TEXTURE_EXTERNAL_OES)
-    }
-
-    override fun finalize()
-    {
+    override fun finalize() {
         release()
         super.finalize()
     }
 }
 
 
-class VideoTexture(val source: String)
-
-    : Texture(
-        PixelFormat.UNDEFINED,
-        TextureOptions(
-                GL10.GL_NEAREST,
-                GL10.GL_LINEAR,
-                GL10.GL_CLAMP_TO_EDGE,
-                GL10.GL_CLAMP_TO_EDGE,
-                false
-        ), null)
-{
+class VideoTexture(val source: String) : Texture(UNDEFINED, TextureOptions(GL_NEAREST, GL_LINEAR, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, false), null) {
 
     private val player = MediaPlayer().apply {
 
         setDataSource(source)
         setVolume(0f, 0f)
+
         isLooping = false
+
         prepare()
     }
 
@@ -81,28 +77,30 @@ class VideoTexture(val source: String)
     override fun getHeight() = player.videoHeight
 
 
-    override fun writeTextureToHardware(pGL: GL10) = Unit
+    override fun writeTextureToHardware(graphics: GL10) = Unit
 
-    override fun bindTextureOnHardware(pGL: GL10) = pGL.glBindTexture(GL_TEXTURE_EXTERNAL_OES, mHardwareTextureID)
+    override fun bindTextureOnHardware(graphics: GL10) = graphics.glBindTexture(GL_TEXTURE_EXTERNAL_OES, mHardwareTextureID)
 
-    override fun deleteTextureOnHardware(pGL: GL10?)
-    {
+
+    override fun deleteTextureOnHardware(pGL: GL10?) {
+
         surfaceTexture?.release()
         surfaceTexture = null
+
         super.deleteTextureOnHardware(pGL)
     }
 
 
-    override fun bind(pGL: GL10)
-    {
-        if (!isLoadedToHardware)
+    override fun bind(graphics: GL10) {
+
+        if (!isLoadedToHardware) {
             return
+        }
 
-        bindTextureOnHardware(pGL)
-        applyTextureOptions(pGL)
+        bindTextureOnHardware(graphics)
+        applyTextureOptions(graphics)
 
-        if (surfaceTexture == null)
-        {
+        if (surfaceTexture == null) {
             surfaceTexture = SurfaceTexture(mHardwareTextureID)
 
             val surface = Surface(surfaceTexture)
@@ -112,10 +110,12 @@ class VideoTexture(val source: String)
 
         try {
             surfaceTexture?.updateTexImage()
-        } catch (_: Exception) {
+        } catch (ignored: Exception) {
+
             isUpdateOnHardwareNeeded = true
         }
     }
+
 
     fun play() = player.start()
 
@@ -123,21 +123,21 @@ class VideoTexture(val source: String)
 
     fun release() = player.release()
 
-    fun seekTo(ms: Int)
-    {
+
+    fun seekTo(ms: Int) {
+
         // Unfortunately in old versions we can't seek at closest frame from the desired position.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             player.seekTo(ms.toLong(), MediaPlayer.SEEK_CLOSEST)
-        else
+        } else {
             player.seekTo(ms)
+        }
     }
 
-    fun setPlaybackSpeed(speed: Float)
-    {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-        {
-            val newParams = player.playbackParams.setSpeed(speed)
-            player.playbackParams = newParams
+    fun setPlaybackSpeed(speed: Float) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            player.playbackParams = player.playbackParams.setSpeed(speed)
         }
     }
 
@@ -145,13 +145,15 @@ class VideoTexture(val source: String)
     fun toRegion() = TextureRegion(this, 0, 0, width, height)
 
 
-    companion object
-    {
+    companion object {
+
         /**
          * See [MediaPlayer documentation](https://developer.android.com/guide/topics/media/platform/supported-formats)
          */
         val SUPPORTED_VIDEO_FORMATS = arrayOf("3gp", "mp4", "mkv", "webm")
 
+
+        @JvmStatic
         fun isSupportedVideo(file: File): Boolean = file.extension.lowercase() in SUPPORTED_VIDEO_FORMATS
     }
 }
