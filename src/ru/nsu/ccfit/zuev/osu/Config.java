@@ -406,6 +406,8 @@ public class Config {
             // Unfortunately there's no better way to check this, if the set isn't a string set it'll throw a CCE.
             //noinspection unchecked
             editor.putStringSet(key, (Set<String>) value);
+        } else {
+            throw new IllegalArgumentException("The type of value isn't supported.");
         }
 
         editor.commit();
