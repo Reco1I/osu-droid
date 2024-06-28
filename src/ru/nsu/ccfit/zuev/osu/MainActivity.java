@@ -126,23 +126,23 @@ public class MainActivity extends BaseGameActivity implements
         final PowerManager manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = manager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "osudroid:osu");
 
-        Osu.Camera = new SmoothCamera(0, 0, Config.screenWidth, Config.screenHeight, 0, 1800, 1);
+        GlobalManager.Camera = new SmoothCamera(0, 0, Config.screenWidth, Config.screenHeight, 0, 1800, 1);
 
-        var options = new EngineOptions(true, null, new RatioResolutionPolicy(Config.screenWidth, Config.screenHeight), Osu.Camera);
+        var options = new EngineOptions(true, null, new RatioResolutionPolicy(Config.screenWidth, Config.screenHeight), GlobalManager.Camera);
         options.setNeedsMusic(false);
         options.setNeedsSound(false);
         options.getRenderOptions().disableExtensionVertexBufferObjects();
         options.getTouchOptions().enableRunOnUpdateThread();
 
-        Osu.Engine = new Engine(options);
+        GlobalManager.Engine = new Engine(options);
 
         try {
-            Osu.Engine.setTouchController(new MultiTouchController());
+            GlobalManager.Engine.setTouchController(new MultiTouchController());
         } catch (final MultiTouchException e) {
             ToastLogger.showText(StringTable.get(R.string.message_error_multitouch), false);
         }
 
-        return Osu.Engine;
+        return GlobalManager.Engine;
     }
 
     private void initialGameDirectory() {
@@ -268,9 +268,9 @@ public class MainActivity extends BaseGameActivity implements
 
         Execution.async(() -> {
             BassAudioPlayer.initDevice();
-            Osu.init();
+            GlobalManager.init();
             analytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, null);
-            Osu.setLoadingProgress(50);
+            GlobalManager.setLoadingProgress(50);
             checkNewSkins();
             Config.loadSkins();
             checkNewBeatmaps();
@@ -284,12 +284,12 @@ public class MainActivity extends BaseGameActivity implements
             Execution.delayed(2500, () -> {
 
                 UpdateManager.INSTANCE.onActivityStart();
-                Osu.setLoadingInfo("");
-                Osu.setLoadingProgress(100);
+                GlobalManager.setLoadingInfo("");
+                GlobalManager.setLoadingProgress(100);
                 ResourceManager.loadFont("font", null, 28, Color.WHITE);
-                Osu.Engine.setScene(Osu.MainScene.getScene());
+                GlobalManager.Engine.setScene(GlobalManager.MainScene.getScene());
                 
-                Osu.MainScene.loadBeatmap();
+                GlobalManager.MainScene.loadBeatmap();
                 initPreferences();
                 availableInternalMemory();
 
@@ -304,7 +304,7 @@ public class MainActivity extends BaseGameActivity implements
                 }
 
                 if (willReplay) {
-                    Osu.MainScene.watchReplay(beatmapToAdd);
+                    GlobalManager.MainScene.watchReplay(beatmapToAdd);
                     willReplay = false;
                 }
             });
@@ -367,7 +367,7 @@ public class MainActivity extends BaseGameActivity implements
     }
 
     public void checkNewBeatmaps() {
-        Osu.setLoadingInfo("Checking for new maps...");
+        GlobalManager.setLoadingInfo("Checking for new maps...");
         final File mainDir = new File(Config.mainDirectory);
         if (beatmapToAdd != null) {
             File file = new File(beatmapToAdd);
@@ -441,7 +441,7 @@ public class MainActivity extends BaseGameActivity implements
     }
 
     public void checkNewSkins() {
-        Osu.setLoadingInfo("Checking new skins...");
+        GlobalManager.setLoadingInfo("Checking new skins...");
 
         final ArrayList<String> skins = new ArrayList<>();
 
@@ -517,7 +517,7 @@ public class MainActivity extends BaseGameActivity implements
     @Override
     protected void onCreate(Bundle pSavedInstanceState) {
 
-        Osu.Activity = this;
+        GlobalManager.Activity = this;
         super.onCreate(pSavedInstanceState);
 
         try {
@@ -551,7 +551,7 @@ public class MainActivity extends BaseGameActivity implements
                     songService = ((SongService.ReturnBindObject) service).getObject();
                     saveServiceObject = (SaveServiceObject) getApplication();
                     saveServiceObject.setSongService(songService);
-                    Osu.SongService = songService;
+                    GlobalManager.SongService = songService;
                 }
 
                 @Override
@@ -563,8 +563,8 @@ public class MainActivity extends BaseGameActivity implements
 
             bindService(new Intent(MainActivity.this, SongService.class), connection, BIND_AUTO_CREATE);
         }
-        Osu.SongService = songService;
-        Osu.SaveServiceObject = saveServiceObject;
+        GlobalManager.SongService = songService;
+        GlobalManager.SaveServiceObject = saveServiceObject;
     }
 
     @Override
@@ -592,22 +592,22 @@ public class MainActivity extends BaseGameActivity implements
             return;
         }
         activityVisible = true;
-        if (Osu.Engine != null) {
-            if (Osu.GameScene != null) {
-                if (Osu.Engine.getScene() == Osu.GameScene.getScene()) {
-                    Osu.Engine.getTextureManager().reloadTextures();
+        if (GlobalManager.Engine != null) {
+            if (GlobalManager.GameScene != null) {
+                if (GlobalManager.Engine.getScene() == GlobalManager.GameScene.getScene()) {
+                    GlobalManager.Engine.getTextureManager().reloadTextures();
                 }
             }
         }
-        if (Osu.MainScene != null) {
+        if (GlobalManager.MainScene != null) {
             if (songService != null && Build.VERSION.SDK_INT > 10) {
                 if (songService.hideNotification()) {
                     if (wakeLock != null && wakeLock.isHeld()) wakeLock.release();
-                    Osu.MainScene.loadBeatmapInfo();
-                    Osu.MainScene.loadTimingPoints(false);
-                    Osu.MainScene.progressBar.setTime(songService.getLength());
-                    Osu.MainScene.progressBar.setPassedTime(songService.getPosition());
-                    Osu.MainScene.musicControl(MainScene.MusicOption.SYNC);
+                    GlobalManager.MainScene.loadBeatmapInfo();
+                    GlobalManager.MainScene.loadTimingPoints(false);
+                    GlobalManager.MainScene.progressBar.setTime(songService.getLength());
+                    GlobalManager.MainScene.progressBar.setPassedTime(songService.getPosition());
+                    GlobalManager.MainScene.musicControl(MainScene.MusicOption.SYNC);
                 }
             }
         }
@@ -620,25 +620,25 @@ public class MainActivity extends BaseGameActivity implements
         if (this.mEngine == null) {
             return;
         }
-        if (Osu.Engine != null) {
-            if (Osu.GameScene != null) {
-                if (Osu.Engine.getScene() == Osu.GameScene.getScene()) {
+        if (GlobalManager.Engine != null) {
+            if (GlobalManager.GameScene != null) {
+                if (GlobalManager.Engine.getScene() == GlobalManager.GameScene.getScene()) {
                     SpritePool.getInstance().purge();
 
                     if (Multiplayer.isMultiplayer) {
                         ToastLogger.showText("You've left the match.", true);
-                        Osu.GameScene.quit();
+                        GlobalManager.GameScene.quit();
                         Multiplayer.log("Player left the match.");
                     } else {
-                        Osu.GameScene.pause();
+                        GlobalManager.GameScene.pause();
                     }
                 }
             }
         }
         
-        if (Osu.MainScene != null) {
+        if (GlobalManager.MainScene != null) {
             
-            BeatmapInfo beatmapInfo = Osu.MainScene.beatmapInfo;
+            BeatmapInfo beatmapInfo = GlobalManager.MainScene.beatmapInfo;
             if (songService != null && beatmapInfo != null && !songService.isGaming()) {
                 songService.showNotification();
 
@@ -670,17 +670,17 @@ public class MainActivity extends BaseGameActivity implements
 
         if (getEngine() != null && !hasFocus) {
 
-            if (Osu.GameScene != null) {
-                if (getEngine().getScene() == Osu.GameScene.getScene()) {
-                    if (!Osu.GameScene.isPaused() && !Multiplayer.isMultiplayer) {
-                        Osu.GameScene.pause();
+            if (GlobalManager.GameScene != null) {
+                if (getEngine().getScene() == GlobalManager.GameScene.getScene()) {
+                    if (!GlobalManager.GameScene.isPaused() && !Multiplayer.isMultiplayer) {
+                        GlobalManager.GameScene.pause();
                     }
                 }
             }
 
             if (Multiplayer.isConnected()
                     && (getEngine().getScene() == RoomScene.INSTANCE
-                    || getEngine().getScene() == Osu.SongMenu.getScene())) {
+                    || getEngine().getScene() == GlobalManager.SongMenu.getScene())) {
                 Execution.async(() -> Execution.runSafe(RoomScene.INSTANCE::invalidateStatus));
             }
         }
@@ -695,11 +695,11 @@ public class MainActivity extends BaseGameActivity implements
         if (this.mEngine == null) {
             return;
         }
-        if (Osu.Camera.getRotation() == 0 && arg0.getY() < -5) {
-            Osu.Camera.setRotation(180);
+        if (GlobalManager.Camera.getRotation() == 0 && arg0.getY() < -5) {
+            GlobalManager.Camera.setRotation(180);
         } else {
-            if (Osu.Camera.getRotation() == 180 && arg0.getY() > 5) {
-                Osu.Camera.setRotation(0);
+            if (GlobalManager.Camera.getRotation() == 180 && arg0.getY() > 5) {
+                GlobalManager.Camera.setRotation(0);
             }
         }
     }
@@ -717,7 +717,7 @@ public class MainActivity extends BaseGameActivity implements
             return super.onKeyDown(keyCode, event);
         }
         
-        if (Osu.Engine == null) {
+        if (GlobalManager.Engine == null) {
             return super.onKeyDown(keyCode, event);
         }
 
@@ -725,36 +725,36 @@ public class MainActivity extends BaseGameActivity implements
             return true;
         }
 
-        if (Osu.GameScene != null && (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_MENU)) {
-            if (Osu.Engine.getScene() == Osu.GameScene.getScene()) {
-                if (Osu.GameScene.isPaused()) {
-                    Osu.GameScene.resume();
+        if (GlobalManager.GameScene != null && (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_MENU)) {
+            if (GlobalManager.Engine.getScene() == GlobalManager.GameScene.getScene()) {
+                if (GlobalManager.GameScene.isPaused()) {
+                    GlobalManager.GameScene.resume();
                 } else {
-                    Osu.GameScene.pause();
+                    GlobalManager.GameScene.pause();
                 }
                 return true;
             }
         }
-        if (Osu.ScoringScene != null && keyCode == KeyEvent.KEYCODE_BACK) {
-            if (Osu.Engine.getScene() == Osu.ScoringScene.getScene()) {
-                Osu.ScoringScene.back();
+        if (GlobalManager.ScoringScene != null && keyCode == KeyEvent.KEYCODE_BACK) {
+            if (GlobalManager.Engine.getScene() == GlobalManager.ScoringScene.getScene()) {
+                GlobalManager.ScoringScene.back();
                 return true;
             }
         }
         if ((keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ENTER)) {
 
-            if (Osu.Engine != null) {
-                if (Osu.SongMenu != null) {
-                    if (Osu.Engine.getScene() == Osu.SongMenu.getScene()) {
-                        if (Osu.SongMenu.getScene().hasChildScene()) {
-                            if (Osu.SongMenu.getScene().getChildScene() == Osu.SongMenu.getFilterMenu().getScene()) {
+            if (GlobalManager.Engine != null) {
+                if (GlobalManager.SongMenu != null) {
+                    if (GlobalManager.Engine.getScene() == GlobalManager.SongMenu.getScene()) {
+                        if (GlobalManager.SongMenu.getScene().hasChildScene()) {
+                            if (GlobalManager.SongMenu.getScene().getChildScene() == GlobalManager.SongMenu.getFilterMenu().getScene()) {
                                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
                                     InputManager.getInstance().toggleKeyboard();
                                 }
-                                Osu.SongMenu.getFilterMenu().hideMenu();
+                                GlobalManager.SongMenu.getFilterMenu().hideMenu();
                             }
 
-                            if (Osu.SongMenu.getScene().getChildScene() == ModMenu.getInstance().getScene()) {
+                            if (GlobalManager.SongMenu.getScene().getChildScene() == ModMenu.getInstance().getScene()) {
                                 ModMenu.getInstance().hide();
                             }
 
@@ -764,39 +764,39 @@ public class MainActivity extends BaseGameActivity implements
                 }
             }
         }
-        if (Osu.SongMenu != null) {
-            if (Osu.Engine != null && keyCode == KeyEvent.KEYCODE_MENU) {
-                if (Osu.Engine.getScene() == Osu.SongMenu.getScene()) {
-                    if (!Osu.SongMenu.getScene().hasChildScene()) {
-                        Osu.SongMenu.stopScroll(0);
-                        Osu.SongMenu.showPropertiesMenu(null);
+        if (GlobalManager.SongMenu != null) {
+            if (GlobalManager.Engine != null && keyCode == KeyEvent.KEYCODE_MENU) {
+                if (GlobalManager.Engine.getScene() == GlobalManager.SongMenu.getScene()) {
+                    if (!GlobalManager.SongMenu.getScene().hasChildScene()) {
+                        GlobalManager.SongMenu.stopScroll(0);
+                        GlobalManager.SongMenu.showPropertiesMenu(null);
                         return true;
                     }
                 }
             }
         }
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (Osu.Engine != null && Osu.SongMenu != null &&
-                    Osu.Engine.getScene() == Osu.SongMenu.getScene()) {
+            if (GlobalManager.Engine != null && GlobalManager.SongMenu != null &&
+                    GlobalManager.Engine.getScene() == GlobalManager.SongMenu.getScene()) {
 
                 //SongMenu 界面按返回按钮（系统按钮）
-                Osu.SongMenu.back();
+                GlobalManager.SongMenu.back();
             } else {
 
                 
-                if (Osu.Engine.getScene() instanceof LoadingScreen.LoadingScene) {
+                if (GlobalManager.Engine.getScene() instanceof LoadingScreen.LoadingScene) {
                     return true;
                 }
 
                 if (Multiplayer.isMultiplayer) {
                     
-                    if (Osu.Engine.getScene() == LobbyScene.INSTANCE) {
+                    if (GlobalManager.Engine.getScene() == LobbyScene.INSTANCE) {
                         LobbyScene.INSTANCE.back();
                         return true;
                     }
 
                     
-                    if (Osu.Engine.getScene() == RoomScene.INSTANCE) {
+                    if (GlobalManager.Engine.getScene() == RoomScene.INSTANCE) {
 
                         if (RoomScene.INSTANCE.hasChildScene() && RoomScene.INSTANCE.getChildScene() == ModMenu.getInstance().getScene()) {
                             ModMenu.getInstance().hide();
@@ -808,7 +808,7 @@ public class MainActivity extends BaseGameActivity implements
                 }
 
                 
-                Osu.MainScene.showExitDialog();
+                GlobalManager.MainScene.showExitDialog();
             }
             return true;
         }
@@ -827,13 +827,13 @@ public class MainActivity extends BaseGameActivity implements
     }
 
     public void forcedExit() {
-        if (Osu.Engine.getScene() == Osu.GameScene.getScene()) {
-            Osu.GameScene.quit();
+        if (GlobalManager.Engine.getScene() == GlobalManager.GameScene.getScene()) {
+            GlobalManager.GameScene.quit();
         }
         
-        Osu.Engine.setScene(Osu.MainScene.getScene());
+        GlobalManager.Engine.setScene(GlobalManager.MainScene.getScene());
         
-        Osu.MainScene.exit();
+        GlobalManager.MainScene.exit();
     }
 
     public long getVersionCode() {

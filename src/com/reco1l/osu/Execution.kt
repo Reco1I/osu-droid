@@ -3,8 +3,8 @@
 package com.reco1l.osu
 
 import kotlinx.coroutines.Runnable
-import ru.nsu.ccfit.zuev.osu.Osu.Activity
-import ru.nsu.ccfit.zuev.osu.Osu.Engine
+import ru.nsu.ccfit.zuev.osu.GlobalManager.Activity
+import ru.nsu.ccfit.zuev.osu.GlobalManager.Engine
 
 
 /**

@@ -28,7 +28,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 import ru.nsu.ccfit.zuev.audio.Status;
 import ru.nsu.ccfit.zuev.osu.BeatmapInfo;
-import ru.nsu.ccfit.zuev.osu.Osu;
+import ru.nsu.ccfit.zuev.osu.GlobalManager;
 import ru.nsu.ccfit.zuev.osu.LibraryManager;
 import ru.nsu.ccfit.zuev.osu.MainActivity;
 import ru.nsu.ccfit.zuev.osuplus.R;
@@ -69,7 +69,7 @@ public class NotifyPlayer {
         filter.addAction(actionNext);
         filter.addAction(actionClose);
 
-        defaultIcon = BitmapFactory.decodeResource(Osu.Activity.getResources(), R.drawable.osut);
+        defaultIcon = BitmapFactory.decodeResource(GlobalManager.Activity.getResources(), R.drawable.osut);
 
         prev = PendingIntent.getBroadcast(context, 0, new Intent(actionPrev), 0);
         next = PendingIntent.getBroadcast(context, 0, new Intent(actionNext), 0);
@@ -104,7 +104,7 @@ public class NotifyPlayer {
                         break;
                     case actionClose:
                         service.stop();
-                        Osu.MainScene.exit();
+                        GlobalManager.MainScene.exit();
                         break;
                 }
             }
@@ -116,7 +116,7 @@ public class NotifyPlayer {
     public void updateState() {
         if (!isShowing)
             return;
-        boolean isPlaying = Osu.SongService.getStatus() == Status.PLAYING;
+        boolean isPlaying = GlobalManager.SongService.getStatus() == Status.PLAYING;
         int drawable = isPlaying ? R.drawable.v_pause : R.drawable.v_play;
 
         builder.mActions.set(1, new NotificationCompat.Action(drawable, actionPlay, play));

@@ -42,8 +42,8 @@ import ru.nsu.ccfit.zuev.osu.Config.mainDirectory
 import ru.nsu.ccfit.zuev.osu.Config.musicVolume
 import ru.nsu.ccfit.zuev.osu.Config.skinPath
 import ru.nsu.ccfit.zuev.osu.Config.useNightcoreOnMultiplayer
-import ru.nsu.ccfit.zuev.osu.Osu
-import ru.nsu.ccfit.zuev.osu.Osu.Engine
+import ru.nsu.ccfit.zuev.osu.GlobalManager
+import ru.nsu.ccfit.zuev.osu.GlobalManager.Engine
 import ru.nsu.ccfit.zuev.osu.LibraryManager
 import ru.nsu.ccfit.zuev.osu.MainActivity
 import ru.nsu.ccfit.zuev.osu.PropertyManager
@@ -375,12 +375,12 @@ class SettingsFragment : com.edlplan.ui.fragment.SettingsFragment() {
         Config.init()
 
         if (!Multiplayer.isMultiplayer) {
-            Osu.MainScene.reloadOnlinePanel()
-            Osu.MainScene.loadTimingPoints(false)
-            Osu.SongService.isGaming = false
+            GlobalManager.MainScene.reloadOnlinePanel()
+            GlobalManager.MainScene.loadTimingPoints(false)
+            GlobalManager.SongService.isGaming = false
         }
 
-        Osu.SongService.volume = musicVolume
+        GlobalManager.SongService.volume = musicVolume
         super.dismiss()
     }
 

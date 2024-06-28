@@ -29,7 +29,7 @@ import java.util.Locale;
 
 import ru.nsu.ccfit.zuev.audio.serviceAudio.SongService;
 import ru.nsu.ccfit.zuev.osu.Config;
-import ru.nsu.ccfit.zuev.osu.Osu;
+import ru.nsu.ccfit.zuev.osu.GlobalManager;
 import ru.nsu.ccfit.zuev.osu.ResourceManager;
 import ru.nsu.ccfit.zuev.osu.TrackInfo;
 import ru.nsu.ccfit.zuev.osu.Utils;
@@ -227,8 +227,8 @@ public class ScoringScene {
                     }
                     if (pSceneTouchEvent.isActionUp()) {
                         ResourceManager.getSound("applause").stop();
-                        Osu.Engine.setScene(Osu.SongMenu.getScene());
-                        Osu.GameScene.startGame(null, null);
+                        GlobalManager.Engine.setScene(GlobalManager.SongMenu.getScene());
+                        GlobalManager.GameScene.startGame(null, null);
                         scene = null;
                         stopMusic();
                         return true;
@@ -257,7 +257,7 @@ public class ScoringScene {
                     if (pSceneTouchEvent.isActionUp()) {
                         ResourceManager.getSound("applause").stop();
                         SongMenu.stopMusicStatic();
-                        Osu.Engine.setScene(Osu.SongMenu.getScene());
+                        GlobalManager.Engine.setScene(GlobalManager.SongMenu.getScene());
 
                         Replay.oldMod = ModMenu.getInstance().getMod();
                         Replay.oldChangeSpeed = ModMenu.getInstance().getChangeSpeed();
@@ -278,7 +278,7 @@ public class ScoringScene {
                         ModMenu.getInstance().setCustomCS(stat.getCustomCS());
                         ModMenu.getInstance().setCustomHP(stat.getCustomHP());
 
-                        Osu.GameScene.startGame(trackToReplay, replay);
+                        GlobalManager.GameScene.startGame(trackToReplay, replay);
 
                         scene = null;
                         stopMusic();
@@ -515,14 +515,14 @@ public class ScoringScene {
         //save and upload score
         if (track != null && track.getMD5() != null && track.getMD5().equals(mapMD5)) {
             ResourceManager.getSound("applause").play();
-            if (!Multiplayer.isMultiplayer || !Osu.GameScene.hasFailed) {
+            if (!Multiplayer.isMultiplayer || !GlobalManager.GameScene.hasFailed) {
                 ScoreLibrary.addScore(track.getFilename(), stat, replay);
             }
 
             if (stat.getTotalScoreWithMultiplier() > 0 && OnlineManager.getInstance().isStayOnline() &&
                     OnlineManager.getInstance().isReadyToSend()) {
 
-                if (Osu.GameScene.hasFailed ||
+                if (GlobalManager.GameScene.hasFailed ||
                         (Multiplayer.isMultiplayer && !Config.submitScoresOnMultiplayer))
                     return;
 
@@ -587,8 +587,8 @@ public class ScoringScene {
             return;
         }
         replayMusic();
-        Osu.Engine.setScene(Osu.SongMenu.getScene());
-        Osu.SongMenu.updateScore();
+        GlobalManager.Engine.setScene(GlobalManager.SongMenu.getScene());
+        GlobalManager.SongMenu.updateScore();
         setReplayID(-1);
     }
 

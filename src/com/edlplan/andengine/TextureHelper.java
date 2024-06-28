@@ -5,18 +5,16 @@ import android.graphics.Bitmap;
 import com.reco1l.osu.graphics.InputStreamTextureAtlasSource;
 
 import org.anddev.andengine.opengl.texture.TextureOptions;
-import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import org.anddev.andengine.opengl.texture.region.TextureRegionFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import ru.nsu.ccfit.zuev.osu.Osu;
+import ru.nsu.ccfit.zuev.osu.GlobalManager;
 
 public class TextureHelper {
 
@@ -49,7 +47,7 @@ public class TextureHelper {
         }
 
         var region = TextureRegionFactory.createFromSource(source.createAtlas(TextureOptions.BILINEAR), source, 0, 0, false);
-        Osu.Engine.getTextureManager().loadTexture(region.getTexture());
+        GlobalManager.Engine.getTextureManager().loadTexture(region.getTexture());
         return region;
     }
 
@@ -62,7 +60,7 @@ public class TextureHelper {
         }
 
         var region = TextureRegionFactory.createFromSource(source.createAtlas(TextureOptions.BILINEAR), source, 0, 0, false);
-        Osu.Engine.getTextureManager().loadTexture(region.getTexture());
+        GlobalManager.Engine.getTextureManager().loadTexture(region.getTexture());
         return region;
     }
 

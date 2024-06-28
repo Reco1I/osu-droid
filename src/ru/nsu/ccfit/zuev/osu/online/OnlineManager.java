@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 import ru.nsu.ccfit.zuev.osu.BeatmapInfo;
 import ru.nsu.ccfit.zuev.osu.Config;
-import ru.nsu.ccfit.zuev.osu.Osu;
+import ru.nsu.ccfit.zuev.osu.GlobalManager;
 import ru.nsu.ccfit.zuev.osu.ResourceManager;
 import ru.nsu.ccfit.zuev.osu.TrackInfo;
 import ru.nsu.ccfit.zuev.osu.helper.FileUtils;
@@ -166,7 +166,7 @@ public class OnlineManager {
 
         Bundle bParams = new Bundle();
         bParams.putString(FirebaseAnalytics.Param.METHOD, "ingame");
-        Osu.Activity.getAnalytics().logEvent(FirebaseAnalytics.Event.LOGIN, bParams);
+        GlobalManager.Activity.getAnalytics().logEvent(FirebaseAnalytics.Event.LOGIN, bParams);
 
         return true;
     }
@@ -337,7 +337,7 @@ public class OnlineManager {
         String filename = MD5Calculator.getStringMD5(avatarURL);
         Debug.i("Loading avatar from " + avatarURL);
         Debug.i("filename = " + filename);
-        File picfile = new File(Osu.Activity.getCacheDir(), filename);
+        File picfile = new File(GlobalManager.Activity.getCacheDir(), filename);
         OnlineFileOperator.downloadFile(avatarURL, picfile.getAbsolutePath(), true);
 
         var bitmap = loadAvatarToBitmap(picfile);
@@ -357,7 +357,7 @@ public class OnlineManager {
         } else {
             // Avatar not found, download the default avatar
             String defaultAvatarFilename = MD5Calculator.getStringMD5(defaultAvatarURL);
-            File avatarFile = new File(Osu.Activity.getCacheDir(), defaultAvatarFilename);
+            File avatarFile = new File(GlobalManager.Activity.getCacheDir(), defaultAvatarFilename);
             OnlineFileOperator.downloadFile(defaultAvatarURL, avatarFile.getAbsolutePath());
 
             bitmap = loadAvatarToBitmap(avatarFile);

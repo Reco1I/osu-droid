@@ -12,7 +12,7 @@ import com.reco1l.framework.net.FileRequest
 import com.reco1l.framework.net.IDownloaderObserver
 import okhttp3.Request
 import org.json.JSONObject
-import ru.nsu.ccfit.zuev.osu.Osu
+import ru.nsu.ccfit.zuev.osu.GlobalManager
 import ru.nsu.ccfit.zuev.osu.helper.StringTable
 import ru.nsu.ccfit.zuev.osu.online.OnlineManager
 import ru.nsu.ccfit.zuev.osu.online.OnlineManager.updateEndpoint
@@ -35,16 +35,16 @@ import java.io.File
 object UpdateManager: IDownloaderObserver {
 
     private val preferences
-        get() = PreferenceManager.getDefaultSharedPreferences(Osu.Activity)
+        get() = PreferenceManager.getDefaultSharedPreferences(GlobalManager.Activity)
 
-    private val cacheDirectory = File(Osu.Activity.cacheDir, "updates").apply { mkdirs() }
+    private val cacheDirectory = File(GlobalManager.Activity.cacheDir, "updates").apply { mkdirs() }
 
-    private val snackBar = Snackbar.make(Osu.Activity.window.decorView, "", LENGTH_INDEFINITE)
+    private val snackBar = Snackbar.make(GlobalManager.Activity.window.decorView, "", LENGTH_INDEFINITE)
 
 
     private var downloadURL: String? = null
 
-    private var newVersionCode: Long = Osu.Activity.versionCode
+    private var newVersionCode: Long = GlobalManager.Activity.versionCode
 
 
     fun onActivityStart() = mainThread {
@@ -52,11 +52,11 @@ object UpdateManager: IDownloaderObserver {
         // showing the changelog after update with a prompt asking user to show.
         preferences.apply {
 
-            val latestUpdate = getLong("latestVersionCode", Osu.Activity.versionCode)
+            val latestUpdate = getLong("latestVersionCode", GlobalManager.Activity.versionCode)
             val pendingChangelog = getString("pendingChangelog", null)
 
             if (!pendingChangelog.isNullOrEmpty()) {
-                if (latestUpdate > Osu.Activity.versionCode) {
+                if (latestUpdate > GlobalManager.Activity.versionCode) {
                     snackBar.apply {
 
                         // Will only dismiss if user wants.
@@ -106,14 +106,14 @@ object UpdateManager: IDownloaderObserver {
             // then installing it.
             cacheDirectory.listFiles()?.also { list ->
 
-                var newestVersionDownloaded: Long = Osu.Activity.versionCode
+                var newestVersionDownloaded: Long = GlobalManager.Activity.versionCode
 
                 list.forEach {
 
                     val version = it.nameWithoutExtension.toLongOrNull() ?: return@forEach
 
                     // Deleting the file corresponding to this version if still present.
-                    if (version == Osu.Activity.versionCode)
+                    if (version == GlobalManager.Activity.versionCode)
                         it.delete()
 
                     // Finding the newest package.
@@ -122,7 +122,7 @@ object UpdateManager: IDownloaderObserver {
                 }
 
                 // Directly navigate to installation if there's already a newer package.
-                if (newestVersionDownloaded > Osu.Activity.versionCode) {
+                if (newestVersionDownloaded > GlobalManager.Activity.versionCode) {
                     newVersionCode = newestVersionDownloaded
                     onFoundNewUpdate(silently)
                     return@async
@@ -139,7 +139,7 @@ object UpdateManager: IDownloaderObserver {
                 }
 
                 val request = Request.Builder()
-                    .url(updateEndpoint + Osu.Activity.resources.configuration.locale.language)
+                    .url(updateEndpoint + GlobalManager.Activity.resources.configuration.locale.language)
                     .build()
 
                 OnlineManager.client.newCall(request).execute().use {
@@ -152,7 +152,7 @@ object UpdateManager: IDownloaderObserver {
 
                     // Previous implementation has this check, server returning an older version 
                     // shouldn't happen.
-                    if (newVersionCode <= Osu.Activity.versionCode) {
+                    if (newVersionCode <= GlobalManager.Activity.versionCode) {
                         onAlreadyLatestVersion(silently)
                         return@async
                     }
@@ -178,12 +178,12 @@ object UpdateManager: IDownloaderObserver {
 
         val intent = Intent(ACTION_VIEW).apply {
 
-            val uri = FileProvider.getUriForFile(Osu.Activity, "$APPLICATION_ID.fileProvider", file)
+            val uri = FileProvider.getUriForFile(GlobalManager.Activity, "$APPLICATION_ID.fileProvider", file)
 
             setDataAndType(uri, "application/vnd.android.package-archive")
             addFlags(FLAG_GRANT_READ_URI_PERMISSION)
         }
-        Osu.Activity.startActivity(intent)
+        GlobalManager.Activity.startActivity(intent)
     }
 
     private fun onDownloadNewUpdate(file: File) {
@@ -215,7 +215,7 @@ object UpdateManager: IDownloaderObserver {
 
     private fun onFoundNewUpdate(silently: Boolean) = mainThread {
 
-        if (newVersionCode <= Osu.Activity.versionCode) {
+        if (newVersionCode <= GlobalManager.Activity.versionCode) {
             onAlreadyLatestVersion(silently)
             return@mainThread
         }

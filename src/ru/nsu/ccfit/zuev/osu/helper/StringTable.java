@@ -4,7 +4,7 @@ import androidx.annotation.StringRes;
 
 import java.util.Formatter;
 
-import ru.nsu.ccfit.zuev.osu.Osu;
+import ru.nsu.ccfit.zuev.osu.GlobalManager;
 
 
 /**
@@ -24,7 +24,7 @@ public class StringTable {
 
 
     public static String get(@StringRes int id) {
-        return Osu.Activity.getString(id);
+        return GlobalManager.Activity.getString(id);
     }
 
     public static String format(@StringRes int id, Object... objects) {

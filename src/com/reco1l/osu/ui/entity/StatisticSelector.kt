@@ -8,8 +8,8 @@ import org.anddev.andengine.entity.sprite.Sprite
 import org.anddev.andengine.entity.text.ChangeableText
 import org.anddev.andengine.input.touch.TouchEvent
 import org.anddev.andengine.util.MathUtils
-import ru.nsu.ccfit.zuev.osu.Osu
-import ru.nsu.ccfit.zuev.osu.Osu.Engine
+import ru.nsu.ccfit.zuev.osu.GlobalManager
+import ru.nsu.ccfit.zuev.osu.GlobalManager.Engine
 import ru.nsu.ccfit.zuev.osu.ResourceManager
 import ru.nsu.ccfit.zuev.osu.scoring.StatisticV2
 import java.text.NumberFormat.getNumberInstance
@@ -22,15 +22,15 @@ import java.util.Locale.US
 class StatisticSelector(stats: Array<StatisticV2>?) : ScrollableList(), ITouchArea
 {
 
-    private var selected: StatisticV2? = Osu.ScoringScene.currentStatistic
+    private var selected: StatisticV2? = GlobalManager.ScoringScene.currentStatistic
         set(value)
         {
             if (value != field && value != null)
             {
                 field = value
 
-                Osu.ScoringScene.load(value, Osu.ScoringScene.track, Osu.SongService, null, null, null)
-                Engine.scene = Osu.ScoringScene.scene
+                GlobalManager.ScoringScene.load(value, GlobalManager.ScoringScene.track, GlobalManager.SongService, null, null, null)
+                Engine.scene = GlobalManager.ScoringScene.scene
             }
         }
 

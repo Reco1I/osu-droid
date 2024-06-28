@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import ru.nsu.ccfit.zuev.osu.Config;
-import ru.nsu.ccfit.zuev.osu.Osu;
+import ru.nsu.ccfit.zuev.osu.GlobalManager;
 import ru.nsu.ccfit.zuev.osu.ToastLogger;
 import ru.nsu.ccfit.zuev.osu.game.mods.GameMod;
 import ru.nsu.ccfit.zuev.osu.helper.StringTable;
@@ -44,7 +44,7 @@ public class ScoreLibrary {
 
     public static void init() {
 
-        DBOpenHelper helper = DBOpenHelper.getOrCreate(Osu.Activity);
+        DBOpenHelper helper = DBOpenHelper.getOrCreate(GlobalManager.Activity);
 
         try {
             database = helper.getWritableDatabase();

@@ -22,7 +22,7 @@ import org.anddev.andengine.util.modifier.IModifier;
 
 import ru.nsu.ccfit.zuev.osu.Config;
 import ru.nsu.ccfit.zuev.osu.Constants;
-import ru.nsu.ccfit.zuev.osu.Osu;
+import ru.nsu.ccfit.zuev.osu.GlobalManager;
 import ru.nsu.ccfit.zuev.osu.ResourceManager;
 import ru.nsu.ccfit.zuev.osu.Utils;
 import ru.nsu.ccfit.zuev.osu.helper.CentredSprite;
@@ -89,7 +89,7 @@ public class Spinner extends GameObject {
             var region = ResourceManager.getTexture(name, false);
             
             if (region != null && region.getTexture() != null && !region.getTexture().isLoadedToHardware()) {
-                Osu.Engine.getTextureManager().reloadTextures();
+                GlobalManager.Engine.getTextureManager().reloadTextures();
                 break;
             }
         }

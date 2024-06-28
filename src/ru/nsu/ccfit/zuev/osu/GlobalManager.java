@@ -19,7 +19,7 @@ import ru.nsu.ccfit.zuev.osuplus.BuildConfig;
  * Originally created by Fuuko on 2015/4/24.
  * Modified by Reco1l on 2024/6/3.
  */
-public class Osu {
+public class GlobalManager {
 
 
     public static Engine Engine;
@@ -48,7 +48,7 @@ public class Osu {
     private static int loadingProgress;
 
 
-    private Osu() {
+    private GlobalManager() {
         // Prevent instantiation.
     }
 

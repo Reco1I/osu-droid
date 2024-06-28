@@ -13,7 +13,7 @@ import java.security.NoSuchAlgorithmException;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-import ru.nsu.ccfit.zuev.osu.Osu;
+import ru.nsu.ccfit.zuev.osu.GlobalManager;
 
 /**
  * 加解密工具类
@@ -71,7 +71,7 @@ public final class SecurityUtils {
 
 
     public static void getAppSignature(Context context, String packageName) {
-        if (!Osu.hasOnlineAccess()) {
+        if (!GlobalManager.hasOnlineAccess()) {
             return;
         }
         if (appSignature != null || packageName == null || packageName.length() == 0) {

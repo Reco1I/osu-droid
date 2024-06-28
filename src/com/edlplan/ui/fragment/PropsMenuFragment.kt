@@ -15,7 +15,7 @@ import com.reco1l.osu.ui.MessageDialog
 import com.reco1l.toolkt.android.cornerRadius
 import com.reco1l.toolkt.android.dp
 import ru.nsu.ccfit.zuev.osu.BeatmapProperties
-import ru.nsu.ccfit.zuev.osu.Osu
+import ru.nsu.ccfit.zuev.osu.GlobalManager
 import ru.nsu.ccfit.zuev.osu.PropertyManager
 import ru.nsu.ccfit.zuev.osu.menu.IPropsMenu
 import ru.nsu.ccfit.zuev.osu.menu.MenuItem
@@ -105,7 +105,7 @@ class PropsMenuFragment : BaseFragment(), IPropsMenu {
 
         findViewById<View>(R.id.manageFavButton)!!.setOnClickListener { v: View? ->
             val dialog = FavoriteManagerFragment()
-            dialog.showToAddToFolder(ScoreLibrary.getTrackDir(Osu.getSelectedTrack()!!.filename))
+            dialog.showToAddToFolder(ScoreLibrary.getTrackDir(GlobalManager.getSelectedTrack()!!.filename))
         }
 
         findViewById<View>(R.id.deleteBeatmap)!!.setOnClickListener { v: View? ->

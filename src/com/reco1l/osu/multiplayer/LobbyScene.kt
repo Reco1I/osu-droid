@@ -216,7 +216,7 @@ object LobbyScene : Scene()
         if (Multiplayer.isConnected)
             return
 
-        Osu.SongService.isGaming = true
+        GlobalManager.SongService.isGaming = true
         Multiplayer.isMultiplayer = true
 
         async {
@@ -224,8 +224,8 @@ object LobbyScene : Scene()
             try {
                 LoadingScreen().show()
 
-                Osu.Activity.checkNewSkins()
-                Osu.Activity.checkNewBeatmaps()
+                GlobalManager.Activity.checkNewSkins()
+                GlobalManager.Activity.checkNewBeatmaps()
                 LibraryManager.INSTANCE.updateLibrary(true)
 
                 RoomScene.load()
@@ -342,14 +342,14 @@ object LobbyScene : Scene()
         search.dismiss()
 
         Multiplayer.isMultiplayer = false
-        Osu.SongService.isGaming = false
-        Osu.MainScene.show()
+        GlobalManager.SongService.isGaming = false
+        GlobalManager.MainScene.show()
     }
 
     fun show()
     {
         updateBackground()
-        Osu.Engine.scene = this
+        GlobalManager.Engine.scene = this
         updateList()
 
         search.show()

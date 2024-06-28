@@ -14,7 +14,7 @@ import com.reco1l.toolkt.kotlin.replaceAlphanumeric
 import net.lingala.zip4j.ZipFile
 import org.apache.commons.io.FilenameUtils
 import ru.nsu.ccfit.zuev.osu.Config.beatmapsDirectory
-import ru.nsu.ccfit.zuev.osu.Osu
+import ru.nsu.ccfit.zuev.osu.GlobalManager
 import ru.nsu.ccfit.zuev.osu.LibraryManager
 import ru.nsu.ccfit.zuev.osu.ToastLogger
 import ru.nsu.ccfit.zuev.osu.helper.FileUtils
@@ -30,7 +30,7 @@ object BeatmapDownloader : IDownloaderObserver {
     private lateinit var currentFilename: String
 
 
-    private val context = Osu.Activity
+    private val context = GlobalManager.Activity
 
     // TODO: We should adapt the system to allow multiple downloads at a time.
     private var isDownloading = false

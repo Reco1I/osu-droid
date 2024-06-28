@@ -72,7 +72,7 @@ public class LoadingScreen implements IUpdateHandler {
     }
 
     public void show() {
-        Osu.Engine.setScene(scene);
+        GlobalManager.Engine.setScene(scene);
     }
 
     @SuppressLint("DefaultLocale")

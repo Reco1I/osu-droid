@@ -29,7 +29,7 @@ public class PropertyManager {
 
     public static void init() {
 
-        var lib = new File(Osu.Activity.getFilesDir(), "properties");
+        var lib = new File(GlobalManager.Activity.getFilesDir(), "properties");
         if (!lib.exists()) {
             return;
         }
@@ -60,7 +60,7 @@ public class PropertyManager {
 
     public static synchronized void save() {
 
-        var lib = new File(Osu.Activity.getFilesDir(), "properties");
+        var lib = new File(GlobalManager.Activity.getFilesDir(), "properties");
 
         try(var ostream = new ObjectOutputStream(new FileOutputStream(lib))) {
 
@@ -91,7 +91,7 @@ public class PropertyManager {
     }
 
     public static synchronized void clear() {
-        new File(Osu.Activity.getFilesDir(), "properties").delete();
+        new File(GlobalManager.Activity.getFilesDir(), "properties").delete();
         properties.clear();
     }
 }

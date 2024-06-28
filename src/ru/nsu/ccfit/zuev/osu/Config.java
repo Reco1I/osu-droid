@@ -180,10 +180,10 @@ public class Config {
 
     public static void init() {
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(Osu.Activity);
+        preferences = PreferenceManager.getDefaultSharedPreferences(GlobalManager.Activity);
 
         var metrics = new DisplayMetrics();
-        Osu.Activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        GlobalManager.Activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
         screenWidth = 1280;
         screenHeight = 1280 * metrics.heightPixels / metrics.widthPixels;
 
@@ -362,7 +362,7 @@ public class Config {
      * Whether online connections are enabled.
      */
     public static boolean isOnlineConnectionEnabled() {
-        return allowOnlineConnection && Osu.hasOnlineAccess();
+        return allowOnlineConnection && GlobalManager.hasOnlineAccess();
     }
 
 

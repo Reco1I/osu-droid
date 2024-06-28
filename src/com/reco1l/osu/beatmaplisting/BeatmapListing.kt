@@ -42,7 +42,7 @@ import kotlinx.coroutines.SupervisorJob
 import ru.nsu.ccfit.zuev.audio.Status
 import ru.nsu.ccfit.zuev.osu.Config.forceMetadataRomanization
 import ru.nsu.ccfit.zuev.osu.Config.musicVolume
-import ru.nsu.ccfit.zuev.osu.Osu
+import ru.nsu.ccfit.zuev.osu.GlobalManager
 import ru.nsu.ccfit.zuev.osu.MainScene.MusicOption
 import ru.nsu.ccfit.zuev.osu.ToastLogger
 import ru.nsu.ccfit.zuev.osuplus.R
@@ -219,7 +219,7 @@ class BeatmapListing : BaseFragment(),
 
 
     override fun show() {
-        isPlayingMusic = Osu.SongService.status == Status.PLAYING
+        isPlayingMusic = GlobalManager.SongService.status == Status.PLAYING
         super.show()
     }
 
@@ -554,11 +554,11 @@ class BeatmapSetViewHolder(itemView: View, private val mediaScope: CoroutineScop
                     stopPreview(true)
 
                     if (BeatmapListing.isPlayingMusic) {
-                        Osu.MainScene.musicControl(MusicOption.PLAY)
+                        GlobalManager.MainScene.musicControl(MusicOption.PLAY)
                     }
                 }
 
-                Osu.MainScene.musicControl(MusicOption.PAUSE)
+                GlobalManager.MainScene.musicControl(MusicOption.PAUSE)
 
                 previewStream!!.setVolume(musicVolume)
                 previewStream!!.play()
@@ -595,7 +595,7 @@ class BeatmapSetViewHolder(itemView: View, private val mediaScope: CoroutineScop
         }
 
         if (shouldResumeMusic && BeatmapListing.isPlayingMusic) {
-            Osu.MainScene.musicControl(MusicOption.PLAY)
+            GlobalManager.MainScene.musicControl(MusicOption.PLAY)
         }
     }
 

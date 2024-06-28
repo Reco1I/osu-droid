@@ -15,7 +15,6 @@ import org.anddev.andengine.opengl.font.FontFactory;
 import org.anddev.andengine.opengl.font.StrokeFont;
 import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
-import org.anddev.andengine.opengl.texture.atlas.bitmap.source.FileBitmapTextureAtlasSource;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import org.anddev.andengine.opengl.texture.region.TextureRegionFactory;
 import org.anddev.andengine.util.Debug;
@@ -64,7 +63,7 @@ public class ResourceManager {
         customTextures.clear();
         customFrameCount.clear();
 
-        SecurityUtils.getAppSignature(Osu.Activity, Osu.Activity.getPackageName());
+        SecurityUtils.getAppSignature(GlobalManager.Activity, GlobalManager.Activity.getPackageName());
     }
 
 
@@ -115,7 +114,7 @@ public class ResourceManager {
             var jsonFile = new File(folder, "skin.json");
 
             try {
-                Osu.setLoadingInfo("Reading skin configuration file...");
+                GlobalManager.setLoadingInfo("Reading skin configuration file...");
 
                 if (jsonFile.exists()) {
                     skinJson = new JSONObject(OsuSkin.readFull(jsonFile));
@@ -190,7 +189,7 @@ public class ResourceManager {
         customFrameCount.clear();
 
         try {
-            var gfxAssets = Osu.Activity.getAssets().list("gfx");
+            var gfxAssets = GlobalManager.Activity.getAssets().list("gfx");
             assert gfxAssets != null;
 
             for (var asset : gfxAssets) {
@@ -257,7 +256,7 @@ public class ResourceManager {
         SkinManager.getInstance().presetFrameCount();
 
         try {
-            var sounds = Osu.Activity.getAssets().list("sfx");
+            var sounds = GlobalManager.Activity.getAssets().list("sfx");
             assert sounds != null;
 
             for (var s : sounds) {
@@ -329,7 +328,7 @@ public class ResourceManager {
             var texture = region.getTexture();
 
             if (texture != null && texture.isLoadedToHardware()) {
-                Osu.Engine.getTextureManager().unloadTexture(texture);
+                GlobalManager.Engine.getTextureManager().unloadTexture(texture);
             }
         }
 
@@ -369,11 +368,11 @@ public class ResourceManager {
         if (file == null) {
             font = new Font(texture, Typeface.create(Typeface.DEFAULT, Typeface.NORMAL), size, true, color);
         } else {
-            font = FontFactory.createFromAsset(texture, Osu.Activity, "fonts/" + file, size, true, color);
+            font = FontFactory.createFromAsset(texture, GlobalManager.Activity, "fonts/" + file, size, true, color);
         }
 
-        Osu.Engine.getTextureManager().loadTexture(texture);
-        Osu.Engine.getFontManager().loadFont(font);
+        GlobalManager.Engine.getTextureManager().loadTexture(texture);
+        GlobalManager.Engine.getFontManager().loadFont(font);
 
         fonts.put(asset, font);
         return font;
@@ -396,11 +395,11 @@ public class ResourceManager {
         if (file == null) {
             font = new StrokeFont(texture, Typeface.create(Typeface.DEFAULT, Typeface.NORMAL), size, true, color, 2f, strokeColor);
         } else {
-            font = FontFactory.createStrokeFromAsset(texture, Osu.Activity, "fonts/" + file, size, true, color, 2f, strokeColor);
+            font = FontFactory.createStrokeFromAsset(texture, GlobalManager.Activity, "fonts/" + file, size, true, color, 2f, strokeColor);
         }
 
-        Osu.Engine.getTextureManager().loadTexture(texture);
-        Osu.Engine.getFontManager().loadFont(font);
+        GlobalManager.Engine.getTextureManager().loadTexture(texture);
+        GlobalManager.Engine.getFontManager().loadFont(font);
 
         fonts.put(asset, font);
         return font;
@@ -432,9 +431,9 @@ public class ResourceManager {
 
             var previous = textures.put("::background", texture);
             if (previous != null) {
-                Osu.Engine.getTextureManager().unloadTexture(previous.getTexture());
+                GlobalManager.Engine.getTextureManager().unloadTexture(previous.getTexture());
             }
-            Osu.Engine.getTextureManager().loadTexture(texture.getTexture());
+            GlobalManager.Engine.getTextureManager().loadTexture(texture.getTexture());
 
             return texture;
         } catch (Exception e) {
@@ -467,14 +466,14 @@ public class ResourceManager {
     public static TextureRegion loadTexture(String name, String filename, TextureOptions options) {
 
         try {
-            var source = new InputStreamTextureAtlasSource(() -> Osu.Activity.getAssets().open(filename));
+            var source = new InputStreamTextureAtlasSource(() -> GlobalManager.Activity.getAssets().open(filename));
             var texture = TextureRegionFactory.createFromSource(source.createAtlas(options), source, 0, 0, false);
 
             var previous = textures.put(name, texture);
             if (previous != null) {
-                Osu.Engine.getTextureManager().unloadTexture(previous.getTexture());
+                GlobalManager.Engine.getTextureManager().unloadTexture(previous.getTexture());
             }
-            Osu.Engine.getTextureManager().loadTexture(texture.getTexture());
+            GlobalManager.Engine.getTextureManager().loadTexture(texture.getTexture());
 
             return texture;
         } catch (Exception e) {
@@ -511,9 +510,9 @@ public class ResourceManager {
 
             var previous = textures.put(name, texture);
             if (previous != null) {
-                Osu.Engine.getTextureManager().unloadTexture(previous.getTexture());
+                GlobalManager.Engine.getTextureManager().unloadTexture(previous.getTexture());
             }
-            Osu.Engine.getTextureManager().loadTexture(texture.getTexture());
+            GlobalManager.Engine.getTextureManager().loadTexture(texture.getTexture());
 
             return texture;
         } catch (Exception e) {
@@ -579,7 +578,7 @@ public class ResourceManager {
             var source = new InputStreamTextureAtlasSource(file);
             var texture = TextureRegionFactory.createFromSource(source.createAtlas(TextureOptions.BILINEAR), source, 0, 0, false);
 
-            Osu.Engine.getTextureManager().loadTexture(texture.getTexture());
+            GlobalManager.Engine.getTextureManager().loadTexture(texture.getTexture());
 
             if (multiframe) {
 
@@ -630,7 +629,7 @@ public class ResourceManager {
             return;
         }
 
-        Osu.Engine.getTextureManager().unloadTexture(region.getTexture());
+        GlobalManager.Engine.getTextureManager().unloadTexture(region.getTexture());
         textures.remove(name);
     }
 
@@ -651,7 +650,7 @@ public class ResourceManager {
             textures.remove(key);
         }
 
-        Osu.Engine.getTextureManager().unloadTexture(texture.getTexture());
+        GlobalManager.Engine.getTextureManager().unloadTexture(texture.getTexture());
     }
 
     /**
@@ -759,7 +758,7 @@ public class ResourceManager {
         try {
             var sound = new BassSoundProvider();
 
-            if (!sound.prepare(Osu.Activity.getAssets(), filename)) {
+            if (!sound.prepare(GlobalManager.Activity.getAssets(), filename)) {
                 return BassSoundProvider.EMPTY_SOUND;
             }
             sounds.put(name, sound);

@@ -10,7 +10,7 @@ import org.anddev.andengine.entity.text.ChangeableText;
 
 import org.anddev.andengine.util.HorizontalAlign;
 import ru.nsu.ccfit.zuev.osu.Config;
-import ru.nsu.ccfit.zuev.osu.Osu;
+import ru.nsu.ccfit.zuev.osu.GlobalManager;
 import ru.nsu.ccfit.zuev.osu.ResourceManager;
 
 /**
@@ -108,7 +108,7 @@ public class SplashScene implements IUpdateHandler {
 
     @Override
     public void onUpdate(float pSecondsElapsed) {
-        float progress = Osu.getLoadingProgress();
+        float progress = GlobalManager.getLoadingProgress();
         if (mStarting)
         {
             mLoading.setAlpha(mLoading.getAlpha() + 0.1f);
@@ -117,8 +117,8 @@ public class SplashScene implements IUpdateHandler {
         progressText.setText(String.format("%.0f %%", progress));
         progressText.setPosition((Config.screenWidth - progressText.getWidth()) / 2f, (Config.screenHeight + mLoading.getHeight()) / 2f - mLoading.getHeight() / 4f);
 
-        if (Osu.getLoadingInfo() != null) {
-            infoText.setText(Osu.getLoadingInfo());
+        if (GlobalManager.getLoadingInfo() != null) {
+            infoText.setText(GlobalManager.getLoadingInfo());
             infoText.setPosition((Config.screenWidth - infoText.getWidth()) / 2, Config.screenHeight - infoText.getHeight() - 20);
         }
     }

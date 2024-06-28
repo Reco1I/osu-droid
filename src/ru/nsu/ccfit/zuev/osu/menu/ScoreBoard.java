@@ -79,7 +79,7 @@ public class ScoreBoard extends Entity implements ScrollDetector.IScrollDetector
     public static String convertModString(StringBuilder sb, String s) {
         // Account for SC being removed.
         // Too dirty of a solution, but no other clean way :/
-        var track = Osu.getSelectedTrack();
+        var track = GlobalManager.getSelectedTrack();
         var cs = track.getCircleSize();
         var hasLegacySC = false;
 
@@ -457,7 +457,7 @@ public class ScoreBoard extends Entity implements ScrollDetector.IScrollDetector
         if (downTime > 0.5f) {
             moved = true;
             if (!Multiplayer.isMultiplayer && _scoreID != -1 && !showOnlineScores) {
-                Osu.SongMenu.showDeleteScoreMenu(_scoreID);
+                GlobalManager.SongMenu.showDeleteScoreMenu(_scoreID);
             }
             downTime = -1;
         }
@@ -714,7 +714,7 @@ public class ScoreBoard extends Entity implements ScrollDetector.IScrollDetector
                     return true;
 
                 listener.openScore(scoreID, showOnline, username);
-                Osu.ScoringScene.setReplayID(scoreID);
+                GlobalManager.ScoringScene.setReplayID(scoreID);
                 return true;
             } else if (event.isActionOutside() || event.isActionMove() && MathUtils.distance(dx, dy, localX, localY) > 10) {
                 downTime = -1;

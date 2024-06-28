@@ -12,12 +12,11 @@ import org.anddev.andengine.entity.modifier.IEntityModifier;
 import org.anddev.andengine.entity.modifier.SequenceEntityModifier;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.sprite.Sprite;
-import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import org.anddev.andengine.util.MathUtils;
 import org.anddev.andengine.util.modifier.IModifier;
 
 import ru.nsu.ccfit.zuev.osu.Constants;
-import ru.nsu.ccfit.zuev.osu.Osu;
+import ru.nsu.ccfit.zuev.osu.GlobalManager;
 import ru.nsu.ccfit.zuev.osu.ResourceManager;
 import ru.nsu.ccfit.zuev.osu.Utils;
 import ru.nsu.ccfit.zuev.osu.scoring.ScoreNumber;
@@ -78,7 +77,7 @@ public class ModernSpinner extends Spinner {
             var region = ResourceManager.getTexture(name, false);
             
             if (region != null && region.getTexture() != null && !region.getTexture().isLoadedToHardware()) {
-                Osu.Engine.getTextureManager().reloadTextures();
+                GlobalManager.Engine.getTextureManager().reloadTextures();
                 break;
             }
         }
