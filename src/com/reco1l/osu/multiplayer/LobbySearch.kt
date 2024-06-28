@@ -99,7 +99,7 @@ class LobbySearch : BaseFragment(), OnEditorActionListener, OnKeyListener
     @SuppressLint("ClickableViewAccessibility")
     private fun toggleVisibility()
     {
-        field?.clearFocus()
+        field.clearFocus()
 
         if (isExtended) {
 

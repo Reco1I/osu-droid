@@ -78,7 +78,6 @@ import ru.nsu.ccfit.zuev.audio.serviceAudio.SaveServiceObject;
 import ru.nsu.ccfit.zuev.audio.serviceAudio.SongService;
 import ru.nsu.ccfit.zuev.osu.game.SpritePool;
 import ru.nsu.ccfit.zuev.osu.helper.FileUtils;
-import ru.nsu.ccfit.zuev.osu.helper.InputManager;
 import ru.nsu.ccfit.zuev.osu.helper.StringTable;
 import ru.nsu.ccfit.zuev.osu.menu.LoadingScreen;
 import ru.nsu.ccfit.zuev.osu.menu.ModMenu;
@@ -116,7 +115,6 @@ public class MainActivity extends BaseGameActivity implements
         Config.init();
         initialGameDirectory();
         ToastLogger.init(this);
-        InputManager.setContext(this);
         OnlineManager.getInstance().Init(getApplicationContext());
         crashlytics.setUserId(Config.deviceUUID);
 
@@ -748,9 +746,6 @@ public class MainActivity extends BaseGameActivity implements
                     if (GlobalManager.Engine.getScene() == GlobalManager.SongMenu.getScene()) {
                         if (GlobalManager.SongMenu.getScene().hasChildScene()) {
                             if (GlobalManager.SongMenu.getScene().getChildScene() == GlobalManager.SongMenu.getFilterMenu().getScene()) {
-                                if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                                    InputManager.getInstance().toggleKeyboard();
-                                }
                                 GlobalManager.SongMenu.getFilterMenu().hideMenu();
                             }
 
@@ -813,16 +808,6 @@ public class MainActivity extends BaseGameActivity implements
             return true;
         }
 
-        if (InputManager.getInstance().isStarted()) {
-            if (keyCode == KeyEvent.KEYCODE_DEL) {
-                InputManager.getInstance().pop();
-            } else if (keyCode != KeyEvent.KEYCODE_ENTER) {
-                final char c = (char) event.getUnicodeChar();
-                if (c != 0) {
-                    InputManager.getInstance().append(c);
-                }
-            }
-        }
         return super.onKeyDown(keyCode, event);
     }
 

@@ -18,16 +18,14 @@ import com.edlplan.ui.EasingHelper
 import com.reco1l.osu.mainThread
 import com.reco1l.toolkt.android.cornerRadius
 import com.reco1l.toolkt.android.dp
-import org.anddev.andengine.engine.handler.IUpdateHandler
 import org.anddev.andengine.entity.scene.Scene
 import ru.nsu.ccfit.zuev.osu.GlobalManager
-import ru.nsu.ccfit.zuev.osu.helper.InputManager
 import ru.nsu.ccfit.zuev.osu.helper.StringTable
 import ru.nsu.ccfit.zuev.osu.menu.IFilterMenu
 import ru.nsu.ccfit.zuev.osu.menu.SongMenu
 import ru.nsu.ccfit.zuev.osuplus.R
 
-class FilterMenuFragment : BaseFragment(), IUpdateHandler, IFilterMenu {
+class FilterMenuFragment : BaseFragment(), IFilterMenu {
     private var configContext: Context? = null
     private var savedFolder: String? = null
     private var savedFavOnly = false
@@ -262,16 +260,6 @@ class FilterMenuFragment : BaseFragment(), IUpdateHandler, IFilterMenu {
 
     private fun updateUpdater() {
         updater?.update()
-    }
-
-    override fun onUpdate(pSecondsElapsed: Float) {
-        if (InputManager.getInstance().isChanged) {
-            filter.setText(InputManager.getInstance().text)
-        }
-    }
-
-    override fun reset() {
-        TODO("Not yet implemented")
     }
 
     // Due to how the fragment lifecycle works in this context, the state needs to be saved manually
