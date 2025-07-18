@@ -166,7 +166,7 @@ class UIComponentModifier(private val pool: SimplePool<UIComponentModifier>? = n
     }
 
     override fun setRemoveWhenFinished(value: Boolean) {
-        Log.w("GenericModifier", "GenericModifier always removes itself when finished.")
+        Log.w("UIComponentModifier", "UIComponentModifier always removes itself when finished.")
     }
 
     override fun addModifierListener(pModifierListener: IModifier.IModifierListener<IEntity>?) {
