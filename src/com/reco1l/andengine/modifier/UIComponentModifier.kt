@@ -136,11 +136,14 @@ class UIComponentModifier(private val pool: SimplePool<UIComponentModifier>? = n
         return if (onUpdate == null && onStart == null && duration == 0f)
             this
         else
-            target?.obtainModifier(block)
+            target?.obtainModifier {
+
                 // This will make the next modifier share the same start time as this one.
                 // If `then()` was used then the start time will be the end time of this modifier.
-                ?.also { it.startTime = startTime }
-                ?: throw IllegalStateException("Cannot obtain modifier without a target component.")
+                startTime = this@UIComponentModifier.endTime
+                block()
+
+            } ?: throw IllegalStateException("Cannot obtain modifier without a target component.")
     }
 
 
