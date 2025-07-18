@@ -2,6 +2,7 @@ package com.reco1l.andengine.component
 
 import android.util.*
 import android.view.*
+import androidx.core.util.Pools.SynchronizedPool
 import com.osudroid.*
 import com.reco1l.andengine.*
 import com.reco1l.andengine.modifier.*
@@ -28,7 +29,7 @@ import kotlin.math.*
  * @author Reco1l
  */
 @Suppress("MemberVisibilityCanBePrivate")
-abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IThemeable {
+abstract class UIComponent : Entity(0f, 0f), ITouchArea, UIComponentModifierChain, IThemeable {
 
     //region Axes properties
 
@@ -331,11 +332,6 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IThemea
     //region State properties
 
     /**
-     * The modifier pool used to manage the modifiers of this entity. By default [UniversalModifier.GlobalPool].
-     */
-    var modifierPool = UniversalModifier.GlobalPool
-
-    /**
      * The mode in which the entity is attached to its parent.
      */
     var attachmentMode = AttachmentMode.None
@@ -346,7 +342,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IThemea
      */
     var cullingMode = CullingMode.Disabled
 
-    /**
+/**
      * The current invalidation flags. Indicates which properties were updated and need to be handled.
      *
      * @see InvalidationFlag
@@ -927,19 +923,16 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IThemea
 
     //region Modifiers
 
-    fun clearModifiers(vararg type: ModifierType) {
-        unregisterEntityModifiers { it is UniversalModifier && it.type in type }
+    override fun obtainModifier(block: UIComponentModifier.() -> Unit): UIComponentModifier {
+        return (MODIFIER_POOL.acquire() ?: UIComponentModifier(MODIFIER_POOL)).apply {
+            target = this@UIComponent
+            block()
+            registerEntityModifier(this)
+        }
     }
 
-    override fun appendModifier(block: UniversalModifier.() -> Unit): UniversalModifier {
-
-        val modifier = modifierPool.acquire() ?: UniversalModifier(modifierPool)
-        modifier.setToDefault()
-        modifier.parent = this
-        modifier.block()
-
-        registerEntityModifier(modifier)
-        return modifier
+    fun clearModifiers(vararg type: UIComponentModifierType) {
+        unregisterEntityModifiers { it is UIComponentModifier && it.type in type }
     }
 
     //endregion
@@ -1050,6 +1043,8 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IThemea
          */
         const val FitParent = -3f
 
+
+        private val MODIFIER_POOL = SynchronizedPool<UIComponentModifier>(32)
 
         private val VERTICES_WRAPPER = FloatArray(8)
 
