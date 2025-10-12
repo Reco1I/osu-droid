@@ -1,5 +1,6 @@
 package com.reco1l.framework
 
+import android.graphics.Color
 import kotlin.math.*
 
 data class Color4(private val hex: Long) {
@@ -78,6 +79,16 @@ data class Color4(private val hex: Long) {
 
 
     fun toInt() = hex.toInt()
+
+
+    companion object {
+        val Black = Color4(Color.BLACK)
+        val White = Color4(Color.WHITE)
+        val Red = Color4(Color.RED)
+        val Green = Color4(Color.GREEN)
+        val Blue = Color4(Color.BLUE)
+        val Transparent = Color4(Color.TRANSPARENT)
+    }
 }
 
 enum class HexComposition {
