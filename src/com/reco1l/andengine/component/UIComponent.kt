@@ -45,19 +45,6 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IThemea
      */
     open var relativeSizeAxes = Axes.None
 
-    /**
-     * Determines which axes for the position of the entity are relative w.r.t the parent.
-     *
-     * * If the value is [Axes.None], the unit for both [x][setX] and [y][setY] will be absolute.
-     * * If the value is [Axes.X], the unit for [x][setX] will be relative meanwhile [y][setY] will remain as absolute.
-     * * If the value is [Axes.Y], the unit for [y][setY] will be relative meanwhile [x][setX] will remain as absolute.
-     * * If the value is [Axes.Both], both [x][setX] and [y][setY] will be relative.
-     *
-     * Relative values are calculated as a percentage of the parent's size minus its padding, that is, values passed
-     * to [x][setX] or [y][setY] will be treated as a percentage (values from 0 to 1).
-     */
-    open var relativePositionAxes = Axes.None
-
     //endregion
 
     //region Size related properties
@@ -190,9 +177,6 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IThemea
     //region Position related properties
 
     override fun getX(): Float {
-        if (relativePositionAxes.isHorizontal) {
-            return mX * parent.innerWidth
-        }
         return mX
     }
     fun setX(value: Float) {
@@ -203,9 +187,6 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IThemea
     }
 
     override fun getY(): Float {
-        if (relativePositionAxes.isVertical) {
-            return mY * parent.innerHeight
-        }
         return mY
     }
     fun setY(value: Float) {
