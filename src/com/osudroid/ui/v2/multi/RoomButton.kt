@@ -28,7 +28,7 @@ class RoomButton(val lobbyScene: LobbyScene, val room: Room) : UIButton() {
         }
 
         // Override the default background
-        applyTheme = {}
+        style = {}
 
         container {
             width = FillParent
@@ -46,7 +46,7 @@ class RoomButton(val lobbyScene: LobbyScene, val room: Room) : UIButton() {
                         anchor = Anchor.CenterLeft
                         textureRegion = ResourceManager.getInstance().getTexture(if (room.isLocked) "lock" else "unlock")
                         size = Vec2(20f)
-                        applyTheme = { color = it.accentColor }
+                        style = { color = it.accentColor }
                     }
 
                     text {
@@ -54,14 +54,14 @@ class RoomButton(val lobbyScene: LobbyScene, val room: Room) : UIButton() {
                         anchor = Anchor.CenterLeft
                         font = ResourceManager.getInstance().getFont("smallFont")
                         text = room.name
-                        applyTheme = { color = it.accentColor }
+                        style = { color = it.accentColor }
                     }
                 }
 
                 text {
                     font = ResourceManager.getInstance().getFont("xs")
                     text = room.playerNames.takeUnless { it.isEmpty() } ?: StringTable.get(string.multiplayer_room_no_players)
-                    applyTheme = {
+                    style = {
                         color = it.accentColor
                         alpha = 0.95f
                     }
@@ -97,7 +97,7 @@ class RoomButton(val lobbyScene: LobbyScene, val room: Room) : UIButton() {
                     if (room.gameplaySettings.isFreeMod) {
                         badge {
                             sizeVariant = SizeVariant.Small
-                            applyTheme = {
+                            style = {
                                 color = it.accentColor * 0.1f
                                 background?.color = it.accentColor
                             }
@@ -124,7 +124,7 @@ class RoomButton(val lobbyScene: LobbyScene, val room: Room) : UIButton() {
                     RoomStatus.Playing -> string.multiplayer_room_status_playing
                     else -> string.multiplayer_room_status_idle
                 })
-                applyTheme = { color = it.accentColor }
+                style = { color = it.accentColor }
             }
         }
 

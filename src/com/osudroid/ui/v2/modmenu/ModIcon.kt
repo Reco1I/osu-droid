@@ -1,7 +1,6 @@
 package com.osudroid.ui.v2.modmenu
 
 import com.osudroid.ui.v2.*
-import com.osudroid.utils.updateThread
 import com.reco1l.andengine.*
 import com.reco1l.andengine.buffered.*
 import com.reco1l.andengine.component.*
@@ -66,7 +65,7 @@ class ModIcon(val mod: Mod) : UIContainer(), ISkinnable {
                 })
             } else {
                 background = UIBox().apply {
-                    applyTheme = { color = it.accentColor * 0.1f }
+                    style = { color = it.accentColor * 0.1f }
                 }
 
                 attachChild(UIText().apply {
@@ -74,7 +73,7 @@ class ModIcon(val mod: Mod) : UIContainer(), ISkinnable {
                     origin = Anchor.Center
                     text = mod.acronym
                     font = ResourceManager.getInstance().getFont("smallFont")
-                    applyTheme = { color = it.accentColor }
+                    style = { color = it.accentColor }
                 })
             }
 

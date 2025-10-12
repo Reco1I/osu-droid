@@ -22,16 +22,13 @@ import com.osudroid.ui.v2.GameLoaderScene
 import com.osudroid.ui.v2.ModsIndicator
 import com.osudroid.ui.v2.modmenu.ModMenu
 import com.osudroid.utils.async
-import com.osudroid.utils.mainThread
 import com.osudroid.utils.updateThread
 import com.reco1l.andengine.Anchor
 import com.reco1l.andengine.Axes
 import com.reco1l.andengine.UIEngine
 import com.reco1l.andengine.UIScene
 import com.reco1l.andengine.badge
-import com.reco1l.andengine.component.UIComponent
 import com.reco1l.andengine.component.UIComponent.Companion.FillParent
-import com.reco1l.andengine.component.forEach
 import com.reco1l.andengine.component.setText
 import com.reco1l.andengine.container
 import com.reco1l.andengine.container.JustifyContent
@@ -173,7 +170,7 @@ class RoomScene(val room: Room) : UIScene(), IRoomEventListener, IPlayerEventLis
                 }
 
                 foreground = UIBox().apply {
-                    applyTheme = {
+                    style = {
                         color = it.accentColor * 0.1f
                         alpha = 0.9f
                     }
@@ -197,7 +194,7 @@ class RoomScene(val room: Room) : UIScene(), IRoomEventListener, IPlayerEventLis
                         nameText = text {
                             text = room.name
                             font = ResourceManager.getInstance().getFont("font")
-                            applyTheme = { color = it.accentColor }
+                            style = { color = it.accentColor }
                         }
 
                         linearContainer {
@@ -219,7 +216,7 @@ class RoomScene(val room: Room) : UIScene(), IRoomEventListener, IPlayerEventLis
 
                             freeModsBadge = badge {
                                 sizeVariant = SizeVariant.Small
-                                applyTheme = {
+                                style = {
                                     color = it.accentColor * 0.1f
                                     background?.color = it.accentColor
                                 }
@@ -264,7 +261,7 @@ class RoomScene(val room: Room) : UIScene(), IRoomEventListener, IPlayerEventLis
 
                             text {
                                 text = StringTable.get(title).uppercase()
-                                applyTheme = { color = it.accentColor * 0.7f }
+                                style = { color = it.accentColor * 0.7f }
                             }
 
                             block()
@@ -295,7 +292,7 @@ class RoomScene(val room: Room) : UIScene(), IRoomEventListener, IPlayerEventLis
                             padding = Vec4(16f)
                             background = UIBox().apply {
                                 cornerRadius = 12f
-                                applyTheme = {
+                                style = {
                                     color = it.accentColor * 0.1f
                                     alpha = 0.5f
                                 }
@@ -310,7 +307,7 @@ class RoomScene(val room: Room) : UIScene(), IRoomEventListener, IPlayerEventLis
                             alignment = Anchor.Center
                             background = UIBox().apply {
                                 cornerRadius = 12f
-                                applyTheme = {
+                                style = {
                                     color = it.accentColor * 0.1f
                                     alpha = 0.5f
                                 }

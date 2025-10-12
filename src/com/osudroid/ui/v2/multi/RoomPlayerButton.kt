@@ -28,7 +28,7 @@ class RoomPlayerButton() : UIButton() {
     private lateinit var missingIndicator: UISprite
 
 
-    override var applyTheme: UIComponent.(Theme) -> Unit = { theme ->
+    override var style: UIComponent.(Theme) -> Unit = { theme ->
         color = theme.accentColor
         alpha = if (isEnabled) 1f else 0.5f
     }
@@ -58,7 +58,7 @@ class RoomPlayerButton() : UIButton() {
                 spacing = 4f
 
                 nameText = text {
-                    applyTheme = { color = it.accentColor }
+                    style = { color = it.accentColor }
                 }
 
                 missingIndicator = sprite {
@@ -146,7 +146,7 @@ class RoomPlayerButton() : UIButton() {
 
                         addButton {
                             setText(R.string.multiplayer_room_player_menu_kick)
-                            applyTheme = {
+                            style = {
                                 color = Color4("#FFBFBF")
                             }
                             onActionUp = {

@@ -26,7 +26,7 @@ open class UIModal(
 
 ) : UIComponent() {
 
-    override var applyTheme: UIComponent.(Theme) -> Unit = { theme ->
+    override var style: UIComponent.(Theme) -> Unit = { theme ->
         card.background?.color = theme.accentColor * 0.15f
     }
 
@@ -181,7 +181,7 @@ abstract class UIDialog<T : UIComponent>(val innerContent: T) : UIModal(card = U
         alignment = Anchor.Center
         padding = Vec4(0f, 16f)
 
-        applyTheme = { theme ->
+        style = { theme ->
             color = theme.accentColor * 0.7f
         }
     }
@@ -209,7 +209,7 @@ abstract class UIDialog<T : UIComponent>(val innerContent: T) : UIModal(card = U
             box {
                 width = FillParent
                 height = 1f
-                applyTheme = {
+                style = {
                     color = it.accentColor
                     alpha = 0.1f
                 }
@@ -249,7 +249,7 @@ open class UIMessageDialog : UIDialog<UIText>(
         alignment = Anchor.Center
         padding = Vec4(24f)
 
-        applyTheme = { theme ->
+        style = { theme ->
             color = theme.accentColor
         }
     }

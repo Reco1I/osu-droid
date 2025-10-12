@@ -21,7 +21,7 @@ import javax.microedition.khronos.opengles.*
  */
 open class UIBadge : CompoundText(), ISizeVariable {
 
-    override var applyTheme: UIComponent.(Theme) -> Unit = { theme ->
+    override var style: UIComponent.(Theme) -> Unit = { theme ->
         color = theme.accentColor
         background?.color = theme.accentColor * 0.15f
     }
@@ -74,7 +74,7 @@ open class UIBadge : CompoundText(), ISizeVariable {
  */
 open class UILabeledBadge : UILinearContainer(), ISizeVariable {
 
-    override var applyTheme: UIComponent.(Theme) -> Unit = { theme ->
+    override var style: UIComponent.(Theme) -> Unit = { theme ->
         color = theme.accentColor
         background?.color = theme.accentColor * 0.15f
     }

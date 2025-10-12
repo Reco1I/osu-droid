@@ -7,7 +7,7 @@ import com.reco1l.andengine.shape.*
 
 open class CircularProgressBar : UIContainer() {
 
-    override var applyTheme: UIComponent.(Theme) -> Unit = { theme ->
+    override var style: UIComponent.(Theme) -> Unit = { theme ->
         trackCircle.color = theme.accentColor.copy(alpha = trackCircle.alpha)
         rotatingCircle.color = theme.accentColor
     }
@@ -30,7 +30,7 @@ open class CircularProgressBar : UIContainer() {
         height = FillParent
         paintStyle = PaintStyle.Outline
         lineWidth = 4f
-        applyTheme = {
+        style = {
             color = Theme.current.accentColor
             alpha = 0.3f
         }
@@ -44,7 +44,7 @@ open class CircularProgressBar : UIContainer() {
         origin = Anchor.Center
         rotationCenter = Anchor.Center
         setPortion(0.1f)
-        applyTheme = {
+        style = {
             color = Theme.current.accentColor
             alpha = 0.3f
         }

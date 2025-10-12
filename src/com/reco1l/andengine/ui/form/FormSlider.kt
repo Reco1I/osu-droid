@@ -23,7 +23,7 @@ open class FormSlider(initialValue: Float = 0f) : FormControl<Float, UISlider>(i
         origin = Anchor.CenterRight
         padding = Vec4(6f, 0f)
         alignment = Anchor.Center
-        applyTheme = { color = it.accentColor }
+        style = { color = it.accentColor }
 
         background = UIBox().apply {
             color = Color4.Black

@@ -61,7 +61,7 @@ class LobbyScene : UIScene() {
                 }
 
                 foreground = UIBox().apply {
-                    applyTheme = {
+                    style = {
                         color = it.accentColor * 0.1f
                         alpha = 0.9f
                     }
@@ -123,7 +123,7 @@ class LobbyScene : UIScene() {
                         size = Vec2(52f, 28f)
                         anchor = Anchor.CenterRight
                         origin = Anchor.CenterRight
-                        applyTheme = { color = it.accentColor }
+                        style = { color = it.accentColor }
                     }
                 }
             }
@@ -222,7 +222,7 @@ class LobbyScene : UIScene() {
 
                     text {
                         font = ResourceManager.getInstance().getFont("smallFont")
-                        applyTheme = { color = it.accentColor }
+                        style = { color = it.accentColor }
                         setText(string.multiplayer_lobby_fetch_error)
                     }
                 }
@@ -258,7 +258,7 @@ class LobbyScene : UIScene() {
 
                         text {
                             font = ResourceManager.getInstance().getFont("smallFont")
-                            applyTheme = { color = it.accentColor }
+                            style = { color = it.accentColor }
                             setText(if (searchQuery.isNullOrEmpty()) string.multiplayer_lobby_no_rooms else string.multiplayer_lobby_no_results)
                         }
                     }

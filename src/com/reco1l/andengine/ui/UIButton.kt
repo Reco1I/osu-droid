@@ -14,7 +14,7 @@ import org.anddev.andengine.input.touch.TouchEvent
 @Suppress("LeakingThis")
 open class UIButton : UILinearContainer() {
 
-    override var applyTheme: UIComponent.(Theme) -> Unit = { theme ->
+    override var style: UIComponent.(Theme) -> Unit = { theme ->
         background?.color = if (isSelected) theme.accentColor else theme.accentColor * 0.175f
         color = if (isSelected) theme.accentColor * 0.1f else theme.accentColor
         alpha = if (isEnabled) 1f else 0.5f

@@ -62,21 +62,21 @@ class BeatmapInfoLayout : UILinearContainer() {
                 artistText = text {
                     font = ResourceManager.getInstance().getFont("smallFont")
                     text = "Unknown"
-                    applyTheme = { color = it.accentColor * 0.9f}
+                    style = { color = it.accentColor * 0.9f}
                 }
 
                 titleText = text {
                     width = FillParent
                     font = ResourceManager.getInstance().getFont("smallFont")
                     text = "No selected beatmap"
-                    applyTheme = { color = it.accentColor }
+                    style = { color = it.accentColor }
                     clipToBounds = true
                 }
 
                 versionText = text {
                     font = ResourceManager.getInstance().getFont("smallFont")
                     text = "Unknown"
-                    applyTheme = { color = it.accentColor * 0.8f}
+                    style = { color = it.accentColor * 0.8f}
                 }
             }
 
@@ -93,14 +93,14 @@ class BeatmapInfoLayout : UILinearContainer() {
             lengthText = compoundText {
                 leadingIcon = UISprite(ResourceManager.getInstance().getTexture("clock"))
                 text = "00:00"
-                applyTheme = { color = it.accentColor }
+                style = { color = it.accentColor }
                 font = ResourceManager.getInstance().getFont("xs")
             }
 
             bpmText = compoundText {
                 leadingIcon = UISprite(ResourceManager.getInstance().getTexture("bpm"))
                 text = "0"
-                applyTheme = { color = it.accentColor }
+                style = { color = it.accentColor }
                 font = ResourceManager.getInstance().getFont("xs")
             }
         }

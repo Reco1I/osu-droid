@@ -103,7 +103,7 @@ class GameLoaderScene(private val gameScene: GameScene, private val beatmapInfo:
                     width = 700f
                     clipToBounds = true
                     autoScrollSpeed = 30f
-                    applyTheme = { color = it.accentColor }
+                    style = { color = it.accentColor }
                 }
 
                 // Difficulty
@@ -112,14 +112,14 @@ class GameLoaderScene(private val gameScene: GameScene, private val beatmapInfo:
                     text = beatmapInfo.version
                     width = 700f
                     clipToBounds = true
-                    applyTheme = { color = it.accentColor }
+                    style = { color = it.accentColor }
                 }
 
                 // Creator
                 text {
                     font = ResourceManager.getInstance().getFont("middleFont")
                     text = "by ${beatmapInfo.artistText}"
-                    applyTheme = { color = it.accentColor * 0.9f }
+                    style = { color = it.accentColor * 0.9f }
                 }
 
                 // Mods

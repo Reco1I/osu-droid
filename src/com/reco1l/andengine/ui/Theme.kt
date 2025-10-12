@@ -31,10 +31,9 @@ data class Theme(
     }
 }
 
-interface IThemeable {
-
+interface IStyleable {
     /**
-     * Called when the theme is changed. This is used to apply the theme to the entity.
+     * A callback that applies a style to the entity based on the current [Theme].
      */
-    var applyTheme: UIComponent.(theme: Theme) -> Unit
+    var style: UIComponent.(theme: Theme) -> Unit
 }

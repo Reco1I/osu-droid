@@ -94,7 +94,7 @@ object ModMenu : UIScene() {
             direction = FlexDirection.Column
             justifyContent = JustifyContent.SpaceBetween
             background = UIBox().apply {
-                applyTheme = {
+                style = {
                     color = it.accentColor * 0.1f
                     alpha = 0.9f
                 }
@@ -148,7 +148,7 @@ object ModMenu : UIScene() {
 
                     +UITextButton().apply {
                         text = "Clear"
-                        applyTheme = {}
+                        style = {}
                         color = Color4(0xFFFFBFBF)
                         background?.color = Color4(0xFF342121)
                         leadingIcon = UISprite().apply {
@@ -200,7 +200,7 @@ object ModMenu : UIScene() {
                         size = Vec2(52f, 28f)
                         anchor = Anchor.CenterRight
                         origin = Anchor.CenterRight
-                        applyTheme = { color = it.accentColor }
+                        style = { color = it.accentColor }
                     }
                 }
             }
@@ -299,7 +299,7 @@ object ModMenu : UIScene() {
                         text = "Ranked"
                         background!!.color = Color4(0xFF83DF6B)
                         color = Color4(0xFF161622)
-                        applyTheme = {}
+                        style = {}
                     }
 
                     scoreMultiplierBadge = labeledBadge {

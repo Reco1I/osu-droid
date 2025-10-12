@@ -23,7 +23,7 @@ open class ModMenuSection(name: String, private val toggles: List<UIButton> = li
         cullingMode = CullingMode.CameraBounds
 
         background = UIBox().apply {
-            applyTheme = { color = it.accentColor * 0.1f }
+            style = { color = it.accentColor * 0.1f }
             cornerRadius = 16f
         }
 
@@ -33,7 +33,7 @@ open class ModMenuSection(name: String, private val toggles: List<UIButton> = li
             alignment = Anchor.Center
             font = ResourceManager.getInstance().getFont("smallFont")
             padding = Vec4(12f)
-            applyTheme = {
+            style = {
                 color = it.accentColor
                 alpha = 0.75f
             }

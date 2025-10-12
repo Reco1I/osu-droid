@@ -75,7 +75,7 @@ class RoomChat : UILinearContainer() {
         anchor = Anchor.BottomCenter
         origin = Anchor.BottomCenter
         background = UIBox().apply {
-            applyTheme = {
+            style = {
                 color = it.accentColor * 0.1f
                 alpha = 0.9f
             }
@@ -266,7 +266,7 @@ class RoomChat : UILinearContainer() {
             padding = Vec4(80f, 18f)
             spacing = 12f
             background = UIBox().apply {
-                applyTheme = {
+                style = {
                     color = it.accentColor * 0.15f
                     alpha = 0.5f
                 }
@@ -276,7 +276,7 @@ class RoomChat : UILinearContainer() {
                 textureRegion = ResourceManager.getInstance().getTexture("chat")
                 anchor = Anchor.CenterLeft
                 origin = Anchor.CenterLeft
-                applyTheme = { color = it.accentColor }
+                style = { color = it.accentColor }
                 size = Vec2(28f)
             }
 
@@ -295,7 +295,7 @@ class RoomChat : UILinearContainer() {
                     width = FillParent
                     anchor = Anchor.CenterLeft
                     origin = Anchor.CenterLeft
-                    applyTheme = { color = it.accentColor }
+                    style = { color = it.accentColor }
                 }
             }
         }
@@ -356,7 +356,7 @@ class RoomChat : UILinearContainer() {
             cullingMode = CullingMode.ParentBounds
             background = UIBox().apply {
                 buffer = messageBackgroundBuffer
-                applyTheme = {
+                style = {
                     color = it.accentColor * 0.09f
                     alpha = 0f
                 }
@@ -403,7 +403,7 @@ class RoomChat : UILinearContainer() {
 
                         text {
                             buffer = messageTimestampBuffer
-                            applyTheme = { color = it.accentColor * 0.5f }
+                            style = { color = it.accentColor * 0.5f }
                             text = timestampFormat.format(message.time)
                         }
 
@@ -419,7 +419,7 @@ class RoomChat : UILinearContainer() {
                     text {
                         buffer = messageTextBuffer
                         width = FillParent
-                        applyTheme = { color = it.accentColor }
+                        style = { color = it.accentColor }
                         text = message.content
                     }
                 } else {

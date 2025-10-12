@@ -21,7 +21,7 @@ import kotlin.text.substring
 
 open class UITextInput(initialValue: String) : UIControl<String>(initialValue), IFocusable {
 
-    override var applyTheme: UIComponent.(Theme) -> Unit = { theme ->
+    override var style: UIComponent.(Theme) -> Unit = { theme ->
         background?.color = theme.accentColor * 0.25f
         foreground?.color = if (isFocused) theme.accentColor else theme.accentColor * 0.4f
         textEntity.color = theme.accentColor

@@ -46,7 +46,7 @@ class UIDropdown(var trigger: UIComponent) : UIScrollableContainer() {
         clipToBounds = true
         background = UIBox().apply {
             cornerRadius = 14f
-            applyTheme = { color = it.accentColor * 0.175f }
+            style = { color = it.accentColor * 0.175f }
         }
         scaleCenter = Anchor.Center
         alpha = 0f
@@ -95,7 +95,7 @@ class UIDropdown(var trigger: UIComponent) : UIScrollableContainer() {
     fun addButton(block: UITextButton.() -> Unit): UITextButton {
         val button = object : UITextButton() {
 
-            override var applyTheme: UIComponent.(Theme) -> Unit = { theme ->
+            override var style: UIComponent.(Theme) -> Unit = { theme ->
                 color = theme.accentColor
             }
 
@@ -104,14 +104,14 @@ class UIDropdown(var trigger: UIComponent) : UIScrollableContainer() {
                 alignment = Anchor.CenterLeft
                 background = UIBox().apply {
                     cornerRadius = 12f
-                    applyTheme = {
+                    style = {
                         color = it.accentColor * 0.9f
                         alpha = 0f
                     }
                 }
                 foreground = UIBox().apply {
                     cornerRadius = 12f
-                    applyTheme = {
+                    style = {
                         color = it.accentColor
                         alpha = 0f
                     }

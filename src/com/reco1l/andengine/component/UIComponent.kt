@@ -28,7 +28,7 @@ import kotlin.math.*
  * @author Reco1l
  */
 @Suppress("MemberVisibilityCanBePrivate")
-abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IThemeable {
+abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStyleable {
 
     //region Axes properties
 
@@ -249,7 +249,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IThemea
 
     //region Cosmetic properties
 
-    override var applyTheme: UIComponent.(theme: Theme) -> Unit = {}
+    override var style: UIComponent.(theme: Theme) -> Unit = {}
 
     /**
      * The background entity. This entity will be drawn before the entity children and will not be
@@ -1024,7 +1024,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IThemea
         background?.onThemeChanged(theme)
         foreground?.onThemeChanged(theme)
 
-        applyTheme(theme)
+        style(theme)
     }
 
     //endregion

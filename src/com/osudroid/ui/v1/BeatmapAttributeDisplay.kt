@@ -136,13 +136,13 @@ open class BeatmapAttributeDisplay(difficulty: BeatmapDifficulty, mods: Iterable
                 +UIText().apply {
                     font = ResourceManager.getInstance().getFont("font")
                     text = name
-                    applyTheme = { color = it.accentColor }
+                    style = { color = it.accentColor }
                 }
 
                 +UIText().apply {
                     font = ResourceManager.getInstance().getFont("smallFont")
                     text = description
-                    applyTheme = { color = it.accentColor }
+                    style = { color = it.accentColor }
                 }
             }
 
@@ -153,7 +153,7 @@ open class BeatmapAttributeDisplay(difficulty: BeatmapDifficulty, mods: Iterable
                     +UIText().apply {
                         font = ResourceManager.getInstance().getFont("smallFont")
                         text = "${metric.name}: ${metric.value}"
-                        applyTheme = { color = metric.color ?: (it.accentColor * 0.8f) }
+                        style = { color = metric.color ?: (it.accentColor * 0.8f) }
                     }
                 }
             }
@@ -166,7 +166,7 @@ open class BeatmapAttributeDisplay(difficulty: BeatmapDifficulty, mods: Iterable
                         +UIText().apply {
                             font = ResourceManager.getInstance().getFont("smallFont")
                             text = "This value is being adjusted by mods (${originalValue.roundBy(2)} ➜ ${adjustedValue.roundBy(2)})."
-                            applyTheme = { color = it.accentColor * 0.6f }
+                            style = { color = it.accentColor * 0.6f }
                         }
                     }
 
@@ -174,7 +174,7 @@ open class BeatmapAttributeDisplay(difficulty: BeatmapDifficulty, mods: Iterable
                         +UIText().apply {
                             font = ResourceManager.getInstance().getFont("smallFont")
                             text = info
-                            applyTheme = { color = it.accentColor * 0.6f }
+                            style = { color = it.accentColor * 0.6f }
                         }
                     }
                 }

@@ -44,7 +44,7 @@ abstract class FormControl<V : Any, C: UIControl<V>>(initialValue: V): UILinearC
         font = ResourceManager.getInstance().getFont("smallFont")
         anchor = Anchor.CenterLeft
         origin = Anchor.CenterLeft
-        applyTheme = { color = it.accentColor }
+        style = { color = it.accentColor }
     }
 
     /**

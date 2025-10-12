@@ -56,7 +56,7 @@ open class UICard(
         orientation = Orientation.Vertical
         background = UIBox().apply {
             cornerRadius = 14f
-            applyTheme = { color = it.accentColor * 0.15f }
+            style = { color = it.accentColor * 0.15f }
         }
 
         +titleBar.apply {
@@ -67,7 +67,7 @@ open class UICard(
                 font = ResourceManager.getInstance().getFont("smallFont")
                 anchor = Anchor.CenterLeft
                 origin = Anchor.CenterLeft
-                applyTheme = { color = it.accentColor }
+                style = { color = it.accentColor }
             }
 
             +UITriangle().apply {
@@ -76,7 +76,7 @@ open class UICard(
                 rotationCenter = Anchor.Center
                 width = 16f
                 height = 12f
-                applyTheme = {
+                style = {
                     color = it.accentColor
                     alpha = 0.5f
                 }
@@ -86,7 +86,7 @@ open class UICard(
         +UIBox().apply {
             width = FillParent
             height = 1f
-            applyTheme = {
+            style = {
                 color = it.accentColor
                 alpha = 0.025f
             }

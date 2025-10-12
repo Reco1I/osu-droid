@@ -11,7 +11,7 @@ import kotlin.math.*
 @Suppress("LeakingThis")
 open class UISlider(initialValue: Float = 0f) : UIControl<Float>(initialValue) {
 
-    override var applyTheme: UIComponent.(Theme) -> Unit = { theme ->
+    override var style: UIComponent.(Theme) -> Unit = { theme ->
         background?.color = theme.accentColor * 0.25f
         progressBar.color = theme.accentColor * 0.5f
         thumb.color = theme.accentColor

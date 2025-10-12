@@ -10,7 +10,7 @@ import ru.nsu.ccfit.zuev.osu.*
 
 class UICheckbox(initialValue: Boolean = false) : UIControl<Boolean>(initialValue) {
 
-    override var applyTheme: UIComponent.(Theme) -> Unit = { theme ->
+    override var style: UIComponent.(Theme) -> Unit = { theme ->
         if (value) {
             background?.color = theme.accentColor * 0.5f
         } else {

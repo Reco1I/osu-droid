@@ -156,7 +156,7 @@ class ModCustomizationMenu : UIModal(
                     origin = Anchor.CenterLeft
                     font = ResourceManager.getInstance().getFont("smallFont")
                     text = mod.name.uppercase()
-                    applyTheme = {
+                    style = {
                         color = it.accentColor
                         alpha = 0.9f
                     }
