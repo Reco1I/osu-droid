@@ -6,6 +6,7 @@ import com.reco1l.andengine.container.*
 import com.reco1l.andengine.modifier.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.text.*
+import com.reco1l.andengine.theme.FontSize
 import com.reco1l.framework.*
 import com.reco1l.framework.math.*
 import org.anddev.andengine.input.touch.*
@@ -177,7 +178,7 @@ abstract class UIDialog<T : UIComponent>(val innerContent: T) : UIModal(card = U
 
     val titleEntity = UIText().apply {
         width = FillParent
-        font = ResourceManager.getInstance().getFont("smallFont")
+        fontSize = FontSize.SM
         alignment = Anchor.Center
         padding = Vec4(0f, 16f)
 
@@ -245,7 +246,7 @@ abstract class UIDialog<T : UIComponent>(val innerContent: T) : UIModal(card = U
 open class UIMessageDialog : UIDialog<UIText>(
     innerContent = UIText().apply {
         width = FillParent
-        font = ResourceManager.getInstance().getFont("smallFont")
+        fontSize = FontSize.SM
         alignment = Anchor.Center
         padding = Vec4(24f)
 

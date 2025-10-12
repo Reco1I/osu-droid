@@ -10,6 +10,7 @@ import com.reco1l.andengine.container.*
 import com.reco1l.andengine.modifier.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.sprite.*
+import com.reco1l.andengine.theme.FontSize
 import com.reco1l.andengine.ui.*
 import com.reco1l.andengine.ui.form.*
 import com.reco1l.framework.*
@@ -83,7 +84,7 @@ class GameLoaderScene(private val gameScene: GameScene, private val beatmapInfo:
                     }
 
                     text {
-                        font = ResourceManager.getInstance().getFont("smallFont")
+                        fontSize = FontSize.SM
                         text = StringTable.get(com.osudroid.resources.R.string.epilepsy_warning)
                     }
                 }
@@ -98,7 +99,7 @@ class GameLoaderScene(private val gameScene: GameScene, private val beatmapInfo:
 
                 // Title
                 text {
-                    font = ResourceManager.getInstance().getFont("bigFont")
+                    fontSize = FontSize.XL
                     text = beatmapInfo.titleText
                     width = 700f
                     clipToBounds = true
@@ -108,7 +109,7 @@ class GameLoaderScene(private val gameScene: GameScene, private val beatmapInfo:
 
                 // Difficulty
                 text {
-                    font = ResourceManager.getInstance().getFont("middleFont")
+                    fontSize = FontSize.LG
                     text = beatmapInfo.version
                     width = 700f
                     clipToBounds = true
@@ -117,7 +118,7 @@ class GameLoaderScene(private val gameScene: GameScene, private val beatmapInfo:
 
                 // Creator
                 text {
-                    font = ResourceManager.getInstance().getFont("middleFont")
+                    fontSize = FontSize.LG
                     text = "by ${beatmapInfo.artistText}"
                     style = { color = it.accentColor * 0.9f }
                 }

@@ -8,6 +8,7 @@ import com.reco1l.andengine.container.Orientation
 import com.reco1l.andengine.container.UILinearContainer
 import com.reco1l.andengine.container.UIScrollableContainer
 import com.reco1l.andengine.text.UIText
+import com.reco1l.andengine.theme.FontSize
 import com.reco1l.andengine.ui.UIModal
 import com.reco1l.framework.Color4
 import com.reco1l.framework.math.Vec4
@@ -134,13 +135,13 @@ open class BeatmapAttributeDisplay(difficulty: BeatmapDifficulty, mods: Iterable
                 spacing = 5f
 
                 +UIText().apply {
-                    font = ResourceManager.getInstance().getFont("font")
+                    
                     text = name
                     style = { color = it.accentColor }
                 }
 
                 +UIText().apply {
-                    font = ResourceManager.getInstance().getFont("smallFont")
+                    fontSize = FontSize.SM
                     text = description
                     style = { color = it.accentColor }
                 }
@@ -151,7 +152,7 @@ open class BeatmapAttributeDisplay(difficulty: BeatmapDifficulty, mods: Iterable
 
                 metrics.fastForEach { metric ->
                     +UIText().apply {
-                        font = ResourceManager.getInstance().getFont("smallFont")
+                        fontSize = FontSize.SM
                         text = "${metric.name}: ${metric.value}"
                         style = { color = metric.color ?: (it.accentColor * 0.8f) }
                     }
@@ -164,7 +165,7 @@ open class BeatmapAttributeDisplay(difficulty: BeatmapDifficulty, mods: Iterable
 
                     if (originalValue != adjustedValue) {
                         +UIText().apply {
-                            font = ResourceManager.getInstance().getFont("smallFont")
+                            fontSize = FontSize.SM
                             text = "This value is being adjusted by mods (${originalValue.roundBy(2)} ➜ ${adjustedValue.roundBy(2)})."
                             style = { color = it.accentColor * 0.6f }
                         }
@@ -172,7 +173,7 @@ open class BeatmapAttributeDisplay(difficulty: BeatmapDifficulty, mods: Iterable
 
                     additionalInfo.fastForEach { info ->
                         +UIText().apply {
-                            font = ResourceManager.getInstance().getFont("smallFont")
+                            fontSize = FontSize.SM
                             text = info
                             style = { color = it.accentColor * 0.6f }
                         }

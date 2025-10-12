@@ -12,6 +12,7 @@ import com.reco1l.framework.math.Vec4
 import com.osudroid.ui.v2.hud.GameplayHUD
 import com.osudroid.ui.v2.hud.HUDElements
 import com.osudroid.ui.v2.hud.IGameplayEvents
+import com.reco1l.andengine.theme.FontSize
 import com.reco1l.toolkt.kotlin.fastForEach
 import com.rian.osu.beatmap.hitobject.HitObject
 import org.anddev.andengine.input.touch.TouchEvent
@@ -80,7 +81,7 @@ class HUDElementSelector(private val hud: GameplayHUD) : UIContainer(), IGamepla
                     rotation = -90f
                     anchor = Anchor.Center
                     origin = Anchor.Center
-                    font = ResourceManager.getInstance().getFont("smallFont")
+                    fontSize = FontSize.SM
                     text = "Elements"
 
                     x = BUTTON_RADIUS / 2

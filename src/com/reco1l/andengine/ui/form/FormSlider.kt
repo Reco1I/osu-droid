@@ -4,6 +4,7 @@ import com.reco1l.andengine.*
 import com.reco1l.andengine.container.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.text.*
+import com.reco1l.andengine.theme.FontSize
 import com.reco1l.andengine.ui.*
 import com.reco1l.framework.*
 import com.reco1l.framework.math.*
@@ -18,7 +19,7 @@ open class FormSlider(initialValue: Float = 0f) : FormControl<Float, UISlider>(i
     }
 
     override val valueText = UIText().apply {
-        font = ResourceManager.getInstance().getFont("smallFont")
+        fontSize = FontSize.SM
         anchor = Anchor.CenterRight
         origin = Anchor.CenterRight
         padding = Vec4(6f, 0f)

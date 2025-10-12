@@ -11,6 +11,7 @@ import com.reco1l.andengine.component.*
 import com.reco1l.andengine.modifier.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.text.*
+import com.reco1l.andengine.theme.FontSize
 import com.reco1l.framework.*
 import com.reco1l.framework.math.*
 import org.anddev.andengine.input.touch.*
@@ -29,13 +30,13 @@ open class UITextInput(initialValue: String) : UIControl<String>(initialValue), 
     }
 
     private val placeholderEntity = UIText().apply {
-        font = ResourceManager.getInstance().getFont("smallFont")
+        fontSize = FontSize.SM
         anchor = Anchor.CenterLeft
         origin = Anchor.CenterLeft
     }
 
     private val textEntity = UIText().apply {
-        font = ResourceManager.getInstance().getFont("smallFont")
+        fontSize = FontSize.SM
         anchor = Anchor.CenterLeft
         origin = Anchor.CenterLeft
     }

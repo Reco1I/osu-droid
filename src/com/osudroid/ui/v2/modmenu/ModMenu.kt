@@ -17,6 +17,7 @@ import com.osudroid.ui.OsuColors
 import com.osudroid.ui.v2.ModsIndicator
 import com.osudroid.utils.updateThread
 import com.reco1l.andengine.component.*
+import com.reco1l.andengine.theme.srem
 import com.reco1l.andengine.ui.UITextButton
 import com.reco1l.toolkt.kotlin.*
 import com.reco1l.toolkt.kotlin.async
@@ -103,7 +104,9 @@ object ModMenu : UIScene() {
             +UIContainer().apply {
                 width = FillParent
                 height = MatchContent
-                padding = Vec4(60f, 12f)
+                style = {
+                    padding = UIEngine.current.safeArea.copy(y = 12f, w = 12f)
+                }
 
                 +UILinearContainer().apply {
                     orientation = Orientation.Horizontal
@@ -215,8 +218,10 @@ object ModMenu : UIScene() {
                     orientation = Orientation.Horizontal
                     width = MatchContent
                     height = FillParent
-                    spacing = 16f
-                    padding = Vec4(60f, 0f)
+                    style = {
+                        spacing = 2f.srem
+                        padding = UIEngine.current.safeArea
+                    }
 
                     modPresetsSection = ModMenuPresetsSection()
                     +modPresetsSection
@@ -244,7 +249,9 @@ object ModMenu : UIScene() {
             +UIContainer().apply {
                 width = FillParent
                 height = MatchContent
-                padding = Vec4(60f, 12f)
+                style = {
+                    padding = UIEngine.current.safeArea.copy(y = 12f, w = 12f)
+                }
 
                 onUpdateTick = {
                     val buttonHeight = Multiplayer.roomScene?.chat?.buttonHeight ?: 0f

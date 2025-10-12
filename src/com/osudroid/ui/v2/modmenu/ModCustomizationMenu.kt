@@ -6,6 +6,7 @@ import com.reco1l.andengine.component.*
 import com.reco1l.andengine.container.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.text.*
+import com.reco1l.andengine.theme.FontSize
 import com.reco1l.andengine.ui.*
 import com.reco1l.framework.*
 import com.reco1l.framework.math.*
@@ -154,7 +155,7 @@ class ModCustomizationMenu : UIModal(
                 +UIText().apply {
                     anchor = Anchor.CenterLeft
                     origin = Anchor.CenterLeft
-                    font = ResourceManager.getInstance().getFont("smallFont")
+                    fontSize = FontSize.SM
                     text = mod.name.uppercase()
                     style = {
                         color = it.accentColor

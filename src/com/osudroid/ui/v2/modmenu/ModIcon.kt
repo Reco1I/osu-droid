@@ -9,6 +9,7 @@ import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.sprite.*
 import com.reco1l.andengine.text.*
 import com.reco1l.andengine.texture.*
+import com.reco1l.andengine.theme.FontSize
 import com.reco1l.andengine.ui.*
 import com.rian.osu.mods.*
 import com.rian.osu.utils.*
@@ -72,7 +73,7 @@ class ModIcon(val mod: Mod) : UIContainer(), ISkinnable {
                     anchor = Anchor.Center
                     origin = Anchor.Center
                     text = mod.acronym
-                    font = ResourceManager.getInstance().getFont("smallFont")
+                    fontSize = FontSize.SM
                     style = { color = it.accentColor }
                 })
             }

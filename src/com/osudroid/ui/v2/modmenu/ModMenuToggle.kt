@@ -9,6 +9,7 @@ import com.reco1l.andengine.container.*
 import com.reco1l.andengine.modifier.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.text.*
+import com.reco1l.andengine.theme.FontSize
 import com.reco1l.andengine.ui.*
 import com.rian.osu.mods.*
 import ru.nsu.ccfit.zuev.osu.*
@@ -53,13 +54,13 @@ class ModMenuToggle(var mod: Mod): UIButton() {
 
             text {
                 text = mod.name
-                font = ResourceManager.getInstance().getFont("smallFont")
+                fontSize = FontSize.SM
                 buffer = sharedTextCB
             }
 
             text {
                 width = FillParent
-                font = ResourceManager.getInstance().getFont("xs")
+                fontSize = FontSize.XS
                 text = mod.description
                 clipToBounds = true
                 alpha = 0.75f

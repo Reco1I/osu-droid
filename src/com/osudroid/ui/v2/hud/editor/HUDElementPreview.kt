@@ -10,6 +10,7 @@ import com.osudroid.ui.v2.hud.GameplayHUD
 import com.osudroid.ui.v2.hud.HUDElement
 import com.osudroid.ui.v2.hud.HUDElementSkinData
 import com.reco1l.andengine.component.*
+import com.reco1l.andengine.theme.FontSize
 import org.anddev.andengine.engine.camera.Camera
 import org.anddev.andengine.input.touch.TouchEvent
 import ru.nsu.ccfit.zuev.osu.ResourceManager
@@ -21,7 +22,7 @@ class HUDElementPreview(private val element: HUDElement, val hud: GameplayHUD): 
 
 
     private val label = UIText().apply {
-        font = ResourceManager.getInstance().getFont("smallFont")
+        fontSize = FontSize.SM
         anchor = Anchor.BottomLeft
         origin = Anchor.BottomLeft
         text = element.name

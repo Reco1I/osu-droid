@@ -9,6 +9,8 @@ import com.reco1l.andengine.*
 import com.reco1l.andengine.component.*
 import com.reco1l.andengine.container.*
 import com.reco1l.andengine.sprite.*
+import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.rem
 import com.reco1l.andengine.ui.*
 import com.reco1l.toolkt.kotlin.*
 import com.rian.osu.utils.*
@@ -23,7 +25,9 @@ class ModMenuPresetsSection : ModMenuSection("Presets") {
 
 
     init {
-        width = 300f
+        style = {
+            width = 9f.rem
+        }
 
         addButton = UITextButton().apply {
             width = FillParent
@@ -138,7 +142,7 @@ class ModMenuPresetsSection : ModMenuSection("Presets") {
 
             text {
                 text = preset.name
-                font = ResourceManager.getInstance().getFont("smallFont")
+                fontSize = FontSize.SM
             }
 
             +ModsIndicator().apply {

@@ -193,7 +193,7 @@ class RoomScene(val room: Room) : UIScene(), IRoomEventListener, IPlayerEventLis
 
                         nameText = text {
                             text = room.name
-                            font = ResourceManager.getInstance().getFont("font")
+                            
                             style = { color = it.accentColor }
                         }
 

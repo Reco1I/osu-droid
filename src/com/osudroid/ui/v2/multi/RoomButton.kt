@@ -8,6 +8,7 @@ import com.osudroid.ui.v2.*
 import com.reco1l.andengine.*
 import com.reco1l.andengine.component.*
 import com.reco1l.andengine.container.*
+import com.reco1l.andengine.theme.FontSize
 import com.reco1l.andengine.ui.*
 import com.reco1l.andengine.ui.form.*
 import com.reco1l.framework.*
@@ -52,14 +53,14 @@ class RoomButton(val lobbyScene: LobbyScene, val room: Room) : UIButton() {
                     text {
                         origin = Anchor.CenterLeft
                         anchor = Anchor.CenterLeft
-                        font = ResourceManager.getInstance().getFont("smallFont")
+                        fontSize = FontSize.SM
                         text = room.name
                         style = { color = it.accentColor }
                     }
                 }
 
                 text {
-                    font = ResourceManager.getInstance().getFont("xs")
+                    fontSize = FontSize.XS
                     text = room.playerNames.takeUnless { it.isEmpty() } ?: StringTable.get(string.multiplayer_room_no_players)
                     style = {
                         color = it.accentColor
@@ -117,7 +118,7 @@ class RoomButton(val lobbyScene: LobbyScene, val room: Room) : UIButton() {
             text {
                 origin = Anchor.TopRight
                 anchor = Anchor.TopRight
-                font = ResourceManager.getInstance().getFont("smallFont")
+                fontSize = FontSize.SM
                 setScale(0.85f)
                 setText(when (room.status) {
                     RoomStatus.ChangingBeatmap -> string.multiplayer_room_status_changing_beatmap

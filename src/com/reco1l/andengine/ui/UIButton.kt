@@ -195,6 +195,8 @@ open class UITextButton : UIButton() {
 
     var font by content::font
 
+    var fontSize by content::fontSize
+
     var leadingIcon by content::leadingIcon
 
     var trailingIcon by content::trailingIcon

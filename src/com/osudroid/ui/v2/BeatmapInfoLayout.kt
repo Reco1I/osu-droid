@@ -8,6 +8,7 @@ import com.reco1l.andengine.*
 import com.reco1l.andengine.container.*
 import com.reco1l.andengine.sprite.*
 import com.reco1l.andengine.text.*
+import com.reco1l.andengine.theme.FontSize
 import com.reco1l.andengine.ui.*
 import com.reco1l.framework.*
 import com.reco1l.toolkt.*
@@ -60,21 +61,21 @@ class BeatmapInfoLayout : UILinearContainer() {
                 orientation = Orientation.Vertical
 
                 artistText = text {
-                    font = ResourceManager.getInstance().getFont("smallFont")
+                    fontSize = FontSize.SM
                     text = "Unknown"
                     style = { color = it.accentColor * 0.9f}
                 }
 
                 titleText = text {
                     width = FillParent
-                    font = ResourceManager.getInstance().getFont("smallFont")
+                    fontSize = FontSize.SM
                     text = "No selected beatmap"
                     style = { color = it.accentColor }
                     clipToBounds = true
                 }
 
                 versionText = text {
-                    font = ResourceManager.getInstance().getFont("smallFont")
+                    fontSize = FontSize.SM
                     text = "Unknown"
                     style = { color = it.accentColor * 0.8f}
                 }
@@ -94,14 +95,14 @@ class BeatmapInfoLayout : UILinearContainer() {
                 leadingIcon = UISprite(ResourceManager.getInstance().getTexture("clock"))
                 text = "00:00"
                 style = { color = it.accentColor }
-                font = ResourceManager.getInstance().getFont("xs")
+                fontSize = FontSize.XS
             }
 
             bpmText = compoundText {
                 leadingIcon = UISprite(ResourceManager.getInstance().getTexture("bpm"))
                 text = "0"
                 style = { color = it.accentColor }
-                font = ResourceManager.getInstance().getFont("xs")
+                fontSize = FontSize.XS
             }
         }
 

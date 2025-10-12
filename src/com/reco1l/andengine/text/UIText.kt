@@ -5,10 +5,11 @@ import com.reco1l.andengine.buffered.*
 import com.reco1l.andengine.buffered.VertexBuffer
 import com.reco1l.andengine.component.*
 import com.reco1l.andengine.container.*
+import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.Fonts
 import com.reco1l.toolkt.kotlin.*
 import org.anddev.andengine.engine.camera.*
 import org.anddev.andengine.opengl.font.*
-import ru.nsu.ccfit.zuev.osu.*
 import javax.microedition.khronos.opengles.*
 import javax.microedition.khronos.opengles.GL10.*
 import javax.microedition.khronos.opengles.GL11.GL_STATIC_DRAW
@@ -38,17 +39,42 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
             }
         }
 
+    var fontFamily = Fonts.NunitoMedium
+        set(value) {
+            if (field != value) {
+                field = value
+                fontSettingsChanged = true
+            }
+        }
+
+    var fontSize = FontSize.MD
+        set(value) {
+            if (field != value) {
+                field = value
+                fontSettingsChanged = true
+            }
+        }
+
+
     /**
      * The font to use for this text.
      * It must be already loaded and ready to use before setting it.
      */
-    var font: Font? = ResourceManager.getInstance().getFont("smallFont")
+    var font: Font? = null
         set(value) {
             if (field != value) {
                 field = value
                 invalidate(InvalidationFlag.Content)
             }
         }
+
+    /**
+     * Called when the font settings (font size or family) change.
+     */
+    var onFontSettingsChange: () -> Unit = {
+        font = UIEngine.current.resources.getOrStoreFont(fontSize, fontFamily)
+        invalidate(InvalidationFlag.Content)
+    }
 
     /**
      * The alignment of the text.
@@ -78,12 +104,11 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
 
 
     private var currentLength = 0
-
     private var scrollX = 0f
     private var scrollY = 0f
     private var scrollXTimeoutElapsed = 0f
     private var scrollYTimeoutElapsed = 0f
-
+    private var fontSettingsChanged = true
 
     private var lines: List<String>? = null
     private var linesWidth: IntArray? = null
@@ -157,6 +182,14 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
         super.onApplyTransformations(gl, camera)
     }
 
+
+    override fun onManagedDraw(gl: GL10, camera: Camera) {
+        if (fontSettingsChanged) {
+            fontSettingsChanged = false
+            onFontSettingsChange()
+        }
+        super.onManagedDraw(gl, camera)
+    }
 
     override fun onManagedUpdate(deltaTimeSec: Float) {
 
@@ -320,7 +353,7 @@ open class CompoundText : UIContainer() {
      * The text entity.
      */
     val textEntity = UIText().apply {
-        font = ResourceManager.getInstance().getFont("smallFont")
+        fontSize = FontSize.SM
         anchor = Anchor.CenterLeft
         origin = Anchor.CenterLeft
     }
@@ -333,6 +366,8 @@ open class CompoundText : UIContainer() {
     var text by textEntity::text
 
     var font by textEntity::font
+
+    var fontSize by textEntity::fontSize
 
     var alignment by textEntity::alignment
 

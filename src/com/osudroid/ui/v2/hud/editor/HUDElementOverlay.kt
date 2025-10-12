@@ -12,6 +12,7 @@ import com.reco1l.framework.Color4
 import com.osudroid.ui.v2.hud.HUDElement
 import com.osudroid.utils.updateThread
 import com.reco1l.andengine.component.*
+import com.reco1l.andengine.theme.FontSize
 import com.reco1l.toolkt.kotlin.*
 import org.anddev.andengine.input.touch.TouchEvent
 import ru.nsu.ccfit.zuev.osu.ResourceManager
@@ -56,7 +57,7 @@ class HUDElementOverlay(private val element: HUDElement) : UIConstraintContainer
     private val nameText = UIText().apply {
         anchor = Anchor.BottomCenter
         origin = Anchor.TopCenter
-        font = ResourceManager.getInstance().getFont("smallFont")
+        fontSize = FontSize.SM
         color = Color4(0xFFF27272)
         text = element.name
     }

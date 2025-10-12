@@ -7,6 +7,7 @@ import com.reco1l.andengine.component.*
 import com.reco1l.andengine.container.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.text.*
+import com.reco1l.andengine.theme.FontSize
 import com.reco1l.andengine.ui.SizeVariant.*
 import com.reco1l.framework.*
 import com.reco1l.framework.math.*
@@ -46,19 +47,19 @@ open class UIBadge : CompoundText(), ISizeVariable {
 
         when (sizeVariant) {
             Small -> {
-                font = ResourceManager.getInstance().getFont("xs")
+                fontSize = FontSize.XS
                 padding = Vec4(8f, 4f)
                 spacing = 4f
                 cornerRadius = 6f
             }
             Medium -> {
-                font = ResourceManager.getInstance().getFont("smallFont")
+                fontSize = FontSize.SM
                 padding = Vec4(12f, 8f)
                 spacing = 8f
                 cornerRadius = 12f
             }
             Large -> {
-                font = ResourceManager.getInstance().getFont("font")
+                
                 padding = Vec4(16f, 12f)
                 spacing = 12f
                 cornerRadius = 16f
@@ -104,7 +105,7 @@ open class UILabeledBadge : UILinearContainer(), ISizeVariable {
      * The value of the badge.
      */
     val valueEntity = text {
-        font = ResourceManager.getInstance().getFont("smallFont")
+        fontSize = FontSize.SM
         padding = Vec4(12f, 8f)
         alignment = Anchor.Center
     }
@@ -134,30 +135,30 @@ open class UILabeledBadge : UILinearContainer(), ISizeVariable {
 
     override fun onSizeVariantChanged() {
 
-        val font: Font
+        val fontSize: Float
         val padding: Vec4
         val cornerRadius: Float
 
         when (sizeVariant) {
             Small -> {
-                font = ResourceManager.getInstance().getFont("xs")
+                fontSize = FontSize.XS
                 padding = Vec4(8f, 4f)
                 cornerRadius = 6f
             }
             Medium -> {
-                font = ResourceManager.getInstance().getFont("smallFont")
+                fontSize = FontSize.SM
                 padding = Vec4(12f, 8f)
                 cornerRadius = 12f
             }
             Large -> {
-                font = ResourceManager.getInstance().getFont("font")
+                fontSize = FontSize.MD
                 padding = Vec4(16f, 12f)
                 cornerRadius = 16f
             }
         }
 
-        labelEntity.font = font
-        valueEntity.font = font
+        labelEntity.fontSize = fontSize
+        valueEntity.fontSize = fontSize
         labelEntity.padding = padding
         valueEntity.padding = padding
         (background as? UIBox)?.cornerRadius = cornerRadius

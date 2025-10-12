@@ -13,6 +13,7 @@ import com.reco1l.andengine.component.UIComponent.Companion.FillParent
 import com.reco1l.andengine.container.*
 import com.reco1l.andengine.modifier.*
 import com.reco1l.andengine.shape.*
+import com.reco1l.andengine.theme.FontSize
 import com.reco1l.andengine.ui.*
 import com.reco1l.framework.math.*
 import kotlinx.coroutines.*
@@ -221,7 +222,7 @@ class LobbyScene : UIScene() {
                     detachChildren()
 
                     text {
-                        font = ResourceManager.getInstance().getFont("smallFont")
+                        fontSize = FontSize.SM
                         style = { color = it.accentColor }
                         setText(string.multiplayer_lobby_fetch_error)
                     }
@@ -257,7 +258,7 @@ class LobbyScene : UIScene() {
                         detachChildren()
 
                         text {
-                            font = ResourceManager.getInstance().getFont("smallFont")
+                            fontSize = FontSize.SM
                             style = { color = it.accentColor }
                             setText(if (searchQuery.isNullOrEmpty()) string.multiplayer_lobby_no_rooms else string.multiplayer_lobby_no_results)
                         }

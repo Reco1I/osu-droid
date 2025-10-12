@@ -7,6 +7,7 @@ import com.reco1l.andengine.modifier.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.sprite.*
 import com.reco1l.andengine.text.*
+import com.reco1l.andengine.theme.FontSize
 import com.reco1l.andengine.ui.*
 import com.reco1l.framework.*
 import com.reco1l.framework.math.*
@@ -41,7 +42,7 @@ abstract class FormControl<V : Any, C: UIControl<V>>(initialValue: V): UILinearC
      * The text that is displayed as the label of the control.
      */
     open val labelText = UIText().apply {
-        font = ResourceManager.getInstance().getFont("smallFont")
+        fontSize = FontSize.SM
         anchor = Anchor.CenterLeft
         origin = Anchor.CenterLeft
         style = { color = it.accentColor }
@@ -54,7 +55,7 @@ abstract class FormControl<V : Any, C: UIControl<V>>(initialValue: V): UILinearC
         anchor = Anchor.CenterLeft
         origin = Anchor.CenterLeft
         scaleCenter = Anchor.Center
-        font = ResourceManager.getInstance().getFont("xs")
+        fontSize = FontSize.XS
         text = "Reset"
         padding = Vec4(4f, 0f, 8f, 0f)
         content.spacing = -2f

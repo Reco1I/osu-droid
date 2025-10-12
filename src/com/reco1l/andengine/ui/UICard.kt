@@ -6,6 +6,7 @@ import com.reco1l.andengine.container.*
 import com.reco1l.andengine.modifier.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.text.*
+import com.reco1l.andengine.theme.FontSize
 import com.reco1l.framework.math.*
 import org.anddev.andengine.input.touch.*
 import ru.nsu.ccfit.zuev.osu.*
@@ -64,7 +65,7 @@ open class UICard(
             padding = Vec4(12f, 8f)
 
             +UIText().apply {
-                font = ResourceManager.getInstance().getFont("smallFont")
+                fontSize = FontSize.SM
                 anchor = Anchor.CenterLeft
                 origin = Anchor.CenterLeft
                 style = { color = it.accentColor }

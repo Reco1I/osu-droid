@@ -5,6 +5,8 @@ import com.reco1l.andengine.component.*
 import com.reco1l.andengine.container.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.text.*
+import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.rem
 import com.reco1l.andengine.ui.*
 import com.reco1l.framework.math.*
 import com.reco1l.toolkt.kotlin.*
@@ -18,9 +20,11 @@ open class ModMenuSection(name: String, private val toggles: List<UIButton> = li
 
     init {
         orientation = Orientation.Vertical
-        width = 340f
         height = FillParent
         cullingMode = CullingMode.CameraBounds
+        style = {
+            width = 10f.rem
+        }
 
         background = UIBox().apply {
             style = { color = it.accentColor * 0.1f }
@@ -31,7 +35,7 @@ open class ModMenuSection(name: String, private val toggles: List<UIButton> = li
             width = FillParent
             text = name
             alignment = Anchor.Center
-            font = ResourceManager.getInstance().getFont("smallFont")
+            fontSize = FontSize.SM
             padding = Vec4(12f)
             style = {
                 color = it.accentColor

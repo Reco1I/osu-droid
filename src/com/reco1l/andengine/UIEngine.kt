@@ -1,7 +1,6 @@
 package com.reco1l.andengine
 
 import android.app.Activity
-import android.graphics.Rect
 import android.util.Log
 import android.view.*
 import androidx.core.view.ViewCompat
@@ -27,6 +26,11 @@ class UIEngine(val context: Activity, options: EngineOptions) : Engine(options) 
      * The global HUD used for overlays (menus, dialogs, etc).
      */
     val overlay = HUD()
+
+    /**
+     * The resource manager for loading and accessing UI resources (fonts, textures, etc).
+     */
+    val resources = UIResourceManager(context)
 
     /**
      * The safe area insets of the display, in pixels. This is used to avoid placing UI elements in areas that

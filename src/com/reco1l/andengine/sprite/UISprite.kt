@@ -82,7 +82,7 @@ open class UISprite(textureRegion: TextureRegion? = null) : UIBufferedComponent<
     /**
      * The scale type of the sprite.
      */
-    var scaleType: ScaleType = Fit
+    open var scaleType: ScaleType = Fit
         set(value) {
             if (field != value) {
                 field = value
@@ -179,7 +179,10 @@ open class UISprite(textureRegion: TextureRegion? = null) : UIBufferedComponent<
                     quadHeight = textureHeight * scale
                 }
 
-                Stretch -> Unit
+                Stretch -> {
+                    quadWidth = entity.width
+                    quadHeight = entity.height
+                }
             }
 
             val x = (entity.width - quadWidth) * entity.gravity.x
