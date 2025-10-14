@@ -22,7 +22,7 @@ import ru.nsu.ccfit.zuev.osu.online.*
 class RoomButton(val lobbyScene: LobbyScene, val room: Room) : UIButton() {
 
     init {
-        width = FillParent
+        width = Full
         background?.apply {
             color = Color4.Black
             alpha = 0.25f
@@ -32,7 +32,7 @@ class RoomButton(val lobbyScene: LobbyScene, val room: Room) : UIButton() {
         style = {}
 
         container {
-            width = FillParent
+            width = Full
 
             linearContainer {
                 orientation = Orientation.Vertical
@@ -135,12 +135,12 @@ class RoomButton(val lobbyScene: LobbyScene, val room: Room) : UIButton() {
                 val form: FormContainer
 
                 object : UIDialog<FormContainer>(FormContainer().apply {
-                    width = FillParent
+                    width = Full
                     form = this
 
                     +FormInput().apply {
                         key = "password"
-                        width = FillParent
+                        width = Full
                         label = StringTable.get(string.multiplayer_lobby_room_password)
                     }
 

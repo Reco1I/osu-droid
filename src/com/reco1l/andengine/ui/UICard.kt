@@ -9,7 +9,6 @@ import com.reco1l.andengine.text.*
 import com.reco1l.andengine.theme.FontSize
 import com.reco1l.framework.math.*
 import org.anddev.andengine.input.touch.*
-import ru.nsu.ccfit.zuev.osu.*
 
 @Suppress("LeakingThis")
 open class UICard(
@@ -19,7 +18,7 @@ open class UICard(
      */
     val content: UIContainer = UILinearContainer().apply {
         orientation = Orientation.Vertical
-        width = FillParent
+        width = Full
         clipToBounds = true
     },
 
@@ -61,7 +60,7 @@ open class UICard(
         }
 
         +titleBar.apply {
-            width = FillParent
+            width = Full
             padding = Vec4(12f, 8f)
 
             +UIText().apply {
@@ -85,7 +84,7 @@ open class UICard(
         }
 
         +UIBox().apply {
-            width = FillParent
+            width = Full
             height = 1f
             style = {
                 color = it.accentColor

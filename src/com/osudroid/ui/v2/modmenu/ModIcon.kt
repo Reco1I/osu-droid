@@ -60,8 +60,8 @@ class ModIcon(val mod: Mod) : UIContainer(), ISkinnable {
                 background = null
 
                 attachChild(OsuSkinnableSprite(mod.iconTextureName).apply {
-                    width = FillParent
-                    height = FillParent
+                    width = Full
+                    height = Full
                     buffer = sharedSpriteVBO
                 })
             } else {

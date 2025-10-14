@@ -47,7 +47,7 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
             }
         }
 
-    var fontSize = FontSize.MD
+    var fontSize = FontSize.SM
         set(value) {
             if (field != value) {
                 field = value
@@ -91,6 +91,12 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
      * Which axes to scroll the text automatically when it overflows.
      */
     var autoScrollAxes = Axes.X
+        set(value) {
+            if (field != value) {
+                field = value
+                clipToBounds = value != Axes.None
+            }
+        }
 
     /**
      * The speed of the auto scroll animation in pixels per second.
@@ -115,9 +121,11 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
 
 
     init {
-        width = MatchContent
-        height = MatchContent
+        width = Auto
+        height = Auto
         invalidate(InvalidationFlag.Content)
+
+        clipToBounds = true
     }
 
 
@@ -347,29 +355,30 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
 /**
  * A compound text entity that can be displayed with leading and trailing icons.
  */
-open class CompoundText : UIContainer() {
+open class CompoundText : UIFlexContainer() {
 
     /**
      * The text entity.
      */
-    val textEntity = UIText().apply {
-        fontSize = FontSize.SM
+    val content = UIText().apply {
         anchor = Anchor.CenterLeft
         origin = Anchor.CenterLeft
+        isVisible = false
+
+        flexRules {
+            grow = 1f
+        }
     }
 
+    @Deprecated("Use 'gap' instead", ReplaceWith("gap"))
+    var spacing by this::gap
 
-    var spacing = 0f
 
     //region Shortcuts
 
-    var text by textEntity::text
-
-    var font by textEntity::font
-
-    var fontSize by textEntity::fontSize
-
-    var alignment by textEntity::alignment
+    var text by content::text
+    var fontSize by content::fontSize
+    var alignment by content::alignment
 
     //endregion
 
@@ -378,7 +387,7 @@ open class CompoundText : UIContainer() {
     /**
      * The leading icon.
      */
-    var leadingIcon: UIComponent? = null
+    var icon: UIComponent? = null
         set(value) {
             if (field != value) {
                 field?.detachSelf()
@@ -394,7 +403,7 @@ open class CompoundText : UIContainer() {
     /**
      * The trailing icon.
      */
-    var trailingIcon: UIComponent? = null
+    var rightIcon: UIComponent? = null
         set(value) {
             if (field != value) {
                 field?.detachSelf()
@@ -408,72 +417,42 @@ open class CompoundText : UIContainer() {
         }
 
 
-    /**
-     * Which leading icon's size axes should match the text size.
-     */
-    var autoSizeLeadingIcon = Axes.Both
+    @Deprecated("Use 'icon' instead", ReplaceWith("icon"))
+    var leadingIcon by this::icon
+
+    @Deprecated("Use 'rightIcon' instead", ReplaceWith("rightIcon"))
+    var trailingIcon by this::rightIcon
+
 
     /**
-     * Which trailing icon's size axes should match the text size.
+     * The size of the icons.
      */
-    var autoSizeTrailingIcon = Axes.Both
-
+    var iconSize = FontSize.MD
 
     /**
      * Called when one of the icons changes.
      */
-    open var onIconChange: (UIComponent) -> Unit = { icon ->
-        val anchor = if (icon === leadingIcon) Anchor.CenterLeft else Anchor.CenterRight
-        icon.anchor = anchor
-        icon.origin = anchor
+    var onIconChange: (UIComponent) -> Unit = {
+        it.anchor = Anchor.CenterLeft
+        it.origin = Anchor.CenterLeft
+        it.style = {
+            flexRules { basis = iconSize }
+            width = iconSize
+            height = iconSize
+        }
     }
 
     //endregion
 
-    override fun onContentChanged() {
-        contentWidth = textEntity.contentWidth + (leadingIcon?.let { it.width + spacing } ?: 0f) + (trailingIcon?.let { it.width + spacing } ?: 0f)
-        contentHeight = textEntity.height
-    }
-
 
     init {
-        +textEntity
+        +content
     }
 
 
-    override fun onManagedUpdate(deltaTimeSec: Float) {
-
-        val leadingIcon = leadingIcon
-        val trailingIcon = trailingIcon
-
-        val iconSize = textEntity.height
-
-        if (leadingIcon != null) {
-            if (autoSizeLeadingIcon.isHorizontal) {
-                leadingIcon.width = iconSize
-            }
-            if (autoSizeLeadingIcon.isVertical) {
-                leadingIcon.height = iconSize
-            }
-        }
-
-        if (trailingIcon != null) {
-            if (autoSizeTrailingIcon.isHorizontal) {
-                trailingIcon.width = iconSize
-            }
-            if (autoSizeTrailingIcon.isVertical) {
-                trailingIcon.height = iconSize
-            }
-        }
-
-
-        val leadingIconSize = leadingIcon?.let { it.width + spacing } ?: 0f
-        val trailingIconSize = trailingIcon?.let { it.width + spacing } ?: 0f
-
-        textEntity.x = leadingIconSize
-        textEntity.width = width - leadingIconSize - trailingIconSize
-
-        super.onManagedUpdate(deltaTimeSec)
+    override fun onManagedDraw(gl: GL10, camera: Camera) {
+        content.isVisible = text.isNotEmpty()
+        super.onManagedDraw(gl, camera)
     }
 }
 

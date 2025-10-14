@@ -16,14 +16,14 @@ import ru.nsu.ccfit.zuev.osu.online.*
 
 class RoomCreateDialog(lobbyScene: LobbyScene) : UIDialog<UIScrollableContainer>(UIScrollableContainer().apply {
     scrollAxes = Axes.Y
-    width = FillParent
+    width = Full
     height = 360f
     clipToBounds = true
 }) {
     init {
 
         val form = FormContainer().apply {
-            width = FillParent
+            width = Full
             orientation = Orientation.Vertical
 
             onSubmit = { data ->
@@ -76,19 +76,19 @@ class RoomCreateDialog(lobbyScene: LobbyScene) : UIDialog<UIScrollableContainer>
 
             +FormInput(StringTable.format(string.multiplayer_lobby_create_room_name_default, OnlineManager.getInstance().username)).apply {
                 key = "name"
-                width = FillParent
+                width = Full
                 label = StringTable.get(string.multiplayer_lobby_room_name)
             }
 
             +FormInput().apply {
                 key = "password"
-                width = FillParent
+                width = Full
                 label = StringTable.get(string.multiplayer_lobby_room_password)
             }
 
             +FormSlider(8f).apply {
                 key = "capacity"
-                width = FillParent
+                width = Full
                 label = StringTable.get(string.multiplayer_lobby_room_capacity)
                 control.max = 16f
                 control.min = 2f

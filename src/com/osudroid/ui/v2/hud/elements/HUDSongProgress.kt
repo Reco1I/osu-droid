@@ -24,18 +24,15 @@ sealed class HUDSongProgress : HUDElement() {
 class HUDLinearSongProgress : HUDSongProgress() {
 
     private val backgroundRect = UIBox().apply {
-
         anchor = Anchor.BottomLeft
         origin = Anchor.BottomLeft
-        relativeSizeAxes = Axes.X
-        setSize(1f, BAR_HEIGHT)
-
+        width = Full
+        height = BAR_HEIGHT
         color = Color4.Black
         alpha = 0.3f
     }
 
     private val progressRect = UIBox().apply {
-
         anchor = Anchor.BottomLeft
         origin = Anchor.BottomLeft
         setSize(0f, BAR_HEIGHT)
@@ -76,8 +73,8 @@ class HUDPieSongProgress : HUDSongProgress() {
 
 
     init {
-        width = MatchContent
-        height = MatchContent
+        width = Auto
+        height = Auto
 
         // Reference: https://github.com/ppy/osu/blob/6455c0583b5e607baeca7f584410bc63515aa619/osu.Game/Skinning/LegacySongProgress.cs
 

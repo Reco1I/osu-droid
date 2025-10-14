@@ -47,12 +47,12 @@ class BeatmapInfoLayout : UILinearContainer() {
 
 
     init {
-        width = FillParent
+        width = Full
         orientation = Orientation.Vertical
         spacing = 6f
 
         flexContainer {
-            width = FillParent
+            width = Full
 
             linearContainer {
                 flexRules {
@@ -67,7 +67,7 @@ class BeatmapInfoLayout : UILinearContainer() {
                 }
 
                 titleText = text {
-                    width = FillParent
+                    width = Full
                     fontSize = FontSize.SM
                     text = "No selected beatmap"
                     style = { color = it.accentColor }

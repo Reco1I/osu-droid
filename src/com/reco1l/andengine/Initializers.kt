@@ -48,10 +48,16 @@ inline fun IEntity.triangle(builder: UITriangle.() -> Unit): UITriangle {
     return UITriangle().apply(builder).also(::attachChild)
 }
 
+inline fun IEntity.button(builder: UIButton.() -> Unit): UIButton {
+    return UIButton().apply(builder).also(::attachChild)
+}
+
+@Deprecated("Use button instead", ReplaceWith("button(builder)"))
 inline fun IEntity.textButton(builder: UITextButton.() -> Unit): UITextButton {
     return UITextButton().apply(builder).also(::attachChild)
 }
 
+@Deprecated("Use button instead", ReplaceWith("button(builder)"))
 inline fun IEntity.iconButton(builder: UIIconButton.() -> Unit): UIIconButton {
     return UIIconButton().apply(builder).also(::attachChild)
 }

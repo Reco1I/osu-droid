@@ -28,8 +28,8 @@ class ModMenuToggle(var mod: Mod): UIButton() {
         }
 
     init {
-        orientation = Orientation.Horizontal
-        width = FillParent
+        direction = FlexDirection.Row
+        width = Full
         spacing = 8f
         cullingMode = CullingMode.CameraBounds
 
@@ -48,7 +48,7 @@ class ModMenuToggle(var mod: Mod): UIButton() {
 
         linearContainer {
             orientation = Orientation.Vertical
-            width = FillParent
+            width = Full
             anchor = Anchor.CenterLeft
             origin = Anchor.CenterLeft
 
@@ -59,7 +59,7 @@ class ModMenuToggle(var mod: Mod): UIButton() {
             }
 
             text {
-                width = FillParent
+                width = Full
                 fontSize = FontSize.XS
                 text = mod.description
                 clipToBounds = true

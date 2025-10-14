@@ -33,8 +33,8 @@ abstract class ScrollableList : UIComponent(), IScrollDetectorListener
     protected var itemHeight = 0f
 
     init {
-        width = FillParent
-        height = FillParent
+        width = Full
+        height = Full
     }
 
     fun handleScrolling(event: TouchEvent)

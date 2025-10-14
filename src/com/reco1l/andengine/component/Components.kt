@@ -2,6 +2,7 @@ package com.reco1l.andengine.component
 
 import androidx.annotation.*
 import com.reco1l.andengine.component.AttachmentMode.*
+import com.reco1l.andengine.shape.UIBox
 import com.reco1l.andengine.text.*
 import com.reco1l.andengine.ui.*
 import com.reco1l.framework.*
@@ -231,7 +232,6 @@ var IEntity.color4
 
 //endregion
 
-
 //region Utilities
 
 /**
@@ -264,5 +264,55 @@ fun UITextButton.setText(@StringRes resourceId: Int) {
 fun UIBadge.setText(@StringRes resourceId: Int) {
     text = StringTable.get(resourceId)
 }
+
+//endregion
+
+//region Cosmetics
+
+var UIComponent.backgroundColor
+    get() = background?.color ?: Color4.Transparent
+    set(value) {
+        if (background == null) {
+            background = UIBox()
+        }
+        background?.color = value
+    }
+
+var UIComponent.backgroundRadius
+    get() = (background as? UIBox)?.cornerRadius ?: 0f
+    set(value) {
+        if (background == null || background !is UIBox) {
+            background = UIBox()
+        }
+        (background as? UIBox)?.cornerRadius = value
+    }
+
+var UIComponent.foregroundColor
+    get() = foreground?.color ?: Color4.Transparent
+    set(value) {
+        if (foreground == null) {
+            foreground = UIBox()
+        }
+        foreground?.color = value
+    }
+
+var UIComponent.foregroundRadius
+    get() = (foreground as? UIBox)?.cornerRadius ?: 0f
+    set(value) {
+        if (foreground == null || foreground !is UIBox) {
+            foreground = UIBox()
+        }
+        (foreground as? UIBox)?.cornerRadius = value
+    }
+
+var UIComponent.foregroundLineWidth
+    get() = (foreground as? UIBox)?.lineWidth ?: 0f
+    set(value) {
+        if (foreground == null || foreground !is UIBox) {
+            foreground = UIBox()
+        }
+        (foreground as? UIBox)?.lineWidth = value
+    }
+
 
 //endregion

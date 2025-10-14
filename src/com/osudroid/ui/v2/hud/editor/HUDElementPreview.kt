@@ -13,7 +13,6 @@ import com.reco1l.andengine.component.*
 import com.reco1l.andengine.theme.FontSize
 import org.anddev.andengine.engine.camera.Camera
 import org.anddev.andengine.input.touch.TouchEvent
-import ru.nsu.ccfit.zuev.osu.ResourceManager
 import javax.microedition.khronos.opengles.GL10
 import kotlin.math.abs
 import kotlin.math.min
@@ -30,7 +29,7 @@ class HUDElementPreview(private val element: HUDElement, val hud: GameplayHUD): 
     }
 
     init {
-        width = FillParent
+        width = Full
         height = 120f
         padding = Vec4(12f)
         scaleCenterX = 0.5f

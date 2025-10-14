@@ -8,14 +8,24 @@ import com.reco1l.andengine.modifier.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.sprite.*
 import com.reco1l.andengine.text.*
+import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.Radius
+import com.reco1l.andengine.theme.rem
+import com.reco1l.andengine.theme.srem
 import com.reco1l.framework.math.*
 import org.anddev.andengine.input.touch.TouchEvent
+import org.anddev.andengine.opengl.texture.region.TextureRegion
 
 @Suppress("LeakingThis")
-open class UIButton : UILinearContainer() {
+open class UIButton : CompoundText() {
 
     override var style: UIComponent.(Theme) -> Unit = { theme ->
-        background?.color = if (isSelected) theme.accentColor else theme.accentColor * 0.175f
+        height = 2.5f.rem
+        gap = 1f.srem
+        iconSize = FontSize.MD
+        backgroundColor = if (isSelected) theme.accentColor else theme.accentColor * 0.175f
+        backgroundRadius = Radius.LG
+        padding = Vec4(2.5f.srem, 0f)
         color = if (isSelected) theme.accentColor * 0.1f else theme.accentColor
         alpha = if (isEnabled) 1f else 0.5f
     }
@@ -83,9 +93,8 @@ open class UIButton : UILinearContainer() {
 
 
     init {
-        padding = Vec4(12f, 16f)
         scaleCenter = Anchor.Center
-        background = UIBox().apply { cornerRadius = 12f }
+        alignment = Anchor.Center
     }
 
 
@@ -113,6 +122,8 @@ open class UIButton : UILinearContainer() {
     }
 
     //endregion
+
+    //region Touch
 
     open fun processTouchFeedback(event: TouchEvent) {
         if (event.isActionDown) {
@@ -160,6 +171,8 @@ open class UIButton : UILinearContainer() {
         return true
     }
 
+    //endregion
+
     override fun onManagedUpdate(deltaTimeSec: Float) {
 
         if (onActionLongPress != null) {
@@ -178,65 +191,9 @@ open class UIButton : UILinearContainer() {
 /**
  * A button that displays a text.
  */
-open class UITextButton : UIButton() {
+@Deprecated("Use UIButton instead", ReplaceWith("UIButton"))
+open class UITextButton : UIButton()
 
-    /**
-     * The compound text of the button.
-     */
-    val content = CompoundText().apply {
-        width = FillParent
-        height = FillParent
-        alignment = Anchor.Center
-        spacing = 8f
-    }
-
-
-    var text by content::text
-
-    var font by content::font
-
-    var fontSize by content::fontSize
-
-    var leadingIcon by content::leadingIcon
-
-    var trailingIcon by content::trailingIcon
-
-    var autoSizeTrailingIcon by content::autoSizeTrailingIcon
-
-    var autoSizeLeadingIcon by content::autoSizeLeadingIcon
-
-    var onIconChange by content::onIconChange
-
-    var alignment by content::alignment
-
-
-    override fun onContentChanged() {
-        // We don't use direct reference of `content` because it may not be initialized yet when this method is called.
-        contentWidth = get<CompoundText>(0)?.contentWidth ?: 0f
-        contentHeight = get<CompoundText>(0)?.contentHeight ?: 0f
-    }
-
-
-    init {
-        +content
-    }
-
-}
-
-open class UIIconButton : UIButton() {
-
-    protected val sprite = sprite {
-        scaleType = ScaleType.Fit
-        anchor = Anchor.Center
-        origin = Anchor.Center
-        width = 28f
-        height = 28f
-    }
-
-    /**
-     * The icon to be displayed on the button.
-     */
-    var icon by sprite::textureRegion
-
-}
+@Deprecated("Use UIButton instead", ReplaceWith("UIButton"))
+open class UIIconButton : UIButton()
 

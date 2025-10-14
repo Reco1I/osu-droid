@@ -33,7 +33,7 @@ public class Font {
 	protected static final float LETTER_LEFT_OFFSET = 0;
 	protected static final int LETTER_EXTRA_WIDTH = 10;
 
-	protected final static int PADDING = 1; 
+	protected final static int PADDING = 0;
 
 	// ===========================================================
 	// Fields

@@ -9,6 +9,7 @@ import com.reco1l.andengine.container.UILinearContainer
 import com.reco1l.andengine.container.UIScrollableContainer
 import com.reco1l.andengine.text.UIText
 import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.pct
 import com.reco1l.andengine.ui.UIModal
 import com.reco1l.framework.Color4
 import com.reco1l.framework.math.Vec4
@@ -26,7 +27,6 @@ import com.rian.osu.utils.CircleSizeCalculator
 import com.rian.osu.utils.ModUtils
 import kotlin.math.roundToInt
 import ru.nsu.ccfit.zuev.osu.GlobalManager
-import ru.nsu.ccfit.zuev.osu.ResourceManager
 
 /**
  * A [UIScene] containing a [UIModal] that shows the attributes of a beatmap, adjusted for the given mods.
@@ -186,9 +186,8 @@ open class BeatmapAttributeDisplay(difficulty: BeatmapDifficulty, mods: Iterable
     private inner class BeatmapAttributeModal : UIModal(
         UIScrollableContainer().apply {
             scrollAxes = Axes.Y
-            relativeSizeAxes = Axes.Both
-            width = 0.8f
-            height = 0.75f
+            width = 0.8f.pct
+            height = 0.75f.pct
             anchor = Anchor.Center
             origin = Anchor.Center
             clipToBounds = true

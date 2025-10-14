@@ -6,6 +6,7 @@ import com.osudroid.*
 import com.reco1l.andengine.*
 import com.reco1l.andengine.modifier.*
 import com.reco1l.andengine.shape.*
+import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.ui.*
 import com.reco1l.framework.*
 import com.reco1l.framework.math.*
@@ -20,7 +21,6 @@ import org.anddev.andengine.opengl.util.*
 import org.anddev.andengine.util.*
 import org.anddev.andengine.util.constants.Constants.*
 import javax.microedition.khronos.opengles.*
-import kotlin.math.*
 
 
 /**
@@ -30,35 +30,10 @@ import kotlin.math.*
 @Suppress("MemberVisibilityCanBePrivate")
 abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStyleable {
 
-    //region Axes properties
-
-    /**
-     * Determines which axes for the size of the entity are relative w.r.t the parent.
-     *
-     * * If the value is [Axes.None], the unit for both [width] and [height] will be absolute.
-     * * If the value is [Axes.X], the unit for [width] will be relative meanwhile [height] will remain as absolute.
-     * * If the value is [Axes.Y], the unit for [height] will be relative meanwhile [width] will remain as absolute.
-     * * If the value is [Axes.Both], both [width] and [height] will be relative.
-     *
-     * Relative values are calculated as a percentage of the parent's size minus its padding, that is, values passed
-     * to [width] or [height] will be treated as a percentage (values from 0 to 1).
-     */
-    open var relativeSizeAxes = Axes.None
-
-    //endregion
-
     //region Size related properties
 
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun computeSizeValue(value: Float, padding: Float, position: Float, isRelative: Boolean, contentSize: Float, containerSize: Float): Float {
-        return when (value) {
-            MatchContent -> contentSize + padding
-            FillParent -> containerSize - position
-            FitParent -> min(contentSize + padding, containerSize - position)
-
-            else -> if (isRelative) value * containerSize else value
-        }
-    }
+    protected var rawWidth = 0f
+        private set
 
     /**
      * The minimum width of the entity.
@@ -81,24 +56,34 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
                 invalidate(InvalidationFlag.Size)
             }
         }
+
     /**
      * The width of the entity.
      */
     var width: Float = 0f
-        get() = computeSizeValue(
-            value = field,
-            padding = padding.horizontal,
-            position = x,
-            isRelative = relativeSizeAxes.isHorizontal,
-            contentSize = contentWidth,
-            containerSize = parent.innerWidth,
-        ).coerceAtMost(maxWidth).coerceAtLeast(minWidth)
+        get() {
+            var value = field
+
+            if (field == Size.Auto) {
+                value = contentWidth + padding.horizontal
+            }
+            if (field in Size.relativeSizeRange) {
+                value = (parent.innerWidth - x) * (field + 3f)
+            }
+
+            return value.coerceAtMost(maxWidth).coerceAtLeast(minWidth)
+        }
         set(value) {
             if (field != value) {
                 field = value
+                rawWidth = value
                 invalidate(InvalidationFlag.Size)
             }
         }
+
+
+    protected var rawHeight = 0f
+        private set
 
     /**
      * The minimum height of the entity.
@@ -120,21 +105,27 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
                 invalidate(InvalidationFlag.Size)
             }
         }
+
     /**
      * The height of the entity.
      */
-    var height = 0f
-        get() = computeSizeValue(
-            value = field,
-            padding = padding.vertical,
-            position = y,
-            isRelative = relativeSizeAxes.isVertical,
-            contentSize = contentHeight,
-            containerSize = parent.innerHeight,
-        ).coerceAtMost(maxHeight).coerceAtLeast(minHeight)
+    var height: Float = 0f
+        get() {
+            var value = field
+
+            if (field == Size.Auto) {
+                value = contentHeight + padding.vertical
+            }
+            if (field in Size.relativeSizeRange) {
+                value = (parent.innerHeight - y) * (field + 3f)
+            }
+
+            return value.coerceAtMost(maxHeight).coerceAtLeast(minHeight)
+        }
         set(value) {
             if (field != value) {
                 field = value
+                rawHeight = value
                 invalidate(InvalidationFlag.Size)
             }
         }
@@ -729,9 +720,9 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
         foreground?.setSize(width, height)
         foreground?.onDraw(gl, camera)
 
-
         if (BuildSettings.SHOW_ENTITY_BOUNDARIES && DEBUG_FOREGROUND != this) {
             DEBUG_FOREGROUND.setSize(width, height)
+            DEBUG_FOREGROUND.onHandleInvalidations()
             DEBUG_FOREGROUND.onDraw(gl, camera)
         }
 
@@ -1036,17 +1027,14 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
         /**
          * The width and height of the entity will match the content size without any constraints.
          */
-        const val MatchContent = -1f
+        @Deprecated("Use Size.Auto instead", ReplaceWith("Size.Auto"))
+        const val Auto = Size.Auto
 
         /**
          * The width and height of the entity will match the parent's inner size.
          */
-        const val FillParent = -2f
-
-        /**
-         * The width and height of the entity will match the content size but will be constrained to the parent's inner size.
-         */
-        const val FitParent = -3f
+        @Deprecated("Use Size.Full instead", ReplaceWith("Size.Full"))
+        const val Full = Size.Full
 
 
         private val VERTICES_WRAPPER = FloatArray(8)
@@ -1055,7 +1043,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
             UIBox().apply {
                 paintStyle = PaintStyle.Outline
                 color = Color4.White
-                lineWidth = 1f
+                lineWidth = 2f
             }
         }
     }

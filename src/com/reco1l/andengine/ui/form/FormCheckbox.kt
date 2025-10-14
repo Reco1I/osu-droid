@@ -1,6 +1,7 @@
 package com.reco1l.andengine.ui.form
 
 import com.reco1l.andengine.*
+import com.reco1l.andengine.theme.srem
 import com.reco1l.andengine.ui.*
 import org.anddev.andengine.input.touch.*
 import ru.nsu.ccfit.zuev.osu.*
@@ -15,13 +16,16 @@ open class FormCheckbox(initialValue: Boolean = false) : FormControl<Boolean, UI
 
 
     init {
-        spacing = 12f
         +labelText
         +resetButton
 
         container {
-            width = FillParent
+            width = Full
             +control
+        }
+
+        style += {
+            spacing = 2f.srem
         }
     }
 

@@ -4,12 +4,13 @@ package com.reco1l.andengine.theme
 
 object Fonts {
     const val NunitoMedium = "nunito-medium.ttf"
-    //const val FontAwesomeSolid = "fa-solid.otf"
-    //const val FontAwesomeBrands = "fa-brands.otf"
-    //const val FontAwesomeRegular = "fa-regular.otf"
+    const val FontAwesomeSolid = "fa-solid.otf"
+    const val FontAwesomeBrands = "fa-brands.otf"
+    const val FontAwesomeRegular = "fa-regular.otf"
 }
 
 object FontSize {
+    val XXS = 0.625f.rem
     val XS = 0.75f.rem
     val SM = 0.875f.rem
     val MD = 1f.rem

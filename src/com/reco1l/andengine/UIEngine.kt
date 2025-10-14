@@ -20,7 +20,7 @@ import kotlin.math.*
 class UIEngine(val context: Activity, options: EngineOptions) : Engine(options) {
 
     @Suppress("DEPRECATION")
-    val rootFontSize = 18f * context.resources.displayMetrics.density
+    val rootFontSize = 16f * context.resources.displayMetrics.density
 
     /**
      * The global HUD used for overlays (menus, dialogs, etc).

@@ -105,8 +105,8 @@ open class UISprite(textureRegion: TextureRegion? = null) : UIBufferedComponent<
 
 
     init {
-        width = MatchContent
-        height = MatchContent
+        width = Auto
+        height = Auto
 
         onTextureRegionChanged()
     }

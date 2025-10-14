@@ -47,7 +47,7 @@ sealed class ModSettingComponent<TSettingValue : Any?, TControlValue : Any>(
      * The [FormControl] that is used to display this [ModSettingComponent].
      */
     protected val control = createControl().apply {
-        width = FillParent
+        width = Full
 
         label = setting.name
 
@@ -68,7 +68,7 @@ sealed class ModSettingComponent<TSettingValue : Any?, TControlValue : Any>(
         }
 
     init {
-        width = FillParent
+        width = Full
         +control
     }
 

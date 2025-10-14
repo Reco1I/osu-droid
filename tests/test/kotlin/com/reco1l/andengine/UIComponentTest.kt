@@ -1,6 +1,7 @@
 package com.reco1l.andengine
 
 import com.reco1l.andengine.container.*
+import com.reco1l.andengine.theme.pct
 import com.reco1l.framework.math.*
 import junit.framework.TestCase.*
 import org.junit.Test
@@ -142,9 +143,8 @@ class UIComponentTest {
     fun `Test child's relative size axes`() {
 
         val component = UIDummyComponent().apply {
-            relativeSizeAxes = Axes.X
-            width = 0.5f
-            height = 100f
+            width = 0.5f.pct
+            height = 100f.pct
         }
 
         UIContainer().apply {

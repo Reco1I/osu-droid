@@ -2,14 +2,14 @@ package com.reco1l.andengine.ui.form
 
 import com.reco1l.andengine.*
 import com.reco1l.andengine.container.*
+import com.reco1l.andengine.theme.srem
 import com.reco1l.andengine.ui.*
-import com.reco1l.framework.math.*
 
 @Suppress("LeakingThis")
 open class FormInput(private val initialValue: String = "") : FormControl<String, UITextInput>(initialValue) {
 
     final override val control = createControl().apply {
-        width = FillParent
+        width = Full
     }
 
     override val valueText = null
@@ -17,12 +17,15 @@ open class FormInput(private val initialValue: String = "") : FormControl<String
 
     init {
         orientation = Orientation.Vertical
-        spacing = 12f
+        style += {
+            spacing = 1f.srem
+        }
 
         linearContainer {
-            width = FillParent
-            padding = Vec4(0f, 12f)
-            spacing = 12f
+            width = Full
+            style = {
+                spacing = 2f.srem
+            }
             +labelText
             +resetButton
         }

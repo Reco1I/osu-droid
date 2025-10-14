@@ -2,13 +2,13 @@ package com.reco1l.andengine.ui.form
 
 import com.reco1l.andengine.*
 import com.reco1l.andengine.container.*
+import com.reco1l.andengine.theme.srem
 import com.reco1l.andengine.ui.*
-import com.reco1l.framework.math.*
 
 open class FormSelect<T : Any>(initialValues: List<T> = emptyList()) : FormControl<List<T>, UISelect<T>>(initialValues) {
 
     final override val control = UISelect<T>().apply {
-        width = FillParent
+        width = Full
     }
 
     // Value is already reflected in the control.
@@ -24,12 +24,15 @@ open class FormSelect<T : Any>(initialValues: List<T> = emptyList()) : FormContr
 
     init {
         orientation = Orientation.Vertical
-        spacing = 12f
+        style += {
+            spacing = 1f.srem
+        }
 
         linearContainer {
-            width = FillParent
-            padding = Vec4(0f, 12f)
-            spacing = 12f
+            width = Full
+            style = {
+                spacing = 2f.srem
+            }
             +labelText
             +resetButton
         }

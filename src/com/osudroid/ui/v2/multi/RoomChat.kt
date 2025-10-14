@@ -14,6 +14,7 @@ import com.reco1l.andengine.modifier.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.sprite.UISprite
 import com.reco1l.andengine.text.*
+import com.reco1l.andengine.theme.pct
 import com.reco1l.andengine.ui.*
 import com.reco1l.framework.*
 import com.reco1l.framework.math.*
@@ -70,7 +71,7 @@ class RoomChat : UILinearContainer() {
 
 
     init {
-        width = FillParent
+        width = Full
         orientation = Orientation.Vertical
         anchor = Anchor.BottomCenter
         origin = Anchor.BottomCenter
@@ -83,18 +84,18 @@ class RoomChat : UILinearContainer() {
 
         +button
         +body.apply {
-            width = FillParent
+            width = Full
             height = 0f
             orientation = Orientation.Vertical
 
             scrollableContainer {
-                width = FillParent
+                width = Full
                 height = body_height - 84f // Input height based of button height plus padding
                 scrollAxes = Axes.Y
                 clipToBounds = true
 
                 messageContainer = linearContainer {
-                    width = FillParent
+                    width = Full
                     orientation = Orientation.Vertical
 
                     repeat(max_messages) {
@@ -104,12 +105,12 @@ class RoomChat : UILinearContainer() {
             }
 
             flexContainer {
-                width = FillParent
+                width = Full
                 padding = Vec4(80f, 12f)
                 gap = 8f
 
                 +UITextInput("").apply {
-                    height = FillParent
+                    height = Full
                     placeholder = "Type a message..."
                     onConfirm = { sendMessage() }
                     flexRules {
@@ -261,7 +262,7 @@ class RoomChat : UILinearContainer() {
 
 
         init {
-            width = FillParent
+            width = Full
             orientation = Orientation.Horizontal
             padding = Vec4(80f, 18f)
             spacing = 12f
@@ -281,7 +282,7 @@ class RoomChat : UILinearContainer() {
             }
 
             linearContainer {
-                width = FillParent
+                width = Full
                 orientation = Orientation.Horizontal
 
                 tagText = text {
@@ -292,7 +293,7 @@ class RoomChat : UILinearContainer() {
                 }
 
                 messageText = text {
-                    width = FillParent
+                    width = Full
                     anchor = Anchor.CenterLeft
                     origin = Anchor.CenterLeft
                     style = { color = it.accentColor }
@@ -349,7 +350,7 @@ class RoomChat : UILinearContainer() {
 
 
         init {
-            width = FillParent
+            width = Full
             padding = Vec4(80f, 0f)
             spacing = 12f
             orientation = Orientation.Horizontal
@@ -379,7 +380,7 @@ class RoomChat : UILinearContainer() {
                 if (message is SystemMessage) {
                     text {
                         buffer = messageTextBuffer
-                        width = FillParent
+                        width = Full
                         anchor = Anchor.CenterLeft
                         origin = Anchor.CenterLeft
                         text = message.content
@@ -394,8 +395,7 @@ class RoomChat : UILinearContainer() {
                         || (messages[messageIndex - 1] as PlayerMessage).player.id != message.player.id
 
                     flexContainer {
-                        relativeSizeAxes = Axes.X
-                        width = 0.25f
+                        width = 0.25f.pct
                         anchor = Anchor.CenterLeft
                         origin = Anchor.CenterLeft
                         direction = FlexDirection.Row
@@ -418,7 +418,7 @@ class RoomChat : UILinearContainer() {
 
                     text {
                         buffer = messageTextBuffer
-                        width = FillParent
+                        width = Full
                         style = { color = it.accentColor }
                         text = message.content
                     }

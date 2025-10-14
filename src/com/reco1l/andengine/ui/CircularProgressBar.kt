@@ -4,6 +4,7 @@ import com.reco1l.andengine.*
 import com.reco1l.andengine.component.*
 import com.reco1l.andengine.container.*
 import com.reco1l.andengine.shape.*
+import com.reco1l.andengine.theme.pct
 
 open class CircularProgressBar : UIContainer() {
 
@@ -26,8 +27,8 @@ open class CircularProgressBar : UIContainer() {
         }
 
     private val trackCircle = circle {
-        width = FillParent
-        height = FillParent
+        width = Full
+        height = Full
         paintStyle = PaintStyle.Outline
         lineWidth = 4f
         style = {
@@ -37,9 +38,8 @@ open class CircularProgressBar : UIContainer() {
     }
 
     private val rotatingCircle = circle {
-        relativeSizeAxes = Axes.Both
-        width = 0.85f
-        height = 0.85f
+        width = 0.85f.pct
+        height = 0.85f.pct
         anchor = Anchor.Center
         origin = Anchor.Center
         rotationCenter = Anchor.Center

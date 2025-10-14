@@ -35,8 +35,8 @@ class RoomPlayerButton() : UIButton() {
 
 
     init {
-        width = FillParent
-        orientation = Orientation.Horizontal
+        width = Full
+        direction = FlexDirection.Row
         padding = Vec4(12f)
         spacing = 6f
 

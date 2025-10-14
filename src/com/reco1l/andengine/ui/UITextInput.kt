@@ -12,6 +12,9 @@ import com.reco1l.andengine.modifier.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.text.*
 import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.Radius
+import com.reco1l.andengine.theme.rem
+import com.reco1l.andengine.theme.srem
 import com.reco1l.framework.*
 import com.reco1l.framework.math.*
 import org.anddev.andengine.input.touch.*
@@ -23,8 +26,13 @@ import kotlin.text.substring
 open class UITextInput(initialValue: String) : UIControl<String>(initialValue), IFocusable {
 
     override var style: UIComponent.(Theme) -> Unit = { theme ->
-        background?.color = theme.accentColor * 0.25f
-        foreground?.color = if (isFocused) theme.accentColor else theme.accentColor * 0.4f
+        height = 2.5f.rem
+        padding = Vec4(2f.srem)
+        backgroundColor = theme.accentColor * 0.25f
+        backgroundRadius = Radius.LG
+        foregroundColor = if (isFocused) theme.accentColor else theme.accentColor * 0.4f
+        foregroundRadius = Radius.LG
+        foregroundLineWidth = 0.2f.srem
         textEntity.color = theme.accentColor
         placeholderEntity.color = theme.accentColor * 0.6f
     }
@@ -76,30 +84,25 @@ open class UITextInput(initialValue: String) : UIControl<String>(initialValue), 
 
 
     private var caretFading = false
-
     private var caretPosition = 0
-
     private var elapsedTimeSec = 0f
-
     private var letterPositions = intArrayOf(0)
 
 
     init {
-        height = 48f
-        padding = Vec4(12f, 0f)
         caretPosition = value.length
 
         +placeholderEntity
         +textEntity
         +caret
 
-        background = UIBox().apply { cornerRadius = 12f }
+        background = UIBox()
         foreground = UIBox().apply {
             paintStyle = PaintStyle.Outline
-            cornerRadius = 12f
         }
 
         updateVisuals()
+        style(Theme.current)
     }
 
     override fun onFocus() {
@@ -108,7 +111,6 @@ open class UITextInput(initialValue: String) : UIControl<String>(initialValue), 
 
         foreground?.clearModifiers(ModifierType.Color)
         foreground?.colorTo(Theme.current.accentColor, 0.1f)
-
     }
 
     override fun onBlur() {
@@ -231,8 +233,7 @@ open class UITextInput(initialValue: String) : UIControl<String>(initialValue), 
 
         val currentText = value
         val currentCaretPosition = caretPosition
-        val newText =
-            currentText.take(currentCaretPosition) + char + currentText.substring(currentCaretPosition)
+        val newText = currentText.take(currentCaretPosition) + char + currentText.substring(currentCaretPosition)
 
         if (newText.isNotEmpty() && !isTextValid(newText)) {
             notifyInputError()

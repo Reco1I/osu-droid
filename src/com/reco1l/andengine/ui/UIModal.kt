@@ -7,10 +7,10 @@ import com.reco1l.andengine.modifier.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.text.*
 import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.pct
 import com.reco1l.framework.*
 import com.reco1l.framework.math.*
 import org.anddev.andengine.input.touch.*
-import ru.nsu.ccfit.zuev.osu.*
 
 @Suppress("LeakingThis")
 open class UIModal(
@@ -44,8 +44,8 @@ open class UIModal(
 
 
     init {
-        width = FillParent
-        height = FillParent
+        width = Full
+        height = Full
 
         isVisible = false
         alpha = 0f
@@ -177,7 +177,7 @@ abstract class UIDialog<T : UIComponent>(val innerContent: T) : UIModal(card = U
 }) {
 
     val titleEntity = UIText().apply {
-        width = FillParent
+        width = Full
         fontSize = FontSize.SM
         alignment = Anchor.Center
         padding = Vec4(0f, 16f)
@@ -200,15 +200,14 @@ abstract class UIDialog<T : UIComponent>(val innerContent: T) : UIModal(card = U
         detachOnHide = true
 
         card.apply {
-            relativeSizeAxes = Axes.X
-            width = 0.5f
+            width = 0.5f.pct
             anchor = Anchor.Center
             origin = Anchor.Center
 
             +titleEntity
 
             box {
-                width = FillParent
+                width = Full
                 height = 1f
                 style = {
                     color = it.accentColor
@@ -219,7 +218,7 @@ abstract class UIDialog<T : UIComponent>(val innerContent: T) : UIModal(card = U
             +innerContent
 
             buttonLayout = flexContainer {
-                width = FillParent
+                width = Full
                 anchor = Anchor.TopCenter
                 origin = Anchor.TopCenter
                 padding = Vec4(24f)
@@ -245,7 +244,7 @@ abstract class UIDialog<T : UIComponent>(val innerContent: T) : UIModal(card = U
 
 open class UIMessageDialog : UIDialog<UIText>(
     innerContent = UIText().apply {
-        width = FillParent
+        width = Full
         fontSize = FontSize.SM
         alignment = Anchor.Center
         padding = Vec4(24f)

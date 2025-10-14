@@ -1,10 +1,12 @@
 package com.reco1l.andengine.ui
 
+import com.edlplan.framework.easing.Easing
 import com.reco1l.andengine.*
 import com.reco1l.andengine.component.*
-import com.reco1l.andengine.container.*
+import com.reco1l.andengine.modifier.ModifierType
+import com.reco1l.andengine.text.FontAwesomeIcon
+import com.reco1l.andengine.theme.Icon
 import com.reco1l.framework.*
-import com.reco1l.framework.math.*
 import org.anddev.andengine.engine.camera.*
 import javax.microedition.khronos.opengles.*
 
@@ -19,12 +21,11 @@ open class UISelect<T : Any>(initialValues: List<T> = emptyList()) : UIControl<L
     /**
      * The button that toggles the dropdown menu.
      */
-    val button = object : UITextButton() {
+    val button = object : UIButton() {
 
         init {
-            width = FillParent
+            width = Full
             alignment = Anchor.CenterLeft
-            content.textEntity.clipToBounds = true
             onActionUp = {
                 if (dropdown.isExpanded) {
                     dropdown.hide()
@@ -33,20 +34,11 @@ open class UISelect<T : Any>(initialValues: List<T> = emptyList()) : UIControl<L
                 }
             }
 
-            trailingIcon = UIContainer().apply {
-                padding = Vec4(12f, 0f)
-
-                triangle {
-                    width = 14f
-                    height = 8f
-                    anchor = Anchor.Center
-                    origin = Anchor.Center
-                    color = Color4.White
-                    alpha = 0.25f
-                    rotationCenter = Anchor.Center
-                    rotation = 180f
-                }
+            rightIcon = FontAwesomeIcon(Icon.ChevronDown).apply {
+                rotation = 0f
+                alpha = 0.5f
             }
+            rightIcon?.rotationCenter = Anchor.Center
         }
 
         override fun onThemeChanged(theme: Theme) {
@@ -99,10 +91,21 @@ open class UISelect<T : Any>(initialValues: List<T> = emptyList()) : UIControl<L
         +button.apply {
             text = placeholder
         }
+
+        val chevronIcon = button.rightIcon as FontAwesomeIcon
+
+        dropdown.onExpand = {
+            chevronIcon.clearModifiers(ModifierType.Rotation)
+            chevronIcon.rotateTo(180f, 0.4f).eased(Easing.OutBounce)
+        }
+
+        dropdown.onCollapse = {
+            chevronIcon.clearModifiers(ModifierType.Rotation)
+            chevronIcon.rotateTo(0f, 0.4f).eased(Easing.OutBounce)
+        }
     }
 
     override fun onManagedDraw(gl: GL10, camera: Camera) {
-        button.content.textEntity.width = width - button.padding.horizontal - button.trailingIcon!!.width
 
         if (listChanged) {
             listChanged = false

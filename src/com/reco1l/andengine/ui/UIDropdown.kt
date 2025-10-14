@@ -6,7 +6,8 @@ import com.reco1l.andengine.*
 import com.reco1l.andengine.component.*
 import com.reco1l.andengine.container.*
 import com.reco1l.andengine.modifier.*
-import com.reco1l.andengine.shape.*
+import com.reco1l.andengine.theme.Radius
+import com.reco1l.andengine.theme.srem
 import com.reco1l.framework.math.*
 import org.anddev.andengine.engine.camera.*
 import org.anddev.andengine.input.touch.*
@@ -21,11 +22,21 @@ class UIDropdown(var trigger: UIComponent) : UIScrollableContainer() {
     val isExpanded: Boolean
         get() = wrapper.hasParent()
 
+    /**
+     * A callback that is invoked when the dropdown menu is expanded.
+     */
+    var onExpand: (() -> Unit)? = null
+
+    /**
+     * A callback that is invoked when the dropdown menu is collapsed.
+     */
+    var onCollapse: (() -> Unit)? = null
+
 
     private val wrapper = object : UIContainer() {
         init {
-            width = FillParent
-            height = FillParent
+            width = Full
+            height = Full
         }
 
         override fun onAreaTouched(event: TouchEvent, localX: Float, localY: Float): Boolean {
@@ -40,22 +51,26 @@ class UIDropdown(var trigger: UIComponent) : UIScrollableContainer() {
 
 
     init {
-        width = MatchContent
-        height = MatchContent
+        width = Auto
+        height = Auto
         scrollAxes = Axes.Y
         clipToBounds = true
-        background = UIBox().apply {
-            cornerRadius = 14f
-            style = { color = it.accentColor * 0.175f }
+
+        style = {
+            backgroundRadius = Radius.LG
+            backgroundColor = it.accentColor * 0.175f
         }
-        scaleCenter = Anchor.Center
+
+        scaleCenter = Anchor.TopCenter
         alpha = 0f
-        scale = Vec2(0.9f)
+        scaleY = 0f
 
         optionsContainer = linearContainer {
             orientation = Orientation.Vertical
-            spacing = 4f
-            padding = Vec4(4f)
+            style = {
+                spacing = 0.5f.srem
+                padding = Vec4(0.5f.srem)
+            }
         }
 
         wrapper.attachChild(this)
@@ -95,45 +110,34 @@ class UIDropdown(var trigger: UIComponent) : UIScrollableContainer() {
     fun addButton(block: UITextButton.() -> Unit): UITextButton {
         val button = object : UITextButton() {
 
-            override var style: UIComponent.(Theme) -> Unit = { theme ->
-                color = theme.accentColor
-            }
-
             init {
-                width = FillParent
+                width = Full
                 alignment = Anchor.CenterLeft
-                background = UIBox().apply {
-                    cornerRadius = 12f
-                    style = {
-                        color = it.accentColor * 0.9f
-                        alpha = 0f
-                    }
-                }
-                foreground = UIBox().apply {
-                    cornerRadius = 12f
-                    style = {
-                        color = it.accentColor
-                        alpha = 0f
-                    }
+                style += {
+                    color = it.accentColor
+                    backgroundColor = (it.accentColor * 0.9f) / 0f
+                    backgroundRadius = Radius.LG
+                    foregroundColor = it.accentColor / 0f
+                    foregroundRadius = Radius.LG
                 }
                 block()
             }
 
             override fun onSelectionChange() {
-                foreground!!.clearModifiers(ModifierType.Alpha)
-                foreground!!.fadeTo(if (isSelected) 0.25f else 0f, 0.2f)
+                foreground?.clearModifiers(ModifierType.Alpha)
+                foreground?.fadeTo(if (isSelected) 0.25f else 0f, 0.2f)
             }
 
             override fun processTouchFeedback(event: TouchEvent) {
                 if (event.isActionDown) {
-                    background!!.apply {
+                    background?.apply {
                         clearModifiers(ModifierType.Alpha)
                         fadeTo(0.2f, 0.3f).eased(Easing.Out)
                     }
                 }
 
                 if ((event.isActionUp || event.isActionCancel) && background!!.alpha != 0f) {
-                    background!!.apply {
+                    background?.apply {
                         clearModifiers(ModifierType.Alpha)
                         fadeOut(0.4f).eased(Easing.OutExpo)
                     }
@@ -161,7 +165,7 @@ class UIDropdown(var trigger: UIComponent) : UIScrollableContainer() {
         if (!isExpanded) {
             clearModifiers(ModifierType.Alpha, ModifierType.ScaleXY)
             fadeTo(1f, 0.2f)
-            scaleTo(1f, 0.2f)
+            scaleToY(1f, 0.3f, Easing.OutBounce)
 
             wrapper.detachSelf()
 
@@ -171,18 +175,22 @@ class UIDropdown(var trigger: UIComponent) : UIScrollableContainer() {
             } else {
                 scene.attachChild(wrapper)
             }
+
+            onExpand?.invoke()
         }
     }
 
     fun hide() {
         if (isExpanded) {
             clearModifiers(ModifierType.Alpha, ModifierType.ScaleXY)
-            scaleTo(0.9f, 0.2f)
+            scaleToY(0f, 0.2f, Easing.OutExpo)
             fadeTo(0f, 0.2f).after {
                 updateThread {
                     wrapper.detachSelf()
                 }
             }
+
+            onCollapse?.invoke()
         }
     }
 

@@ -39,7 +39,7 @@ open class UIFlexContainer : UIContainer() {
         }
 
 
-    private var rules = mutableMapOf<UIComponent, FlexRules>()
+    private val rules = mutableMapOf<UIComponent, FlexRules>()
 
 
     //region Utilities
@@ -54,7 +54,7 @@ open class UIFlexContainer : UIContainer() {
             maxHeight = value
         }
 
-    private val UIComponent.directionBaseSize
+    private val UIComponent.directionContentSize
         get() = if (direction == FlexDirection.Row) contentWidth + padding.horizontal else contentHeight + padding.vertical
 
     private val UIComponent.directionInnerSize
@@ -72,14 +72,18 @@ open class UIFlexContainer : UIContainer() {
         var growSum = 0f
 
         forEach { child -> child as UIComponent
+            if (!child.isVisible) {
+                return@forEach
+            }
+
             val rules = rules[child]
 
-            spaceSum += rules?.basis ?: child.directionBaseSize
+            spaceSum += rules?.basis ?: child.directionContentSize
             growSum += rules?.grow ?: 0f
         }
 
         val totalGapSpace = gap * (childCount - 1)
-        val freeSpace = directionInnerSize - spaceSum - totalGapSpace
+        val freeSpace = if (directionInnerSize > spaceSum + totalGapSpace) directionInnerSize - spaceSum - totalGapSpace else 0f
         val freeSpaceToJustify = if (growSum > 0f) 0f else freeSpace
 
         var currentPosition = when (justifyContent) {
@@ -90,10 +94,14 @@ open class UIFlexContainer : UIContainer() {
 
         forEachIndexed { _, child -> child as UIComponent
 
+            if (!child.isVisible) {
+                return@forEachIndexed
+            }
+
             val rules = rules[child]
             val assignedSpace = if (growSum > 0f) ((rules?.grow ?: 0f) / growSum) * freeSpace else 0f
 
-            child.directionSize = (rules?.basis ?: child.directionBaseSize) + assignedSpace
+            child.directionSize = (rules?.basis ?: child.directionContentSize) + assignedSpace
 
             when (justifyContent) {
 
@@ -130,7 +138,7 @@ open class UIFlexContainer : UIContainer() {
      */
     fun UIComponent.flexRules(block: FlexRules.() -> Unit) {
         rules.getOrPut(this) { FlexRules() }.block()
-        invalidate(InvalidationFlag.Content)
+        this@UIFlexContainer.invalidate(InvalidationFlag.Content)
     }
 
 }

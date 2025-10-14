@@ -8,6 +8,8 @@ import com.reco1l.andengine.container.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.text.*
 import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.Radius
+import com.reco1l.andengine.theme.srem
 import com.reco1l.andengine.ui.SizeVariant.*
 import com.reco1l.framework.*
 import com.reco1l.framework.math.*
@@ -24,7 +26,7 @@ open class UIBadge : CompoundText(), ISizeVariable {
 
     override var style: UIComponent.(Theme) -> Unit = { theme ->
         color = theme.accentColor
-        background?.color = theme.accentColor * 0.15f
+        backgroundColor = theme.accentColor * 0.15f
     }
 
     override var sizeVariant = Medium
@@ -42,31 +44,26 @@ open class UIBadge : CompoundText(), ISizeVariable {
 
 
     override fun onSizeVariantChanged() {
-
-        val cornerRadius: Float
-
         when (sizeVariant) {
             Small -> {
                 fontSize = FontSize.XS
-                padding = Vec4(8f, 4f)
-                spacing = 4f
-                cornerRadius = 6f
+                padding = Vec4(1.25f.srem, 0.75f.srem)
+                spacing = 1.25f.srem
+                backgroundRadius = Radius.MD
             }
             Medium -> {
                 fontSize = FontSize.SM
-                padding = Vec4(12f, 8f)
-                spacing = 8f
-                cornerRadius = 12f
+                padding = Vec4(2f.srem, 1.25f.srem)
+                spacing = 2f.srem
+                backgroundRadius = Radius.LG
             }
             Large -> {
-                
-                padding = Vec4(16f, 12f)
-                spacing = 12f
-                cornerRadius = 16f
+                fontSize = FontSize.MD
+                padding = Vec4(2f.srem, 1.5f.srem)
+                spacing = 2f.srem
+                backgroundRadius = Radius.LG
             }
         }
-
-        (background as? UIBox)?.cornerRadius = cornerRadius
     }
 }
 
@@ -77,7 +74,7 @@ open class UILabeledBadge : UILinearContainer(), ISizeVariable {
 
     override var style: UIComponent.(Theme) -> Unit = { theme ->
         color = theme.accentColor
-        background?.color = theme.accentColor * 0.15f
+        backgroundColor = theme.accentColor * 0.2f
     }
 
     override var sizeVariant = Medium
@@ -93,7 +90,6 @@ open class UILabeledBadge : UILinearContainer(), ISizeVariable {
      * The entity of the badge's label.
      */
     val labelEntity = text {
-
         alignment = Anchor.Center
         background = UIBox().apply {
             color = Color4.Black
@@ -106,7 +102,6 @@ open class UILabeledBadge : UILinearContainer(), ISizeVariable {
      */
     val valueEntity = text {
         fontSize = FontSize.SM
-        padding = Vec4(12f, 8f)
         alignment = Anchor.Center
     }
 
@@ -142,18 +137,18 @@ open class UILabeledBadge : UILinearContainer(), ISizeVariable {
         when (sizeVariant) {
             Small -> {
                 fontSize = FontSize.XS
-                padding = Vec4(8f, 4f)
-                cornerRadius = 6f
+                padding = Vec4(1.25f.srem, 0.75f.srem)
+                cornerRadius = Radius.MD
             }
             Medium -> {
                 fontSize = FontSize.SM
-                padding = Vec4(12f, 8f)
-                cornerRadius = 12f
+                padding = Vec4(2f.srem, 1.25f.srem)
+                cornerRadius = Radius.LG
             }
             Large -> {
                 fontSize = FontSize.MD
-                padding = Vec4(16f, 12f)
-                cornerRadius = 16f
+                padding = Vec4(2f.srem, 1.5f.srem)
+                cornerRadius = Radius.LG
             }
         }
 

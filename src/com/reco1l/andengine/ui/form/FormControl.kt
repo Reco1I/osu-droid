@@ -8,6 +8,9 @@ import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.sprite.*
 import com.reco1l.andengine.text.*
 import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.Icon
+import com.reco1l.andengine.theme.rem
+import com.reco1l.andengine.theme.srem
 import com.reco1l.andengine.ui.*
 import com.reco1l.framework.*
 import com.reco1l.framework.math.*
@@ -51,26 +54,27 @@ abstract class FormControl<V : Any, C: UIControl<V>>(initialValue: V): UILinearC
     /**
      * The button that is used to reset the value of the control to its default value.
      */
-    open val resetButton = UITextButton().apply {
+    open val resetButton = UIButton().apply {
         anchor = Anchor.CenterLeft
         origin = Anchor.CenterLeft
         scaleCenter = Anchor.Center
-        fontSize = FontSize.XS
         text = "Reset"
-        padding = Vec4(4f, 0f, 8f, 0f)
-        content.spacing = -2f
-        leadingIcon = UISprite().apply {
-            textureRegion = ResourceManager.getInstance().getTexture("reset")
-            width = 16f
-            height = 16f
+        isSelected = true
+
+        icon = FontAwesomeIcon(Icon.RotateLeft).apply {
+            iconSize = FontSize.XXS
+        }
+
+        style += {
+            height = 1f.rem
+            gap = 0f
+            padding = Vec4(1f.srem, 0f)
+            fontSize = FontSize.XS
         }
 
         isVisible = false
         alpha = 0f
         translationX = -10f
-
-        // We want to have a highlitghted color.
-        isSelected = true
 
         onActionUp = {
             if (this@FormControl.isVisible) {
@@ -135,11 +139,13 @@ abstract class FormControl<V : Any, C: UIControl<V>>(initialValue: V): UILinearC
 
 
     init {
-        width = FillParent
-        padding = Vec4(24f, 8f)
+        width = Full
         background = UIBox().apply {
             color = Color4.White
             alpha = 0f
+        }
+        style = {
+            padding = Vec4(2f.srem)
         }
     }
 

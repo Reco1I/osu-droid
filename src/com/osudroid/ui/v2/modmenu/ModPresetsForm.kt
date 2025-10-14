@@ -8,7 +8,7 @@ import com.reco1l.framework.math.*
 
 class ModPresetsForm(section: ModMenuPresetsSection) : UIDialog<UILinearContainer>(innerContent = UILinearContainer().apply {
     orientation = Orientation.Vertical
-    width = FillParent
+    width = Full
 }) {
 
     init {
@@ -17,7 +17,7 @@ class ModPresetsForm(section: ModMenuPresetsSection) : UIDialog<UILinearContaine
 
         val nameInput = FormInput().apply {
             label = "Name"
-            width = FillParent
+            width = Full
             showResetButton = false
         }
 

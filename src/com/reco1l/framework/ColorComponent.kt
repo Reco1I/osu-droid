@@ -51,7 +51,6 @@ data class Color4(private val hex: Long) {
         get() = blueInt / 255f
 
 
-    @Deprecated("Use color shades from Colors instead")
     operator fun times(scalar: Float) = Color4(
         red = red * scalar,
         green = green * scalar,
@@ -66,7 +65,7 @@ data class Color4(private val hex: Long) {
         red = red,
         green = green,
         blue = blue,
-        alpha = alpha / scalar
+        alpha = scalar
     )
 
 

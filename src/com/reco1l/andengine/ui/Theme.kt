@@ -31,9 +31,18 @@ data class Theme(
     }
 }
 
+typealias StyleHandler = UIComponent.(theme: Theme) -> Unit
+
 interface IStyleable {
     /**
      * A callback that applies a style to the entity based on the current [Theme].
      */
-    var style: UIComponent.(theme: Theme) -> Unit
+    var style: StyleHandler
+}
+
+operator fun StyleHandler?.plus(other: StyleHandler): StyleHandler {
+    return { theme ->
+        this@plus?.invoke(this, theme)
+        other.invoke(this, theme)
+    }
 }

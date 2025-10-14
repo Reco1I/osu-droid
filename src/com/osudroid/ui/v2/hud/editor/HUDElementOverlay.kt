@@ -13,6 +13,8 @@ import com.osudroid.ui.v2.hud.HUDElement
 import com.osudroid.utils.updateThread
 import com.reco1l.andengine.component.*
 import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.Size
+import com.reco1l.andengine.theme.pct
 import com.reco1l.toolkt.kotlin.*
 import org.anddev.andengine.input.touch.TouchEvent
 import ru.nsu.ccfit.zuev.osu.ResourceManager
@@ -65,7 +67,7 @@ class HUDElementOverlay(private val element: HUDElement) : UIConstraintContainer
 
     init {
         alpha = 0f
-        setSize(FillParent, FillParent)
+        setSize(Full, Full)
 
         attachChild(outline)
         attachChild(toolbar)
@@ -149,8 +151,8 @@ class HUDElementOverlay(private val element: HUDElement) : UIConstraintContainer
                 origin = Anchor.Center
                 color = Color4(0xFFF27272)
                 cornerRadius = TIP_SIZE
-                relativeSizeAxes = Axes.Both
-                setSize(0.5f, 0.5f)
+                width = 0.5f.pct
+                height = 0.5f.pct
             })
         }
 
@@ -205,16 +207,16 @@ class HUDElementOverlay(private val element: HUDElement) : UIConstraintContainer
             attachChild(UIBox().apply {
                 cornerRadius = 12f
                 color = back
-                relativeSizeAxes = Axes.Both
-                setSize(1f, 1f)
+                width = Size.Full
+                height = Size.Full
             })
 
             attachChild(UISprite().apply {
                 textureRegion = ResourceManager.getInstance().getTexture(texture)
                 anchor = Anchor.Center
                 origin = Anchor.Center
-                relativeSizeAxes = Axes.Both
-                setSize(0.8f, 0.8f)
+                width = 0.8f.pct
+                height = 0.8f.pct
             })
         }
 

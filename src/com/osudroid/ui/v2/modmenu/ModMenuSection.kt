@@ -10,7 +10,6 @@ import com.reco1l.andengine.theme.rem
 import com.reco1l.andengine.ui.*
 import com.reco1l.framework.math.*
 import com.reco1l.toolkt.kotlin.*
-import ru.nsu.ccfit.zuev.osu.*
 
 @Suppress("LeakingThis")
 open class ModMenuSection(name: String, private val toggles: List<UIButton> = listOf()) : UILinearContainer() {
@@ -20,7 +19,7 @@ open class ModMenuSection(name: String, private val toggles: List<UIButton> = li
 
     init {
         orientation = Orientation.Vertical
-        height = FillParent
+        height = Full
         cullingMode = CullingMode.CameraBounds
         style = {
             width = 10f.rem
@@ -32,7 +31,7 @@ open class ModMenuSection(name: String, private val toggles: List<UIButton> = li
         }
 
         +UIText().apply {
-            width = FillParent
+            width = Full
             text = name
             alignment = Anchor.Center
             fontSize = FontSize.SM
@@ -45,12 +44,12 @@ open class ModMenuSection(name: String, private val toggles: List<UIButton> = li
 
         +UIScrollableContainer().apply {
             scrollAxes = Axes.Y
-            width = FillParent
-            height = FillParent
+            width = Full
+            height = Full
             clipToBounds = true
 
             +UILinearContainer().apply {
-                width = FillParent
+                width = Full
                 orientation = Orientation.Vertical
                 padding = Vec4(12f, 0f, 12f, 12f)
                 spacing = 16f

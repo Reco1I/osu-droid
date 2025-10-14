@@ -7,6 +7,7 @@ import com.reco1l.andengine.container.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.text.*
 import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.pct
 import com.reco1l.andengine.ui.*
 import com.reco1l.framework.*
 import com.reco1l.framework.math.*
@@ -14,15 +15,13 @@ import com.reco1l.toolkt.kotlin.*
 import com.rian.osu.mods.*
 import com.rian.osu.mods.settings.*
 import kotlin.reflect.KClass
-import ru.nsu.ccfit.zuev.osu.ResourceManager
 
 class ModCustomizationMenu : UIModal(
 
     card = UIScrollableContainer().apply {
         scrollAxes = Axes.Y
-        relativeSizeAxes = Axes.Both
-        width = 0.475f
-        height = 0.75f
+        width = 0.475f.pct
+        height = 0.75f.pct
         x = 60f
         y = 90f
         scaleCenter = Anchor.TopCenter
@@ -30,7 +29,7 @@ class ModCustomizationMenu : UIModal(
         scrollPadding = Vec2(0f, 300f)
 
         +UILinearContainer().apply {
-            width = FillParent
+            width = Full
             orientation = Orientation.Vertical
         }
     }
@@ -131,12 +130,12 @@ class ModCustomizationMenu : UIModal(
 
         init {
             orientation = Orientation.Vertical
-            width = FillParent
+            width = Full
             padding = Vec4(0f, 0f, 0f, 16f)
 
             +UILinearContainer().apply {
                 orientation = Orientation.Horizontal
-                width = FillParent
+                width = Full
                 padding = Vec4(20f, 14f)
                 spacing = 12f
                 background = UIBox().apply {

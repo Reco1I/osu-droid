@@ -30,7 +30,7 @@ class ModMenuPresetsSection : ModMenuSection("Presets") {
         }
 
         addButton = UITextButton().apply {
-            width = FillParent
+            width = Full
             text = "Add preset"
             leadingIcon = UISprite(ResourceManager.getInstance().getTexture("plus"))
             onActionUp = {
@@ -95,7 +95,7 @@ class ModMenuPresetsSection : ModMenuSection("Presets") {
         init {
             orientation = Orientation.Vertical
             spacing = 8f
-            width = FillParent
+            width = Full
             cullingMode = CullingMode.CameraBounds
 
             onActionUp = {

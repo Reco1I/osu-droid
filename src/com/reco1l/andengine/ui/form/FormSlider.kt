@@ -1,52 +1,59 @@
 package com.reco1l.andengine.ui.form
 
 import com.reco1l.andengine.*
+import com.reco1l.andengine.component.backgroundRadius
 import com.reco1l.andengine.container.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.text.*
 import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.Radius
+import com.reco1l.andengine.theme.srem
 import com.reco1l.andengine.ui.*
 import com.reco1l.framework.*
 import com.reco1l.framework.math.*
 import ru.nsu.ccfit.zuev.osu.Config
-import ru.nsu.ccfit.zuev.osu.ResourceManager
 
 @Suppress("LeakingThis")
 open class FormSlider(initialValue: Float = 0f) : FormControl<Float, UISlider>(initialValue) {
 
     override val control = UISlider(initialValue).apply {
-        width = FillParent
+        width = Full
     }
 
     override val valueText = UIText().apply {
-        fontSize = FontSize.SM
         anchor = Anchor.CenterRight
         origin = Anchor.CenterRight
-        padding = Vec4(6f, 0f)
         alignment = Anchor.Center
-        style = { color = it.accentColor }
-
         background = UIBox().apply {
             color = Color4.Black
             alpha = 0.1f
-            cornerRadius = 8f
+        }
+
+        style = {
+            fontSize = FontSize.XS
+            padding = Vec4(1f.srem, 0.5f.srem)
+            color = it.accentColor
+            backgroundRadius = Radius.MD
         }
     }
 
 
     init {
         orientation = Orientation.Vertical
-        spacing = 12f
+        style += {
+            spacing = 1f.srem
+        }
 
         linearContainer {
-            width = FillParent
-            padding = Vec4(0f, 12f)
-            spacing = 12f
+            width = Full
+            style = {
+                spacing = 2f.srem
+            }
             +labelText
             +resetButton
 
             container {
-                width = FillParent
+                width = Full
                 +valueText
             }
         }

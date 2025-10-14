@@ -7,8 +7,8 @@ import kotlin.math.*
 open class UIContainer : UIComponent() {
 
     init {
-        width = MatchContent
-        height = MatchContent
+        width = Auto
+        height = Auto
     }
 
 

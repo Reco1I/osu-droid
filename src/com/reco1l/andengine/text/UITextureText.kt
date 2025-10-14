@@ -63,8 +63,8 @@ open class UITextureText(val characters: MutableMap<Char, TextureRegion>) : UIBu
 
 
     init {
-        width = MatchContent
-        height = MatchContent
+        width = Auto
+        height = Auto
     }
 
 
