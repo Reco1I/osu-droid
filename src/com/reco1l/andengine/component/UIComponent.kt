@@ -68,7 +68,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
                 value = contentWidth + padding.horizontal
             }
             if (field in Size.relativeSizeRange) {
-                value = (parent.innerWidth - x) * (field + 3f)
+                value = parent.innerWidth * (field + 3f)
             }
 
             return value.coerceAtMost(maxWidth).coerceAtLeast(minWidth)
@@ -117,7 +117,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
                 value = contentHeight + padding.vertical
             }
             if (field in Size.relativeSizeRange) {
-                value = (parent.innerHeight - y) * (field + 3f)
+                value = parent.innerHeight * (field + 3f)
             }
 
             return value.coerceAtMost(maxHeight).coerceAtLeast(minHeight)
