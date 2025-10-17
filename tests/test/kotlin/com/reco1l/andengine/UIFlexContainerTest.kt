@@ -15,23 +15,19 @@ class UIFlexContainerTest {
         val component1: UIDummyComponent
         val component2: UIDummyComponent
 
-        UIFlexContainer().apply {
+        UIFillContainer().apply {
             width = 100f
 
             +UIDummyComponent().apply {
                 height = 100f
-                flexRules {
-                    grow = 2f
-                }
+                weight = 2f
                 component1 = this
             }
 
             +UIDummyComponent().apply {
                 width = 100f
 
-                flexRules {
-                    grow = 1f
-                }
+                weight = 1f
                 component2 = this
             }
 

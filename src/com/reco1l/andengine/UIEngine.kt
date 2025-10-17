@@ -20,7 +20,8 @@ import kotlin.math.*
 class UIEngine(val context: Activity, options: EngineOptions) : Engine(options) {
 
     @Suppress("DEPRECATION")
-    val rootFontSize = 16f * context.resources.displayMetrics.density
+    val rootFontSize
+        get() = 16f * context.resources.displayMetrics.density * fontScale
 
     /**
      * The global HUD used for overlays (menus, dialogs, etc).
@@ -37,6 +38,17 @@ class UIEngine(val context: Activity, options: EngineOptions) : Engine(options) 
      * may be obscured by notches, rounded corners, etc.
      */
     var safeArea = Vec4.Zero
+
+    /**
+     * The current font scale factor. Changing this will scale all UI elements accordingly.
+     */
+    var fontScale = 1f
+        set(value) {
+            if (field != value) {
+                field = value
+                onThemeChange(Theme.current)
+            }
+        }
 
     /**
      * The current focused entity.

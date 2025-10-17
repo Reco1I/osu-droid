@@ -74,7 +74,7 @@ abstract class UIBufferedComponent<T: IBuffer> : UIComponent() {
 
     //region Draw pipeline
 
-    override fun onHandleInvalidations(restoreFlags: Boolean) {
+    override fun onHandleInvalidations() {
 
         val invalidationFlags = bufferInvalidationFlags
 
@@ -84,7 +84,7 @@ abstract class UIBufferedComponent<T: IBuffer> : UIComponent() {
             }
         }
 
-        super.onHandleInvalidations(restoreFlags)
+        super.onHandleInvalidations()
 
         // Buffer update is done after invalidations are handled so we can
         // refer the buffer in those invalidations.
@@ -185,7 +185,7 @@ abstract class UIBufferedComponent<T: IBuffer> : UIComponent() {
         blendInfo = BlendInfo.Mixture
     }
 
-    fun finalize() {
+    open fun finalize() {
         buffer?.finalize()
     }
 

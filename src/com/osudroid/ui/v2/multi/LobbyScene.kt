@@ -9,11 +9,11 @@ import com.osudroid.utils.updateThread
 import com.osudroid.resources.R.string
 import com.reco1l.andengine.*
 import com.reco1l.andengine.component.*
-import com.reco1l.andengine.component.UIComponent.Companion.Full
 import com.reco1l.andengine.container.*
 import com.reco1l.andengine.modifier.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.ui.*
 import com.reco1l.framework.math.*
 import kotlinx.coroutines.*
@@ -49,8 +49,8 @@ class LobbyScene : UIScene() {
 
         linearContainer {
             orientation = Orientation.Vertical
-            width = Full
-            height = Full
+            width = Size.Full
+            height = Size.Full
             padding = Vec4(80f, 0f)
 
             background = UISprite().apply {
@@ -70,7 +70,7 @@ class LobbyScene : UIScene() {
             }
 
             container {
-                width = Full
+                width = Size.Full
                 padding = Vec4(0f, 20f)
 
                 linearContainer {
@@ -101,14 +101,14 @@ class LobbyScene : UIScene() {
                 container {
                     anchor = Anchor.TopRight
                     origin = Anchor.TopRight
-                    height = Full
+                    height = Size.Full
 
                     +object : UITextInput("") {
 
                         init {
                             key = "search"
                             width = 500f
-                            height = Full
+                            height = Size.Full
                             placeholder = StringTable.get(ru.nsu.ccfit.zuev.osuplus.R.string.multiplayer_lobby_search_rooms)
                         }
 
@@ -130,8 +130,8 @@ class LobbyScene : UIScene() {
             }
 
             container {
-                width = Full
-                height = Full
+                width = Size.Full
+                height = Size.Full
 
                 messageContainer = linearContainer {
                     orientation = Orientation.Vertical
@@ -142,14 +142,14 @@ class LobbyScene : UIScene() {
 
                 scrollableContainer {
                     scrollAxes = Axes.Y
-                    width = Full
-                    height = Full
+                    width = Size.Full
+                    height = Size.Full
                     clipToBounds = true
 
                     roomContainer = linearContainer {
                         orientation = Orientation.Vertical
                         spacing = 8f
-                        width = Full
+                        width = Size.Full
                         scaleCenter = Anchor.Center
                     }
                 }

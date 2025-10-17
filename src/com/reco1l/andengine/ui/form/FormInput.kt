@@ -2,6 +2,7 @@ package com.reco1l.andengine.ui.form
 
 import com.reco1l.andengine.*
 import com.reco1l.andengine.container.*
+import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.theme.srem
 import com.reco1l.andengine.ui.*
 
@@ -9,7 +10,7 @@ import com.reco1l.andengine.ui.*
 open class FormInput(private val initialValue: String = "") : FormControl<String, UITextInput>(initialValue) {
 
     final override val control = createControl().apply {
-        width = Full
+        width = Size.Full
     }
 
     override val valueText = null
@@ -18,17 +19,18 @@ open class FormInput(private val initialValue: String = "") : FormControl<String
     init {
         orientation = Orientation.Vertical
         style += {
-            spacing = 1f.srem
+            spacing = 2f.srem
         }
 
         linearContainer {
-            width = Full
+            width = Size.Full
             style = {
                 spacing = 2f.srem
             }
             +labelText
             +resetButton
         }
+
         +control
     }
 

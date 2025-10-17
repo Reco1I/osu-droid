@@ -7,6 +7,7 @@ import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.text.*
 import com.reco1l.andengine.theme.FontSize
 import com.reco1l.andengine.theme.Radius
+import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.theme.srem
 import com.reco1l.andengine.ui.*
 import com.reco1l.framework.*
@@ -17,12 +18,12 @@ import ru.nsu.ccfit.zuev.osu.Config
 open class FormSlider(initialValue: Float = 0f) : FormControl<Float, UISlider>(initialValue) {
 
     override val control = UISlider(initialValue).apply {
-        width = Full
+        width = Size.Full
     }
 
     override val valueText = UIText().apply {
-        anchor = Anchor.CenterRight
-        origin = Anchor.CenterRight
+        anchor = Anchor.CenterLeft
+        origin = Anchor.CenterLeft
         alignment = Anchor.Center
         background = UIBox().apply {
             color = Color4.Black
@@ -41,22 +42,24 @@ open class FormSlider(initialValue: Float = 0f) : FormControl<Float, UISlider>(i
     init {
         orientation = Orientation.Vertical
         style += {
-            spacing = 1f.srem
+            spacing = 2f.srem
         }
 
-        linearContainer {
-            width = Full
-            style = {
-                spacing = 2f.srem
-            }
-            +labelText
-            +resetButton
+        fillContainer {
+            width = Size.Full
 
-            container {
-                width = Full
-                +valueText
+            linearContainer {
+                weight = 1f
+                style = {
+                    spacing = 2f.srem
+                }
+                +labelText
+                +resetButton
             }
+
+            +valueText
         }
+
         +control
     }
 }

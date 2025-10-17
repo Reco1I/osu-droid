@@ -7,7 +7,6 @@ import com.reco1l.andengine.text.*
 import com.reco1l.andengine.ui.*
 import org.anddev.andengine.entity.IEntity
 
-
 inline fun IEntity.text(builder: UIText.() -> Unit): UIText {
     return UIText().apply(builder).also(::attachChild)
 }
@@ -24,8 +23,8 @@ inline fun IEntity.constraintContainer(builder: UIConstraintContainer.() -> Unit
     return UIConstraintContainer().apply(builder).also(::attachChild)
 }
 
-inline fun IEntity.flexContainer(builder: UIFlexContainer.() -> Unit): UIFlexContainer {
-    return UIFlexContainer().apply(builder).also(::attachChild)
+inline fun IEntity.fillContainer(builder: UIFillContainer.() -> Unit): UIFillContainer {
+    return UIFillContainer().apply(builder).also(::attachChild)
 }
 
 inline fun IEntity.scrollableContainer(builder: UIScrollableContainer.() -> Unit): UIScrollableContainer {
@@ -48,16 +47,10 @@ inline fun IEntity.triangle(builder: UITriangle.() -> Unit): UITriangle {
     return UITriangle().apply(builder).also(::attachChild)
 }
 
-inline fun IEntity.button(builder: UIButton.() -> Unit): UIButton {
-    return UIButton().apply(builder).also(::attachChild)
-}
-
-@Deprecated("Use button instead", ReplaceWith("button(builder)"))
 inline fun IEntity.textButton(builder: UITextButton.() -> Unit): UITextButton {
     return UITextButton().apply(builder).also(::attachChild)
 }
 
-@Deprecated("Use button instead", ReplaceWith("button(builder)"))
 inline fun IEntity.iconButton(builder: UIIconButton.() -> Unit): UIIconButton {
     return UIIconButton().apply(builder).also(::attachChild)
 }

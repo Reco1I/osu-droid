@@ -57,7 +57,16 @@ open class FontAwesomeIcon(icon: Int = Icon.Question) : UIBufferedComponent<Comp
      * Called when the font settings (font size or family) change.
      */
     var onFontSettingsChange: () -> Unit = {
-        font = UIEngine.current.resources.getOrStoreFont(iconSize, iconVariant)
+        val oldFont = font
+
+        if (oldFont != null) {
+            UIEngine.current.resources.unsubscribeFromFont(oldFont, this)
+        }
+
+        val newFont = UIEngine.current.resources.getOrStoreFont(iconSize, iconVariant)
+        font = newFont
+        UIEngine.current.resources.subscribeToFont(newFont, this)
+
         invalidate(InvalidationFlag.Content)
     }
 
@@ -127,6 +136,15 @@ open class FontAwesomeIcon(icon: Int = Icon.Question) : UIBufferedComponent<Comp
     }
 
 
+    override fun finalize() {
+        super.finalize()
+
+        val font = font ?: return
+        UIEngine.current.resources.unsubscribeFromFont(font, this)
+    }
+
+
+
     //region Buffers
 
     class IconVertexBuffer() : VertexBuffer(
@@ -146,11 +164,13 @@ open class FontAwesomeIcon(icon: Int = Icon.Question) : UIBufferedComponent<Comp
             val lineHeight = font.lineHeight + font.lineGap
             var i = 0
 
-            var lineX = component.width * 0.5f - component.contentWidth * 0.5f
-            val lineY = component.height * 0.5f - lineHeight * 0.5f
+            val scale = min(component.width / component.contentWidth, component.height / component.contentHeight)
 
-            val letterX = lineX + letter.mWidth
-            val letterY = lineY + font.lineHeight
+            val lineX = component.width * 0.5f - component.contentWidth * scale * 0.5f
+            val lineY = component.height * 0.5f - lineHeight * scale * 0.5f
+
+            val letterX = lineX + letter.mWidth * scale
+            val letterY = lineY + font.lineHeight * scale
 
             setPosition(0)
 

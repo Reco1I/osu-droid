@@ -6,6 +6,7 @@ import com.reco1l.andengine.container.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.text.*
 import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.theme.rem
 import com.reco1l.andengine.ui.*
 import com.reco1l.framework.math.*
@@ -19,7 +20,7 @@ open class ModMenuSection(name: String, private val toggles: List<UIButton> = li
 
     init {
         orientation = Orientation.Vertical
-        height = Full
+        height = Size.Full
         cullingMode = CullingMode.CameraBounds
         style = {
             width = 10f.rem
@@ -31,7 +32,7 @@ open class ModMenuSection(name: String, private val toggles: List<UIButton> = li
         }
 
         +UIText().apply {
-            width = Full
+            width = Size.Full
             text = name
             alignment = Anchor.Center
             fontSize = FontSize.SM
@@ -44,12 +45,12 @@ open class ModMenuSection(name: String, private val toggles: List<UIButton> = li
 
         +UIScrollableContainer().apply {
             scrollAxes = Axes.Y
-            width = Full
-            height = Full
+            width = Size.Full
+            height = Size.Full
             clipToBounds = true
 
             +UILinearContainer().apply {
-                width = Full
+                width = Size.Full
                 orientation = Orientation.Vertical
                 padding = Vec4(12f, 0f, 12f, 12f)
                 spacing = 16f

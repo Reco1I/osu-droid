@@ -4,18 +4,15 @@ import com.reco1l.andengine.*
 import com.reco1l.andengine.component.*
 import com.reco1l.andengine.container.*
 import com.reco1l.andengine.modifier.*
-import com.reco1l.andengine.shape.*
-import com.reco1l.andengine.sprite.*
 import com.reco1l.andengine.text.*
 import com.reco1l.andengine.theme.FontSize
 import com.reco1l.andengine.theme.Icon
+import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.theme.rem
 import com.reco1l.andengine.theme.srem
 import com.reco1l.andengine.ui.*
-import com.reco1l.framework.*
 import com.reco1l.framework.math.*
 import org.anddev.andengine.input.touch.*
-import ru.nsu.ccfit.zuev.osu.ResourceManager
 
 /**
  * Represents a form control that is used to change the value of a property.
@@ -54,20 +51,19 @@ abstract class FormControl<V : Any, C: UIControl<V>>(initialValue: V): UILinearC
     /**
      * The button that is used to reset the value of the control to its default value.
      */
-    open val resetButton = UIButton().apply {
+    open val resetButton = UITextButton().apply {
         anchor = Anchor.CenterLeft
         origin = Anchor.CenterLeft
         scaleCenter = Anchor.Center
         text = "Reset"
         isSelected = true
 
-        icon = FontAwesomeIcon(Icon.RotateLeft).apply {
+        leadingIcon = FontAwesomeIcon(Icon.RotateLeft).apply {
             iconSize = FontSize.XXS
         }
 
         style += {
             height = 1f.rem
-            gap = 0f
             padding = Vec4(1f.srem, 0f)
             fontSize = FontSize.XS
         }
@@ -139,11 +135,7 @@ abstract class FormControl<V : Any, C: UIControl<V>>(initialValue: V): UILinearC
 
 
     init {
-        width = Full
-        background = UIBox().apply {
-            color = Color4.White
-            alpha = 0f
-        }
+        width = Size.Full
         style = {
             padding = Vec4(2f.srem)
         }
@@ -201,22 +193,10 @@ abstract class FormControl<V : Any, C: UIControl<V>>(initialValue: V): UILinearC
     }
 
     override fun onAreaTouched(event: TouchEvent, localX: Float, localY: Float): Boolean {
-
         if (!isEnabled) {
             return true
         }
-
-        val consumed = super.onAreaTouched(event, localX, localY)
-
-        if (!consumed && event.isActionUp) {
-            background!!.clearModifiers(ModifierType.Sequence)
-            background!!.beginSequence {
-                fadeTo(0.2f)
-                fadeOut(0.2f)
-            }
-        }
-
-        return consumed
+        return super.onAreaTouched(event, localX, localY)
     }
 
 }

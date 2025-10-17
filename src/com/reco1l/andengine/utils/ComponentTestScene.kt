@@ -3,16 +3,17 @@ package com.reco1l.andengine.utils
 import com.osudroid.BuildSettings
 import com.reco1l.andengine.Anchor
 import com.reco1l.andengine.Axes
+import com.reco1l.andengine.UIEngine
 import com.reco1l.andengine.badge
-import com.reco1l.andengine.button
 import com.reco1l.andengine.component.backgroundColor
 import com.reco1l.andengine.container.Orientation
 import com.reco1l.andengine.container.UIScrollableContainer
-import com.reco1l.andengine.flexContainer
+import com.reco1l.andengine.fillContainer
 import com.reco1l.andengine.iconButton
 import com.reco1l.andengine.labeledBadge
 import com.reco1l.andengine.linearContainer
 import com.reco1l.andengine.text.FontAwesomeIcon
+import com.reco1l.andengine.textButton
 import com.reco1l.andengine.theme.Icon
 import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.theme.rem
@@ -33,8 +34,8 @@ import com.reco1l.framework.math.Vec4
 
 object ComponentTestScene : UIScrollableContainer() {
     init {
-        width = Full
-        height = Full
+        width = Size.Full
+        height = Size.Full
         scrollAxes = Axes.Y
         backgroundColor = Color4.White / 0.3f
         style = {
@@ -50,23 +51,22 @@ object ComponentTestScene : UIScrollableContainer() {
                 padding = Vec4(3f.srem)
             }
 
-            flexContainer {
+            fillContainer {
                 width = Size.Full
-                gap = 3f.srem
-
-                button {
-                    icon = FontAwesomeIcon(Icon.ArrowLeft)
-                    text = "Button left"
-
-                }.flexRules {
-                    grow = 1f
+                style = {
+                    spacing = 3f.srem
                 }
 
-                button {
-                    rightIcon = FontAwesomeIcon(Icon.ArrowRight)
+                textButton {
+                    weight = 1f
+                    leadingIcon = FontAwesomeIcon(Icon.ArrowLeft)
+                    text = "Button left"
+                }
+
+                textButton {
+                    weight = 1f
+                    trailingIcon = FontAwesomeIcon(Icon.ArrowRight)
                     text = "Button right"
-                }.flexRules {
-                    grow = 1f
                 }
             }
 
@@ -119,22 +119,22 @@ object ComponentTestScene : UIScrollableContainer() {
                     spacing = 3f.srem
                 }
 
-                button {
+                textButton {
                     text = "Button"
                 }
 
-                button {
-                    icon = FontAwesomeIcon(Icon.ArrowLeft)
+                textButton {
+                    leadingIcon = FontAwesomeIcon(Icon.ArrowLeft)
                     text = "Button"
                 }
 
-                button {
+                textButton {
                     text = "Button"
                     isSelected = true
                 }
 
-                button {
-                    icon = FontAwesomeIcon(Icon.Gear)
+                textButton {
+                    leadingIcon = FontAwesomeIcon(Icon.Gear)
                     text = "Button"
                     isSelected = true
                 }
@@ -192,7 +192,12 @@ object ComponentTestScene : UIScrollableContainer() {
                     style = {
                         width = 10.rem
                     }
-                    value = 0.5f
+                    value = 1f
+                    min = 0.5f
+                    max = 1.5f
+                    onValueChange = {
+                        UIEngine.current.fontScale = it
+                    }
                 }
 
                 +UICheckbox().apply {
@@ -205,16 +210,16 @@ object ComponentTestScene : UIScrollableContainer() {
 
             +FormSlider().apply {
                 label = "Slider"
-                width = Full
+                width = Size.Full
             }
 
             +FormInput().apply {
                 label = "Input"
-                width = Full
+                width = Size.Full
             }
 
             +FormSelect<String>().apply {
-                width = Full
+                width = Size.Full
                 label = "Select"
                 options = listOf(
                     Option<String>("1", "Option 1"),
@@ -225,7 +230,7 @@ object ComponentTestScene : UIScrollableContainer() {
 
             +FormCheckbox().apply {
                 label = "Checkbox"
-                width = Full
+                width = Size.Full
             }
 
         }

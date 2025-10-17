@@ -7,6 +7,7 @@ import com.reco1l.andengine.container.*
 import com.reco1l.andengine.modifier.ModifierType
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.theme.Radius
+import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.theme.rem
 import com.reco1l.framework.Interpolation
 import com.reco1l.framework.math.*
@@ -70,7 +71,7 @@ open class UISlider(initialValue: Float = 0f) : UIControl<Float>(initialValue) {
 
 
     private val thumb = UIBox().apply {
-        height = Full
+        height = Size.Full
         anchor = Anchor.CenterLeft
         origin = Anchor.Center
         inheritAncestorsColor = false
@@ -83,7 +84,7 @@ open class UISlider(initialValue: Float = 0f) : UIControl<Float>(initialValue) {
     }
 
     private val progressBar = UIBox().apply {
-        height = Full
+        height = Size.Full
         anchor = Anchor.CenterLeft
         origin = Anchor.CenterLeft
         depthInfo = DepthInfo.Default
@@ -111,7 +112,7 @@ open class UISlider(initialValue: Float = 0f) : UIControl<Float>(initialValue) {
 
 
     init {
-        width = Full
+        width = Size.Full
         background = UIBox()
 
         attachChild(thumb)
@@ -128,6 +129,11 @@ open class UISlider(initialValue: Float = 0f) : UIControl<Float>(initialValue) {
 
     override fun onValueChanged() {
         super.onValueChanged()
+        updateProgress()
+    }
+
+    override fun onContentChanged() {
+        super.onContentChanged()
         updateProgress()
     }
 

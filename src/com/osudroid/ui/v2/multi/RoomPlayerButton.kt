@@ -14,6 +14,7 @@ import com.reco1l.andengine.container.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.sprite.UISprite
 import com.reco1l.andengine.text.UIText
+import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.ui.*
 import com.reco1l.framework.*
 import com.reco1l.framework.math.*
@@ -35,47 +36,48 @@ class RoomPlayerButton() : UIButton() {
 
 
     init {
-        width = Full
-        direction = FlexDirection.Row
-        padding = Vec4(12f)
-        spacing = 6f
+        fillContainer {
+            width = Size.Full
+            orientation = Orientation.Horizontal
+            padding = Vec4(12f)
+            spacing = 6f
 
-        background = UIBox().apply {
-            cornerRadius = 12f
-        }
+            background = UIBox().apply {
+                cornerRadius = 12f
+            }
 
-        foreground = UIBox().apply {
-            cornerRadius = 12f
-            paintStyle = PaintStyle.Outline
-        }
-
-        linearContainer {
-            orientation = Orientation.Vertical
-            inheritAncestorsColor = false
+            foreground = UIBox().apply {
+                cornerRadius = 12f
+                paintStyle = PaintStyle.Outline
+            }
 
             linearContainer {
-                orientation = Orientation.Horizontal
-                spacing = 4f
+                orientation = Orientation.Vertical
+                inheritAncestorsColor = false
 
-                nameText = text {
-                    style = { color = it.accentColor }
+                linearContainer {
+                    orientation = Orientation.Horizontal
+                    spacing = 4f
+
+                    nameText = text {
+                        style = { color = it.accentColor }
+                    }
+
+                    missingIndicator = sprite {
+                        textureRegion = ResourceManager.getInstance().getTexture("missing")
+                        anchor = Anchor.CenterLeft
+                        origin = Anchor.CenterLeft
+                        size = Vec2(18f)
+                    }
                 }
 
-                missingIndicator = sprite {
-                    textureRegion = ResourceManager.getInstance().getTexture("missing")
-                    anchor = Anchor.CenterLeft
-                    origin = Anchor.CenterLeft
-                    size = Vec2(18f)
+                +ModsIndicator().apply {
+                    minHeight = 18f // Force to take space even if no mods are enabled
+                    iconSize = 18f
+                    modsIndicator = this
                 }
-            }
-
-            +ModsIndicator().apply {
-                minHeight = 18f // Force to take space even if no mods are enabled
-                iconSize = 18f
-                modsIndicator = this
             }
         }
-
     }
 
 

@@ -38,5 +38,33 @@ annotation class InvalidationFlag {
          */
         const val InputBindings = 1 shl 4
 
+        /**
+         * All invalidation flags.
+         */
+        const val All = Size or Position or Content or Transformations or InputBindings
+
+
+        fun toString(flag: Int): String {
+            val names = mutableListOf<String>()
+            if (flag and Size != 0) {
+                names.add("Size")
+            }
+            if (flag and Position != 0) {
+                names.add("Position")
+            }
+            if (flag and Content != 0) {
+                names.add("Content")
+            }
+            if (flag and Transformations != 0) {
+                names.add("Transformations")
+            }
+            if (flag and InputBindings != 0) {
+                names.add("InputBindings")
+            }
+            if (names.isEmpty()) {
+                return "None"
+            }
+            return names.joinToString(separator = " | ")
+        }
     }
 }

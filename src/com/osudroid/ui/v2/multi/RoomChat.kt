@@ -14,6 +14,7 @@ import com.reco1l.andengine.modifier.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.sprite.UISprite
 import com.reco1l.andengine.text.*
+import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.theme.pct
 import com.reco1l.andengine.ui.*
 import com.reco1l.framework.*
@@ -71,7 +72,7 @@ class RoomChat : UILinearContainer() {
 
 
     init {
-        width = Full
+        width = Size.Full
         orientation = Orientation.Vertical
         anchor = Anchor.BottomCenter
         origin = Anchor.BottomCenter
@@ -84,18 +85,18 @@ class RoomChat : UILinearContainer() {
 
         +button
         +body.apply {
-            width = Full
+            width = Size.Full
             height = 0f
             orientation = Orientation.Vertical
 
             scrollableContainer {
-                width = Full
+                width = Size.Full
                 height = body_height - 84f // Input height based of button height plus padding
                 scrollAxes = Axes.Y
                 clipToBounds = true
 
                 messageContainer = linearContainer {
-                    width = Full
+                    width = Size.Full
                     orientation = Orientation.Vertical
 
                     repeat(max_messages) {
@@ -104,18 +105,16 @@ class RoomChat : UILinearContainer() {
                 }
             }
 
-            flexContainer {
-                width = Full
+            fillContainer {
+                width = Size.Full
                 padding = Vec4(80f, 12f)
-                gap = 8f
+                spacing = 8f
 
                 +UITextInput("").apply {
-                    height = Full
+                    height = Size.Full
                     placeholder = "Type a message..."
                     onConfirm = { sendMessage() }
-                    flexRules {
-                        grow = 1f
-                    }
+                    weight = 1f
 
                     input = this
                 }
@@ -262,7 +261,7 @@ class RoomChat : UILinearContainer() {
 
 
         init {
-            width = Full
+            width = Size.Full
             orientation = Orientation.Horizontal
             padding = Vec4(80f, 18f)
             spacing = 12f
@@ -282,7 +281,7 @@ class RoomChat : UILinearContainer() {
             }
 
             linearContainer {
-                width = Full
+                width = Size.Full
                 orientation = Orientation.Horizontal
 
                 tagText = text {
@@ -293,7 +292,7 @@ class RoomChat : UILinearContainer() {
                 }
 
                 messageText = text {
-                    width = Full
+                    width = Size.Full
                     anchor = Anchor.CenterLeft
                     origin = Anchor.CenterLeft
                     style = { color = it.accentColor }
@@ -350,7 +349,7 @@ class RoomChat : UILinearContainer() {
 
 
         init {
-            width = Full
+            width = Size.Full
             padding = Vec4(80f, 0f)
             spacing = 12f
             orientation = Orientation.Horizontal
@@ -380,7 +379,7 @@ class RoomChat : UILinearContainer() {
                 if (message is SystemMessage) {
                     text {
                         buffer = messageTextBuffer
-                        width = Full
+                        width = Size.Full
                         anchor = Anchor.CenterLeft
                         origin = Anchor.CenterLeft
                         text = message.content
@@ -394,14 +393,15 @@ class RoomChat : UILinearContainer() {
                         || messages[messageIndex - 1] !is PlayerMessage
                         || (messages[messageIndex - 1] as PlayerMessage).player.id != message.player.id
 
-                    flexContainer {
+                    container {
                         width = 0.25f.pct
                         anchor = Anchor.CenterLeft
                         origin = Anchor.CenterLeft
-                        direction = FlexDirection.Row
-                        justifyContent = JustifyContent.SpaceBetween
+                        orientation = Orientation.Horizontal
 
                         text {
+                            anchor = Anchor.CenterLeft
+                            origin = Anchor.CenterLeft
                             buffer = messageTimestampBuffer
                             style = { color = it.accentColor * 0.5f }
                             text = timestampFormat.format(message.time)
@@ -409,6 +409,8 @@ class RoomChat : UILinearContainer() {
 
                         if (showSender) {
                             text {
+                                anchor = Anchor.CenterRight
+                                origin = Anchor.CenterRight
                                 buffer = messagePlayerTagBuffer
                                 color = getPlayerTagColor(message.player)
                                 text = message.player.name
@@ -418,7 +420,7 @@ class RoomChat : UILinearContainer() {
 
                     text {
                         buffer = messageTextBuffer
-                        width = Full
+                        width = Size.Full
                         style = { color = it.accentColor }
                         text = message.content
                     }

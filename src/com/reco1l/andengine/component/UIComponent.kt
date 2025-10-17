@@ -20,7 +20,9 @@ import org.anddev.andengine.input.touch.*
 import org.anddev.andengine.opengl.util.*
 import org.anddev.andengine.util.*
 import org.anddev.andengine.util.constants.Constants.*
+import ru.nsu.ccfit.zuev.osuplus.BuildConfig
 import javax.microedition.khronos.opengles.*
+import kotlin.math.max
 
 
 /**
@@ -32,13 +34,27 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
 
     //region Size related properties
 
-    protected var rawWidth = 0f
-        private set
+    /**
+     * Whether to prevent the component from shrinking below its intrinsic size.
+     */
+    var preventShrink = false
+
+    /**
+     * Used for weighted distribution in some containers such as [UIFillContainer][com.reco1l.andengine.container.UIFillContainer].
+     */
+    var weight = 0f
+        set(value) {
+            if (field != value) {
+                field = value
+                invalidate(InvalidationFlag.Size)
+            }
+        }
 
     /**
      * The minimum width of the entity.
      */
     var minWidth = 0f
+        get() = if (preventShrink) max(intrinsicWidth, field) else field
         set(value) {
             if (field != value) {
                 field = value
@@ -68,7 +84,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
                 value = contentWidth + padding.horizontal
             }
             if (field in Size.relativeSizeRange) {
-                value = parent.innerWidth * (field + 3f)
+                value = (parent?.innerWidth ?: 0f) * (field + 3f)
             }
 
             return value.coerceAtMost(maxWidth).coerceAtLeast(minWidth)
@@ -81,14 +97,21 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
             }
         }
 
-
-    protected var rawHeight = 0f
+    /**
+     * Represents the width specified without any kind of calculation or constraint applied.
+     * * If the value is `-1` it means the width is set to [Size.Auto].
+     * * If the value is between `-2` and `-3` it means the width is set to a percentage value.
+     *
+     * @see Size
+     */
+    var rawWidth = 0f
         private set
 
     /**
      * The minimum height of the entity.
      */
     var minHeight = 0f
+        get() = if (preventShrink) max(intrinsicHeight, field) else field
         set(value) {
             if (field != value) {
                 field = value
@@ -117,7 +140,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
                 value = contentHeight + padding.vertical
             }
             if (field in Size.relativeSizeRange) {
-                value = parent.innerHeight * (field + 3f)
+                value = (parent?.innerHeight ?: 0f) * (field + 3f)
             }
 
             return value.coerceAtMost(maxHeight).coerceAtLeast(minHeight)
@@ -129,6 +152,15 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
                 invalidate(InvalidationFlag.Size)
             }
         }
+
+    /**
+     * Represents the height specified without any kind of calculation or constraint applied.
+     * * If the value is `-1` it means the height is set to [Size.Auto].
+     * * If the value is between `-2` and `-3` it means the height is set to a percentage value.
+     * @see Size
+     */
+    var rawHeight = 0f
+        private set
 
     /**
      * The width of the content inside the entity.
@@ -163,13 +195,49 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
             }
         }
 
+
+    /**
+     * The inner width of the component, which is the width minus the horizontal padding.
+     * It can be equivalent to [contentWidth] if the component's width is set to [Size.Auto].
+     */
+    val innerWidth
+        get() = width - padding.horizontal
+
+    /**
+     * The inner height of the component, which is the height minus the vertical padding.
+     * It can be equivalent to [contentHeight] if the component's height is set to [Size.Auto].
+     */
+    val innerHeight
+        get() = height - padding.vertical
+
+    /**
+     * The intrinsic width of the entity, which is the content width plus the horizontal padding.
+     */
+    val intrinsicWidth
+        get() = max(contentWidth + padding.horizontal, 0f)
+
+    /**
+     * The intrinsic height of the entity, which is the content height plus the vertical padding.
+     */
+    val intrinsicHeight
+        get() = max(contentHeight + padding.vertical, 0f)
+
+    /**
+     * The width of this component with transformations applied.
+     */
+    val transformedWidth
+        get() = width * scaleX
+
+    /**
+     * The height of this component with transformations applied.
+     */
+    val transformedHeight
+        get() = height * scaleY
+
     //endregion
 
     //region Position related properties
 
-    override fun getX(): Float {
-        return mX
-    }
     fun setX(value: Float) {
         if (mX != value) {
             mX = value
@@ -177,9 +245,6 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
         }
     }
 
-    override fun getY(): Float {
-        return mY
-    }
     fun setY(value: Float) {
         if (mY != value) {
             mY = value
@@ -190,7 +255,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
     /**
      * Where the entity should be anchored in the parent.
      */
-    open var anchor = Anchor.TopLeft
+    var anchor = Anchor.TopLeft
         set(value) {
             if (field != value) {
                 field = value
@@ -201,11 +266,10 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
     /**
      * Where the entity's origin should be.
      */
-    open var origin = Anchor.TopLeft
+    var origin = Anchor.TopLeft
         set(value) {
             if (field != value) {
                 field = value
-
                 mRotationCenterX = value.x
                 mRotationCenterY = value.y
                 mScaleCenterX = value.x
@@ -215,36 +279,74 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
         }
 
     /**
-     * The translation in the X axis.
+     * The translation in the X axis, translation does not trigger any kind of invalidation
+     * nor re-layout of the parent container. It is considered as a transformation.
      */
-    open var translationX = 0f
-        set(value) {
-            if (field != value) {
-                field = value
-                invalidate(InvalidationFlag.Position)
-            }
-        }
+    var translationX = 0f
 
     /**
-     * The translation in the Y axis.
+     * The translation in the Y axis, translation does not trigger any kind of invalidation
+     * nor re-layout of the parent container. It is considered as a transformation.
      */
-    open var translationY = 0f
-        set(value) {
-            if (field != value) {
-                field = value
-                invalidate(InvalidationFlag.Position)
-            }
-        }
+    var translationY = 0f
+
+
+    /**
+     * The calculated anchor position for the X axis in the parent's coordinate system.
+     * This will be always 0 if the component has no parent.
+     */
+    val anchorPositionX
+        get() = (parent?.innerWidth ?: 0f) * anchor.x
+
+    /**
+     * The calculated anchor position for the Y axis in the parent's coordinate system.
+     * This will be always 0 if the component has no parent.
+     */
+    val anchorPositionY
+        get() = (parent?.innerHeight ?: 0f) * anchor.y
+
+    /**
+     * The calculated origin position for the X axis in the component's coordinate system.
+     */
+    val originPositionX
+        get() = width * origin.x
+
+    /**
+     * The calculated origin position for the Y axis in the component's coordinate system.
+     */
+    val originPositionY
+        get() = height * origin.y
+
+    /**
+     * The absolute position for the X axis of the entity taking into account the
+     * anchor and origin in the parent's coordinate system.
+     */
+    val absoluteX
+        get() = (if (attachmentMode == AttachmentMode.Child) parent.padding.left else 0f) + anchorPositionX - originPositionX + x
+
+    /**
+     * The absolute position for the Y axis of the entity taking into account the
+     * anchor and origin in the parent's coordinate system.
+     */
+    val absoluteY
+        get() = (if (attachmentMode == AttachmentMode.Child) parent.padding.top else 0f) + anchorPositionY - originPositionY + y
+
 
     //endregion
 
     //region Cosmetic properties
 
     override var style: UIComponent.(theme: Theme) -> Unit = {}
+        set(value) {
+            if (field != value) {
+                field = value
+                value(Theme.current)
+            }
+        }
 
     /**
-     * The background entity. This entity will be drawn before the entity children and will not be
-     * affected by padding.
+     * The background decorator. This will be drawn before the component's content
+     * and it will not be affected by padding.
      */
     open var background: UIComponent? = null
         set(value) {
@@ -260,8 +362,8 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
         }
 
     /**
-     * The foreground entity. This entity will be drawn after the entity children and will not be
-     * affected by padding.
+     * The foreground component. This will be drawn after the component's content
+     * and it will not be affected by padding.
      */
     open var foreground: UIComponent? = null
         set(value) {
@@ -329,12 +431,12 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
      *
      * @see InvalidationFlag
      */
-    protected var invalidationFlags = InvalidationFlag.Position or InvalidationFlag.Size
+    protected var invalidationFlags = InvalidationFlag.All
 
     /**
      * The input bindings of the entity. This is used to handle touch events.
      */
-    protected val inputBindings = arrayOfNulls<ITouchArea>(10)
+    protected val inputBindings = arrayOfNulls<UIComponent>(10)
 
     //endregion
 
@@ -365,7 +467,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
     /**
      * Called when the content of the entity has changed. This usually is called when a child is added or removed.
      */
-    protected open fun onContentChanged() {}
+    open fun onContentChanged() = Unit
 
 
     override fun detachSelf(): Boolean {
@@ -416,7 +518,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
      * Called when a child is attached to this entity.
      */
     open fun onChildAttached(child: IEntity) {
-        onContentChanged()
+        invalidate(InvalidationFlag.Content)
     }
 
     /**
@@ -426,16 +528,8 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
         invalidate(InvalidationFlag.Content)
     }
 
-    override fun setVisible(value: Boolean) {
-        if (mVisible != value) {
-            mVisible = value
-            invalidate(InvalidationFlag.Size)
-        }
-    }
-
     override fun onAttached() {
         onThemeChanged(Theme.current)
-        onHandleInvalidations(false)
     }
 
     //endregion
@@ -443,23 +537,16 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
     //region Size
 
     /**
-     * Called when the size of a child entity changes.
-     */
-    open fun onChildSizeChanged(child: IEntity) {
-        invalidate(InvalidationFlag.Content)
-    }
-
-    /**
      * Called when the size of this entity changes.
      */
     open fun onSizeChanged() {
-        (parent as? UIComponent)?.onChildSizeChanged(this)
+        (parent as? UIComponent)?.invalidate(InvalidationFlag.Content)
     }
 
     /**
      * Sets the size of the entity.
      */
-    open fun setSize(x: Float, y: Float) {
+    fun setSize(x: Float, y: Float) {
         width = x
         height = y
     }
@@ -494,6 +581,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
 
             CullingMode.ParentBounds -> {
 
+                val parent = parent
                 if (parent !is UIComponent && parent !is UIScene) {
                     return false
                 }
@@ -503,7 +591,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
                 val x2 = x1 + width
                 val y2 = y1 + height
 
-                return x2 < 0f || y2 < 0f || x1 > parent.getWidth() || y1 > parent.getHeight()
+                return x2 < 0f || y2 < 0f || x1 > parent.width || y1 > parent.height
             }
 
             else -> return false
@@ -512,17 +600,10 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
     }
 
     /**
-     * Called when the position of a child entity changes.
-     */
-    open fun onChildPositionChanged(child: IEntity) {
-        invalidate(InvalidationFlag.Content)
-    }
-
-    /**
      * Called when the position of this entity changes.
      */
     open fun onPositionChanged() {
-        (parent as? UIComponent)?.onChildPositionChanged(this)
+        (parent as? UIComponent)?.invalidate(InvalidationFlag.Content)
     }
 
     /**
@@ -654,6 +735,9 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
      * Called when an invalidation flag should be processed.
      */
     protected open fun processInvalidationFlag(flag: Int) {
+
+        val parent = parent as? UIComponent
+
         when (flag) {
             InvalidationFlag.Position -> onPositionChanged()
             InvalidationFlag.Content -> onContentChanged()
@@ -661,9 +745,14 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
             InvalidationFlag.Transformations -> onInvalidateTransformations()
             InvalidationFlag.InputBindings -> onInvalidateInputBindings()
         }
+
+        if (flag == InvalidationFlag.Position || flag == InvalidationFlag.Size || flag == InvalidationFlag.Content) {
+            parent?.invalidate(InvalidationFlag.Content)
+        }
     }
 
-    open fun onHandleInvalidations(restoreFlags: Boolean = true) {
+    open fun
+        onHandleInvalidations() {
 
         val flags = invalidationFlags
 
@@ -696,7 +785,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
         }
 
         // During the invalidation process the flags could be changed.
-        if (this.invalidationFlags == flags && restoreFlags) {
+        if (this.invalidationFlags == flags) {
             this.invalidationFlags = 0
         }
 
@@ -993,7 +1082,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
         try {
             for (i in childCount - 1 downTo 0) {
                 val child = getChild(i)
-                if (child is ITouchArea && child.contains(localX, localY)) {
+                if (child is UIComponent && child.contains(localX, localY)) {
                     if (child.onAreaTouched(event, localX - child.absoluteX, localY - child.absoluteY)) {
                         inputBindings[event.pointerID] = child
                         return true
@@ -1021,23 +1110,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
     //endregion
 
 
-    @Suppress("ConstPropertyName")
     companion object {
-
-        /**
-         * The width and height of the entity will match the content size without any constraints.
-         */
-        @Deprecated("Use Size.Auto instead", ReplaceWith("Size.Auto"))
-        const val Auto = Size.Auto
-
-        /**
-         * The width and height of the entity will match the parent's inner size.
-         */
-        @Deprecated("Use Size.Full instead", ReplaceWith("Size.Full"))
-        const val Full = Size.Full
-
-
-        private val VERTICES_WRAPPER = FloatArray(8)
 
         private val DEBUG_FOREGROUND by lazy {
             UIBox().apply {
@@ -1046,6 +1119,8 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
                 lineWidth = 2f
             }
         }
+
+        private val VERTICES_WRAPPER = FloatArray(8)
     }
 
 }

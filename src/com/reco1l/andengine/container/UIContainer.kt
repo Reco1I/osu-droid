@@ -1,14 +1,17 @@
 package com.reco1l.andengine.container
 
 import com.reco1l.andengine.component.*
+import com.reco1l.andengine.text
+import com.reco1l.andengine.text.UIText
+import com.reco1l.andengine.theme.Size
 import org.anddev.andengine.entity.*
 import kotlin.math.*
 
 open class UIContainer : UIComponent() {
 
     init {
-        width = Auto
-        height = Auto
+        width = Size.Auto
+        height = Size.Auto
     }
 
 
@@ -24,13 +27,13 @@ open class UIContainer : UIComponent() {
                 val x = max(0f, child.absoluteX)
                 val y = max(0f, child.absoluteY)
 
-                right = max(right, x + child.getWidth())
-                bottom = max(bottom, y + child.getHeight())
+                right = max(right, x + child.width)
+                bottom = max(bottom, y + child.height)
             }
         }
 
-        contentWidth = right - contentX
-        contentHeight = bottom - contentY
+        contentWidth = right - padding.left
+        contentHeight = bottom - padding.top
     }
 
 
@@ -63,6 +66,12 @@ open class UIContainer : UIComponent() {
 
     operator fun minusAssign(entity: IEntity) {
         detachChild(entity)
+    }
+
+    operator fun String.unaryPlus(): UIText {
+        return text {
+            text = this@unaryPlus
+        }
     }
 
     //endregion

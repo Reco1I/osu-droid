@@ -7,6 +7,7 @@ import com.reco1l.andengine.container.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.text.*
 import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.theme.pct
 import com.reco1l.andengine.ui.*
 import com.reco1l.framework.*
@@ -29,7 +30,7 @@ class ModCustomizationMenu : UIModal(
         scrollPadding = Vec2(0f, 300f)
 
         +UILinearContainer().apply {
-            width = Full
+            width = Size.Full
             orientation = Orientation.Vertical
         }
     }
@@ -130,12 +131,12 @@ class ModCustomizationMenu : UIModal(
 
         init {
             orientation = Orientation.Vertical
-            width = Full
+            width = Size.Full
             padding = Vec4(0f, 0f, 0f, 16f)
 
             +UILinearContainer().apply {
                 orientation = Orientation.Horizontal
-                width = Full
+                width = Size.Full
                 padding = Vec4(20f, 14f)
                 spacing = 12f
                 background = UIBox().apply {

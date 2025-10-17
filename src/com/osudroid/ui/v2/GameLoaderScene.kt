@@ -5,12 +5,12 @@ import com.osudroid.data.*
 import com.osudroid.multiplayer.*
 import com.reco1l.andengine.*
 import com.reco1l.andengine.component.*
-import com.reco1l.andengine.component.UIComponent.Companion.Full
 import com.reco1l.andengine.container.*
 import com.reco1l.andengine.modifier.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.sprite.*
 import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.ui.*
 import com.reco1l.andengine.ui.form.*
 import com.reco1l.framework.*
@@ -41,24 +41,24 @@ class GameLoaderScene(private val gameScene: GameScene, private val beatmapInfo:
 
         // Background
         sprite {
-            width = Full
-            height = Full
+            width = Size.Full
+            height = Size.Full
             scaleType = ScaleType.Crop
             textureRegion = ResourceManager.getInstance().getTexture(if (Config.isSafeBeatmapBg()) "menu-background" else "::background")
         }
 
         // Dim
         dimBox = box {
-            width = Full
-            height = Full
+            width = Size.Full
+            height = Size.Full
             color = Color4.Black
             alpha = 0.7f
         }
 
         // Beatmap info
         mainContainer = container {
-            width = Full
-            height = Full
+            width = Size.Full
+            height = Size.Full
             alpha = 0f
             scaleX = 0.9f
             scaleY = 0.9f
@@ -241,19 +241,19 @@ class GameLoaderScene(private val gameScene: GameScene, private val beatmapInfo:
             anchor = Anchor.CenterRight
             origin = Anchor.CenterRight
             width = 460f
-            height = Full
+            height = Size.Full
             x = -20f
             scrollAxes = Axes.Y
             alpha = 0.5f
 
             linearContainer {
-                width = Full
+                width = Size.Full
                 spacing = 20f
                 padding = Vec4(0f, 20f)
                 orientation = Orientation.Vertical
 
                 collapsibleCard {
-                    width = Full
+                    width = Size.Full
                     title = "Beatmap"
 
                     content.apply {
@@ -309,7 +309,7 @@ class GameLoaderScene(private val gameScene: GameScene, private val beatmapInfo:
                 }
 
                 collapsibleCard {
-                    width = Full
+                    width = Size.Full
                     title = "Settings"
 
                     content.apply {

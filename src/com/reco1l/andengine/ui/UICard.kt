@@ -7,6 +7,7 @@ import com.reco1l.andengine.modifier.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.text.*
 import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.Size
 import com.reco1l.framework.math.*
 import org.anddev.andengine.input.touch.*
 
@@ -18,7 +19,7 @@ open class UICard(
      */
     val content: UIContainer = UILinearContainer().apply {
         orientation = Orientation.Vertical
-        width = Full
+        width = Size.Full
         clipToBounds = true
     },
 
@@ -60,7 +61,7 @@ open class UICard(
         }
 
         +titleBar.apply {
-            width = Full
+            width = Size.Full
             padding = Vec4(12f, 8f)
 
             +UIText().apply {
@@ -84,7 +85,7 @@ open class UICard(
         }
 
         +UIBox().apply {
-            width = Full
+            width = Size.Full
             height = 1f
             style = {
                 color = it.accentColor

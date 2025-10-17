@@ -24,7 +24,6 @@ open class UILinearContainer : UIContainer() {
 
 
     override fun onContentChanged() {
-
         var right = 0f
         var bottom = 0f
 
@@ -41,8 +40,8 @@ open class UILinearContainer : UIContainer() {
                 Horizontal -> {
                     child.x = right
 
-                    right += child.getWidth()
-                    bottom = max(bottom, child.getHeight())
+                    right += child.width
+                    bottom = max(bottom, child.height)
 
                     if (childCount > 1 && i < childCount - 1) {
                         right += spacing
@@ -52,8 +51,8 @@ open class UILinearContainer : UIContainer() {
                 Vertical -> {
                     child.y = bottom
 
-                    right = max(right, child.getWidth())
-                    bottom += child.getHeight()
+                    right = max(right, child.width)
+                    bottom += child.height
 
                     if (childCount > 1 && i < childCount - 1) {
                         bottom += spacing

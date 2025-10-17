@@ -28,14 +28,12 @@ import com.reco1l.andengine.Axes
 import com.reco1l.andengine.UIEngine
 import com.reco1l.andengine.UIScene
 import com.reco1l.andengine.badge
-import com.reco1l.andengine.component.UIComponent.Companion.Full
 import com.reco1l.andengine.component.setText
 import com.reco1l.andengine.container
-import com.reco1l.andengine.container.JustifyContent
 import com.reco1l.andengine.container.Orientation
-import com.reco1l.andengine.container.UIFlexContainer
+import com.reco1l.andengine.container.UIFillContainer
 import com.reco1l.andengine.container.UILinearContainer
-import com.reco1l.andengine.flexContainer
+import com.reco1l.andengine.fillContainer
 import com.reco1l.andengine.labeledBadge
 import com.reco1l.andengine.linearContainer
 import com.reco1l.andengine.scrollableContainer
@@ -45,6 +43,7 @@ import com.reco1l.andengine.sprite.UISprite
 import com.reco1l.andengine.text
 import com.reco1l.andengine.text.UIText
 import com.reco1l.andengine.textButton
+import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.ui.SizeVariant
 import com.reco1l.andengine.ui.UIBadge
 import com.reco1l.andengine.ui.UILabeledBadge
@@ -150,8 +149,8 @@ class RoomScene(val room: Room) : UIScene(), IRoomEventListener, IPlayerEventLis
         chat = RoomChat()
 
         container {
-            width = Full
-            height = Full
+            width = Size.Full
+            height = Size.Full
             padding = Vec4(80f, 0f)
 
             onUpdateTick = {
@@ -179,12 +178,11 @@ class RoomScene(val room: Room) : UIScene(), IRoomEventListener, IPlayerEventLis
 
             linearContainer {
                 orientation = Orientation.Vertical
-                width = Full
-                height = Full
+                width = Size.Full
+                height = Size.Full
 
-                flexContainer {
-                    width = Full
-                    justifyContent = JustifyContent.SpaceBetween
+                container {
+                    width = Size.Full
 
                     linearContainer {
                         orientation = Orientation.Vertical
@@ -193,7 +191,7 @@ class RoomScene(val room: Room) : UIScene(), IRoomEventListener, IPlayerEventLis
 
                         nameText = text {
                             text = room.name
-                            
+
                             style = { color = it.accentColor }
                         }
 
@@ -233,8 +231,8 @@ class RoomScene(val room: Room) : UIScene(), IRoomEventListener, IPlayerEventLis
 
                     textButton {
                         leadingIcon = UISprite(ResourceManager.getInstance().getTexture("settings-icon"))
-                        anchor = Anchor.CenterLeft
-                        origin = Anchor.CenterLeft
+                        anchor = Anchor.CenterRight
+                        origin = Anchor.CenterRight
                         onActionUp = {
                             SettingsFragment().show()
                         }
@@ -242,22 +240,18 @@ class RoomScene(val room: Room) : UIScene(), IRoomEventListener, IPlayerEventLis
                     }
                 }
 
-                flexContainer {
-                    width = Full
-                    height = Full
-                    gap = 24f
+                fillContainer {
+                    width = Size.Full
+                    height = Size.Full
+                    spacing = 24f
                     padding = Vec4(0f, 12f)
 
-                    fun UIFlexContainer.Section(title: Int, block: UILinearContainer.() -> Unit) {
+                    fun UIFillContainer.Section(title: Int, block: UILinearContainer.() -> Unit) {
                         linearContainer {
                             orientation = Orientation.Vertical
-                            height = Full
+                            height = Size.Full
                             spacing = 8f
-
-                            flexRules {
-                                grow = 1f
-                                basis = 0f
-                            }
+                            weight = 1f
 
                             text {
                                 text = StringTable.get(title).uppercase()
@@ -271,14 +265,14 @@ class RoomScene(val room: Room) : UIScene(), IRoomEventListener, IPlayerEventLis
                     Section(R.string.multiplayer_room_players) {
 
                         scrollableContainer {
-                            width = Full
-                            height = Full
+                            width = Size.Full
+                            height = Size.Full
                             scrollAxes = Axes.Y
                             clipToBounds = true
 
                             linearContainer {
                                 orientation = Orientation.Vertical
-                                width = Full
+                                width = Size.Full
                                 spacing = 4f
                                 padding = Vec4.Companion.One
                                 playersContainer = this
@@ -302,7 +296,7 @@ class RoomScene(val room: Room) : UIScene(), IRoomEventListener, IPlayerEventLis
                         }
 
                         beatmapInfoAlert = text {
-                            width = Full
+                            width = Size.Full
                             padding = Vec4(16f)
                             alignment = Anchor.Center
                             background = UIBox().apply {
@@ -315,7 +309,7 @@ class RoomScene(val room: Room) : UIScene(), IRoomEventListener, IPlayerEventLis
                         }
 
                         linearContainer {
-                            width = Full
+                            width = Size.Full
                             spacing = 8f
 
                             changeBeatmapButton = textButton {
@@ -378,7 +372,7 @@ class RoomScene(val room: Room) : UIScene(), IRoomEventListener, IPlayerEventLis
                 padding = Vec4(0f, 12f)
 
                 textButton {
-                    width = Full
+                    width = Size.Full
                     setText(R.string.multiplayer_room_start_game)
                     isSelected = true
                     onActionUp = callback@{
@@ -417,7 +411,7 @@ class RoomScene(val room: Room) : UIScene(), IRoomEventListener, IPlayerEventLis
                 }
 
                 textButton {
-                    width = Full
+                    width = Size.Full
                     setText(R.string.multiplayer_room_not_ready)
                     onActionUp = callback@{
 

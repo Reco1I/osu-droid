@@ -10,19 +10,22 @@ import com.reco1l.andengine.sprite.*
 import com.reco1l.andengine.text.*
 import com.reco1l.andengine.theme.FontSize
 import com.reco1l.andengine.theme.Radius
+import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.theme.rem
 import com.reco1l.andengine.theme.srem
 import com.reco1l.framework.math.*
+import org.anddev.andengine.engine.camera.Camera
 import org.anddev.andengine.input.touch.TouchEvent
 import org.anddev.andengine.opengl.texture.region.TextureRegion
+import javax.microedition.khronos.opengles.GL10
+import kotlin.math.max
+import kotlin.math.min
 
 @Suppress("LeakingThis")
-open class UIButton : CompoundText() {
+open class UIButton : UIContainer() {
 
     override var style: UIComponent.(Theme) -> Unit = { theme ->
         height = 2.5f.rem
-        gap = 1f.srem
-        iconSize = FontSize.MD
         backgroundColor = if (isSelected) theme.accentColor else theme.accentColor * 0.175f
         backgroundRadius = Radius.LG
         padding = Vec4(2.5f.srem, 0f)
@@ -94,7 +97,7 @@ open class UIButton : CompoundText() {
 
     init {
         scaleCenter = Anchor.Center
-        alignment = Anchor.Center
+        preventShrink = true
     }
 
 
@@ -191,9 +194,63 @@ open class UIButton : CompoundText() {
 /**
  * A button that displays a text.
  */
-@Deprecated("Use UIButton instead", ReplaceWith("UIButton"))
-open class UITextButton : UIButton()
+open class UITextButton : UIButton() {
 
-@Deprecated("Use UIButton instead", ReplaceWith("UIButton"))
-open class UIIconButton : UIButton()
+    private val textComponent = CompoundText().apply {
+        width = Size.Full
+        anchor = Anchor.CenterLeft
+        origin = Anchor.CenterLeft
+        style = {
+            iconSize = FontSize.MD
+            spacing = 1f.srem
+        }
+        alignment = Anchor.Center
+        preventShrink = true
+    }
+
+
+    //region Shortcuts
+
+    var text by textComponent::text
+    var fontFamily by textComponent::fontFamily
+    var fontSize by textComponent::fontSize
+    var leadingIcon by textComponent::leadingIcon
+    var trailingIcon by textComponent::trailingIcon
+    var alignment by textComponent::alignment
+
+    //endregion
+
+    init {
+        +textComponent
+    }
+
+}
+
+open class UIIconButton : UIButton() {
+
+    /**
+     * The icon of the button.
+     */
+    var icon: UIComponent? = null
+        set(value) {
+            if (field != value) {
+                field = value
+
+                detachChildren()
+                if (value != null) {
+                    value.anchor = Anchor.Center
+                    value.origin = Anchor.Center
+                    attachChild(value)
+                }
+            }
+        }
+
+    init {
+        style += {
+            icon?.width = FontSize.MD
+            icon?.height = FontSize.MD
+        }
+    }
+
+}
 

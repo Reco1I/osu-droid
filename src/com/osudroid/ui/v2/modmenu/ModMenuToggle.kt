@@ -10,11 +10,12 @@ import com.reco1l.andengine.modifier.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.text.*
 import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.ui.*
 import com.rian.osu.mods.*
 import ru.nsu.ccfit.zuev.osu.*
 
-class ModMenuToggle(var mod: Mod): UIButton() {
+class ModMenuToggle(var mod: Mod) : UIButton() {
 
     /**
      * Whether the [Mod] represented by this [ModMenuToggle] is incompatible with one or more enabled [Mod]s.
@@ -28,54 +29,57 @@ class ModMenuToggle(var mod: Mod): UIButton() {
         }
 
     init {
-        direction = FlexDirection.Row
-        width = Full
-        spacing = 8f
-        cullingMode = CullingMode.CameraBounds
+        fillContainer {
+            orientation = Orientation.Horizontal
+            width = Size.Full
+            spacing = 8f
+            cullingMode = CullingMode.CameraBounds
 
-        background = UIBox().apply {
-            cornerRadius = 12f
-            // Sharing the same VBO across all toggles to reduce memory usage.
-            buffer = sharedButtonVBO
-        }
-
-        +ModIcon(mod).apply {
-            width = 38f
-            height = 38f
-            anchor = Anchor.CenterLeft
-            origin = Anchor.CenterLeft
-        }
-
-        linearContainer {
-            orientation = Orientation.Vertical
-            width = Full
-            anchor = Anchor.CenterLeft
-            origin = Anchor.CenterLeft
-
-            text {
-                text = mod.name
-                fontSize = FontSize.SM
-                buffer = sharedTextCB
+            background = UIBox().apply {
+                cornerRadius = 12f
+                // Sharing the same VBO across all toggles to reduce memory usage.
+                buffer = sharedButtonVBO
             }
 
-            text {
-                width = Full
-                fontSize = FontSize.XS
-                text = mod.description
-                clipToBounds = true
-                alpha = 0.75f
-                buffer = sharedTextCB
+            +ModIcon(mod).apply {
+                width = 38f
+                height = 38f
+                anchor = Anchor.CenterLeft
+                origin = Anchor.CenterLeft
             }
-        }
 
-        onActionUp = {
-            if (isSelected) {
-                ModMenu.removeMod(mod)
-                ResourceManager.getInstance().getSound("check-off")?.play()
-            } else {
-                ModMenu.addMod(mod)
-                ResourceManager.getInstance().getSound("check-on")?.play()
+            linearContainer {
+                weight = 1f
+                orientation = Orientation.Vertical
+                anchor = Anchor.CenterLeft
+                origin = Anchor.CenterLeft
+
+                text {
+                    text = mod.name
+                    fontSize = FontSize.SM
+                    buffer = sharedTextCB
+                }
+
+                text {
+                    width = Size.Full
+                    fontSize = FontSize.XS
+                    text = mod.description
+                    clipToBounds = true
+                    alpha = 0.75f
+                    buffer = sharedTextCB
+                }
             }
+
+            onActionUp = {
+                if (isSelected) {
+                    ModMenu.removeMod(mod)
+                    ResourceManager.getInstance().getSound("check-off")?.play()
+                } else {
+                    ModMenu.addMod(mod)
+                    ResourceManager.getInstance().getSound("check-on")?.play()
+                }
+            }
+
         }
 
         updateVisibility()
@@ -85,7 +89,7 @@ class ModMenuToggle(var mod: Mod): UIButton() {
     fun updateVisibility(searchTerm: String = "") {
         var shouldBeVisible = if (Multiplayer.isMultiplayer && Multiplayer.room != null) {
             mod.isValidForMultiplayer && (Multiplayer.isRoomHost ||
-                    (Multiplayer.room!!.gameplaySettings.isFreeMod && mod.isValidForMultiplayerAsFreeMod))
+                (Multiplayer.room!!.gameplaySettings.isFreeMod && mod.isValidForMultiplayerAsFreeMod))
         } else {
             true
         }

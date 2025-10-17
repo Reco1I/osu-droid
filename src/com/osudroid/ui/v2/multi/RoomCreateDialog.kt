@@ -6,6 +6,7 @@ import com.osudroid.multiplayer.api.data.*
 import com.reco1l.andengine.*
 import com.reco1l.andengine.component.*
 import com.reco1l.andengine.container.*
+import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.ui.*
 import com.reco1l.andengine.ui.form.*
 import com.reco1l.toolkt.kotlin.*
@@ -16,14 +17,14 @@ import ru.nsu.ccfit.zuev.osu.online.*
 
 class RoomCreateDialog(lobbyScene: LobbyScene) : UIDialog<UIScrollableContainer>(UIScrollableContainer().apply {
     scrollAxes = Axes.Y
-    width = Full
+    width = Size.Full
     height = 360f
     clipToBounds = true
 }) {
     init {
 
         val form = FormContainer().apply {
-            width = Full
+            width = Size.Full
             orientation = Orientation.Vertical
 
             onSubmit = { data ->
@@ -76,19 +77,19 @@ class RoomCreateDialog(lobbyScene: LobbyScene) : UIDialog<UIScrollableContainer>
 
             +FormInput(StringTable.format(string.multiplayer_lobby_create_room_name_default, OnlineManager.getInstance().username)).apply {
                 key = "name"
-                width = Full
+                width = Size.Full
                 label = StringTable.get(string.multiplayer_lobby_room_name)
             }
 
             +FormInput().apply {
                 key = "password"
-                width = Full
+                width = Size.Full
                 label = StringTable.get(string.multiplayer_lobby_room_password)
             }
 
             +FormSlider(8f).apply {
                 key = "capacity"
-                width = Full
+                width = Size.Full
                 label = StringTable.get(string.multiplayer_lobby_room_capacity)
                 control.max = 16f
                 control.min = 2f

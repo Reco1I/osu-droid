@@ -5,6 +5,7 @@ import com.reco1l.andengine.buffered.*
 import com.reco1l.andengine.component.*
 import com.reco1l.andengine.sprite.UISprite.*
 import com.reco1l.andengine.sprite.ScaleType.*
+import com.reco1l.andengine.theme.Size
 import com.reco1l.framework.math.*
 import org.anddev.andengine.opengl.texture.region.*
 import org.anddev.andengine.opengl.util.*
@@ -105,8 +106,8 @@ open class UISprite(textureRegion: TextureRegion? = null) : UIBufferedComponent<
 
 
     init {
-        width = Auto
-        height = Auto
+        width = Size.Auto
+        height = Size.Auto
 
         onTextureRegionChanged()
     }

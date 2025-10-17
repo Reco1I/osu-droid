@@ -7,6 +7,7 @@ import com.reco1l.andengine.component.*
 import com.reco1l.andengine.container.*
 import com.reco1l.andengine.modifier.*
 import com.reco1l.andengine.theme.Radius
+import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.theme.srem
 import com.reco1l.framework.math.*
 import org.anddev.andengine.engine.camera.*
@@ -35,8 +36,8 @@ class UIDropdown(var trigger: UIComponent) : UIScrollableContainer() {
 
     private val wrapper = object : UIContainer() {
         init {
-            width = Full
-            height = Full
+            width = Size.Full
+            height = Size.Full
         }
 
         override fun onAreaTouched(event: TouchEvent, localX: Float, localY: Float): Boolean {
@@ -51,8 +52,8 @@ class UIDropdown(var trigger: UIComponent) : UIScrollableContainer() {
 
 
     init {
-        width = Auto
-        height = Auto
+        width = Size.Auto
+        height = Size.Auto
         scrollAxes = Axes.Y
         clipToBounds = true
 
@@ -69,7 +70,7 @@ class UIDropdown(var trigger: UIComponent) : UIScrollableContainer() {
             orientation = Orientation.Vertical
             style = {
                 spacing = 0.5f.srem
-                padding = Vec4(0.5f.srem)
+                padding = Vec4(1f.srem)
             }
         }
 
@@ -98,7 +99,7 @@ class UIDropdown(var trigger: UIComponent) : UIScrollableContainer() {
 
             x = sceneSpaceX
             y = sceneSpaceY
-            maxHeight = min(optionsContainer.height, parent.getHeight() - sceneSpaceY)
+            maxHeight = min(optionsContainer.height, parent.height - sceneSpaceY)
         }
 
         super.onManagedDraw(gl, camera)
@@ -111,7 +112,7 @@ class UIDropdown(var trigger: UIComponent) : UIScrollableContainer() {
         val button = object : UITextButton() {
 
             init {
-                width = Full
+                width = Size.Full
                 alignment = Anchor.CenterLeft
                 style += {
                     color = it.accentColor

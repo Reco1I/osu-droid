@@ -13,6 +13,7 @@ import com.osudroid.ui.v2.hud.GameplayHUD
 import com.osudroid.ui.v2.hud.HUDElements
 import com.osudroid.ui.v2.hud.IGameplayEvents
 import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.Size
 import com.reco1l.toolkt.kotlin.fastForEach
 import com.rian.osu.beatmap.hitobject.HitObject
 import org.anddev.andengine.input.touch.TouchEvent
@@ -35,7 +36,7 @@ class HUDElementSelector(private val hud: GameplayHUD) : UIContainer(), IGamepla
     private val elementList = UIScrollableContainer().apply {
 
         scrollAxes = Axes.Y
-        height = Full
+        height = Size.Full
         width = SELECTOR_WIDTH
 
         background = UIBox().apply {
@@ -43,7 +44,7 @@ class HUDElementSelector(private val hud: GameplayHUD) : UIContainer(), IGamepla
         }
 
         attachChild(UILinearContainer().apply {
-            width = Full
+            width = Size.Full
             padding = Vec4(16f)
             spacing = 12f
             orientation = Orientation.Vertical
@@ -57,7 +58,7 @@ class HUDElementSelector(private val hud: GameplayHUD) : UIContainer(), IGamepla
 
 
     init {
-        height = Full
+        height = Size.Full
 
         x = -SELECTOR_WIDTH
 

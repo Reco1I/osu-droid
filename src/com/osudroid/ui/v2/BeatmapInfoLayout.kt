@@ -9,6 +9,7 @@ import com.reco1l.andengine.container.*
 import com.reco1l.andengine.sprite.*
 import com.reco1l.andengine.text.*
 import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.ui.*
 import com.reco1l.framework.*
 import com.reco1l.toolkt.*
@@ -47,27 +48,25 @@ class BeatmapInfoLayout : UILinearContainer() {
 
 
     init {
-        width = Full
+        width = Size.Full
         orientation = Orientation.Vertical
         spacing = 6f
 
-        flexContainer {
-            width = Full
+        fillContainer {
+            width = Size.Full
 
             linearContainer {
-                flexRules {
-                    grow = 1f
-                }
+                weight = 1f
                 orientation = Orientation.Vertical
 
                 artistText = text {
                     fontSize = FontSize.SM
                     text = "Unknown"
-                    style = { color = it.accentColor * 0.9f}
+                    style = { color = it.accentColor * 0.9f }
                 }
 
                 titleText = text {
-                    width = Full
+                    width = Size.Full
                     fontSize = FontSize.SM
                     text = "No selected beatmap"
                     style = { color = it.accentColor }
@@ -77,7 +76,7 @@ class BeatmapInfoLayout : UILinearContainer() {
                 versionText = text {
                     fontSize = FontSize.SM
                     text = "Unknown"
-                    style = { color = it.accentColor * 0.8f}
+                    style = { color = it.accentColor * 0.8f }
                 }
             }
 

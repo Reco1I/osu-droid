@@ -10,6 +10,7 @@ import com.reco1l.andengine.component.*
 import com.reco1l.andengine.container.*
 import com.reco1l.andengine.sprite.*
 import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.theme.rem
 import com.reco1l.andengine.ui.*
 import com.reco1l.toolkt.kotlin.*
@@ -30,7 +31,7 @@ class ModMenuPresetsSection : ModMenuSection("Presets") {
         }
 
         addButton = UITextButton().apply {
-            width = Full
+            width = Size.Full
             text = "Add preset"
             leadingIcon = UISprite(ResourceManager.getInstance().getTexture("plus"))
             onActionUp = {
@@ -95,7 +96,7 @@ class ModMenuPresetsSection : ModMenuSection("Presets") {
         init {
             orientation = Orientation.Vertical
             spacing = 8f
-            width = Full
+            width = Size.Full
             cullingMode = CullingMode.CameraBounds
 
             onActionUp = {

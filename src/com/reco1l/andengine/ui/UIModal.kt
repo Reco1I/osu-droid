@@ -7,6 +7,7 @@ import com.reco1l.andengine.modifier.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.text.*
 import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.theme.pct
 import com.reco1l.framework.*
 import com.reco1l.framework.math.*
@@ -44,8 +45,8 @@ open class UIModal(
 
 
     init {
-        width = Full
-        height = Full
+        width = Size.Full
+        height = Size.Full
 
         isVisible = false
         alpha = 0f
@@ -177,7 +178,7 @@ abstract class UIDialog<T : UIComponent>(val innerContent: T) : UIModal(card = U
 }) {
 
     val titleEntity = UIText().apply {
-        width = Full
+        width = Size.Full
         fontSize = FontSize.SM
         alignment = Anchor.Center
         padding = Vec4(0f, 16f)
@@ -187,7 +188,7 @@ abstract class UIDialog<T : UIComponent>(val innerContent: T) : UIModal(card = U
         }
     }
 
-    val buttonLayout: UIFlexContainer
+    val buttonLayout: UIFillContainer
 
 
     /**
@@ -207,7 +208,7 @@ abstract class UIDialog<T : UIComponent>(val innerContent: T) : UIModal(card = U
             +titleEntity
 
             box {
-                width = Full
+                width = Size.Full
                 height = 1f
                 style = {
                     color = it.accentColor
@@ -217,12 +218,12 @@ abstract class UIDialog<T : UIComponent>(val innerContent: T) : UIModal(card = U
 
             +innerContent
 
-            buttonLayout = flexContainer {
-                width = Full
+            buttonLayout = fillContainer {
+                width = Size.Full
                 anchor = Anchor.TopCenter
                 origin = Anchor.TopCenter
                 padding = Vec4(24f)
-                gap = 12f
+                spacing = 12f
             }
         }
     }
@@ -235,7 +236,7 @@ abstract class UIDialog<T : UIComponent>(val innerContent: T) : UIModal(card = U
     fun addButton(button: UIButton) {
         buttonLayout.apply {
             attachChild(button.apply {
-                flexRules { grow = 1f }
+                weight = 1f
             })
         }
 
@@ -244,7 +245,7 @@ abstract class UIDialog<T : UIComponent>(val innerContent: T) : UIModal(card = U
 
 open class UIMessageDialog : UIDialog<UIText>(
     innerContent = UIText().apply {
-        width = Full
+        width = Size.Full
         fontSize = FontSize.SM
         alignment = Anchor.Center
         padding = Vec4(24f)

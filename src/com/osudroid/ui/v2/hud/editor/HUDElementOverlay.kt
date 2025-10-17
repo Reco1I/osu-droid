@@ -67,7 +67,7 @@ class HUDElementOverlay(private val element: HUDElement) : UIConstraintContainer
 
     init {
         alpha = 0f
-        setSize(Full, Full)
+        setSize(Size.Full, Size.Full)
 
         attachChild(outline)
         attachChild(toolbar)

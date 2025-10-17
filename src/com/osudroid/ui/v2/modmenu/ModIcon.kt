@@ -10,6 +10,7 @@ import com.reco1l.andengine.sprite.*
 import com.reco1l.andengine.text.*
 import com.reco1l.andengine.texture.*
 import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.ui.*
 import com.rian.osu.mods.*
 import com.rian.osu.utils.*
@@ -60,8 +61,8 @@ class ModIcon(val mod: Mod) : UIContainer(), ISkinnable {
                 background = null
 
                 attachChild(OsuSkinnableSprite(mod.iconTextureName).apply {
-                    width = Full
-                    height = Full
+                    width = Size.Full
+                    height = Size.Full
                     buffer = sharedSpriteVBO
                 })
             } else {

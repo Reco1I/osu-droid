@@ -1,8 +1,6 @@
 package com.osudroid.ui.v2.modmenu
 
 import com.reco1l.andengine.*
-import com.reco1l.andengine.component.UIComponent.Companion.Auto
-import com.reco1l.andengine.component.UIComponent.Companion.Full
 import com.reco1l.andengine.container.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.sprite.*
@@ -17,6 +15,7 @@ import com.osudroid.ui.OsuColors
 import com.osudroid.ui.v2.ModsIndicator
 import com.osudroid.utils.updateThread
 import com.reco1l.andengine.component.*
+import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.theme.srem
 import com.reco1l.andengine.ui.UITextButton
 import com.reco1l.toolkt.kotlin.*
@@ -89,11 +88,10 @@ object ModMenu : UIScene() {
 
         customizationMenu = ModCustomizationMenu()
 
-        attachChild(UIFlexContainer().apply {
-            width = Full
-            height = Full
-            direction = FlexDirection.Column
-            justifyContent = JustifyContent.SpaceBetween
+        attachChild(UIFillContainer().apply {
+            width = Size.Full
+            height = Size.Full
+            orientation = Orientation.Vertical
             background = UIBox().apply {
                 style = {
                     color = it.accentColor * 0.1f
@@ -102,8 +100,8 @@ object ModMenu : UIScene() {
             }
 
             +UIContainer().apply {
-                width = Full
-                height = Auto
+                width = Size.Full
+                height = Size.Auto
                 style = {
                     padding = UIEngine.current.safeArea.copy(y = 12f, w = 12f)
                 }
@@ -169,7 +167,7 @@ object ModMenu : UIScene() {
 
                     +UIScrollableContainer().apply {
                         width = 340f
-                        height = Auto
+                        height = Size.Auto
                         anchor = Anchor.CenterLeft
                         origin = Anchor.CenterLeft
                         scrollAxes = Axes.X
@@ -183,11 +181,11 @@ object ModMenu : UIScene() {
                 +UIContainer().apply {
                     anchor = Anchor.CenterRight
                     origin = Anchor.CenterRight
-                    height = Full
+                    height = Size.Full
 
                     searchInput = ModMenuSearchInput().apply {
                         width = 400f
-                        height = Full
+                        height = Size.Full
                         onSearchTermUpdate = { searchTerm ->
                             modSections.fastForEach { it.onSearchTermUpdate(searchTerm) }
 
@@ -210,15 +208,15 @@ object ModMenu : UIScene() {
             }
 
             +UIScrollableContainer().apply {
-                width = Full
-                height = Full
+                width = Size.Full
+                height = Size.Full
                 scrollAxes = Axes.X
-                flexRules { grow = 1f }
+                weight = 1f
 
                 +UILinearContainer().apply {
                     orientation = Orientation.Horizontal
-                    width = Auto
-                    height = Full
+                    width = Size.Auto
+                    height = Size.Full
                     style = {
                         spacing = 2f.srem
                         padding = UIEngine.current.safeArea
@@ -248,8 +246,8 @@ object ModMenu : UIScene() {
             }
 
             +UIContainer().apply {
-                width = Full
-                height = Auto
+                width = Size.Full
+                height = Size.Auto
                 style = {
                     padding = UIEngine.current.safeArea.copy(y = 12f, w = 12f)
                 }

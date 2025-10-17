@@ -10,10 +10,22 @@ object Fonts {
 }
 
 object FontSize {
-    val XXS = 0.625f.rem
-    val XS = 0.75f.rem
-    val SM = 0.875f.rem
-    val MD = 1f.rem
-    val LG = 1.125f.rem
-    val XL = 1.25f.rem
+
+    val XXS
+        get() = 0.625f.rem
+
+    val XS
+        get() = 0.75f.rem
+
+    val SM
+        get() = 0.875f.rem
+
+    val MD
+        get() = 1f.rem
+
+    val LG
+        get() = 1.125f.rem
+
+    val XL
+        get() = 1.25f.rem
 }

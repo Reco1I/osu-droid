@@ -6,6 +6,7 @@ import com.reco1l.andengine.component.*
 import com.reco1l.andengine.modifier.ModifierType
 import com.reco1l.andengine.text.FontAwesomeIcon
 import com.reco1l.andengine.theme.Icon
+import com.reco1l.andengine.theme.Size
 import com.reco1l.framework.*
 import org.anddev.andengine.engine.camera.*
 import javax.microedition.khronos.opengles.*
@@ -21,10 +22,10 @@ open class UISelect<T : Any>(initialValues: List<T> = emptyList()) : UIControl<L
     /**
      * The button that toggles the dropdown menu.
      */
-    val button = object : UIButton() {
+    val button = object : UITextButton() {
 
         init {
-            width = Full
+            width = Size.Full
             alignment = Anchor.CenterLeft
             onActionUp = {
                 if (dropdown.isExpanded) {
@@ -34,11 +35,11 @@ open class UISelect<T : Any>(initialValues: List<T> = emptyList()) : UIControl<L
                 }
             }
 
-            rightIcon = FontAwesomeIcon(Icon.ChevronDown).apply {
+            trailingIcon = FontAwesomeIcon(Icon.ChevronDown).apply {
                 rotation = 0f
                 alpha = 0.5f
             }
-            rightIcon?.rotationCenter = Anchor.Center
+            trailingIcon?.rotationCenter = Anchor.Center
         }
 
         override fun onThemeChanged(theme: Theme) {
@@ -92,7 +93,7 @@ open class UISelect<T : Any>(initialValues: List<T> = emptyList()) : UIControl<L
             text = placeholder
         }
 
-        val chevronIcon = button.rightIcon as FontAwesomeIcon
+        val chevronIcon = button.trailingIcon as FontAwesomeIcon
 
         dropdown.onExpand = {
             chevronIcon.clearModifiers(ModifierType.Rotation)

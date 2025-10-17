@@ -1,6 +1,8 @@
 package com.reco1l.andengine.ui.form
 
 import com.reco1l.andengine.*
+import com.reco1l.andengine.container.Orientation
+import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.theme.srem
 import com.reco1l.andengine.ui.*
 import org.anddev.andengine.input.touch.*
@@ -16,16 +18,22 @@ open class FormCheckbox(initialValue: Boolean = false) : FormControl<Boolean, UI
 
 
     init {
-        +labelText
-        +resetButton
-
         container {
-            width = Full
-            +control
-        }
+            width = Size.Full
 
-        style += {
-            spacing = 2f.srem
+            linearContainer {
+                weight = 1f
+                anchor = Anchor.CenterLeft
+                origin = Anchor.CenterLeft
+                style = {
+                    spacing = 2f.srem
+                }
+
+                +labelText
+                +resetButton
+            }
+
+            +control
         }
     }
 

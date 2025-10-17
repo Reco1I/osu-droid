@@ -18,7 +18,6 @@ import com.reco1l.andengine.theme.srem
 import com.reco1l.framework.*
 import com.reco1l.framework.math.*
 import org.anddev.andengine.input.touch.*
-import ru.nsu.ccfit.zuev.osu.*
 import kotlin.math.*
 import kotlin.synchronized
 import kotlin.text.substring
@@ -33,7 +32,7 @@ open class UITextInput(initialValue: String) : UIControl<String>(initialValue), 
         foregroundColor = if (isFocused) theme.accentColor else theme.accentColor * 0.4f
         foregroundRadius = Radius.LG
         foregroundLineWidth = 0.2f.srem
-        textEntity.color = theme.accentColor
+        textComponent.color = theme.accentColor
         placeholderEntity.color = theme.accentColor * 0.6f
     }
 
@@ -43,7 +42,7 @@ open class UITextInput(initialValue: String) : UIControl<String>(initialValue), 
         origin = Anchor.CenterLeft
     }
 
-    private val textEntity = UIText().apply {
+    private val textComponent = UIText().apply {
         fontSize = FontSize.SM
         anchor = Anchor.CenterLeft
         origin = Anchor.CenterLeft
@@ -75,7 +74,7 @@ open class UITextInput(initialValue: String) : UIControl<String>(initialValue), 
     /**
      * The font used to render the text.
      */
-    var font by textEntity::font
+    val font by textComponent::font
 
     /**
      * The placeholder text displayed when the input field is empty.
@@ -93,7 +92,7 @@ open class UITextInput(initialValue: String) : UIControl<String>(initialValue), 
         caretPosition = value.length
 
         +placeholderEntity
-        +textEntity
+        +textComponent
         +caret
 
         background = UIBox()
@@ -144,9 +143,9 @@ open class UITextInput(initialValue: String) : UIControl<String>(initialValue), 
     override fun onManagedUpdate(deltaTimeSec: Float) {
 
         if (caret.isVisible) {
-            caret.x = letterPositions.getOrNull(caretPosition)?.toFloat() ?: (textEntity.x + textEntity.width)
-            caret.y = textEntity.y
-            caret.height = textEntity.height
+            caret.x = letterPositions.getOrNull(caretPosition)?.toFloat() ?: (textComponent.x + textComponent.width)
+            caret.y = textComponent.y
+            caret.height = textComponent.height
 
             if (elapsedTimeSec >= 0.5f) {
                 caretFading = !caretFading
@@ -270,7 +269,7 @@ open class UITextInput(initialValue: String) : UIControl<String>(initialValue), 
     }
 
     private fun notifyInputError() {
-        textEntity.apply {
+        textComponent.apply {
             clearModifiers(ModifierType.Color)
             color = Color4.Red
             colorTo(Theme.current.accentColor, 0.2f)
@@ -284,7 +283,7 @@ open class UITextInput(initialValue: String) : UIControl<String>(initialValue), 
     }
 
     private fun updateVisuals() {
-        textEntity.text = value
+        textComponent.text = value
         placeholderEntity.isVisible = value.isEmpty()
 
         caretPosition = min(caretPosition, value.length)

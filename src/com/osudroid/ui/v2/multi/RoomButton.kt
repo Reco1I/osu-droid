@@ -9,6 +9,7 @@ import com.reco1l.andengine.*
 import com.reco1l.andengine.component.*
 import com.reco1l.andengine.container.*
 import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.ui.*
 import com.reco1l.andengine.ui.form.*
 import com.reco1l.framework.*
@@ -22,7 +23,7 @@ import ru.nsu.ccfit.zuev.osu.online.*
 class RoomButton(val lobbyScene: LobbyScene, val room: Room) : UIButton() {
 
     init {
-        width = Full
+        width = Size.Full
         background?.apply {
             color = Color4.Black
             alpha = 0.25f
@@ -32,7 +33,7 @@ class RoomButton(val lobbyScene: LobbyScene, val room: Room) : UIButton() {
         style = {}
 
         container {
-            width = Full
+            width = Size.Full
 
             linearContainer {
                 orientation = Orientation.Vertical
@@ -73,20 +74,24 @@ class RoomButton(val lobbyScene: LobbyScene, val room: Room) : UIButton() {
 
                     badge {
                         sizeVariant = SizeVariant.Small
-                        setText(when (room.teamMode) {
-                            TeamMode.HeadToHead -> string.multiplayer_room_head_to_head
-                            TeamMode.TeamVersus -> string.multiplayer_room_team_versus
-                        })
+                        setText(
+                            when (room.teamMode) {
+                                TeamMode.HeadToHead -> string.multiplayer_room_head_to_head
+                                TeamMode.TeamVersus -> string.multiplayer_room_team_versus
+                            }
+                        )
                     }
 
                     badge {
                         sizeVariant = SizeVariant.Small
-                        setText(when (room.winCondition) {
-                            WinCondition.ScoreV1 -> string.multiplayer_room_score_v1
-                            WinCondition.ScoreV2 -> string.multiplayer_room_score_v2
-                            WinCondition.HighestAccuracy -> string.multiplayer_room_highest_accuracy
-                            WinCondition.MaximumCombo -> string.multiplayer_room_maximum_combo
-                        })
+                        setText(
+                            when (room.winCondition) {
+                                WinCondition.ScoreV1 -> string.multiplayer_room_score_v1
+                                WinCondition.ScoreV2 -> string.multiplayer_room_score_v2
+                                WinCondition.HighestAccuracy -> string.multiplayer_room_highest_accuracy
+                                WinCondition.MaximumCombo -> string.multiplayer_room_maximum_combo
+                            }
+                        )
                     }
 
                     labeledBadge {
@@ -120,11 +125,13 @@ class RoomButton(val lobbyScene: LobbyScene, val room: Room) : UIButton() {
                 anchor = Anchor.TopRight
                 fontSize = FontSize.SM
                 setScale(0.85f)
-                setText(when (room.status) {
-                    RoomStatus.ChangingBeatmap -> string.multiplayer_room_status_changing_beatmap
-                    RoomStatus.Playing -> string.multiplayer_room_status_playing
-                    else -> string.multiplayer_room_status_idle
-                })
+                setText(
+                    when (room.status) {
+                        RoomStatus.ChangingBeatmap -> string.multiplayer_room_status_changing_beatmap
+                        RoomStatus.Playing -> string.multiplayer_room_status_playing
+                        else -> string.multiplayer_room_status_idle
+                    }
+                )
                 style = { color = it.accentColor }
             }
         }
@@ -135,12 +142,12 @@ class RoomButton(val lobbyScene: LobbyScene, val room: Room) : UIButton() {
                 val form: FormContainer
 
                 object : UIDialog<FormContainer>(FormContainer().apply {
-                    width = Full
+                    width = Size.Full
                     form = this
 
                     +FormInput().apply {
                         key = "password"
-                        width = Full
+                        width = Size.Full
                         label = StringTable.get(string.multiplayer_lobby_room_password)
                     }
 

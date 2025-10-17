@@ -7,6 +7,7 @@ import com.reco1l.andengine.component.*
 import com.reco1l.andengine.container.*
 import com.reco1l.andengine.theme.FontSize
 import com.reco1l.andengine.theme.Fonts
+import com.reco1l.andengine.theme.Size
 import com.reco1l.toolkt.kotlin.*
 import org.anddev.andengine.engine.camera.*
 import org.anddev.andengine.opengl.font.*
@@ -39,6 +40,20 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
             }
         }
 
+    /**
+     * The font used to render the text.
+     */
+    var font: Font? = null
+        private set(value) {
+            if (field != value) {
+                field = value
+                invalidate(InvalidationFlag.Content)
+            }
+        }
+
+    /**
+     * The font family to use for this text.
+     */
     var fontFamily = Fonts.NunitoMedium
         set(value) {
             if (field != value) {
@@ -47,6 +62,9 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
             }
         }
 
+    /**
+     * The font size to use for this text.
+     */
     var fontSize = FontSize.SM
         set(value) {
             if (field != value) {
@@ -55,24 +73,20 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
             }
         }
 
-
-    /**
-     * The font to use for this text.
-     * It must be already loaded and ready to use before setting it.
-     */
-    var font: Font? = null
-        set(value) {
-            if (field != value) {
-                field = value
-                invalidate(InvalidationFlag.Content)
-            }
-        }
-
     /**
      * Called when the font settings (font size or family) change.
      */
     var onFontSettingsChange: () -> Unit = {
-        font = UIEngine.current.resources.getOrStoreFont(fontSize, fontFamily)
+        val oldFont = font
+
+        if (oldFont != null) {
+            UIEngine.current.resources.unsubscribeFromFont(oldFont, this)
+        }
+
+        val newFont = UIEngine.current.resources.getOrStoreFont(fontSize, fontFamily)
+        font = newFont
+        UIEngine.current.resources.subscribeToFont(newFont, this)
+
         invalidate(InvalidationFlag.Content)
     }
 
@@ -121,15 +135,19 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
 
 
     init {
-        width = Auto
-        height = Auto
-        invalidate(InvalidationFlag.Content)
+        width = Size.Auto
+        height = Size.Auto
 
         clipToBounds = true
+
+        style = {
+            fontSize = FontSize.SM
+        }
     }
 
 
     override fun onContentChanged() {
+
         val text = text
         val font = font
 
@@ -148,6 +166,8 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
         contentHeight = (lines!!.size * font.lineHeight + (lines!!.size - 1) * font.lineGap).toFloat()
 
         invalidateBuffer(BufferInvalidationFlag.Data)
+
+        super.onContentChanged()
     }
 
     override fun onSizeChanged() {
@@ -247,6 +267,14 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
         }
 
         super.onManagedUpdate(deltaTimeSec)
+    }
+
+
+    override fun finalize() {
+        super.finalize()
+
+        val font = font ?: return
+        UIEngine.current.resources.unsubscribeFromFont(font, this)
     }
 
 
@@ -355,30 +383,25 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
 /**
  * A compound text entity that can be displayed with leading and trailing icons.
  */
-open class CompoundText : UIFlexContainer() {
+open class CompoundText : UIFillContainer() {
 
     /**
      * The text entity.
      */
-    val content = UIText().apply {
+    val textComponent = UIText().apply {
+        preventShrink = true
+        weight = 1f
         anchor = Anchor.CenterLeft
         origin = Anchor.CenterLeft
         isVisible = false
-
-        flexRules {
-            grow = 1f
-        }
     }
-
-    @Deprecated("Use 'gap' instead", ReplaceWith("gap"))
-    var spacing by this::gap
-
 
     //region Shortcuts
 
-    var text by content::text
-    var fontSize by content::fontSize
-    var alignment by content::alignment
+    var text by textComponent::text
+    var fontSize by textComponent::fontSize
+    var fontFamily by textComponent::fontFamily
+    var alignment by textComponent::alignment
 
     //endregion
 
@@ -387,7 +410,7 @@ open class CompoundText : UIFlexContainer() {
     /**
      * The leading icon.
      */
-    var icon: UIComponent? = null
+    var leadingIcon: UIComponent? = null
         set(value) {
             if (field != value) {
                 field?.detachSelf()
@@ -403,7 +426,7 @@ open class CompoundText : UIFlexContainer() {
     /**
      * The trailing icon.
      */
-    var rightIcon: UIComponent? = null
+    var trailingIcon: UIComponent? = null
         set(value) {
             if (field != value) {
                 field?.detachSelf()
@@ -415,14 +438,6 @@ open class CompoundText : UIFlexContainer() {
                 }
             }
         }
-
-
-    @Deprecated("Use 'icon' instead", ReplaceWith("icon"))
-    var leadingIcon by this::icon
-
-    @Deprecated("Use 'rightIcon' instead", ReplaceWith("rightIcon"))
-    var trailingIcon by this::rightIcon
-
 
     /**
      * The size of the icons.
@@ -436,7 +451,6 @@ open class CompoundText : UIFlexContainer() {
         it.anchor = Anchor.CenterLeft
         it.origin = Anchor.CenterLeft
         it.style = {
-            flexRules { basis = iconSize }
             width = iconSize
             height = iconSize
         }
@@ -446,12 +460,12 @@ open class CompoundText : UIFlexContainer() {
 
 
     init {
-        +content
+        +textComponent
     }
 
 
     override fun onManagedDraw(gl: GL10, camera: Camera) {
-        content.isVisible = text.isNotEmpty()
+        textComponent.isVisible = text.isNotEmpty()
         super.onManagedDraw(gl, camera)
     }
 }

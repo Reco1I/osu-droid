@@ -6,14 +6,17 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
 import android.util.Log
+import com.reco1l.andengine.component.UIComponent
 import org.anddev.andengine.opengl.font.Font
 import org.anddev.andengine.opengl.texture.TextureOptions
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas
 import org.anddev.andengine.opengl.util.GLHelper
+import java.lang.ref.WeakReference
 
 class UIResourceManager(private val context: Context) {
 
     private val fonts = mutableMapOf<String, Font>()
+    private val fontSubscribers = mutableMapOf<Font, MutableList<WeakReference<UIComponent>>>()
 
 
     fun getOrStoreFont(size: Float, family: String): Font {
@@ -43,6 +46,32 @@ class UIResourceManager(private val context: Context) {
         }
 
         return font
+    }
+
+    fun subscribeToFont(font: Font, component: UIComponent) {
+        val subscribers = fontSubscribers.getOrPut(font) { mutableListOf() }
+        if (subscribers.none { it.get() === component }) {
+            subscribers.add(WeakReference(component))
+        }
+    }
+
+    fun unsubscribeFromFont(font: Font, component: UIComponent) {
+
+        val subscribers = fontSubscribers[font] ?: return
+        subscribers.removeAll { it.get() === component || it.get() == null }
+
+        if (subscribers.isEmpty()) {
+            val fontKey = fonts.entries.find { it.value == font }?.key
+            Log.i("UI", "Unloading font: $fontKey")
+
+            fonts.remove(fontKey)
+            fontSubscribers.remove(font)
+
+            UIEngine.current.apply {
+                fontManager.unloadFont(font)
+                textureManager.unloadTexture(font.texture)
+            }
+        }
     }
 
 }

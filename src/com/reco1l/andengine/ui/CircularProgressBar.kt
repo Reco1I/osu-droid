@@ -4,6 +4,7 @@ import com.reco1l.andengine.*
 import com.reco1l.andengine.component.*
 import com.reco1l.andengine.container.*
 import com.reco1l.andengine.shape.*
+import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.theme.pct
 
 open class CircularProgressBar : UIContainer() {
@@ -27,8 +28,8 @@ open class CircularProgressBar : UIContainer() {
         }
 
     private val trackCircle = circle {
-        width = Full
-        height = Full
+        width = Size.Full
+        height = Size.Full
         paintStyle = PaintStyle.Outline
         lineWidth = 4f
         style = {
