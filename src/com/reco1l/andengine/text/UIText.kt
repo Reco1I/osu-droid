@@ -30,7 +30,7 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
                 field = value
 
                 val previousLength = currentLength
-                currentLength = value.length
+                currentLength = value.codePointCount(0, value.length)
 
                 if (currentLength > previousLength) {
                     invalidateBuffer(BufferInvalidationFlag.Instance)
@@ -160,7 +160,23 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
         }
 
         lines = text.split('\n')
-        linesWidth = IntArray(lines!!.size) { i -> lines!![i].sumOf { char -> font.getLetter(char).mAdvance } }
+        
+        linesWidth = IntArray(lines!!.size) { i ->
+            val line = lines!![i]
+            var width = 0
+            var charIndex = 0
+            
+            while (charIndex < line.length) {
+                val codePoint = line.codePointAt(charIndex)
+                val charCount = Character.charCount(codePoint)
+
+                val characterString = line.substring(charIndex, charIndex + charCount)
+
+                width += font.getLetter(characterString).mAdvance
+                charIndex += charCount
+            }
+            width
+        }
 
         contentWidth = linesWidth!!.max().toFloat()
         contentHeight = (lines!!.size * font.lineHeight + (lines!!.size - 1) * font.lineGap).toFloat()
@@ -302,8 +318,13 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
                 var lineX = entity.width * entity.alignment.x - linesWidth[lineIndex] * entity.alignment.x
                 val lineY = entity.height * entity.alignment.y - lines.size * lineHeight * entity.alignment.y + lineIndex * lineHeight
 
-                line.forEach { character ->
-                    val letter = font.getLetter(character)
+                var charIndex = 0
+                while (charIndex < line.length) {
+                    val codePoint = line.codePointAt(charIndex)
+                    val charCount = Character.charCount(codePoint)
+                    val characterString = line.substring(charIndex, charIndex + charCount)
+
+                    val letter = font.getLetter(characterString)
 
                     val letterX = lineX + letter.mWidth
                     val letterY = lineY + font.lineHeight
@@ -320,6 +341,7 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
                     setPosition(0)
 
                     lineX += letter.mAdvance
+                    charIndex += charCount
                 }
             }
         }
@@ -347,9 +369,13 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
             setPosition(0)
 
             lines.fastForEach { line ->
-                line.forEach { character ->
+                var charIndex = 0
+                while (charIndex < line.length) {
+                    val codePoint = line.codePointAt(charIndex)
+                    val charCount = Character.charCount(codePoint)
 
-                    val letter = font.getLetter(character)
+                    val characterString = line.substring(charIndex, charIndex + charCount)
+                    val letter = font.getLetter(characterString)
 
                     val letterTextureX = letter.mTextureX
                     val letterTextureY = letter.mTextureY
@@ -362,6 +388,8 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
                     putVertex(letterTextureX2, letterTextureY2)
                     putVertex(letterTextureX2, letterTextureY)
                     putVertex(letterTextureX, letterTextureY)
+                    
+                    charIndex += charCount
                 }
             }
 
