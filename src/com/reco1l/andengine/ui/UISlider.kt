@@ -110,6 +110,8 @@ open class UISlider(initialValue: Float = 0f) : UIControl<Float>(initialValue) {
     private var targetProgressBarWidth = 0f
     private var targetThumbX = 0f
 
+    private var isStretching = false
+
 
     init {
         width = Size.Full
@@ -188,12 +190,40 @@ open class UISlider(initialValue: Float = 0f) : UIControl<Float>(initialValue) {
                 setHierarchyScrollPrevention(true)
                 onStartDragging()
             }
+
+            val overflowLeft = max(0f, -localX)
+            val overflowRight = max(0f, localX - width)
+            val isOutOfBounds = overflowLeft > 0f || overflowRight > 0f
+
+            if (isOutOfBounds) {
+                isStretching = true
+
+                val overflow = max(overflowLeft, overflowRight)
+                val stretchAmount = min(overflow / width, 1f)
+
+                scaleCenter = if (overflowLeft > 0f) Anchor.CenterRight else Anchor.CenterLeft
+                scaleX = 1f + stretchAmount * 0.15f
+                scaleY = 1f - stretchAmount * 0.3f
+
+            } else {
+                isStretching = false
+                scaleX = 1f
+                scaleY = 1f
+            }
+
             value = (localX / width) * (max - min) + min
             isPressed = true
         } else {
             setHierarchyScrollPrevention(false)
             onStopDragging()
             isPressed = false
+
+            if (isStretching) {
+                isStretching = false
+
+                clearModifiers(ModifierType.ScaleXY)
+                scaleTo(1f, 0.4f, Easing.OutElastic)
+            }
         }
         return true
     }
