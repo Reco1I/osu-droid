@@ -801,8 +801,6 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
             this.invalidationFlags = 0
         }
 
-        backgroundBox?.onHandleInvalidations()
-        borderBox?.onHandleInvalidations()
     }
 
     override fun onManagedDraw(gl: GL10, camera: Camera) {
@@ -812,11 +810,14 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
         onApplyTransformations(gl, camera)
 
         backgroundBox?.setSize(width, height)
-        borderBox?.setSize(width, height)
-
+        backgroundBox?.onHandleInvalidations()
         backgroundBox?.onDraw(gl, camera)
+
         doDraw(gl, camera)
         onDrawChildren(gl, camera)
+
+        borderBox?.setSize(width, height)
+        borderBox?.onHandleInvalidations()
         borderBox?.onDraw(gl, camera)
 
         if (BuildSettings.SHOW_ENTITY_BOUNDARIES && DEBUG_FOREGROUND != this && attachmentMode != AttachmentMode.Decorator) {
@@ -901,6 +902,45 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
         }
     }
 
+
+    override fun setRotation(pRotation: Float) {
+        if (mRotation != pRotation) {
+            mRotation = pRotation
+            invalidate(InvalidationFlag.Transformations)
+        }
+    }
+
+    override fun setRotationCenterX(pRotationCenterX: Float) = setRotationCenter(pRotationCenterX, mRotationCenterY)
+    override fun setRotationCenterY(pRotationCenterY: Float) = setRotationCenter(mRotationCenterX, pRotationCenterY)
+    override fun setRotationCenter(pRotationCenterX: Float, pRotationCenterY: Float) {
+        if (mRotationCenterX != pRotationCenterX || mRotationCenterY != pRotationCenterY) {
+            mRotationCenterX = pRotationCenterX
+            mRotationCenterY = pRotationCenterY
+            invalidate(InvalidationFlag.Transformations)
+        }
+    }
+
+    override fun setScaleCenterX(pScaleCenterX: Float) = setScaleCenter(pScaleCenterX, mScaleCenterY)
+    override fun setScaleCenterY(pScaleCenterY: Float) = setScaleCenter(mScaleCenterX, pScaleCenterY)
+    override fun setScaleCenter(pScaleCenterX: Float, pScaleCenterY: Float) {
+        if (mScaleCenterX != pScaleCenterX || mScaleCenterY != pScaleCenterY) {
+            mScaleCenterX = pScaleCenterX
+            mScaleCenterY = pScaleCenterY
+            invalidate(InvalidationFlag.Transformations)
+        }
+    }
+
+    override fun setScaleX(pScaleX: Float) = setScale(pScaleX, mScaleY)
+    override fun setScaleY(pScaleY: Float) = setScale(mScaleX, pScaleY)
+    override fun setScale(pScale: Float) = setScale(pScale, pScale)
+    override fun setScale(pScaleX: Float, pScaleY: Float) {
+        if (mScaleX != pScaleX || mScaleY != pScaleY) {
+            mScaleX = pScaleX
+            mScaleY = pScaleY
+            invalidate(InvalidationFlag.Transformations)
+        }
+    }
+
     override fun getLocalToParentTransformation(): Transformation {
 
         if (mLocalToParentTransformation == null) {
@@ -909,6 +949,25 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
 
         if (mLocalToParentTransformationDirty) {
             mLocalToParentTransformation.setToIdentity()
+
+            if (mScaleX != 1f || mScaleY != 1f) {
+                val centerX = width * mScaleCenterX
+                val centerY = height * mScaleCenterY
+
+                mLocalToParentTransformation.postTranslate(-centerX, -centerY)
+                mLocalToParentTransformation.postScale(mScaleX, mScaleY)
+                mLocalToParentTransformation.postTranslate(centerX, centerY)
+            }
+
+            if (rotation != 0f) {
+                val centerX = width * mRotationCenterX
+                val centerY = height * mRotationCenterY
+
+                mLocalToParentTransformation.postTranslate(-centerX, -centerY)
+                mLocalToParentTransformation.postRotate(mRotation)
+                mLocalToParentTransformation.postTranslate(centerX, centerY)
+            }
+
             mLocalToParentTransformation.postTranslate(absoluteX, absoluteY)
             mLocalToParentTransformationDirty = false
         }
@@ -925,6 +984,25 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
         if (mParentToLocalTransformationDirty) {
             mParentToLocalTransformation.setToIdentity()
             mParentToLocalTransformation.postTranslate(-absoluteX, -absoluteY)
+
+            if (mRotation != 0f) {
+                val centerX = width * mRotationCenterX
+                val centerY = height * mRotationCenterY
+
+                mParentToLocalTransformation.postTranslate(-centerX, -centerY)
+                mParentToLocalTransformation.postRotate(-mRotation)
+                mParentToLocalTransformation.postTranslate(centerX, centerY)
+            }
+
+            if (mScaleX != 1f || mScaleY != 1f) {
+                val centerX = width * mScaleCenterX
+                val centerY = height * mScaleCenterY
+
+                mParentToLocalTransformation.postTranslate(-centerX, -centerY)
+                mParentToLocalTransformation.postScale(1 / mScaleX, 1 / mScaleY)
+                mParentToLocalTransformation.postTranslate(centerX, centerY)
+            }
+
             mParentToLocalTransformationDirty = false
         }
 
