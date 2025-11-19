@@ -29,27 +29,18 @@ class RoomPlayerButton() : UIButton() {
     private lateinit var missingIndicator: UISprite
 
 
-    override var style: UIComponent.(Theme) -> Unit = { theme ->
-        color = theme.accentColor
-        alpha = if (isEnabled) 1f else 0.5f
-    }
-
-
     init {
+
+        style = {
+            color = it.accentColor
+            alpha = if (isEnabled) 1f else 0.5f
+        }
+
         fillContainer {
             width = Size.Full
             orientation = Orientation.Horizontal
             padding = Vec4(12f)
             spacing = 6f
-
-            background = UIBox().apply {
-                cornerRadius = 12f
-            }
-
-            foreground = UIBox().apply {
-                cornerRadius = 12f
-                paintStyle = PaintStyle.Outline
-            }
 
             linearContainer {
                 orientation = Orientation.Vertical
@@ -83,20 +74,16 @@ class RoomPlayerButton() : UIButton() {
 
     fun updateState(room: Room, player: RoomPlayer) {
 
-        background!!.apply {
-            color = when {
-                room.isTeamVersus -> when (player.team) {
-                    Blue -> Color4("#A0C0FF") * 0.1f
-                    Red -> Color4("#FFA0A0") * 0.1f
-                    null -> Theme.current.accentColor * 0.1f
-                }
-
-                else -> Theme.current.accentColor * 0.1f
+        backgroundColor = when {
+            room.isTeamVersus -> when (player.team) {
+                Blue -> Color4("#A0C0FF") * 0.1f
+                Red -> Color4("#FFA0A0") * 0.1f
+                null -> Theme.current.accentColor * 0.1f
             }
-            alpha = 0.5f
-        }
+            else -> Theme.current.accentColor * 0.1f
+        } / 0.5f
 
-        foreground!!.color = when (player.status) {
+        borderColor = when (player.status) {
             Playing -> Theme.current.accentColor
             Ready -> Color4("#A0FFA0")
             NotReady, MissingBeatmap -> Color4("#FFA0A0")

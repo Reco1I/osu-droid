@@ -139,11 +139,8 @@ class ModCustomizationMenu : UIModal(
                 width = Size.Full
                 padding = Vec4(20f, 14f)
                 spacing = 12f
-                background = UIBox().apply {
-                    color = Color4.Black
-                    alpha = 0.05f
-                    cornerRadius = 12f
-                }
+                backgroundColor = Color4.Black / 0.05f
+                radius = 12f
 
                 +ModIcon(mod).apply {
                     anchor = Anchor.CenterLeft

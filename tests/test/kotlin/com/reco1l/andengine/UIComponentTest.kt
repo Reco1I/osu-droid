@@ -20,7 +20,6 @@ class UIComponentTest {
                 height = 100f
             }
 
-            onHandleInvalidations()
         }
 
         assertEquals(100f, container.width)
@@ -38,7 +37,6 @@ class UIComponentTest {
                 height = 100f
             }
 
-            onHandleInvalidations()
         }
 
         assertEquals(100f + 20f * 2, container.width)
@@ -61,7 +59,6 @@ class UIComponentTest {
                 height = 100f
             }
 
-            onHandleInvalidations()
         }
 
         assertEquals(100f * 2 + 10f, container.width)
@@ -84,7 +81,6 @@ class UIComponentTest {
                 height = 100f
             }
 
-            onHandleInvalidations()
         }
 
         assertEquals(100f * 2 + 20f * 2, container.width)
@@ -107,7 +103,6 @@ class UIComponentTest {
                 height = 100f
             }
 
-            onHandleInvalidations()
         }
 
         assertEquals(100f * 2 + 10f, container.width)
@@ -131,7 +126,6 @@ class UIComponentTest {
                 height = 100f
             }
 
-            onHandleInvalidations()
         }
 
         assertEquals(100f * 2 + 10f + 20f * 2, container.width)
@@ -151,7 +145,6 @@ class UIComponentTest {
             width = 200f
             height = 200f
             +component
-            onHandleInvalidations()
         }
 
         assertEquals(component.width, 100f)

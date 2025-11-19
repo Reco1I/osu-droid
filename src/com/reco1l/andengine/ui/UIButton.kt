@@ -5,33 +5,35 @@ import com.reco1l.andengine.*
 import com.reco1l.andengine.component.*
 import com.reco1l.andengine.container.*
 import com.reco1l.andengine.modifier.*
-import com.reco1l.andengine.shape.*
-import com.reco1l.andengine.sprite.*
 import com.reco1l.andengine.text.*
 import com.reco1l.andengine.theme.FontSize
 import com.reco1l.andengine.theme.Radius
 import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.theme.rem
 import com.reco1l.andengine.theme.srem
+import com.reco1l.framework.Color4
 import com.reco1l.framework.math.*
-import org.anddev.andengine.engine.camera.Camera
 import org.anddev.andengine.input.touch.TouchEvent
-import org.anddev.andengine.opengl.texture.region.TextureRegion
-import javax.microedition.khronos.opengles.GL10
-import kotlin.math.max
-import kotlin.math.min
 
 @Suppress("LeakingThis")
-open class UIButton : UIContainer() {
+open class UIButton : UIContainer(), ISizeVariable, IColorVariable {
 
-    override var style: UIComponent.(Theme) -> Unit = { theme ->
-        height = 2.5f.rem
-        backgroundColor = if (isSelected) theme.accentColor else theme.accentColor * 0.175f
-        backgroundRadius = Radius.LG
-        padding = Vec4(2.5f.srem, 0f)
-        color = if (isSelected) theme.accentColor * 0.1f else theme.accentColor
-        alpha = if (isEnabled) 1f else 0.5f
-    }
+
+    override var sizeVariant = SizeVariant.Medium
+        set(value) {
+            if (field != value) {
+                field = value
+                applyStyle()
+            }
+        }
+
+    override var colorVariant = ColorVariant.Secondary
+        set(value) {
+            if (field != value) {
+                field = value
+                applyStyle()
+            }
+        }
 
 
     //region State
@@ -46,7 +48,7 @@ open class UIButton : UIContainer() {
      * Whether the button is enabled or not. If disabled, the button will not process any
      * touch events.
      */
-    open var isEnabled = true
+    var isEnabled = true
         set(value) {
             if (field != value) {
                 field = value
@@ -57,12 +59,11 @@ open class UIButton : UIContainer() {
     /**
      * Whether the button is selected or not.
      */
-    open var isSelected = false
+    @Deprecated("Use colorVariant instead", ReplaceWith("colorVariant"))
+    var isSelected
+        get() = colorVariant == ColorVariant.Primary
         set(value) {
-            if (field != value) {
-                field = value
-                onSelectionChange()
-            }
+            colorVariant = if (value) ColorVariant.Primary else ColorVariant.Secondary
         }
 
 
@@ -97,7 +98,45 @@ open class UIButton : UIContainer() {
 
     init {
         scaleCenter = Anchor.Center
-        preventShrink = true
+        shrink = false
+
+        style = {
+
+            when (colorVariant) {
+                ColorVariant.Primary -> {
+                    backgroundColor = it.accentColor
+                    color = it.accentColor * 0.1f
+                }
+                ColorVariant.Secondary -> {
+                    backgroundColor = it.accentColor * 0.175f
+                    color = it.accentColor
+                }
+                ColorVariant.Tertiary -> {
+                    backgroundColor = Color4.Transparent
+                    color = it.accentColor
+                }
+            }
+
+            when (sizeVariant) {
+                SizeVariant.Small -> {
+                    height = 2f.rem
+                    padding = Vec4(2f.srem, 0f)
+                    radius = Radius.MD
+                }
+                SizeVariant.Medium -> {
+                    height = 2.5f.rem
+                    padding = Vec4(2.5f.srem, 0f)
+                    radius = Radius.LG
+                }
+                SizeVariant.Large -> {
+                    height = 3f.rem
+                    padding = Vec4(3f.srem, 0f)
+                    radius = Radius.LG
+                }
+            }
+
+            alpha = if (isEnabled) 1f else 0.5f
+        }
     }
 
 
@@ -106,22 +145,9 @@ open class UIButton : UIContainer() {
     /**
      * Called when the enable state of the button changes.
      */
-    open fun onEnableStateChange() {
+    fun onEnableStateChange() {
         clearModifiers(ModifierType.Alpha)
         fadeTo(if (isEnabled) 1f else 0.5f, 0.2f)
-    }
-
-    /**
-     * Called when the selection state of the button changes.
-     */
-    open fun onSelectionChange() {
-        clearModifiers(ModifierType.Color)
-        colorTo(if (isSelected) Theme.current.accentColor * 0.1f else Theme.current.accentColor, 0.2f)
-
-        background?.apply {
-            clearModifiers(ModifierType.Color)
-            colorTo(if (isSelected) Theme.current.accentColor else Theme.current.accentColor * 0.175f)
-        }
     }
 
     //endregion
@@ -201,11 +227,23 @@ open class UITextButton : UIButton() {
         anchor = Anchor.CenterLeft
         origin = Anchor.CenterLeft
         style = {
-            iconSize = FontSize.MD
-            spacing = 1f.srem
+            when (sizeVariant) {
+                SizeVariant.Small -> {
+                    fontSize = FontSize.SM
+                    spacing = 1f.srem
+                }
+                SizeVariant.Medium -> {
+                    fontSize = FontSize.MD
+                    spacing = 2f.srem
+                }
+                SizeVariant.Large -> {
+                    fontSize = FontSize.LG
+                    spacing = 2.5f.srem
+                }
+            }
         }
         alignment = Anchor.Center
-        preventShrink = true
+        shrink = false
     }
 
 
@@ -247,8 +285,20 @@ open class UIIconButton : UIButton() {
 
     init {
         style += {
-            icon?.width = FontSize.MD
-            icon?.height = FontSize.MD
+            when (sizeVariant) {
+                SizeVariant.Small -> {
+                    icon?.width = FontSize.SM
+                    icon?.height = FontSize.SM
+                }
+                SizeVariant.Medium -> {
+                    icon?.width = FontSize.MD
+                    icon?.height = FontSize.MD
+                }
+                SizeVariant.Large -> {
+                    icon?.width = FontSize.LG
+                    icon?.height = FontSize.LG
+                }
+            }
         }
     }
 

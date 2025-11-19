@@ -28,6 +28,7 @@ import com.reco1l.andengine.Axes
 import com.reco1l.andengine.UIEngine
 import com.reco1l.andengine.UIScene
 import com.reco1l.andengine.badge
+import com.reco1l.andengine.box
 import com.reco1l.andengine.component.setText
 import com.reco1l.andengine.container
 import com.reco1l.andengine.container.Orientation
@@ -37,7 +38,7 @@ import com.reco1l.andengine.fillContainer
 import com.reco1l.andengine.labeledBadge
 import com.reco1l.andengine.linearContainer
 import com.reco1l.andengine.scrollableContainer
-import com.reco1l.andengine.shape.UIBox
+import com.reco1l.andengine.sprite
 import com.reco1l.andengine.sprite.ScaleType
 import com.reco1l.andengine.sprite.UISprite
 import com.reco1l.andengine.text
@@ -45,6 +46,7 @@ import com.reco1l.andengine.text.UIText
 import com.reco1l.andengine.textButton
 import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.ui.SizeVariant
+import com.reco1l.andengine.ui.Theme
 import com.reco1l.andengine.ui.UIBadge
 import com.reco1l.andengine.ui.UILabeledBadge
 import com.reco1l.andengine.ui.UIMessageDialog
@@ -148,32 +150,30 @@ class RoomScene(val room: Room) : UIScene(), IRoomEventListener, IPlayerEventLis
         RoomAPI.roomEventListener = this
         chat = RoomChat()
 
+        backgroundSprite = sprite {
+            scaleType = ScaleType.Crop
+            textureRegion = ResourceManager.getInstance().getTexture("menu-background")
+
+            if (!Config.isSafeBeatmapBg()) {
+                textureRegion = ResourceManager.getInstance().getTexture("::background") ?: textureRegion
+            }
+        }
+
+        box {
+            width = Size.Full
+            height = Size.Full
+            style = {
+                color = Theme.current.accentColor * 0.1f
+                alpha = 0.9f
+            }
+        }
+
         container {
             width = Size.Full
             height = Size.Full
             padding = Vec4(80f, 0f)
-
-            onUpdateTick = {
-                if (padding.bottom != chat.buttonHeight) {
-                    padding = Vec4(80f, 0f, 80f, chat.buttonHeight + 12f)
-                }
-            }
-
-            background = UISprite().apply {
-                scaleType = ScaleType.Crop
-                textureRegion = ResourceManager.getInstance().getTexture("menu-background")
-                backgroundSprite = this
-
-                if (!Config.isSafeBeatmapBg()) {
-                    textureRegion = ResourceManager.getInstance().getTexture("::background") ?: textureRegion
-                }
-
-                foreground = UIBox().apply {
-                    style = {
-                        color = it.accentColor * 0.1f
-                        alpha = 0.9f
-                    }
-                }
+            style = {
+                padding = Vec4(80f, 0f, 80f, chat.buttonHeight + 12f)
             }
 
             linearContainer {
@@ -216,7 +216,7 @@ class RoomScene(val room: Room) : UIScene(), IRoomEventListener, IPlayerEventLis
                                 sizeVariant = SizeVariant.Small
                                 style = {
                                     color = it.accentColor * 0.1f
-                                    background?.color = it.accentColor
+                                    backgroundColor = it.accentColor
                                 }
                                 setText(R.string.multiplayer_room_free_mods)
                                 isVisible = false
@@ -284,12 +284,9 @@ class RoomScene(val room: Room) : UIScene(), IRoomEventListener, IPlayerEventLis
 
                         +BeatmapInfoLayout().apply {
                             padding = Vec4(16f)
-                            background = UIBox().apply {
-                                cornerRadius = 12f
-                                style = {
-                                    color = it.accentColor * 0.1f
-                                    alpha = 0.5f
-                                }
+                            style = {
+                                radius = 12f
+                                backgroundColor = it.accentColor * 0.1f / 0.5f
                             }
                             isVisible = false
                             beatmapInfoLayout = this
@@ -299,12 +296,9 @@ class RoomScene(val room: Room) : UIScene(), IRoomEventListener, IPlayerEventLis
                             width = Size.Full
                             padding = Vec4(16f)
                             alignment = Anchor.Center
-                            background = UIBox().apply {
-                                cornerRadius = 12f
-                                style = {
-                                    color = it.accentColor * 0.1f
-                                    alpha = 0.5f
-                                }
+                            style = {
+                                radius = 12f
+                                backgroundColor = it.accentColor * 0.1f / 0.5f
                             }
                         }
 

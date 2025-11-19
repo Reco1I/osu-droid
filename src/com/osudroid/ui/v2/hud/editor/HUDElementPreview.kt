@@ -34,11 +34,8 @@ class HUDElementPreview(private val element: HUDElement, val hud: GameplayHUD): 
         padding = Vec4(12f)
         scaleCenterX = 0.5f
         scaleCenterY = 0.5f
-
-        background = UIBox().apply {
-            color = Color4(0xFF363653)
-            cornerRadius = 12f
-        }
+        backgroundColor = Color4(0xFF363653)
+        radius = 12f
 
         attachChild(element)
         attachChild(label)

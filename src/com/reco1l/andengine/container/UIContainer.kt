@@ -36,6 +36,16 @@ open class UIContainer : UIComponent() {
         contentHeight = bottom - padding.top
     }
 
+    override fun onSizeChanged() {
+        super.onSizeChanged()
+
+        forEach {
+            if (it is UIComponent && (it.rawWidth == Size.Full || it.rawHeight == Size.Full)) {
+                it.invalidate(InvalidationFlag.Content)
+            }
+        }
+    }
+
 
     //region Operators
 

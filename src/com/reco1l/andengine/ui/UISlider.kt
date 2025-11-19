@@ -17,15 +17,6 @@ import kotlin.math.*
 @Suppress("LeakingThis")
 open class UISlider(initialValue: Float = 0f) : UIControl<Float>(initialValue) {
 
-    override var style: UIComponent.(Theme) -> Unit = { theme ->
-        height = 2.15f.rem
-        backgroundColor = theme.accentColor * 0.25f
-        backgroundRadius = Radius.LG
-        progressBar.color = theme.accentColor * 0.5f
-        thumb.color = theme.accentColor
-    }
-
-
     /**
      * The minimum allowed value of the slider.
      */
@@ -79,7 +70,7 @@ open class UISlider(initialValue: Float = 0f) : UIControl<Float>(initialValue) {
         clearInfo = ClearInfo.ClearDepthBuffer
         style = {
             width = 1f.rem
-            cornerRadius = Radius.LG
+            radius = Radius.LG
         }
     }
 
@@ -89,7 +80,7 @@ open class UISlider(initialValue: Float = 0f) : UIControl<Float>(initialValue) {
         origin = Anchor.CenterLeft
         depthInfo = DepthInfo.Default
         style = {
-            cornerRadius = Radius.LG
+            radius = Radius.LG
         }
     }
 
@@ -114,8 +105,15 @@ open class UISlider(initialValue: Float = 0f) : UIControl<Float>(initialValue) {
 
 
     init {
+        style = {
+            height = 2.15f.rem
+            backgroundColor = it.accentColor * 0.25f
+            radius = Radius.LG
+            progressBar.color = it.accentColor * 0.5f
+            thumb.color = it.accentColor
+        }
+
         width = Size.Full
-        background = UIBox()
 
         attachChild(thumb)
         attachChild(progressBar)

@@ -7,6 +7,7 @@ import com.reco1l.andengine.modifier.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.text.*
 import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.Radius
 import com.reco1l.andengine.theme.Size
 import com.reco1l.framework.math.*
 import org.anddev.andengine.input.touch.*
@@ -55,9 +56,9 @@ open class UICard(
 
     init {
         orientation = Orientation.Vertical
-        background = UIBox().apply {
-            cornerRadius = 14f
-            style = { color = it.accentColor * 0.15f }
+        style = {
+            backgroundColor = it.accentColor * 0.15f
+            radius = Radius.MD
         }
 
         +titleBar.apply {

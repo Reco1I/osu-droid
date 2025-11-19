@@ -51,12 +51,7 @@ data class Color4(private val hex: Long) {
         get() = blueInt / 255f
 
 
-    operator fun times(scalar: Float) = Color4(
-        red = red * scalar,
-        green = green * scalar,
-        blue = blue * scalar,
-        alpha = alpha
-    )
+    operator fun times(scalar: Float) = lighteen(scalar)
 
     /**
      * Similar to Tailwind CSS opacity utilities (https://tailwindcss.com/docs/opacity).
@@ -66,6 +61,24 @@ data class Color4(private val hex: Long) {
         green = green,
         blue = blue,
         alpha = scalar
+    )
+
+
+    fun lighteen(factor: Float): Color4 {
+        //val factor = max(1f, 1f + factor)
+        return Color4(red * factor, green * factor, blue * factor, alpha).clamped()
+    }
+
+    fun darken(factor: Float): Color4 {
+        val factor = max(1f, 1f + factor)
+        return Color4(red / factor, green / factor, blue / factor, alpha).clamped()
+    }
+
+    fun clamped() = Color4(
+        red = red.coerceIn(0f, 1f),
+        green = green.coerceIn(0f, 1f),
+        blue = blue.coerceIn(0f, 1f),
+        alpha = alpha.coerceIn(0f, 1f),
     )
 
 

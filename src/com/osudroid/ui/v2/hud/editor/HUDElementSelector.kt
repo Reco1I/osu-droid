@@ -38,10 +38,7 @@ class HUDElementSelector(private val hud: GameplayHUD) : UIContainer(), IGamepla
         scrollAxes = Axes.Y
         height = Size.Full
         width = SELECTOR_WIDTH
-
-        background = UIBox().apply {
-            color = Color4(0xFF1E1E2E)
-        }
+        backgroundColor = Color4(0xFF1E1E2E)
 
         attachChild(UILinearContainer().apply {
             width = Size.Full
@@ -66,10 +63,8 @@ class HUDElementSelector(private val hud: GameplayHUD) : UIContainer(), IGamepla
         attachChild(object : UIContainer() {
 
             init {
-                background = UIBox().apply {
-                    cornerRadius = BUTTON_RADIUS
-                    color = Color4(0xFF181825)
-                }
+                backgroundColor = Color4(0xFF181825)
+                radius = BUTTON_RADIUS
 
                 setSize(BUTTON_WIDTH, 150f)
                 x = SELECTOR_WIDTH - BUTTON_RADIUS

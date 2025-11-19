@@ -14,21 +14,13 @@ import ru.nsu.ccfit.zuev.osu.*
 
 class UICheckbox(initialValue: Boolean = false) : UIControl<Boolean>(initialValue) {
 
-    override var style: UIComponent.(Theme) -> Unit = { theme ->
-        width = 2.15f.rem
-        height = 2.15f.rem
-        backgroundColor = if (value) theme.accentColor * 0.5f else theme.accentColor * 0.25f
-        backgroundRadius = Radius.LG
-        checkIcon.color = theme.accentColor
-    }
-
-
     private val checkIcon = FontAwesomeIcon(Icon.Check).apply {
         anchor = Anchor.Center
         origin = Anchor.Center
         style = {
             width = 1.075f.rem
             height = 1.075f.rem
+            color = it.accentColor
         }
 
         if (!initialValue) {
@@ -40,21 +32,25 @@ class UICheckbox(initialValue: Boolean = false) : UIControl<Boolean>(initialValu
 
 
     init {
-        background = UIBox()
+        style = {
+            width = 2.15f.rem
+            height = 2.15f.rem
+            backgroundColor = if (value) it.accentColor * 0.5f else it.accentColor * 0.25f
+            radius = Radius.LG
+        }
         +checkIcon
     }
 
     override fun onValueChanged() {
         super.onValueChanged()
 
-        background!!.clearModifiers(ModifierType.Color)
         checkIcon.clearModifiers(ModifierType.Alpha, ModifierType.ScaleXY)
 
         if (value) {
-            background!!.colorTo(Theme.current.accentColor * 0.5f, 0.1f)
+            backgroundColor = Theme.current.accentColor * 0.5f
             checkIcon.scaleTo(1f, 0.2f, Easing.OutBounce)
         } else {
-            background!!.colorTo(Theme.current.accentColor * 0.25f, 0.1f)
+            backgroundColor = Theme.current.accentColor * 0.25f
             checkIcon.scaleTo(0f, 0.2f, Easing.OutBounce)
         }
 

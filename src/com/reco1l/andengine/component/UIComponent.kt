@@ -20,7 +20,6 @@ import org.anddev.andengine.input.touch.*
 import org.anddev.andengine.opengl.util.*
 import org.anddev.andengine.util.*
 import org.anddev.andengine.util.constants.Constants.*
-import ru.nsu.ccfit.zuev.osuplus.BuildConfig
 import javax.microedition.khronos.opengles.*
 import kotlin.math.max
 
@@ -30,14 +29,14 @@ import kotlin.math.max
  * @author Reco1l
  */
 @Suppress("MemberVisibilityCanBePrivate")
-abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStyleable {
+abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
 
     //region Size related properties
 
     /**
      * Whether to prevent the component from shrinking below its intrinsic size.
      */
-    var preventShrink = false
+    var shrink = true
 
     /**
      * Used for weighted distribution in some containers such as [UIFillContainer][com.reco1l.andengine.container.UIFillContainer].
@@ -54,7 +53,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
      * The minimum width of the entity.
      */
     var minWidth = 0f
-        get() = if (preventShrink) max(intrinsicWidth, field) else field
+        get() = if (!shrink) max(intrinsicWidth, field) else field
         set(value) {
             if (field != value) {
                 field = value
@@ -111,7 +110,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
      * The minimum height of the entity.
      */
     var minHeight = 0f
-        get() = if (preventShrink) max(intrinsicHeight, field) else field
+        get() = if (!shrink) max(intrinsicHeight, field) else field
         set(value) {
             if (field != value) {
                 field = value
@@ -165,7 +164,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
     /**
      * The width of the content inside the entity.
      */
-    open var contentWidth = 0f
+    var contentWidth = 0f
         protected set(value) {
             if (field != value) {
                 field = value
@@ -176,7 +175,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
     /**
      * The height of the content inside the entity.
      */
-    open var contentHeight = 0f
+    var contentHeight = 0f
         protected set(value) {
             if (field != value) {
                 field = value
@@ -187,7 +186,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
     /**
      * The padding of the entity.
      */
-    open var padding = Vec4.Zero
+    var padding = Vec4.Zero
         set(value) {
             if (field != value) {
                 field = value
@@ -201,14 +200,14 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
      * It can be equivalent to [contentWidth] if the component's width is set to [Size.Auto].
      */
     val innerWidth
-        get() = width - padding.horizontal
+        get() = max(0f, width - padding.horizontal)
 
     /**
      * The inner height of the component, which is the height minus the vertical padding.
      * It can be equivalent to [contentHeight] if the component's height is set to [Size.Auto].
      */
     val innerHeight
-        get() = height - padding.vertical
+        get() = max(0f, height - padding.vertical)
 
     /**
      * The intrinsic width of the entity, which is the content width plus the horizontal padding.
@@ -336,52 +335,28 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
 
     //region Cosmetic properties
 
-    override var style: UIComponent.(theme: Theme) -> Unit = {}
+    /**
+     * The style of this component.
+     */
+    var style: UIComponent.(theme: Theme) -> Unit = {}
         set(value) {
             if (field != value) {
                 field = value
-                value(Theme.current)
+                applyStyle()
             }
         }
 
     /**
-     * The background decorator. This will be drawn before the component's content
-     * and it will not be affected by padding.
+     * Applies the current style to the component.
      */
-    open var background: UIComponent? = null
-        set(value) {
-            if (field != value) {
-                if (value?.parent != null) {
-                    Log.e("UIComponent", "The background entity is already attached to another entity.")
-                    return
-                }
-                field?.detachSelf()
-                field = value
-                field?.setParent(this, AttachmentMode.Decorator)
-            }
-        }
-
-    /**
-     * The foreground component. This will be drawn after the component's content
-     * and it will not be affected by padding.
-     */
-    open var foreground: UIComponent? = null
-        set(value) {
-            if (field != value) {
-                if (value?.parent != null) {
-                    Log.e("UIComponent", "The foreground entity is already attached to another entity.")
-                    return
-                }
-                field?.detachSelf()
-                field = value
-                field?.setParent(this, AttachmentMode.Decorator)
-            }
-        }
+    fun applyStyle() {
+        onStyle(Theme.current)
+    }
 
     /**
      * The color of the entity boxed in a [Color4] object.
      */
-    open var color: Color4
+    var color: Color4
         get() = Color4(mRed, mGreen, mBlue, mAlpha)
         set(value) {
             mRed = value.red
@@ -393,33 +368,64 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
     /**
      * Whether the entity's color should be multiplied by the color of its ancestor entities.
      */
-    open var inheritAncestorsColor = true
+    var inheritAncestorsColor = true
 
     /**
      * Whether the entity should clip its children.
      */
-    open var clipToBounds = false
+    var clipToBounds = false
+
+    /**
+     * The background color of this component.
+     */
+    var backgroundColor
+        get() = backgroundBox?.color ?: Color4.Transparent
+        set(value) {
+            if (backgroundBox?.color != value) {
+                initializeBackground()
+                backgroundBox!!.color = value
+            }
+        }
+
+    /**
+     * The border color of this component.
+     */
+    var borderColor
+        get() = borderBox?.color ?: Color4.Transparent
+        set(value) {
+            if (borderBox?.color != value) {
+                initializeBorder()
+                borderBox!!.color = value
+            }
+        }
+
+    /**
+     * The border width of this component.
+     */
+    var borderWidth
+        get() = borderBox?.lineWidth ?: 0f
+        set(value) {
+            if (borderBox?.lineWidth != value) {
+                initializeBorder()
+                borderBox!!.lineWidth = value
+            }
+        }
+
+    /**
+     * The corner radius of this component.
+     */
+    var radius = 0f
+        set(value) {
+            if (field != value) {
+                field = value
+                backgroundBox?.radius = value
+                borderBox?.radius = value
+            }
+        }
 
     //endregion
 
-    //region State properties
-
-    /**
-     * Whether the component is currently animating.
-     */
-    val isAnimating
-        get() = !mEntityModifiers.isNullOrEmpty()
-
-    /**
-     * The modifier pool used to manage the modifiers of this entity. By default [UniversalModifier.GlobalPool].
-     */
-    var modifierPool = UniversalModifier.GlobalPool
-
-    /**
-     * The mode in which the entity is attached to its parent.
-     */
-    var attachmentMode = AttachmentMode.None
-        private set
+    //region Other properties
 
     /**
      * Whether the entity should be culled when it is outside the parent's bounds.
@@ -427,16 +433,17 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
     var cullingMode = CullingMode.Disabled
 
     /**
-     * The current invalidation flags. Indicates which properties were updated and need to be handled.
-     *
-     * @see InvalidationFlag
+     * The mode in which the entity is attached to its parent.
      */
-    protected var invalidationFlags = InvalidationFlag.All
+    var attachmentMode = AttachmentMode.None
+        private set
 
-    /**
-     * The input bindings of the entity. This is used to handle touch events.
-     */
-    protected val inputBindings = arrayOfNulls<UIComponent>(10)
+
+    private var invalidationFlags = InvalidationFlag.All
+    private var backgroundBox: UIBox? = null
+    private var borderBox: UIBox? = null
+
+    private val inputBindings = arrayOfNulls<UIComponent>(10)
 
     //endregion
 
@@ -451,14 +458,26 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
         invalidationFlags = invalidationFlags or flag
     }
 
-    //endregion
+    private fun initializeBackground() {
+        if (backgroundBox == null) {
+            backgroundBox = UIBox().apply {
+                setParent(this@UIComponent, AttachmentMode.Decorator)
+                radius = this@UIComponent.radius
+                color = Color4.Transparent
+            }
+        }
+    }
 
-    //region Events
-
-    /**
-     * Called every update thread tick, avoid heavy operations here.
-     */
-    var onUpdateTick: OnUpdateEvent? = null
+    private fun initializeBorder() {
+        if (borderBox == null) {
+            borderBox = UIBox().apply {
+                setParent(this@UIComponent, AttachmentMode.Decorator)
+                paintStyle = PaintStyle.Outline
+                radius = this@UIComponent.radius
+                color = Color4.Transparent
+            }
+        }
+    }
 
     //endregion
 
@@ -467,7 +486,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
     /**
      * Called when the content of the entity has changed. This usually is called when a child is added or removed.
      */
-    open fun onContentChanged() = Unit
+    open fun onContentChanged() {}
 
 
     override fun detachSelf(): Boolean {
@@ -529,7 +548,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
     }
 
     override fun onAttached() {
-        onThemeChanged(Theme.current)
+        applyStyle()
     }
 
     //endregion
@@ -549,16 +568,6 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
     fun setSize(x: Float, y: Float) {
         width = x
         height = y
-    }
-
-    @Deprecated("Keeping this for the current usages.", ReplaceWith("transformedWidth"))
-    fun getWidthScaled(): Float {
-        return width * scaleX
-    }
-
-    @Deprecated("Keeping this for the current usages.", ReplaceWith("transformedHeight"))
-    fun getHeightScaled(): Float {
-        return height * scaleY
     }
 
     //endregion
@@ -610,8 +619,11 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
      * Sets the position of the entity.
      */
     override fun setPosition(x: Float, y: Float) {
-        setX(x)
-        setY(y)
+        if (mX != x || mY != y) {
+            mX = x
+            mY = y
+            invalidate(InvalidationFlag.Position)
+        }
     }
 
     //endregion
@@ -789,27 +801,25 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
             this.invalidationFlags = 0
         }
 
-        background?.onHandleInvalidations()
-        foreground?.onHandleInvalidations()
+        backgroundBox?.onHandleInvalidations()
+        borderBox?.onHandleInvalidations()
     }
 
     override fun onManagedDraw(gl: GL10, camera: Camera) {
-
         onHandleInvalidations()
 
         gl.glPushMatrix()
         onApplyTransformations(gl, camera)
 
-        background?.setSize(width, height)
-        background?.onDraw(gl, camera)
+        backgroundBox?.setSize(width, height)
+        borderBox?.setSize(width, height)
 
+        backgroundBox?.onDraw(gl, camera)
         doDraw(gl, camera)
         onDrawChildren(gl, camera)
+        borderBox?.onDraw(gl, camera)
 
-        foreground?.setSize(width, height)
-        foreground?.onDraw(gl, camera)
-
-        if (BuildSettings.SHOW_ENTITY_BOUNDARIES && DEBUG_FOREGROUND != this) {
+        if (BuildSettings.SHOW_ENTITY_BOUNDARIES && DEBUG_FOREGROUND != this && attachmentMode != AttachmentMode.Decorator) {
             DEBUG_FOREGROUND.setSize(width, height)
             DEBUG_FOREGROUND.onHandleInvalidations()
             DEBUG_FOREGROUND.onDraw(gl, camera)
@@ -835,11 +845,8 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
     //region Update
 
     override fun onManagedUpdate(deltaTimeSec: Float) {
-
-        onUpdateTick?.invoke(deltaTimeSec)
-
-        background?.onManagedUpdate(deltaTimeSec)
-        foreground?.onManagedUpdate(deltaTimeSec)
+        backgroundBox?.onManagedUpdate(deltaTimeSec)
+        borderBox?.onManagedUpdate(deltaTimeSec)
 
         super.onManagedUpdate(deltaTimeSec)
     }
@@ -887,49 +894,10 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
         localToParentTransformation
         parentToLocalTransformation
 
-        mChildren?.fastForEach {
+        forEach {
             if (it is UIComponent) {
                 it.onInvalidateTransformations()
             }
-        }
-    }
-
-
-    override fun setRotation(pRotation: Float) {
-        if (mRotation != pRotation) {
-            mRotation = pRotation
-            invalidate(InvalidationFlag.Transformations)
-        }
-    }
-
-    override fun setRotationCenterX(pRotationCenterX: Float) = setRotationCenter(pRotationCenterX, mRotationCenterY)
-    override fun setRotationCenterY(pRotationCenterY: Float) = setRotationCenter(mRotationCenterX, pRotationCenterY)
-    override fun setRotationCenter(pRotationCenterX: Float, pRotationCenterY: Float) {
-        if (mRotationCenterX != pRotationCenterX || mRotationCenterY != pRotationCenterY) {
-            mRotationCenterX = pRotationCenterX
-            mRotationCenterY = pRotationCenterY
-            invalidate(InvalidationFlag.Transformations)
-        }
-    }
-
-    override fun setScaleCenterX(pScaleCenterX: Float) = setScaleCenter(pScaleCenterX, mScaleCenterY)
-    override fun setScaleCenterY(pScaleCenterY: Float) = setScaleCenter(mScaleCenterX, pScaleCenterY)
-    override fun setScaleCenter(pScaleCenterX: Float, pScaleCenterY: Float) {
-        if (mScaleCenterX != pScaleCenterX || mScaleCenterY != pScaleCenterY) {
-            mScaleCenterX = pScaleCenterX
-            mScaleCenterY = pScaleCenterY
-            invalidate(InvalidationFlag.Transformations)
-        }
-    }
-
-    override fun setScaleX(pScaleX: Float) = setScale(pScaleX, mScaleY)
-    override fun setScaleY(pScaleY: Float) = setScale(mScaleX, pScaleY)
-    override fun setScale(pScale: Float) = setScale(pScale, pScale)
-    override fun setScale(pScaleX: Float, pScaleY: Float) {
-        if (mScaleX != pScaleX || mScaleY != pScaleY) {
-            mScaleX = pScaleX
-            mScaleY = pScaleY
-            invalidate(InvalidationFlag.Transformations)
         }
     }
 
@@ -941,25 +909,6 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
 
         if (mLocalToParentTransformationDirty) {
             mLocalToParentTransformation.setToIdentity()
-
-            if (mScaleX != 1f || mScaleY != 1f) {
-                val centerX = width * mScaleCenterX
-                val centerY = height * mScaleCenterY
-
-                mLocalToParentTransformation.postTranslate(-centerX, -centerY)
-                mLocalToParentTransformation.postScale(mScaleX, mScaleY)
-                mLocalToParentTransformation.postTranslate(centerX, centerY)
-            }
-
-            if (rotation != 0f) {
-                val centerX = width * mRotationCenterX
-                val centerY = height * mRotationCenterY
-
-                mLocalToParentTransformation.postTranslate(-centerX, -centerY)
-                mLocalToParentTransformation.postRotate(mRotation)
-                mLocalToParentTransformation.postTranslate(centerX, centerY)
-            }
-
             mLocalToParentTransformation.postTranslate(absoluteX, absoluteY)
             mLocalToParentTransformationDirty = false
         }
@@ -976,25 +925,6 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
         if (mParentToLocalTransformationDirty) {
             mParentToLocalTransformation.setToIdentity()
             mParentToLocalTransformation.postTranslate(-absoluteX, -absoluteY)
-
-            if (mRotation != 0f) {
-                val centerX = width * mRotationCenterX
-                val centerY = height * mRotationCenterY
-
-                mParentToLocalTransformation.postTranslate(-centerX, -centerY)
-                mParentToLocalTransformation.postRotate(-mRotation)
-                mParentToLocalTransformation.postTranslate(centerX, centerY)
-            }
-
-            if (mScaleX != 1f || mScaleY != 1f) {
-                val centerX = width * mScaleCenterX
-                val centerY = height * mScaleCenterY
-
-                mParentToLocalTransformation.postTranslate(-centerX, -centerY)
-                mParentToLocalTransformation.postScale(1 / mScaleX, 1 / mScaleY)
-                mParentToLocalTransformation.postTranslate(centerX, centerY)
-            }
-
             mParentToLocalTransformationDirty = false
         }
 
@@ -1011,7 +941,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
 
     override fun appendModifier(block: UniversalModifier.() -> Unit): UniversalModifier {
 
-        val modifier = modifierPool.acquire() ?: UniversalModifier(modifierPool)
+        val modifier = UniversalModifier.GlobalPool.acquire() ?: UniversalModifier()
         modifier.setToDefault()
         modifier.parent = this
         modifier.block()
@@ -1100,9 +1030,9 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain, IStylea
 
     //region Cosmetic functions
 
-    open fun onThemeChanged(theme: Theme) {
-        background?.onThemeChanged(theme)
-        foreground?.onThemeChanged(theme)
+    fun onStyle(theme: Theme) {
+        backgroundBox?.onStyle(theme)
+        borderBox?.onStyle(theme)
 
         style(theme)
     }

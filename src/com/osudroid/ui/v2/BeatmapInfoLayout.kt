@@ -244,7 +244,7 @@ class BeatmapInfoLayout : UILinearContainer() {
         starsText.apply {
             text = value.roundBy(2).toString()
             color = if (value >= 6.5) Color4(0xFFFFD966) else Color4.Black.copy(alpha = 0.75f)
-            background?.color = OsuColors.getStarRatingColor(value)
+            backgroundColor = OsuColors.getStarRatingColor(value)
         }
     }
 

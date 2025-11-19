@@ -3,9 +3,9 @@ package com.osudroid.ui.v2.modmenu
 import com.reco1l.andengine.*
 import com.reco1l.andengine.component.*
 import com.reco1l.andengine.container.*
-import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.text.*
 import com.reco1l.andengine.theme.FontSize
+import com.reco1l.andengine.theme.Radius
 import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.theme.rem
 import com.reco1l.andengine.ui.*
@@ -24,11 +24,8 @@ open class ModMenuSection(name: String, private val toggles: List<UIButton> = li
         cullingMode = CullingMode.CameraBounds
         style = {
             width = 10f.rem
-        }
-
-        background = UIBox().apply {
-            style = { color = it.accentColor * 0.1f }
-            cornerRadius = 16f
+            backgroundColor = it.accentColor * 0.1f
+            radius = Radius.LG
         }
 
         +UIText().apply {

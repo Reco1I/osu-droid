@@ -5,7 +5,6 @@ import com.reco1l.andengine.Anchor
 import com.reco1l.andengine.Axes
 import com.reco1l.andengine.UIEngine
 import com.reco1l.andengine.badge
-import com.reco1l.andengine.component.backgroundColor
 import com.reco1l.andengine.container.Orientation
 import com.reco1l.andengine.container.UIScrollableContainer
 import com.reco1l.andengine.fillContainer
@@ -18,6 +17,7 @@ import com.reco1l.andengine.theme.Icon
 import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.theme.rem
 import com.reco1l.andengine.theme.srem
+import com.reco1l.andengine.ui.ColorVariant
 import com.reco1l.andengine.ui.SizeVariant
 import com.reco1l.andengine.ui.UICheckbox
 import com.reco1l.andengine.ui.UISelect
@@ -36,6 +36,8 @@ object ComponentTestScene : UIScrollableContainer() {
     init {
         width = Size.Full
         height = Size.Full
+        anchor = Anchor.Center
+        origin = Anchor.Center
         scrollAxes = Axes.Y
         backgroundColor = Color4.White / 0.3f
         style = {
@@ -130,13 +132,35 @@ object ComponentTestScene : UIScrollableContainer() {
 
                 textButton {
                     text = "Button"
-                    isSelected = true
+                    colorVariant = ColorVariant.Secondary
                 }
 
                 textButton {
                     leadingIcon = FontAwesomeIcon(Icon.Gear)
                     text = "Button"
-                    isSelected = true
+                    colorVariant = ColorVariant.Secondary
+                }
+            }
+
+            linearContainer {
+                orientation = Orientation.Horizontal
+                style = {
+                    spacing = 3f.srem
+                }
+
+                textButton {
+                    text = "Button"
+                    sizeVariant = SizeVariant.Small
+                }
+
+                textButton {
+                    text = "Button"
+                    sizeVariant = SizeVariant.Medium
+                }
+
+                textButton {
+                    text = "Button"
+                    sizeVariant = SizeVariant.Large
                 }
             }
 

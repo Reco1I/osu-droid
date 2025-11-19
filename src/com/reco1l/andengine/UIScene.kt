@@ -1,3 +1,4 @@
+
 package com.reco1l.andengine
 
 import android.util.Log
@@ -74,7 +75,7 @@ open class UIScene : Scene(), IShape {
         fun IEntity.propagateSkinChanges() {
 
             if (this is UIComponent) {
-                onThemeChanged(Theme.current)
+                onStyle(Theme.current)
             }
 
             if (this is ISkinnable) {

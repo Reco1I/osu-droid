@@ -22,30 +22,25 @@ open class UISelect<T : Any>(initialValues: List<T> = emptyList()) : UIControl<L
     /**
      * The button that toggles the dropdown menu.
      */
-    val button = object : UITextButton() {
-
-        init {
-            width = Size.Full
-            alignment = Anchor.CenterLeft
-            onActionUp = {
-                if (dropdown.isExpanded) {
-                    dropdown.hide()
-                } else {
-                    dropdown.show()
-                }
+    val button = UITextButton().apply {
+        width = Size.Full
+        alignment = Anchor.CenterLeft
+        onActionUp = {
+            if (dropdown.isExpanded) {
+                dropdown.hide()
+            } else {
+                dropdown.show()
             }
-
-            trailingIcon = FontAwesomeIcon(Icon.ChevronDown).apply {
-                rotation = 0f
-                alpha = 0.5f
-            }
-            trailingIcon?.rotationCenter = Anchor.Center
+        }
+        style += {
+            backgroundColor = it.accentColor * 0.25f
         }
 
-        override fun onThemeChanged(theme: Theme) {
-            super.onThemeChanged(theme)
-            background?.color = theme.accentColor * 0.25f
+        trailingIcon = FontAwesomeIcon(Icon.ChevronDown).apply {
+            rotation = 0f
+            alpha = 0.5f
         }
+        trailingIcon?.rotationCenter = Anchor.Center
     }
 
     /**

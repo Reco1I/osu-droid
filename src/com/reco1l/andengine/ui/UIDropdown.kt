@@ -58,7 +58,7 @@ class UIDropdown(var trigger: UIComponent) : UIScrollableContainer() {
         clipToBounds = true
 
         style = {
-            backgroundRadius = Radius.LG
+            radius = Radius.LG
             backgroundColor = it.accentColor * 0.175f
         }
 
@@ -109,41 +109,16 @@ class UIDropdown(var trigger: UIComponent) : UIScrollableContainer() {
     //region Buttons
 
     fun addButton(block: UITextButton.() -> Unit): UITextButton {
-        val button = object : UITextButton() {
-
-            init {
-                width = Size.Full
-                alignment = Anchor.CenterLeft
-                style += {
-                    color = it.accentColor
-                    backgroundColor = (it.accentColor * 0.9f) / 0f
-                    backgroundRadius = Radius.LG
-                    foregroundColor = it.accentColor / 0f
-                    foregroundRadius = Radius.LG
-                }
-                block()
+        val button = UITextButton().apply {
+            width = Size.Full
+            alignment = Anchor.CenterLeft
+            colorVariant = ColorVariant.Tertiary
+            style += {
+                color = it.accentColor
+                backgroundColor = (it.accentColor * 0.9f) / 0f
+                radius = Radius.LG
             }
-
-            override fun onSelectionChange() {
-                foreground?.clearModifiers(ModifierType.Alpha)
-                foreground?.fadeTo(if (isSelected) 0.25f else 0f, 0.2f)
-            }
-
-            override fun processTouchFeedback(event: TouchEvent) {
-                if (event.isActionDown) {
-                    background?.apply {
-                        clearModifiers(ModifierType.Alpha)
-                        fadeTo(0.2f, 0.3f).eased(Easing.Out)
-                    }
-                }
-
-                if ((event.isActionUp || event.isActionCancel) && background!!.alpha != 0f) {
-                    background?.apply {
-                        clearModifiers(ModifierType.Alpha)
-                        fadeOut(0.4f).eased(Easing.OutExpo)
-                    }
-                }
-            }
+            block()
         }
 
         optionsContainer += button

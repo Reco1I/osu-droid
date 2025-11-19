@@ -92,11 +92,8 @@ object ModMenu : UIScene() {
             width = Size.Full
             height = Size.Full
             orientation = Orientation.Vertical
-            background = UIBox().apply {
-                style = {
-                    color = it.accentColor * 0.1f
-                    alpha = 0.9f
-                }
+            style = {
+                backgroundColor = it.accentColor * 0.1f / 0.9f
             }
 
             +UIContainer().apply {
@@ -181,11 +178,9 @@ object ModMenu : UIScene() {
                 +UIContainer().apply {
                     anchor = Anchor.CenterRight
                     origin = Anchor.CenterRight
-                    height = Size.Full
 
                     searchInput = ModMenuSearchInput().apply {
                         width = 400f
-                        height = Size.Full
                         onSearchTermUpdate = { searchTerm ->
                             modSections.fastForEach { it.onSearchTermUpdate(searchTerm) }
 
@@ -249,13 +244,11 @@ object ModMenu : UIScene() {
                 width = Size.Full
                 height = Size.Auto
                 style = {
-                    padding = UIEngine.current.safeArea.copy(y = 12f, w = 12f)
-                }
-
-                onUpdateTick = {
-                    val buttonHeight = Multiplayer.roomScene?.chat?.buttonHeight ?: 0f
-
-                    paddingBottom = if (Multiplayer.isConnected) buttonHeight + 12f else 12f
+                    padding = UIEngine.current.safeArea.copy(
+                        y = 2f.srem,
+                        // If we're in multiplayer, account for the chat button height as margin.
+                        w = 2f.srem + (Multiplayer.roomScene?.chat?.buttonHeight ?: 0f)
+                    )
                 }
 
                 +UILinearContainer().apply {
@@ -303,7 +296,7 @@ object ModMenu : UIScene() {
 
                     rankedBadge = badge {
                         text = "Ranked"
-                        background!!.color = Color4(0xFF83DF6B)
+                        backgroundColor = Color4(0xFF342121)
                         color = Color4(0xFF161622)
                         style = {}
                     }
@@ -400,10 +393,9 @@ object ModMenu : UIScene() {
 
             updateThread {
                 starRatingBadge.clearEntityModifiers()
-                starRatingBadge.background!!.clearEntityModifiers()
 
-                starRatingBadge.valueEntity.text = "%.2f".format(attributes.starRating)
-                starRatingBadge.background!!.colorTo(OsuColors.getStarRatingColor(attributes.starRating), 0.1f)
+                starRatingBadge.valueComponent.text = "%.2f".format(attributes.starRating)
+                starRatingBadge.backgroundColor = OsuColors.getStarRatingColor(attributes.starRating)
 
                 if (attributes.starRating >= 6.5) {
                     starRatingBadge.colorTo(Color4(0xFFFFD966), 0.1f)
@@ -591,8 +583,7 @@ object ModMenu : UIScene() {
             clearEntityModifiers()
             colorTo(if (isRanked) Color4(0xFF161622) else Theme.current.accentColor, 0.1f)
 
-            background!!.clearEntityModifiers()
-            background!!.colorTo(if (isRanked) Color4(0xFF83DF6B) else Theme.current.accentColor * 0.15f, 0.1f)
+            backgroundColor = if (isRanked) Color4(0xFF83DF6B) else Theme.current.accentColor * 0.15f
         }
 
         modToggles.fastForEach {
@@ -673,13 +664,13 @@ object ModMenu : UIScene() {
 
         val newText = if (finalValue is Float || finalValue is Double) "%.2f".format(finalValue) else finalValue.toString()
 
-        if (valueEntity.text == newText) {
+        if (valueComponent.text == newText) {
             return
         }
-        valueEntity.text = newText
+        valueComponent.text = newText
 
-        valueEntity.clearEntityModifiers()
-        valueEntity.colorTo(Color4(when {
+        valueComponent.clearEntityModifiers()
+        valueComponent.colorTo(Color4(when {
             initialValue < finalValue -> 0xFFF78383
             initialValue > finalValue -> 0xFF40CF5D
             else -> 0xFFFFFFFF

@@ -1,10 +1,7 @@
 package com.reco1l.andengine.ui
 
-import android.text.Editable
 import android.text.InputType
-import android.text.method.BaseKeyListener
 import android.view.*
-import android.view.KeyEvent.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
@@ -17,7 +14,6 @@ import androidx.core.widget.addTextChangedListener
 import com.edlplan.framework.easing.Easing
 import com.osudroid.utils.mainThread
 import com.reco1l.andengine.*
-import com.reco1l.andengine.component.*
 import com.reco1l.andengine.modifier.*
 import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.text.*
@@ -32,18 +28,6 @@ import kotlin.math.*
 import kotlin.text.substring
 
 open class UITextInput(initialValue: String) : UIControl<String>(initialValue), IFocusable {
-
-    override var style: UIComponent.(Theme) -> Unit = { theme ->
-        height = 2.5f.rem
-        padding = Vec4(2f.srem)
-        backgroundColor = theme.accentColor * 0.25f
-        backgroundRadius = Radius.LG
-        foregroundColor = if (isFocused) theme.accentColor else theme.accentColor * 0.4f
-        foregroundRadius = Radius.LG
-        foregroundLineWidth = 0.2f.srem
-        textComponent.color = theme.accentColor
-        placeholderEntity.color = theme.accentColor * 0.6f
-    }
 
     private val placeholderEntity = UIText().apply {
         fontSize = FontSize.SM
@@ -180,15 +164,21 @@ open class UITextInput(initialValue: String) : UIControl<String>(initialValue), 
     init {
         clipToBounds = true
 
+        style = {
+            height = 2.5f.rem
+            padding = Vec4(2f.srem)
+            backgroundColor = it.accentColor * 0.25f
+            borderColor = if (isFocused) it.accentColor else it.accentColor * 0.4f
+            borderWidth = 0.2f.srem
+            radius = Radius.LG
+            textComponent.color = it.accentColor
+            placeholderEntity.color = it.accentColor * 0.6f
+        }
+
         +placeholderEntity
         +textComponent
         +caret
         +selectionBox
-
-        background = UIBox()
-        foreground = UIBox().apply {
-            paintStyle = PaintStyle.Outline
-        }
 
         updateVisuals()
         style(Theme.current)
@@ -197,17 +187,13 @@ open class UITextInput(initialValue: String) : UIControl<String>(initialValue), 
     override fun onFocus() {
         setKeyboardVisibility(true)
         caret.isVisible = true
-
-        foreground?.clearModifiers(ModifierType.Color)
-        foreground?.colorTo(Theme.current.accentColor, 0.1f)
+        borderColor = Theme.current.accentColor
     }
 
     override fun onBlur() {
         setKeyboardVisibility(false)
         caret.isVisible = false
-
-        foreground?.clearModifiers(ModifierType.Color)
-        foreground?.colorTo(Theme.current.accentColor * 0.4f, 0.1f)
+        borderColor = Theme.current.accentColor * 0.4f
     }
 
     private fun setKeyboardVisibility(value: Boolean) = mainThread {
@@ -370,11 +356,7 @@ open class UITextInput(initialValue: String) : UIControl<String>(initialValue), 
             colorTo(Theme.current.accentColor, 0.2f)
         }
 
-        foreground?.apply {
-            clearModifiers(ModifierType.Color)
-            color = Color4.Red
-            colorTo(Theme.current.accentColor, 0.2f)
-        }
+        borderColor = Color4.Red
     }
 
     private fun updateVisuals() {

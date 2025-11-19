@@ -76,11 +76,8 @@ class RoomChat : UILinearContainer() {
         orientation = Orientation.Vertical
         anchor = Anchor.BottomCenter
         origin = Anchor.BottomCenter
-        background = UIBox().apply {
-            style = {
-                color = it.accentColor * 0.1f
-                alpha = 0.9f
-            }
+        style = {
+            backgroundColor = it.accentColor * 0.1f / 0.9f
         }
 
         +button
@@ -265,11 +262,8 @@ class RoomChat : UILinearContainer() {
             orientation = Orientation.Horizontal
             padding = Vec4(80f, 18f)
             spacing = 12f
-            background = UIBox().apply {
-                style = {
-                    color = it.accentColor * 0.15f
-                    alpha = 0.5f
-                }
+            style = {
+                backgroundColor = it.accentColor * 0.15f / 0.5f
             }
 
             sprite {
@@ -354,12 +348,8 @@ class RoomChat : UILinearContainer() {
             spacing = 12f
             orientation = Orientation.Horizontal
             cullingMode = CullingMode.ParentBounds
-            background = UIBox().apply {
-                buffer = messageBackgroundBuffer
-                style = {
-                    color = it.accentColor * 0.09f
-                    alpha = 0f
-                }
+            style = {
+                backgroundColor = it.accentColor * 0.09f / 0f
             }
         }
 
@@ -374,7 +364,7 @@ class RoomChat : UILinearContainer() {
                 val message = message ?: return
                 val messageIndex = messages.indexOf(message)
 
-                background!!.alpha = if (messageIndex % 2 == 0) 0.5f else 0f
+                backgroundColor /= if (messageIndex % 2 == 0) 0.5f else 0f
 
                 if (message is SystemMessage) {
                     text {

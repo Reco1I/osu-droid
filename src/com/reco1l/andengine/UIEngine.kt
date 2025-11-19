@@ -146,7 +146,7 @@ class UIEngine(val context: Activity, options: EngineOptions) : Engine(options) 
         fun IEntity.propagateThemeChange() {
 
             if (this is UIComponent) {
-                onThemeChanged(theme)
+                onStyle(theme)
             }
 
             if (this is Scene) {

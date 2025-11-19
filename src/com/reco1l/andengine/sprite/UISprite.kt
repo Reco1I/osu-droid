@@ -19,15 +19,6 @@ import kotlin.math.*
 @Suppress("LeakingThis")
 open class UISprite(textureRegion: TextureRegion? = null) : UIBufferedComponent<SpriteVBO>() {
 
-    override var contentWidth: Float
-        get() = textureRegion?.width?.toFloat() ?: 0f
-        set(_) = Unit
-
-    override var contentHeight: Float
-        get() = textureRegion?.height?.toFloat() ?: 0f
-        set(_) = Unit
-
-
     /**
      * Whether the texture should be flipped horizontally.
      */
@@ -87,7 +78,7 @@ open class UISprite(textureRegion: TextureRegion? = null) : UIBufferedComponent<
         set(value) {
             if (field != value) {
                 field = value
-                invalidateBuffer(BufferInvalidationFlag.Data)
+                requestBufferUpdate()
             }
         }
 
@@ -100,7 +91,7 @@ open class UISprite(textureRegion: TextureRegion? = null) : UIBufferedComponent<
         set(value) {
             if (field != value) {
                 field = value
-                invalidateBuffer(BufferInvalidationFlag.Data)
+                requestBufferUpdate()
             }
         }
 
@@ -112,23 +103,24 @@ open class UISprite(textureRegion: TextureRegion? = null) : UIBufferedComponent<
         onTextureRegionChanged()
     }
 
+    override fun onContentChanged() {
+        contentWidth = textureRegion?.width?.toFloat() ?: 0f
+        contentHeight = textureRegion?.height?.toFloat() ?: 0f
+    }
 
     open fun onTextureRegionChanged() {
-
         val textureRegion = textureRegion ?: return
-
         textureRegion.setTexturePosition(textureX, textureY)
         textureRegion.isFlippedVertical = flippedVertical
         textureRegion.isFlippedHorizontal = flippedHorizontal
-
         blendInfo = if (textureRegion.texture.textureOptions.mPreMultipyAlpha) BlendInfo.PreMultiply else BlendInfo.Mixture
-        invalidateBuffer(BufferInvalidationFlag.Data)
+        requestBufferUpdate()
     }
 
 
     override fun onSizeChanged() {
         super.onSizeChanged()
-        invalidateBuffer(BufferInvalidationFlag.Data)
+        requestBufferUpdate()
     }
 
 

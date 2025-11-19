@@ -33,7 +33,7 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
                 currentLength = value.codePointCount(0, value.length)
 
                 if (currentLength > previousLength) {
-                    invalidateBuffer(BufferInvalidationFlag.Instance)
+                    requestNewBuffer()
                 }
 
                 invalidate(InvalidationFlag.Content)
@@ -97,7 +97,7 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
         set(value) {
             if (field != value) {
                 field = value
-                invalidateBuffer(BufferInvalidationFlag.Data)
+                requestBufferUpdate()
             }
         }
 
@@ -181,14 +181,13 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
         contentWidth = linesWidth!!.max().toFloat()
         contentHeight = (lines!!.size * font.lineHeight + (lines!!.size - 1) * font.lineGap).toFloat()
 
-        invalidateBuffer(BufferInvalidationFlag.Data)
-
+        requestBufferUpdate()
         super.onContentChanged()
     }
 
     override fun onSizeChanged() {
         super.onSizeChanged()
-        invalidateBuffer(BufferInvalidationFlag.Data)
+        requestBufferUpdate()
     }
 
     override fun onCreateBuffer(): CompoundBuffer {
@@ -417,7 +416,7 @@ open class CompoundText : UIFillContainer() {
      * The text entity.
      */
     val textComponent = UIText().apply {
-        preventShrink = true
+        shrink = false
         weight = 1f
         anchor = Anchor.CenterLeft
         origin = Anchor.CenterLeft

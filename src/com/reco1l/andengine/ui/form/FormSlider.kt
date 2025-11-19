@@ -1,9 +1,7 @@
 package com.reco1l.andengine.ui.form
 
 import com.reco1l.andengine.*
-import com.reco1l.andengine.component.backgroundRadius
 import com.reco1l.andengine.container.*
-import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.text.*
 import com.reco1l.andengine.theme.FontSize
 import com.reco1l.andengine.theme.Radius
@@ -25,16 +23,12 @@ open class FormSlider(initialValue: Float = 0f) : FormControl<Float, UISlider>(i
         anchor = Anchor.CenterLeft
         origin = Anchor.CenterLeft
         alignment = Anchor.Center
-        background = UIBox().apply {
-            color = Color4.Black
-            alpha = 0.1f
-        }
-
         style = {
             fontSize = FontSize.XS
             padding = Vec4(1f.srem, 0.5f.srem)
             color = it.accentColor
-            backgroundRadius = Radius.MD
+            backgroundColor = Color4.Black / 0.1f
+            radius = Radius.MD
         }
     }
 

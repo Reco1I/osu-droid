@@ -35,12 +35,6 @@ class ModMenuToggle(var mod: Mod) : UIButton() {
             spacing = 8f
             cullingMode = CullingMode.CameraBounds
 
-            background = UIBox().apply {
-                cornerRadius = 12f
-                // Sharing the same VBO across all toggles to reduce memory usage.
-                buffer = sharedButtonVBO
-            }
-
             +ModIcon(mod).apply {
                 width = 38f
                 height = 38f

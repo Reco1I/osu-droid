@@ -5,13 +5,13 @@ import com.reco1l.andengine.*
 import com.reco1l.andengine.buffered.*
 import com.reco1l.andengine.component.*
 import com.reco1l.andengine.container.*
-import com.reco1l.andengine.shape.*
 import com.reco1l.andengine.sprite.*
 import com.reco1l.andengine.text.*
 import com.reco1l.andengine.texture.*
 import com.reco1l.andengine.theme.FontSize
 import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.ui.*
+import com.reco1l.framework.Color4
 import com.rian.osu.mods.*
 import com.rian.osu.utils.*
 import org.anddev.andengine.engine.camera.*
@@ -46,7 +46,7 @@ class ModIcon(val mod: Mod) : UIContainer(), ISkinnable {
             acronymText.setScale(height * 0.6f / acronymText.contentHeight)
         }
 
-        (background as? UIBox)?.cornerRadius = height * 0.2f
+        radius = height * 0.2f
 
         super.onManagedDraw(gl, camera)
     }
@@ -58,7 +58,7 @@ class ModIcon(val mod: Mod) : UIContainer(), ISkinnable {
             val texture = fetchTextureRegion()
 
             if (texture != null) {
-                background = null
+                backgroundColor = Color4.Transparent
 
                 attachChild(OsuSkinnableSprite(mod.iconTextureName).apply {
                     width = Size.Full
@@ -66,9 +66,7 @@ class ModIcon(val mod: Mod) : UIContainer(), ISkinnable {
                     buffer = sharedSpriteVBO
                 })
             } else {
-                background = UIBox().apply {
-                    style = { color = it.accentColor * 0.1f }
-                }
+                backgroundColor = Theme.current.accentColor * 0.1f
 
                 attachChild(UIText().apply {
                     anchor = Anchor.Center

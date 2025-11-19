@@ -47,27 +47,21 @@ class LobbyScene : UIScene() {
         ResourceManager.getInstance().loadHighQualityAsset("refresh", "refresh.png")
         ResourceManager.getInstance().loadHighQualityAsset("search-small", "search-small.png")
 
+        sprite {
+            width = Size.Full
+            height = Size.Full
+            textureRegion = ResourceManager.getInstance().getTexture("menu-background")
+
+            if (!Config.isSafeBeatmapBg()) {
+                textureRegion = ResourceManager.getInstance().getTexture("::background") ?: textureRegion
+            }
+        }
+
         linearContainer {
             orientation = Orientation.Vertical
             width = Size.Full
             height = Size.Full
             padding = Vec4(80f, 0f)
-
-            background = UISprite().apply {
-                scaleType = ScaleType.Crop
-                textureRegion = ResourceManager.getInstance().getTexture("menu-background")
-
-                if (!Config.isSafeBeatmapBg()) {
-                    textureRegion = ResourceManager.getInstance().getTexture("::background") ?: textureRegion
-                }
-
-                foreground = UIBox().apply {
-                    style = {
-                        color = it.accentColor * 0.1f
-                        alpha = 0.9f
-                    }
-                }
-            }
 
             container {
                 width = Size.Full
@@ -156,6 +150,7 @@ class LobbyScene : UIScene() {
             }
 
         }
+
     }
 
     override fun onManagedUpdate(deltaTimeSec: Float) {

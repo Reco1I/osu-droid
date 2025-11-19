@@ -9,12 +9,6 @@ import com.reco1l.andengine.theme.pct
 
 open class CircularProgressBar : UIContainer() {
 
-    override var style: UIComponent.(Theme) -> Unit = { theme ->
-        trackCircle.color = theme.accentColor.copy(alpha = trackCircle.alpha)
-        rotatingCircle.color = theme.accentColor
-    }
-
-
     /**
      * The progress of the circular progress bar, from 0 to 1. If set to -1, the progress bar will
      * be treated as indeterminate.
@@ -48,6 +42,14 @@ open class CircularProgressBar : UIContainer() {
         style = {
             color = Theme.current.accentColor
             alpha = 0.3f
+        }
+    }
+
+
+    init {
+        style = {
+            trackCircle.color = it.accentColor / trackCircle.alpha
+            rotatingCircle.color = it.accentColor
         }
     }
 

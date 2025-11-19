@@ -24,10 +24,7 @@ class RoomButton(val lobbyScene: LobbyScene, val room: Room) : UIButton() {
 
     init {
         width = Size.Full
-        background?.apply {
-            color = Color4.Black
-            alpha = 0.25f
-        }
+        backgroundColor = Color4.Black / 0.25f
 
         // Override the default background
         style = {}
@@ -105,7 +102,7 @@ class RoomButton(val lobbyScene: LobbyScene, val room: Room) : UIButton() {
                             sizeVariant = SizeVariant.Small
                             style = {
                                 color = it.accentColor * 0.1f
-                                background?.color = it.accentColor
+                                backgroundColor = it.accentColor
                             }
                             setText(string.multiplayer_room_free_mods)
                         }

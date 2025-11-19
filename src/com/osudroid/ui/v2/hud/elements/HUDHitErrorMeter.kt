@@ -43,7 +43,7 @@ class HUDHitErrorMeter : HUDElement() {
             anchor = Anchor.Center
             origin = Anchor.Center
             color = mehColor
-            cornerRadius = BAR_HEIGHT / 2
+            radius = BAR_HEIGHT / 2
             setSize(WIDTH, BAR_HEIGHT)
 
             depthInfo = DepthInfo.Default

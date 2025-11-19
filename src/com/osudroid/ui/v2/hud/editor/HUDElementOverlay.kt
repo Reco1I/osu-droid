@@ -150,7 +150,7 @@ class HUDElementOverlay(private val element: HUDElement) : UIConstraintContainer
                 anchor = Anchor.Center
                 origin = Anchor.Center
                 color = Color4(0xFFF27272)
-                cornerRadius = TIP_SIZE
+                radius = TIP_SIZE
                 width = 0.5f.pct
                 height = 0.5f.pct
             })
@@ -205,7 +205,7 @@ class HUDElementOverlay(private val element: HUDElement) : UIConstraintContainer
             scaleCenter = Anchor.Center
 
             attachChild(UIBox().apply {
-                cornerRadius = 12f
+                radius = 12f
                 color = back
                 width = Size.Full
                 height = Size.Full
