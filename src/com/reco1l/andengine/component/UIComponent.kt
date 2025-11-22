@@ -34,30 +34,20 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
     //region Size related properties
 
     /**
-     * Whether to prevent the component from shrinking below its intrinsic size.
+     * Whether the component can shrink below its intrinsic size. By default it
+     * is true in order to pair default CSS's `flex-shrink` behavior.
      */
     var shrink = true
-
-    /**
-     * Used for weighted distribution in some containers such as [UIFillContainer][com.reco1l.andengine.container.UIFillContainer].
-     */
-    var weight = 0f
-        set(value) {
-            if (field != value) {
-                field = value
-                invalidate(InvalidationFlag.Size)
-            }
-        }
 
     /**
      * The minimum width of the entity.
      */
     var minWidth = 0f
-        get() = if (!shrink) max(intrinsicWidth, field) else field
+        get() = if (shrink) field else max(intrinsicWidth, field)
         set(value) {
             if (field != value) {
                 field = value
-                invalidate(InvalidationFlag.Size)
+                invalidate(InvalidationFlag.Content or InvalidationFlag.Size)
             }
         }
 
@@ -68,31 +58,23 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
         set(value) {
             if (field != value) {
                 field = value
-                invalidate(InvalidationFlag.Size)
+                invalidate(InvalidationFlag.Content or InvalidationFlag.Size)
             }
         }
 
     /**
      * The width of the entity.
      */
-    var width: Float = 0f
-        get() {
-            var value = field
-
-            if (field == Size.Auto) {
-                value = contentWidth + padding.horizontal
-            }
-            if (field in Size.relativeSizeRange) {
-                value = (parent?.innerWidth ?: 0f) * (field + 3f)
-            }
-
-            return value.coerceAtMost(maxWidth).coerceAtLeast(minWidth)
-        }
+    var width: Float
+        get() = when (rawWidth) {
+            Size.Auto -> intrinsicWidth
+            in Size.relativeSizeRange -> (parent?.innerWidth ?: 0f) * (rawWidth - Size.relativeSizeRange.start)
+            else -> rawWidth
+        }.coerceAtMost(maxWidth).coerceAtLeast(minWidth)
         set(value) {
-            if (field != value) {
-                field = value
+            if (rawWidth != value) {
                 rawWidth = value
-                invalidate(InvalidationFlag.Size)
+                invalidate(InvalidationFlag.Content or InvalidationFlag.Size)
             }
         }
 
@@ -110,11 +92,11 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
      * The minimum height of the entity.
      */
     var minHeight = 0f
-        get() = if (!shrink) max(intrinsicHeight, field) else field
+        get() = if (shrink) field else max(intrinsicHeight, field)
         set(value) {
             if (field != value) {
                 field = value
-                invalidate(InvalidationFlag.Size)
+                invalidate(InvalidationFlag.Content or InvalidationFlag.Size)
             }
         }
     /**
@@ -124,31 +106,23 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
         set(value) {
             if (field != value) {
                 field = value
-                invalidate(InvalidationFlag.Size)
+                invalidate(InvalidationFlag.Content or InvalidationFlag.Size)
             }
         }
 
     /**
      * The height of the entity.
      */
-    var height: Float = 0f
-        get() {
-            var value = field
-
-            if (field == Size.Auto) {
-                value = contentHeight + padding.vertical
-            }
-            if (field in Size.relativeSizeRange) {
-                value = (parent?.innerHeight ?: 0f) * (field + 3f)
-            }
-
-            return value.coerceAtMost(maxHeight).coerceAtLeast(minHeight)
-        }
+    var height: Float
+        get() = when (rawHeight) {
+            Size.Auto -> intrinsicHeight
+            in Size.relativeSizeRange -> (parent?.innerHeight ?: 0f) * (rawHeight - Size.relativeSizeRange.start)
+            else -> rawHeight
+        }.coerceAtMost(maxHeight).coerceAtLeast(minHeight)
         set(value) {
-            if (field != value) {
-                field = value
+            if (rawHeight != value) {
                 rawHeight = value
-                invalidate(InvalidationFlag.Size)
+                invalidate(InvalidationFlag.Content or InvalidationFlag.Size)
             }
         }
 
@@ -168,7 +142,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
         protected set(value) {
             if (field != value) {
                 field = value
-                invalidate(InvalidationFlag.Size)
+                invalidate(InvalidationFlag.Content or InvalidationFlag.Size)
             }
         }
 
@@ -179,7 +153,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
         protected set(value) {
             if (field != value) {
                 field = value
-                invalidate(InvalidationFlag.Size)
+                invalidate(InvalidationFlag.Content or InvalidationFlag.Size)
             }
         }
 
@@ -190,7 +164,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
         set(value) {
             if (field != value) {
                 field = value
-                invalidate(InvalidationFlag.Size)
+                invalidate(InvalidationFlag.Content or InvalidationFlag.Size)
             }
         }
 
@@ -558,9 +532,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
     /**
      * Called when the size of this entity changes.
      */
-    open fun onSizeChanged() {
-        (parent as? UIComponent)?.invalidate(InvalidationFlag.Content)
-    }
+    open fun onSizeChanged() {}
 
     /**
      * Sets the size of the entity.
@@ -611,9 +583,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
     /**
      * Called when the position of this entity changes.
      */
-    open fun onPositionChanged() {
-        (parent as? UIComponent)?.invalidate(InvalidationFlag.Content)
-    }
+    open fun onPositionChanged() {}
 
     /**
      * Sets the position of the entity.
@@ -704,15 +674,6 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
         val isCulled = isCulled(camera)
 
         if (!isVisible || isCulled) {
-            // We're going to still handle invalidations flags even if the entity is not visible
-            // because some of them like size-related flags might change the parent's layout.
-            onHandleInvalidations()
-
-            mChildren?.fastForEach { child ->
-                if (child is UIComponent) {
-                    onHandleInvalidations()
-                }
-            }
             return
         }
 
@@ -743,64 +704,63 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
         }
     }
 
+
     /**
-     * Called when an invalidation flag should be processed.
+     * Called when invalidations needs to be run.
      */
-    protected open fun processInvalidationFlag(flag: Int) {
-
-        val parent = parent as? UIComponent
-
-        when (flag) {
-            InvalidationFlag.Position -> onPositionChanged()
-            InvalidationFlag.Content -> onContentChanged()
-            InvalidationFlag.Size -> onSizeChanged()
-            InvalidationFlag.Transformations -> onInvalidateTransformations()
-            InvalidationFlag.InputBindings -> onInvalidateInputBindings()
-        }
-
-        if (flag == InvalidationFlag.Position || flag == InvalidationFlag.Size || flag == InvalidationFlag.Content) {
-            parent?.invalidate(InvalidationFlag.Content)
-        }
-    }
-
-    open fun
-        onHandleInvalidations() {
+    open fun onHandleInvalidations() {
 
         val flags = invalidationFlags
 
-        if (flags == 0) {
-            return
+        var propagateInChildrenFlags = 0
+        var propagateInParentFlags = 0
+
+        if (flags and InvalidationFlag.Content != 0) {
+            onContentChanged()
+            propagateInChildrenFlags = InvalidationFlag.Content
+            propagateInParentFlags = InvalidationFlag.Content
         }
 
-        operator fun Int.contains(flag: Int): Boolean {
-            return flags and flag != 0
+        if (flags and InvalidationFlag.Size != 0) {
+            onSizeChanged()
+            propagateInChildrenFlags = InvalidationFlag.Content
+            propagateInParentFlags = InvalidationFlag.Content
         }
 
-        if (InvalidationFlag.Size in flags) {
-            processInvalidationFlag(InvalidationFlag.Size)
+        if (flags and InvalidationFlag.Position != 0) {
+            onPositionChanged()
+            propagateInParentFlags = InvalidationFlag.Content
         }
 
-        if (InvalidationFlag.Content in flags) {
-            processInvalidationFlag(InvalidationFlag.Content)
+        // Transformations have and special case since they are affected by position and size changes as well
+        // but not always, as an example scale and rotation do not trigger Position or Size flags but they're
+        // still transformations.
+        if (flags and InvalidationFlag.Transformations != 0 || flags and InvalidationFlag.Position != 0 || flags and InvalidationFlag.Size != 0) {
+            onInvalidateTransformations()
+            propagateInChildrenFlags = propagateInChildrenFlags or InvalidationFlag.Transformations
         }
 
-        if (InvalidationFlag.Position in flags) {
-            processInvalidationFlag(InvalidationFlag.Position)
+        if (flags and InvalidationFlag.InputBindings != 0) {
+            onInvalidateInputBindings()
+            propagateInChildrenFlags = propagateInChildrenFlags or InvalidationFlag.InputBindings
         }
 
-        if (InvalidationFlag.Transformations in flags || InvalidationFlag.Size in flags || InvalidationFlag.Position in flags) {
-            processInvalidationFlag(InvalidationFlag.Transformations)
+        val parent = parent
+        if (parent is UIComponent && propagateInParentFlags != 0) {
+            parent.invalidate(propagateInParentFlags)
         }
 
-        if (InvalidationFlag.InputBindings in flags) {
-            processInvalidationFlag(InvalidationFlag.InputBindings)
+        if (propagateInChildrenFlags != 0) {
+            forEach { child ->
+                if (child is UIComponent) {
+                    child.invalidate(propagateInChildrenFlags)
+                }
+            }
         }
 
-        // During the invalidation process the flags could be changed.
-        if (this.invalidationFlags == flags) {
-            this.invalidationFlags = 0
+        if (invalidationFlags == flags) {
+            invalidationFlags = 0
         }
-
     }
 
     override fun onManagedDraw(gl: GL10, camera: Camera) {
@@ -1058,7 +1018,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
         }
         inputBindings.fill(null)
 
-        mChildren?.fastForEach { child ->
+        forEach { child ->
             if (child is UIComponent) {
                 child.onInvalidateInputBindings()
             }

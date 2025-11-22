@@ -234,7 +234,7 @@ abstract class UIDialog<T : UIComponent>(val innerContent: T) : UIModal(card = U
     fun addButton(button: UIButton) {
         buttonLayout.apply {
             attachChild(button.apply {
-                weight = 1f
+                width = Size.Full
             })
         }
 

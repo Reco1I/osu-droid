@@ -16,8 +16,8 @@ open class UIContainer : UIComponent() {
 
 
     override fun onContentChanged() {
-        var right = 0f
-        var bottom = 0f
+        var contentWidth = 0f
+        var contentHeight = 0f
 
         if (mChildren != null) {
             for (i in mChildren.indices) {
@@ -27,25 +27,14 @@ open class UIContainer : UIComponent() {
                 val x = max(0f, child.absoluteX)
                 val y = max(0f, child.absoluteY)
 
-                right = max(right, x + child.width)
-                bottom = max(bottom, y + child.height)
+                contentWidth = max(contentWidth, x + child.width)
+                contentHeight = max(contentHeight, y + child.height)
             }
         }
 
-        contentWidth = right - padding.left
-        contentHeight = bottom - padding.top
+        this.contentWidth = contentWidth - padding.left
+        this.contentHeight = contentHeight - padding.top
     }
-
-    override fun onSizeChanged() {
-        super.onSizeChanged()
-
-        forEach {
-            if (it is UIComponent && (it.rawWidth == Size.Full || it.rawHeight == Size.Full)) {
-                it.invalidate(InvalidationFlag.Content)
-            }
-        }
-    }
-
 
     //region Operators
 

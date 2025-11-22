@@ -48,7 +48,7 @@ val Int.srem: Float
  * It will be converted to a value between -4 and -3.
  */
 val Float.pct: Float
-    get() =  Size.relativeSizeRange.start + this.coerceAtLeast(0f).coerceAtMost(1f)
+    get() = Size.relativeSizeRange.start + this.coerceAtLeast(0f).coerceAtMost(1f)
 
 
 object Size {

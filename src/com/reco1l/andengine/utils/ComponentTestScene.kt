@@ -1,6 +1,5 @@
 package com.reco1l.andengine.utils
 
-import com.osudroid.BuildSettings
 import com.reco1l.andengine.Anchor
 import com.reco1l.andengine.Axes
 import com.reco1l.andengine.UIEngine
@@ -60,13 +59,13 @@ object ComponentTestScene : UIScrollableContainer() {
                 }
 
                 textButton {
-                    weight = 1f
+                    width = Size.Full
                     leadingIcon = FontAwesomeIcon(Icon.ArrowLeft)
                     text = "Button left"
                 }
 
                 textButton {
-                    weight = 1f
+                    width = Size.Full
                     trailingIcon = FontAwesomeIcon(Icon.ArrowRight)
                     text = "Button right"
                 }
@@ -224,11 +223,7 @@ object ComponentTestScene : UIScrollableContainer() {
                     }
                 }
 
-                +UICheckbox().apply {
-                    onValueChange = {
-                        BuildSettings.SHOW_ENTITY_BOUNDARIES = it
-                    }
-                }
+                +UICheckbox()
 
             }
 

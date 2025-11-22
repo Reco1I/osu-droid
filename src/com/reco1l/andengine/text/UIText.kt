@@ -416,8 +416,8 @@ open class CompoundText : UIFillContainer() {
      * The text entity.
      */
     val textComponent = UIText().apply {
+        width = Size.Full
         shrink = false
-        weight = 1f
         anchor = Anchor.CenterLeft
         origin = Anchor.CenterLeft
         isVisible = false

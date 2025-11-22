@@ -59,13 +59,13 @@ val IEntity?.padding: Vec4
  * The width minus padding of the entity.
  */
 val IEntity.innerWidth: Float
-    get() = width - padding.horizontal
+    get() = if (this is UIComponent) innerWidth else width - padding.horizontal
 
 /**
  * The height minus padding of the entity.
  */
 val IEntity.innerHeight: Float
-    get() = if (this is UIComponent) height - padding.vertical else height
+    get() = if (this is UIComponent) innerHeight else height - padding.vertical
 
 //endregion
 

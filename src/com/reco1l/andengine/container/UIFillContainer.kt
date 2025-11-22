@@ -31,10 +31,17 @@ open class UIFillContainer : UILinearContainer() {
             }
             visibleCount++
 
-            totalWidth += child.intrinsicWidth
-            totalHeight += child.intrinsicHeight
+            // In the layout system dimensions below zero are not allowed, so we use negative
+            // values to indicate Auto or Full sizes but we can't use them directly here,
+            // instead we need to use intrinsic sizes. But if raw size is greater or equal to
+            // zero it means the size is fixed and we should use it as is.
+            totalWidth += if (child.rawWidth >= 0f) child.rawWidth else child.intrinsicWidth
+            totalHeight += if (child.rawHeight >= 0f) child.rawHeight else child.intrinsicHeight
 
-            totalWeight += child.weight
+            when (orientation) {
+                Orientation.Horizontal -> if (child.rawWidth == Size.Full) totalWeight++
+                Orientation.Vertical -> if (child.rawHeight == Size.Full) totalWeight++
+            }
         }
 
         // Nothing to distribute.
@@ -44,7 +51,10 @@ open class UIFillContainer : UILinearContainer() {
         }
 
         val totalSpacing = spacing * (visibleCount - 1)
-        val freeSpace = width - totalWidth - totalSpacing
+        val freeSpace = when (orientation) {
+            Orientation.Horizontal -> innerWidth - totalWidth - totalSpacing
+            Orientation.Vertical -> innerHeight - totalHeight - totalSpacing
+        }
 
         // Second pass - place items, distribute remaining space according to weights
         var contentWidth = 0f
@@ -56,14 +66,18 @@ open class UIFillContainer : UILinearContainer() {
                 return@forEachIndexed
             }
 
-            val weightPortion = child.weight / totalWeight
+            val weightPortion = 1f / totalWeight
             val extraSpace = freeSpace * weightPortion
             val spacing = (if (index < visibleCount - 1) spacing else 0f)
 
             when (orientation) {
 
                 Orientation.Horizontal -> {
-                    child.width = child.intrinsicWidth + extraSpace
+                    if (child.rawWidth == Size.Full) {
+                        val assignedWidth = child.intrinsicWidth + extraSpace
+                        child.minWidth = assignedWidth
+                        child.maxWidth = assignedWidth
+                    }
                     child.x = contentWidth
 
                     contentWidth += child.width + spacing
@@ -71,11 +85,15 @@ open class UIFillContainer : UILinearContainer() {
                 }
 
                 Orientation.Vertical -> {
-                    child.height = child.intrinsicHeight + extraSpace
-                    child.y = contentWidth
+                    if (child.rawHeight == Size.Full) {
+                        val assignedHeight = child.intrinsicHeight + extraSpace
+                        child.minHeight = assignedHeight
+                        child.maxHeight = assignedHeight
+                    }
+                    child.y = contentHeight
 
-                    contentWidth += child.height + spacing
-                    contentHeight = max(contentHeight, child.width)
+                    contentWidth = max(contentWidth, child.width)
+                    contentHeight += child.height + spacing
                 }
             }
         }

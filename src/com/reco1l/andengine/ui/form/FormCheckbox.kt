@@ -22,7 +22,6 @@ open class FormCheckbox(initialValue: Boolean = false) : FormControl<Boolean, UI
             width = Size.Full
 
             linearContainer {
-                weight = 1f
                 anchor = Anchor.CenterLeft
                 origin = Anchor.CenterLeft
                 style = {

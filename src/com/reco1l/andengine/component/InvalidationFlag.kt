@@ -4,9 +4,9 @@ import androidx.annotation.*
 
 @Suppress("ConstPropertyName")
 @IntDef(value = [
+    InvalidationFlag.Content,
     InvalidationFlag.Size,
     InvalidationFlag.Position,
-    InvalidationFlag.Content,
     InvalidationFlag.Transformations,
     InvalidationFlag.InputBindings
 ])
@@ -14,27 +14,27 @@ annotation class InvalidationFlag {
     companion object {
 
         /**
-         * The size of the entity has changed. Calls [UIComponent.onSizeChanged].
+         * The size of the entity has changed.
          */
-        const val Size = 1
+        const val Content = 1
 
         /**
-         * The content of the entity has changed. Calls [UIComponent.onContentChanged].
+         * The size of the entity has changed.
          */
-        const val Content = 1 shl 1
+        const val Size = 1 shl 1
 
         /**
-         * The position of the entity has changed. Calls [UIComponent.onPositionChanged].
+         * The position of the entity has changed.
          */
         const val Position = 1 shl 2
 
         /**
-         * The transformations of the entity have changed. Calls [UIComponent.onInvalidateTransformations].
+         * The transformations of the entity have changed.
          */
         const val Transformations = 1 shl 3
 
         /**
-         * The input bindings were removed. Calls [UIComponent.onInvalidateInputBindings].
+         * The input bindings were removed.
          */
         const val InputBindings = 1 shl 4
 

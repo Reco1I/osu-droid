@@ -99,6 +99,7 @@ open class UIButton : UIContainer(), ISizeVariable, IColorVariable {
     init {
         scaleCenter = Anchor.Center
         shrink = false
+        clipToBounds = true
 
         style = {
 

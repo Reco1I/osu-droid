@@ -85,7 +85,6 @@ open class FontAwesomeIcon(icon: Int = Icon.Question) : UIBufferedComponent<Comp
     init {
         width = Size.Auto
         height = Size.Auto
-        invalidate(InvalidationFlag.Content)
     }
 
 

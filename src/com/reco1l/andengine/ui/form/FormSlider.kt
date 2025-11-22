@@ -43,7 +43,7 @@ open class FormSlider(initialValue: Float = 0f) : FormControl<Float, UISlider>(i
             width = Size.Full
 
             linearContainer {
-                weight = 1f
+                width = Size.Full
                 style = {
                     spacing = 2f.srem
                 }
