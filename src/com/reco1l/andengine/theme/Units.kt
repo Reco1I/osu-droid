@@ -50,6 +50,20 @@ val Int.srem: Float
 val Float.pct: Float
     get() = Size.relativeSizeRange.start + this.coerceAtLeast(0f).coerceAtMost(1f)
 
+/**
+ * Indicates that this float value is in "vw" units (viewport width).
+ * It will be converted to pixels by multiplying it with the surface width.
+ */
+val Float.vw: Float
+    get() = this * UIEngine.Companion.current.surfaceWidth / 100f
+
+/**
+ * Indicates that this float value is in "vh" units (viewport height).
+ * It will be converted to pixels by multiplying it with the surface height.
+ */
+val Float.vh: Float
+    get() = this * UIEngine.Companion.current.surfaceHeight / 100f
+
 
 object Size {
 
