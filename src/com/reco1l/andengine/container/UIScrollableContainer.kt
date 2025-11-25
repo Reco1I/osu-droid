@@ -471,8 +471,8 @@ open class UIScrollableContainer : UIContainer() {
             }
         }
 
-        if (!isScrolling) {
-            super.onAreaTouched(event, localX, localY)
+        if (!isUserScrolling) {
+            return super.onAreaTouched(event, localX, localY)
         }
 
         return true
