@@ -122,6 +122,17 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
      */
     var autoScrollTimeout = 3f
 
+    /**
+     * Whether to wrap text that exceeds the width of the component.
+     */
+    var wrapText = false
+        set(value) {
+            if (field != value) {
+                field = value
+                invalidate(InvalidationFlag.Content)
+            }
+        }
+
 
     private var currentLength = 0
     private var scrollX = 0f
@@ -159,26 +170,40 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
             return
         }
 
-        lines = text.split('\n')
-        
-        linesWidth = IntArray(lines!!.size) { i ->
-            val line = lines!![i]
-            var width = 0
-            var charIndex = 0
-            
-            while (charIndex < line.length) {
-                val codePoint = line.codePointAt(charIndex)
-                val charCount = Character.charCount(codePoint)
+        val originalLines = text.split('\n')
 
-                val characterString = line.substring(charIndex, charIndex + charCount)
+        if (wrapText && width > 0f) {
+            val wrappedLines = mutableListOf<String>()
+            val wrappedLinesWidth = mutableListOf<Int>()
 
-                width += font.getLetter(characterString).mAdvance
-                charIndex += charCount
+            originalLines.forEach { originalLine ->
+                wrapLine(originalLine, font, width.toInt(), wrappedLines, wrappedLinesWidth)
             }
-            width
+
+            lines = wrappedLines
+            linesWidth = wrappedLinesWidth.toIntArray()
+        } else {
+            lines = originalLines
+
+            linesWidth = IntArray(lines!!.size) { i ->
+                val line = lines!![i]
+                var width = 0
+                var charIndex = 0
+
+                while (charIndex < line.length) {
+                    val codePoint = line.codePointAt(charIndex)
+                    val charCount = Character.charCount(codePoint)
+
+                    val characterString = line.substring(charIndex, charIndex + charCount)
+
+                    width += font.getLetter(characterString).mAdvance
+                    charIndex += charCount
+                }
+                width
+            }
         }
 
-        contentWidth = linesWidth!!.max().toFloat()
+        contentWidth = if (linesWidth!!.isNotEmpty()) linesWidth!!.max().toFloat() else 0f
         contentHeight = (lines!!.size * font.lineHeight + (lines!!.size - 1) * font.lineGap).toFloat()
 
         requestBufferUpdate()
@@ -187,7 +212,68 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
 
     override fun onSizeChanged() {
         super.onSizeChanged()
+
+        if (wrapText) {
+            invalidate(InvalidationFlag.Content)
+        }
         requestBufferUpdate()
+    }
+
+    private fun wrapLine(line: String, font: Font, maxWidth: Int, outputLines: MutableList<String>, outputWidths: MutableList<Int>) {
+        if (line.isEmpty()) {
+            outputLines.add("")
+            outputWidths.add(0)
+            return
+        }
+
+        var currentLineStart = 0
+        var currentWidth = 0
+        var lastSpaceIndex = -1
+        var lastSpaceWidth = 0
+        var charIndex = 0
+
+        while (charIndex < line.length) {
+            val codePoint = line.codePointAt(charIndex)
+            val charCount = Character.charCount(codePoint)
+            val characterString = line.substring(charIndex, charIndex + charCount)
+
+            val letterAdvance = font.getLetter(characterString).mAdvance
+            val newWidth = currentWidth + letterAdvance
+
+            if (characterString == " ") {
+                lastSpaceIndex = charIndex
+                lastSpaceWidth = currentWidth
+            }
+
+            if (newWidth > maxWidth && currentWidth > 0) {
+                if (lastSpaceIndex > currentLineStart) {
+                    outputLines.add(line.substring(currentLineStart, lastSpaceIndex))
+                    outputWidths.add(lastSpaceWidth)
+                    currentLineStart = lastSpaceIndex + 1
+                    charIndex = currentLineStart
+                    currentWidth = 0
+                    lastSpaceIndex = -1
+                    lastSpaceWidth = 0
+                    continue
+                } else {
+                    outputLines.add(line.substring(currentLineStart, charIndex))
+                    outputWidths.add(currentWidth)
+                    currentLineStart = charIndex
+                    currentWidth = 0
+                    lastSpaceIndex = -1
+                    lastSpaceWidth = 0
+                    continue
+                }
+            }
+
+            currentWidth = newWidth
+            charIndex += charCount
+        }
+
+        if (currentLineStart < line.length) {
+            outputLines.add(line.substring(currentLineStart))
+            outputWidths.add(currentWidth)
+        }
     }
 
     override fun onCreateBuffer(): CompoundBuffer {
