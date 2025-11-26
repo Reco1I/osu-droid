@@ -312,7 +312,7 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
     /**
      * The style of this component.
      */
-    var style: UIComponent.(theme: Theme) -> Unit = {}
+    var style: StyleApplier = {}
         set(value) {
             if (field != value) {
                 field = value
@@ -353,11 +353,11 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
      * The background color of this component.
      */
     var backgroundColor
-        get() = backgroundBox?.color ?: Color4.Transparent
+        get() = background?.color ?: Color4.Transparent
         set(value) {
-            if (backgroundBox?.color != value) {
+            if (background?.color != value) {
                 initializeBackground()
-                backgroundBox!!.color = value
+                background!!.color = value
             }
         }
 
@@ -365,11 +365,11 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
      * The border color of this component.
      */
     var borderColor
-        get() = borderBox?.color ?: Color4.Transparent
+        get() = border?.color ?: Color4.Transparent
         set(value) {
-            if (borderBox?.color != value) {
+            if (border?.color != value) {
                 initializeBorder()
-                borderBox!!.color = value
+                border!!.color = value
             }
         }
 
@@ -377,11 +377,11 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
      * The border width of this component.
      */
     var borderWidth
-        get() = borderBox?.lineWidth ?: 0f
+        get() = border?.lineWidth ?: 0f
         set(value) {
-            if (borderBox?.lineWidth != value) {
+            if (border?.lineWidth != value) {
                 initializeBorder()
-                borderBox!!.lineWidth = value
+                border!!.lineWidth = value
             }
         }
 
@@ -392,8 +392,8 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
         set(value) {
             if (field != value) {
                 field = value
-                backgroundBox?.radius = value
-                borderBox?.radius = value
+                background?.radius = value
+                border?.radius = value
             }
         }
 
@@ -414,8 +414,8 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
 
 
     private var invalidationFlags = InvalidationFlag.All
-    private var backgroundBox: UIBox? = null
-    private var borderBox: UIBox? = null
+    private var background: UIBox? = null
+    private var border: UIBox? = null
 
     private val inputBindings = arrayOfNulls<UIComponent>(10)
 
@@ -433,8 +433,8 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
     }
 
     private fun initializeBackground() {
-        if (backgroundBox == null) {
-            backgroundBox = UIBox().apply {
+        if (background == null) {
+            background = UIBox().apply {
                 setParent(this@UIComponent, AttachmentMode.Decorator)
                 radius = this@UIComponent.radius
                 color = Color4.Transparent
@@ -443,8 +443,8 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
     }
 
     private fun initializeBorder() {
-        if (borderBox == null) {
-            borderBox = UIBox().apply {
+        if (border == null) {
+            border = UIBox().apply {
                 setParent(this@UIComponent, AttachmentMode.Decorator)
                 paintStyle = PaintStyle.Outline
                 radius = this@UIComponent.radius
@@ -712,24 +712,24 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
 
         val flags = invalidationFlags
 
-        var propagateInChildrenFlags = 0
-        var propagateInParentFlags = 0
+        var propagateToChildrenFlags = 0
+        var propagateToParentFlags = 0
 
         if (flags and InvalidationFlag.Content != 0) {
             onContentChanged()
-            propagateInChildrenFlags = InvalidationFlag.Content
-            propagateInParentFlags = InvalidationFlag.Content
+            propagateToChildrenFlags = InvalidationFlag.Content
+            propagateToParentFlags = InvalidationFlag.Content
         }
 
         if (flags and InvalidationFlag.Size != 0) {
             onSizeChanged()
-            propagateInChildrenFlags = InvalidationFlag.Content
-            propagateInParentFlags = InvalidationFlag.Content
+            propagateToChildrenFlags = InvalidationFlag.Content
+            propagateToParentFlags = InvalidationFlag.Content
         }
 
         if (flags and InvalidationFlag.Position != 0) {
             onPositionChanged()
-            propagateInParentFlags = InvalidationFlag.Content
+            propagateToParentFlags = InvalidationFlag.Content
         }
 
         // Transformations have and special case since they are affected by position and size changes as well
@@ -737,23 +737,25 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
         // still transformations.
         if (flags and InvalidationFlag.Transformations != 0 || flags and InvalidationFlag.Position != 0 || flags and InvalidationFlag.Size != 0) {
             onInvalidateTransformations()
-            propagateInChildrenFlags = propagateInChildrenFlags or InvalidationFlag.Transformations
+            propagateToChildrenFlags = propagateToChildrenFlags or InvalidationFlag.Transformations
         }
 
         if (flags and InvalidationFlag.InputBindings != 0) {
             onInvalidateInputBindings()
-            propagateInChildrenFlags = propagateInChildrenFlags or InvalidationFlag.InputBindings
+            propagateToChildrenFlags = propagateToChildrenFlags or InvalidationFlag.InputBindings
         }
 
-        val parent = parent
-        if (parent is UIComponent && propagateInParentFlags != 0) {
-            parent.invalidate(propagateInParentFlags)
+        if (propagateToParentFlags != 0) {
+            val parent = parent
+            if (parent is UIComponent) {
+                parent.invalidate(propagateToParentFlags)
+            }
         }
 
-        if (propagateInChildrenFlags != 0) {
+        if (propagateToChildrenFlags != 0) {
             forEach { child ->
                 if (child is UIComponent) {
-                    child.invalidate(propagateInChildrenFlags)
+                    child.invalidate(propagateToChildrenFlags)
                 }
             }
         }
@@ -769,16 +771,16 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
         gl.glPushMatrix()
         onApplyTransformations(gl, camera)
 
-        backgroundBox?.setSize(width, height)
-        backgroundBox?.onHandleInvalidations()
-        backgroundBox?.onDraw(gl, camera)
+        background?.setSize(width, height)
+        background?.onHandleInvalidations()
+        background?.onDraw(gl, camera)
 
         doDraw(gl, camera)
         onDrawChildren(gl, camera)
 
-        borderBox?.setSize(width, height)
-        borderBox?.onHandleInvalidations()
-        borderBox?.onDraw(gl, camera)
+        border?.setSize(width, height)
+        border?.onHandleInvalidations()
+        border?.onDraw(gl, camera)
 
         if (BuildSettings.SHOW_ENTITY_BOUNDARIES && DEBUG_FOREGROUND != this && attachmentMode != AttachmentMode.Decorator) {
             DEBUG_FOREGROUND.setSize(width, height)
@@ -806,8 +808,8 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
     //region Update
 
     override fun onManagedUpdate(deltaTimeSec: Float) {
-        backgroundBox?.onManagedUpdate(deltaTimeSec)
-        borderBox?.onManagedUpdate(deltaTimeSec)
+        background?.onManagedUpdate(deltaTimeSec)
+        border?.onManagedUpdate(deltaTimeSec)
 
         super.onManagedUpdate(deltaTimeSec)
     }
@@ -854,12 +856,6 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
         // This recreates and calculates the transformation matrices.
         localToParentTransformation
         parentToLocalTransformation
-
-        forEach {
-            if (it is UIComponent) {
-                it.onInvalidateTransformations()
-            }
-        }
     }
 
 
@@ -1017,12 +1013,6 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
             }
         }
         inputBindings.fill(null)
-
-        forEach { child ->
-            if (child is UIComponent) {
-                child.onInvalidateInputBindings()
-            }
-        }
     }
 
     /**
@@ -1069,8 +1059,8 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
     //region Cosmetic functions
 
     fun onStyle(theme: Theme) {
-        backgroundBox?.onStyle(theme)
-        borderBox?.onStyle(theme)
+        background?.onStyle(theme)
+        border?.onStyle(theme)
 
         style(theme)
     }
