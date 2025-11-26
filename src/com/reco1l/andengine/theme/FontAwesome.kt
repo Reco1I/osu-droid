@@ -10,7 +10,7 @@ object IconVariant {
 
 /**
  * FontAwesome icons.
- * They are represented by their Unicode code point, you might need to convert them to a character.
+ * They are represented by their Unicode code point.
  */
 object Icon {
     const val _0 = 0x0030
