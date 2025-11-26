@@ -15,6 +15,10 @@ inline fun IEntity.container(builder: UIContainer.() -> Unit): UIContainer {
     return UIContainer().apply(builder).also(::attachChild)
 }
 
+inline fun IEntity.clickableContainer(builder: UIClickableContainer.() -> Unit): UIClickableContainer {
+    return UIClickableContainer().apply(builder).also(::attachChild)
+}
+
 inline fun IEntity.linearContainer(builder: UILinearContainer.() -> Unit): UILinearContainer {
     return UILinearContainer().apply(builder).also(::attachChild)
 }
