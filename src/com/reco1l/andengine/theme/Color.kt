@@ -627,6 +627,6 @@ object Colors {
     val Stone950 = oklch(0.147f, 0.004f, 49.25f)
 
     val Black = rgb(0, 0, 0)
-    val White = rgb(1, 1, 1)
+    val White = rgb(1f, 1f, 1f)
     val Transparent = rgb(0, 0, 0, 0)
 }
