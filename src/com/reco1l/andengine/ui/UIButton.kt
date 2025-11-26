@@ -3,7 +3,6 @@ package com.reco1l.andengine.ui
 import com.edlplan.framework.easing.*
 import com.reco1l.andengine.*
 import com.reco1l.andengine.component.*
-import com.reco1l.andengine.container.*
 import com.reco1l.andengine.modifier.*
 import com.reco1l.andengine.text.*
 import com.reco1l.andengine.theme.FontSize
@@ -16,7 +15,7 @@ import com.reco1l.framework.math.*
 import org.anddev.andengine.input.touch.TouchEvent
 
 @Suppress("LeakingThis")
-open class UIButton : UIContainer(), ISizeVariable, IColorVariable {
+open class UIButton : UIClickableContainer(), ISizeVariable, IColorVariable {
 
 
     override var sizeVariant = SizeVariant.Medium
@@ -37,12 +36,6 @@ open class UIButton : UIContainer(), ISizeVariable, IColorVariable {
 
 
     //region State
-
-    /**
-     * Whether the button is being pressed or not.
-     */
-    var isPressed = false
-        private set
 
     /**
      * Whether the button is enabled or not. If disabled, the button will not process any
@@ -66,32 +59,6 @@ open class UIButton : UIContainer(), ISizeVariable, IColorVariable {
             colorVariant = if (value) ColorVariant.Primary else ColorVariant.Secondary
         }
 
-
-    private var pressStartTime = 0L
-
-    //endregion
-
-    //region Actions
-
-    /**
-     * The action to perform when the button is pressed.
-     */
-    var onActionDown: (() -> Unit)? = null
-
-    /**
-     * The action to perform when the button is released.
-     */
-    var onActionUp: (() -> Unit)? = null
-
-    /**
-     * The action to perform when the button is cancelled.
-     */
-    var onActionCancel: (() -> Unit)? = null
-
-    /**
-     * The action to perform when the button is long pressed.
-     */
-    var onActionLongPress: (() -> Unit)? = null
 
     //endregion
 
@@ -168,53 +135,12 @@ open class UIButton : UIContainer(), ISizeVariable, IColorVariable {
     }
 
     override fun onAreaTouched(event: TouchEvent, localX: Float, localY: Float): Boolean {
-
         if (!isEnabled) {
             return true
         }
         processTouchFeedback(event)
-
-        when {
-            event.isActionDown -> {
-                isPressed = true
-                onActionDown?.invoke()
-                pressStartTime = System.currentTimeMillis()
-            }
-
-            event.isActionUp -> {
-                if (localX <= width && localY <= height && isPressed) {
-                    onActionUp?.invoke()
-                } else {
-                    onActionCancel?.invoke()
-                }
-                isPressed = false
-            }
-
-            event.isActionOutside || event.isActionCancel -> {
-                onActionCancel?.invoke()
-                isPressed = false
-            }
-
-            !event.isActionMove -> isPressed = false
-        }
-
-        return true
+        return super.onAreaTouched(event, localX, localY)
     }
-
-    //endregion
-
-    override fun onManagedUpdate(deltaTimeSec: Float) {
-
-        if (onActionLongPress != null) {
-            if (isPressed && System.currentTimeMillis() - pressStartTime >= 500L) {
-                onActionLongPress?.invoke()
-                propagateTouchEvent(TouchEvent.ACTION_CANCEL)
-            }
-        }
-
-        super.onManagedUpdate(deltaTimeSec)
-    }
-
 }
 
 
@@ -279,6 +205,7 @@ open class UIIconButton : UIButton() {
                 if (value != null) {
                     value.anchor = Anchor.Center
                     value.origin = Anchor.Center
+                    applyStyle()
                     attachChild(value)
                 }
             }
