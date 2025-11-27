@@ -9,6 +9,7 @@ import com.reco1l.andengine.theme.FontSize
 import com.reco1l.andengine.theme.Radius
 import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.theme.pct
+import com.reco1l.andengine.theme.srem
 import com.reco1l.framework.*
 import com.reco1l.framework.math.*
 import org.anddev.andengine.input.touch.*
@@ -173,16 +174,20 @@ open class UIModal(
 
 abstract class UIDialog<T : UIComponent>(val innerContent: T) : UIModal(card = UILinearContainer().apply {
     orientation = Orientation.Vertical
+    style = {
+        backgroundColor = it.accentColor * 0.15f
+        radius = Radius.XL
+    }
 }) {
 
     val titleEntity = UIText().apply {
         width = Size.Full
-        fontSize = FontSize.SM
         alignment = Anchor.Center
-        padding = Vec4(0f, 16f)
 
         style = {
             color = it.accentColor * 0.7f
+            fontSize = FontSize.SM
+            padding = Vec4(3f.srem)
         }
     }
 
@@ -207,21 +212,30 @@ abstract class UIDialog<T : UIComponent>(val innerContent: T) : UIModal(card = U
 
             box {
                 width = Size.Full
-                height = 1f
+                height = 2f
                 style = {
-                    color = it.accentColor
-                    alpha = 0.1f
+                    color = it.accentColor / 0.1f
                 }
             }
 
             +innerContent
 
+            box {
+                width = Size.Full
+                height = 2f
+                style = {
+                    color = it.accentColor / 0.1f
+                }
+            }
+
             buttonLayout = fillContainer {
                 width = Size.Full
                 anchor = Anchor.TopCenter
                 origin = Anchor.TopCenter
-                padding = Vec4(24f)
-                spacing = 12f
+                style = {
+                    padding = Vec4(3f.srem)
+                    spacing = 3f.srem
+                }
             }
         }
     }
