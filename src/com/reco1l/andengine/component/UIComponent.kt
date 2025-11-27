@@ -295,14 +295,14 @@ abstract class UIComponent : Entity(0f, 0f), ITouchArea, IModifierChain {
      * anchor and origin in the parent's coordinate system.
      */
     val absoluteX
-        get() = (if (attachmentMode == AttachmentMode.Child) parent.padding.left else 0f) + anchorPositionX - originPositionX + x
+        get() = (if (attachmentMode == AttachmentMode.Child) parent.padding.left else 0f) + anchorPositionX - originPositionX + x + translationX
 
     /**
      * The absolute position for the Y axis of the entity taking into account the
      * anchor and origin in the parent's coordinate system.
      */
     val absoluteY
-        get() = (if (attachmentMode == AttachmentMode.Child) parent.padding.top else 0f) + anchorPositionY - originPositionY + y
+        get() = (if (attachmentMode == AttachmentMode.Child) parent.padding.top else 0f) + anchorPositionY - originPositionY + y + translationY
 
 
     //endregion
