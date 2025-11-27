@@ -213,6 +213,8 @@ open class UIIconButton : UIButton() {
 
     init {
         style += {
+            width = height
+
             when (sizeVariant) {
                 SizeVariant.Small -> {
                     icon?.width = FontSize.SM
