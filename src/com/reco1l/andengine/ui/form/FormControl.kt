@@ -42,10 +42,12 @@ abstract class FormControl<V : Any, C: UIControl<V>>(initialValue: V): UILinearC
      * The text that is displayed as the label of the control.
      */
     open val labelText = UIText().apply {
-        fontSize = FontSize.SM
         anchor = Anchor.CenterLeft
         origin = Anchor.CenterLeft
-        style = { color = it.accentColor }
+        style = {
+            fontSize = FontSize.SM
+            color = it.accentColor
+        }
     }
 
     /**
@@ -56,19 +58,10 @@ abstract class FormControl<V : Any, C: UIControl<V>>(initialValue: V): UILinearC
         origin = Anchor.CenterLeft
         scaleCenter = Anchor.Center
         text = "Reset"
-        isSelected = true
+        leadingIcon = FontAwesomeIcon(Icon.RotateLeft)
+        colorVariant = ColorVariant.Primary
+        sizeVariant = SizeVariant.Small
 
-        leadingIcon = FontAwesomeIcon(Icon.RotateLeft).apply {
-            iconSize = FontSize.XXS
-        }
-
-        style += {
-            height = 1f.rem
-            padding = Vec4(1f.srem, 0f)
-            fontSize = FontSize.XS
-        }
-
-        isVisible = false
         alpha = 0f
         translationX = -10f
 
