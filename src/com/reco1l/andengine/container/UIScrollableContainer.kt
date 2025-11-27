@@ -427,6 +427,8 @@ open class UIScrollableContainer : UIContainer() {
             return super.onAreaTouched(event, localX, localY)
         }
 
+        val wasUserScrolling = isUserScrolling
+
         when (event.action) {
 
             ACTION_DOWN -> {
@@ -471,7 +473,7 @@ open class UIScrollableContainer : UIContainer() {
             }
         }
 
-        if (!isUserScrolling) {
+        if (!wasUserScrolling && !isUserScrolling) {
             return super.onAreaTouched(event, localX, localY)
         }
 
