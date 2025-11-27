@@ -207,12 +207,9 @@ open class UIText : UIBufferedComponent<CompoundBuffer>() {
         contentHeight = (lines!!.size * font.lineHeight + (lines!!.size - 1) * font.lineGap).toFloat()
 
         requestBufferUpdate()
-        super.onContentChanged()
     }
 
     override fun onSizeChanged() {
-        super.onSizeChanged()
-
         if (wrapText) {
             invalidate(InvalidationFlag.Content)
         }
