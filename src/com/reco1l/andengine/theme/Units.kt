@@ -55,14 +55,14 @@ val Float.pct: Float
  * It will be converted to pixels by multiplying it with the surface width.
  */
 val Float.vw: Float
-    get() = this * UIEngine.Companion.current.surfaceWidth / 100f
+    get() = this * UIEngine.Companion.current.surfaceWidth
 
 /**
  * Indicates that this float value is in "vh" units (viewport height).
  * It will be converted to pixels by multiplying it with the surface height.
  */
 val Float.vh: Float
-    get() = this * UIEngine.Companion.current.surfaceHeight / 100f
+    get() = this * UIEngine.Companion.current.surfaceHeight
 
 
 object Size {
