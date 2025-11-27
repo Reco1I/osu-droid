@@ -1,3 +1,4 @@
+@file:Suppress("ConstPropertyName")
 package com.reco1l.andengine.theme
 
 object Radius {
@@ -15,5 +16,7 @@ object Radius {
 
     val XL
         get() = 0.75f.rem
+
+    const val Full = Float.MAX_VALUE
 
 }
