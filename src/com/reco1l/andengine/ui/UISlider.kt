@@ -11,6 +11,7 @@ import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.theme.rem
 import com.reco1l.framework.Interpolation
 import com.reco1l.framework.math.*
+import com.reco1l.toolkt.roundBy
 import org.anddev.andengine.input.touch.*
 import kotlin.math.*
 
@@ -48,6 +49,27 @@ open class UISlider(initialValue: Float = 0f) : UIControl<Float>(initialValue) {
                 throw IllegalArgumentException("step must be greater than or equal to 0")
             }
             field = step
+        }
+
+    /**
+     * The number of decimal places to round [value] to.
+     *
+     * When set to `null`, no rounding will happen.
+     */
+    var precision: Int? = null
+        set(precision) {
+            if (field != precision) {
+                if (precision != null && precision < 0) {
+                    throw IllegalArgumentException("precision must be greater than or equal to 0")
+                }
+
+                field = precision
+
+                if (precision != null) {
+                    // Reapply the current value to apply the new precision.
+                    value = onProcessValue(value)
+                }
+            }
         }
 
     /**
@@ -138,10 +160,18 @@ open class UISlider(initialValue: Float = 0f) : UIControl<Float>(initialValue) {
     }
 
     override fun onProcessValue(value: Float): Float {
+        var result = value
+        val precision = precision
+
         if (step > 0f) {
-            return (min + step * round((value - min) / step)).coerceIn(min, max)
+            result = min + step * round((value - min) / step)
         }
-        return value.coerceIn(min, max)
+
+        if (precision != null) {
+            result = result.roundBy(precision)
+        }
+
+        return result.coerceIn(min, max)
     }
 
 

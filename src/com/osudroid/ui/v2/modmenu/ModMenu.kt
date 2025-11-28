@@ -11,8 +11,8 @@ import com.osudroid.multiplayer.api.RoomAPI.setPlayerMods
 import com.osudroid.multiplayer.api.RoomAPI.setRoomMods
 import com.osudroid.multiplayer.api.data.RoomMods
 import com.osudroid.multiplayer.Multiplayer
-import com.osudroid.ui.OsuColors
 import com.osudroid.ui.v2.ModsIndicator
+import com.osudroid.ui.v2.StarRatingBadge
 import com.osudroid.utils.updateThread
 import com.reco1l.andengine.component.*
 import com.reco1l.andengine.theme.Size
@@ -70,7 +70,7 @@ object ModMenu : UIScene() {
     private val csBadge: UILabeledBadge
     private val hpBadge: UILabeledBadge
     private val bpmBadge: UILabeledBadge
-    private val starRatingBadge: UILabeledBadge
+    private val starRatingBadge: StarRatingBadge
     private val scoreMultiplierBadge: UILabeledBadge
 
     private var parsedBeatmap: Beatmap? = null
@@ -289,10 +289,8 @@ object ModMenu : UIScene() {
                     origin = Anchor.CenterRight
                     spacing = 10f
 
-                    starRatingBadge = labeledBadge {
-                        label = "★"
-                        value = "0.00"
-                    }
+                    starRatingBadge = StarRatingBadge()
+                    +starRatingBadge
 
                     rankedBadge = badge {
                         text = "Ranked"
@@ -391,23 +389,7 @@ object ModMenu : UIScene() {
 
             ensureActive()
 
-            updateThread {
-                starRatingBadge.clearEntityModifiers()
-
-                starRatingBadge.valueComponent.text = "%.2f".format(attributes.starRating)
-                starRatingBadge.backgroundColor = OsuColors.getStarRatingColor(attributes.starRating)
-
-                if (attributes.starRating >= 6.5) {
-                    starRatingBadge.colorTo(Color4(0xFFFFD966), 0.1f)
-                    starRatingBadge.fadeTo(1f, 0.1f)
-                } else {
-                    starRatingBadge.colorTo(Color4.Black, 0.1f)
-                    starRatingBadge.fadeTo(0.75f, 0.1f)
-                }
-            }
-
-            ensureActive()
-
+            starRatingBadge.rating = attributes.starRating
             songMenu.changeDimensionInfo(selectedBeatmap)
             songMenu.setStarsDisplay(attributes.starRating.toFloat())
         }
@@ -605,7 +587,7 @@ object ModMenu : UIScene() {
 
         parseBeatmap()
 
-        selectedModsIndicator.mods = ModUtils.serializeMods(enabledMods, includeNonUserPlayable = true, includeIrrelevantMods = true)
+        selectedModsIndicator.mods = enabledMods
         modPresetsSection.onModsChanged()
     }
 

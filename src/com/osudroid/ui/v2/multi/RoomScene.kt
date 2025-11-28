@@ -139,7 +139,6 @@ class RoomScene(val room: Room) : UIScene(), IRoomEventListener, IPlayerEventLis
         ResourceManager.getInstance().loadHighQualityAsset("swap", "swap.png")
         ResourceManager.getInstance().loadHighQualityAsset("clock", "clock.png")
         ResourceManager.getInstance().loadHighQualityAsset("bpm", "bpm.png")
-        ResourceManager.getInstance().loadHighQualityAsset("star", "star.png")
         ResourceManager.getInstance().loadHighQualityAsset("chat", "chat.png")
         ResourceManager.getInstance().loadHighQualityAsset("download", "download.png")
         ResourceManager.getInstance().loadHighQualityAsset("send", "send.png")
@@ -488,7 +487,7 @@ class RoomScene(val room: Room) : UIScene(), IRoomEventListener, IPlayerEventLis
         freeModsBadge.isVisible = room.gameplaySettings.isFreeMod
 
         nameText.text = room.name
-        modsIndicator.mods = room.mods.json
+        modsIndicator.mods = room.mods.values
     }
 
     private fun updatePlayerList() {

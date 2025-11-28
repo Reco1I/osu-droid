@@ -2,7 +2,6 @@ package com.osudroid.ui.v2
 
 import com.osudroid.data.*
 import com.osudroid.multiplayer.api.data.*
-import com.osudroid.ui.*
 import com.osudroid.ui.v2.modmenu.*
 import com.reco1l.andengine.*
 import com.reco1l.andengine.container.*
@@ -11,16 +10,11 @@ import com.reco1l.andengine.text.*
 import com.reco1l.andengine.theme.FontSize
 import com.reco1l.andengine.theme.Size
 import com.reco1l.andengine.ui.*
-import com.reco1l.framework.*
 import com.reco1l.toolkt.*
 import com.rian.osu.*
-import com.rian.osu.beatmap.*
-import com.rian.osu.beatmap.DroidHitWindow.Companion.hitWindow300ToOverallDifficulty
-import com.rian.osu.mods.*
 import com.rian.osu.utils.ModUtils.applyModsToBeatmapDifficulty
 import com.rian.osu.utils.ModUtils.calculateRateWithMods
 import ru.nsu.ccfit.zuev.osu.*
-import ru.nsu.ccfit.zuev.osu.game.*
 import java.text.*
 import java.util.*
 import kotlin.math.roundToInt
@@ -43,7 +37,7 @@ class BeatmapInfoLayout : UILinearContainer() {
     private lateinit var slidersBadge: UILabeledBadge
     private lateinit var spinnersBadge: UILabeledBadge
 
-    private lateinit var starsText: CompoundText
+    private lateinit var starRatingBadge: StarRatingBadge
     private lateinit var versionText: UIText
 
 
@@ -80,10 +74,8 @@ class BeatmapInfoLayout : UILinearContainer() {
                 }
             }
 
-            starsText = badge {
-                text = "0.00"
-                leadingIcon = UISprite(ResourceManager.getInstance().getTexture("star-xs"))
-            }
+            starRatingBadge = StarRatingBadge()
+            +starRatingBadge
         }
 
         linearContainer {
@@ -136,22 +128,22 @@ class BeatmapInfoLayout : UILinearContainer() {
 
                 arText = labeledBadge {
                     label = "AR"
-                    value = "00.0"
+                    value = "0.00"
                     sizeVariant = SizeVariant.Small
                 }
                 odText = labeledBadge {
                     label = "OD"
-                    value = "00.0"
+                    value = "0.00"
                     sizeVariant = SizeVariant.Small
                 }
                 csText = labeledBadge {
                     label = "CS"
-                    value = "00.0"
+                    value = "0.00"
                     sizeVariant = SizeVariant.Small
                 }
                 hpText = labeledBadge {
                     label = "HP"
-                    value = "00.0"
+                    value = "0.00"
                     sizeVariant = SizeVariant.Small
                 }
             }
@@ -183,40 +175,22 @@ class BeatmapInfoLayout : UILinearContainer() {
         spinnersBadge.value = beatmapInfo?.spinnerCount?.toString() ?: "0"
 
         if (beatmapInfo == null) {
-            arText.value = "00.0"
-            odText.value = "00.0"
-            csText.value = "00.0"
-            hpText.value = "00.0"
-            starsText.text = "0.00"
+            arText.value = "0.00"
+            odText.value = "0.00"
+            csText.value = "0.00"
+            hpText.value = "0.00"
+            starRatingBadge.rating = 0.0
             bpmText.text = "0"
             lengthText.text = "00:00"
             return
         }
 
         val mods = ModMenu.enabledMods
-        val isPreciseMod = ModPrecise::class in mods
         val totalSpeedMultiplier = calculateRateWithMods(mods.values, Double.POSITIVE_INFINITY)
 
         val difficulty = beatmapInfo.getBeatmapDifficulty()
 
         applyModsToBeatmapDifficulty(difficulty, GameMode.Droid, mods.values, true)
-
-        if (isPreciseMod) {
-            // Special case for OD. The Precise mod changes the hit window and not the OD itself, but we must
-            // map the hit window back to the original hit window for the user to understand the difficulty
-            // increase of the mod.
-            val greatWindow = PreciseDroidHitWindow(difficulty.od).greatWindow
-            difficulty.od = hitWindow300ToOverallDifficulty(greatWindow)
-        }
-
-        // Round to 2 decimal places.
-        // Using difficulty circle size is quite inaccurate here as the real circle size changes
-        // depending on the height of the running device, but for the sake of comparison across
-        // players, we assume the height of the device to be fixed.
-        difficulty.difficultyCS = GameHelper.Round(difficulty.difficultyCS.toDouble(), 2)
-        difficulty.ar = GameHelper.Round(difficulty.ar.toDouble(), 2)
-        difficulty.od = GameHelper.Round(difficulty.od.toDouble(), 2)
-        difficulty.hp = GameHelper.Round(difficulty.hp.toDouble(), 2)
 
         val minBpm = (beatmapInfo.bpmMin * totalSpeedMultiplier).roundToInt()
         val maxBpm = (beatmapInfo.bpmMax * totalSpeedMultiplier).roundToInt()
@@ -229,23 +203,12 @@ class BeatmapInfoLayout : UILinearContainer() {
 
         bpmText.text = if (minBpm == maxBpm) commonBpm.toString() else "$minBpm-$maxBpm ($commonBpm)"
 
-        arText.value = difficulty.ar.toString()
-        odText.value = difficulty.od.toString()
-        csText.value = difficulty.difficultyCS.toString()
-        hpText.value = difficulty.hp.toString()
-
-        setStarRatingDisplay(beatmapInfo.getStarRating().toDouble())
-    }
-
-    /**
-     * Change the displayed star rating.
-     */
-    fun setStarRatingDisplay(value: Double) {
-        starsText.apply {
-            text = value.roundBy(2).toString()
-            color = if (value >= 6.5) Color4(0xFFFFD966) else Color4.Black.copy(alpha = 0.75f)
-            backgroundColor = OsuColors.getStarRatingColor(value)
-        }
+        // Round to 2 decimal places.
+        arText.value = difficulty.ar.roundBy(2).toString()
+        odText.value = difficulty.od.roundBy(2).toString()
+        csText.value = difficulty.difficultyCS.roundBy(2).toString()
+        hpText.value = difficulty.hp.roundBy(2).toString()
+        starRatingBadge.rating = beatmapInfo.getStarRating().toDouble()
     }
 
 
@@ -253,7 +216,6 @@ class BeatmapInfoLayout : UILinearContainer() {
         init {
             ResourceManager.getInstance().loadHighQualityAsset("clock", "clock.png")
             ResourceManager.getInstance().loadHighQualityAsset("bpm", "bpm.png")
-            ResourceManager.getInstance().loadHighQualityAsset("star-xs", "star.png")
         }
     }
 }

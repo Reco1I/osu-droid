@@ -418,12 +418,27 @@ object RoomAPI {
      * Change room mods.
      */
     @JvmStatic
-    fun setRoomMods(mods: JSONArray) {
-        socket?.emit("roomModsChanged", mods) ?: run {
+    fun setRoomMods(mods: String) {
+        socket?.emit("roomModsChanged", JSONArray(mods)) ?: run {
 			Multiplayer.log("WARNING: Tried to emit event 'roomModsChanged' while socket is null.")
 			return
 		}
         Multiplayer.log("EMITTED: roomModsChanged -> $mods")
+    }
+
+    /**
+     * Change the remove slider lock setting.
+     */
+    fun setRoomRemoveSliderLock(isEnabled: Boolean) {
+        val json = JSONObject().apply {
+            put("isRemoveSliderLock", isEnabled)
+        }
+
+        socket?.emit("roomGameplaySettingsChanged", json) ?: run {
+            Multiplayer.log("WARNING: Tried to emit event 'roomGameplaySettingsChanged' while socket is null.")
+            return
+        }
+        Multiplayer.log("EMITTED: roomGameplaySettingsChanged -> $json")
     }
 
     /**
@@ -567,8 +582,8 @@ object RoomAPI {
      * Change player mods.
      */
     @JvmStatic
-    fun setPlayerMods(mods: JSONArray) {
-        socket?.emit("playerModsChanged", mods) ?: run {
+    fun setPlayerMods(mods: String) {
+        socket?.emit("playerModsChanged", JSONArray(mods)) ?: run {
 			Multiplayer.log("WARNING: Tried to emit event 'playerModsChanged' while socket is null.")
 			return
 		}
